@@ -8,11 +8,13 @@ Built from the ground up on **React Native (New Architecture)** and **Expo SDK 5
 
 ## 📦 Downloads
 
-| Asset | Description | Size |
-|---|---|---|
-| 📱 **`app-release.apk`** | Standalone Android APK (Universal: `arm64-v8a`, `armeabi-v7a`, `x86`, `x86_64`) | ~94.3 MB |
+| Asset | Architecture | Target | Size |
+|---|---|---|---|
+| 🚀 **`velora-v1.0.0.apk`** | `arm64-v8a` (Optimized) | Physical Android Phones (Android 9–15+) | **17.25 MB** |
 
 > **Installation Note**: If prompted with *"Install unknown apps"*, tap **Settings** and toggle **Allow from this source** to proceed with installation.
+> 
+> ⚡ **Size Optimization Note**: Through R8 bytecode minification, resource shrinking, and native 64-bit ARM architecture targeting, the final binary size was reduced from **94.3 MB down to 17.25 MB** (>81% size reduction) for instant downloads and peak runtime performance.
 
 ---
 
