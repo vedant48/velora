@@ -41,7 +41,7 @@ jobs:
 
       - name: 🛠️ Ensure Android directory & optimized Gradle properties
         run: |
-          if [ ! -d "android" ]; then
+          if [ ! -f "android/gradlew" ]; then
             npx expo prebuild --platform android --clean
           fi
           # Ensure arm64-v8a target and compressed native packaging

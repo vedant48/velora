@@ -120,8 +120,12 @@ async function main() {
   const tagName = `v${newVersion}`;
   try {
     run('git add package.json app.json RELEASE_NOTES.md README.md');
-    if (fs.existsSync(buildGradlePath)) {
-      run('git add android/app/build.gradle');
+    try {
+      if (fs.existsSync(buildGradlePath)) {
+        run('git add -f android/app/build.gradle android/gradle.properties');
+      }
+    } catch (e) {
+      // Ignored
     }
     try {
       run(`git commit -m "chore(release): ${tagName}"`);
@@ -130,7 +134,7 @@ async function main() {
     }
 
     // Check if tag already exists
-    const existingTags = runCapture('git tag -l').split('\n');
+    const existingTags = runCapture('git tag -l').split('\n').map(t => t.trim());
     if (existingTags.includes(tagName)) {
       console.log(`Tag ${tagName} already exists.`);
     } else {
@@ -146,24 +150,14 @@ async function main() {
     console.error('Git operation failed:', err.message);
   }
 
-  // 7. GitHub Release via gh CLI if available
+  // 7. GitHub Release publication via GitHub REST API
   if (!skipGh) {
     try {
-      const ghCheck = runCapture('where gh || which gh');
-      if (ghCheck) {
-        console.log(`\n\x1b[34mPublishing GitHub Release using GitHub CLI...\x1b[0m`);
-        const notesFile = path.join(rootDir, 'RELEASE_NOTES.md');
-        let ghCmd = `gh release create ${tagName} "${apkDest}" --title "Velora ${tagName}"`;
-        if (fs.existsSync(notesFile)) {
-          ghCmd += ` --notes-file "${notesFile}"`;
-        } else {
-          ghCmd += ` --generate-notes`;
-        }
-        run(ghCmd);
-        console.log(`\x1b[32mSuccessfully published ${tagName} to GitHub Releases!\x1b[0m`);
-      }
+      console.log(`\n\x1b[34mPublishing GitHub Release and uploading APK asset...\x1b[0m`);
+      const publisherPath = path.join(__dirname, 'publish-release.js');
+      run(`node "${publisherPath}" ${tagName}`);
     } catch (ghErr) {
-      console.warn(`Could not run GitHub CLI (${ghErr.message}). You can also rely on GitHub Actions.`);
+      console.warn(`Local release upload skipped: ${ghErr.message.split('\n')[0]}`);
     }
   }
 
