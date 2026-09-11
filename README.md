@@ -26,7 +26,7 @@
 
 Get the latest production-ready Android APK directly from GitHub Releases:
 
-📦 **[Download Latest Velora APK (v1.0.0)](https://github.com/vedant48/velora/releases/latest)**
+📦 **[Download Latest Velora APK (v1.1.0)](https://github.com/vedant48/velora/releases/latest)**
 
 > Alternatively, visit the [Releases Page](https://github.com/vedant48/velora/releases) to view all release notes and build assets.
 

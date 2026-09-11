@@ -1,6 +1,6 @@
-# 🎬 Velora v1.0.0 — Initial Production Release
+# 🎬 Velora v1.1.0 — Production Release
 
-Welcome to the initial production release of **Velora**, a cinematic streaming application inspired by the interaction quality, polish, and performance of Netflix and Disney+.
+Welcome to **Velora v1.1.0**, a cinematic streaming application inspired by the interaction quality, polish, and performance of Netflix and Disney+.
 
 Built from the ground up on **React Native (New Architecture)** and **Expo SDK 57**, Velora is engineered for **buttery-smooth 60/120 FPS UI performance**, instant navigation, hardware-accelerated animations, and zero layout shifts.
 
@@ -10,7 +10,7 @@ Built from the ground up on **React Native (New Architecture)** and **Expo SDK 5
 
 | Asset | Architecture | Target | Size |
 |---|---|---|---|
-| 🚀 **`velora-v1.0.0.apk`** | `arm64-v8a` (Optimized) | Physical Android Phones (Android 9–15+) | **17.25 MB** |
+| 🚀 **`velora-v1.1.0.apk`** | `arm64-v8a` (Optimized) | Physical Android Phones (Android 9–15+) | **17.25 MB** |
 
 > **Installation Note**: If prompted with *"Install unknown apps"*, tap **Settings** and toggle **Allow from this source** to proceed with installation.
 > 
