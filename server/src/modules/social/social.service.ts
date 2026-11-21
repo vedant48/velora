@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { DatabaseService } from '../../common/database.service';
 import { randomId } from '../../common/crypto';
 
@@ -35,11 +35,14 @@ export class SocialService {
    * rating agreement. Needs at least 3 shared rated titles, else null.
    */
   async match(userId: string, usernameRaw: string) {
-    const target = await this.db.first<{ id: string; username: string; display_name: string }>(
-      'SELECT id, username, display_name FROM users WHERE username = ?',
+    const target = await this.db.first<{ id: string; username: string; display_name: string; is_private: number }>(
+      'SELECT id, username, display_name, is_private FROM users WHERE username = ?',
       [usernameRaw.trim().toLowerCase()],
     );
     if (!target) throw new NotFoundException('User not found');
+    if (target.is_private === 1 && target.id !== userId) {
+      throw new ForbiddenException('This account is private');
+    }
     const shared = await this.db.all<{ title: string; mine: number; theirs: number; media_type: string; tmdb_id: number }>(
       `SELECT a.title, a.rating AS mine, b.rating AS theirs, a.media_type, a.tmdb_id
        FROM library_items a
@@ -72,7 +75,7 @@ export class SocialService {
        FROM library_items l
        JOIN follows f ON f.followee_id = l.user_id
        JOIN users u ON u.id = l.user_id
-       WHERE f.follower_id = ?
+       WHERE f.follower_id = ? AND u.is_private = 0
        ORDER BY l.updated_at DESC LIMIT 50`,
       [userId],
     );
