@@ -1,0 +1,63 @@
+name: Build isolated Velora Preview
+on:
+  push:
+    branches: ['build/velora-preview-1']
+    paths: ['.github/workflows/preview.yml']
+permissions:
+  contents: read
+concurrency:
+  group: velora-preview
+  cancel-in-progress: false
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci
+      - name: Check types and regressions
+        run: |
+          npx tsc --noEmit
+          node --test tests/*.test.cjs
+      - name: Configure isolated preview identity
+        run: |
+          python3 - <<'PY'
+          import json
+          p='app.json'
+          d=json.load(open(p))
+          d['expo']['name']='Velora Preview'
+          d['expo']['slug']='velora-preview'
+          d['expo']['version']='1.4.1-preview.1'
+          d['expo']['android']['package']='com.vedant.velora.preview'
+          d['expo']['android']['versionCode']=1
+          json.dump(d,open(p,'w'),indent=2)
+          PY
+          npx expo prebuild --platform android --clean --no-install
+          python3 - <<'PY'
+          p='android/gradle.properties'
+          lines=open(p).read().splitlines()
+          lines=[x for x in lines if not x.startswith(('reactNativeArchitectures=','expo.useLegacyPackaging=','android.enableMinifyInReleaseBuilds=','android.enableShrinkResourcesInReleaseBuilds='))]
+          lines += ['reactNativeArchitectures=arm64-v8a,x86_64','expo.useLegacyPackaging=true','android.enableMinifyInReleaseBuilds=false','android.enableShrinkResourcesInReleaseBuilds=false']
+          open(p,'w').write('\n'.join(lines)+'\n')
+          PY
+      - name: Compile standalone preview APK
+        working-directory: android
+        run: ./gradlew assembleRelease --no-daemon --max-workers=2
+      - name: Prepare APK and checksum
+        run: |
+          mkdir -p preview
+          cp android/app/build/outputs/apk/release/app-release.apk preview/velora-preview.apk
+          sha256sum preview/velora-preview.apk > preview/checksums.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: velora-preview
+          path: preview/
+          retention-days: 1
+          if-no-files-found: error
