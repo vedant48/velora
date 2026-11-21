@@ -155,8 +155,55 @@ export const veloraApi = {
     episodesWatched: number;
     totalEpisodes: number;
   }>) => call<LibraryItem>(`/library/${mediaType}/${tmdbId}`, { method: 'PATCH', body: patch }),
+  moveToWant: (mediaType: MediaType, tmdbId: number) =>
+    call<LibraryItem>(`/library/${mediaType}/${tmdbId}/move-to-want`, { method: 'POST' }),
+  getMyReviews: () => call<{ reviews: Review[] }>('/reviews/mine'),
   removeItem: (mediaType: MediaType, tmdbId: number) =>
     call<{ removed: boolean }>(`/library/${mediaType}/${tmdbId}`, { method: 'DELETE' }),
+
+  // Per-episode progress (TV)
+  getEpisodeProgress: (tmdbId: number) =>
+    call<{ watched: { season: number; episode: number }[] }>(`/library/tv/${tmdbId}/episodes`),
+  setEpisodeWatched: (
+    tmdbId: number,
+    body: {
+      season: number;
+      episode: number;
+      watched?: boolean;
+      title?: string;
+      posterPath?: string | null;
+      backdropPath?: string | null;
+      releaseDate?: string | null;
+      totalEpisodes?: number;
+    },
+  ) =>
+    call<{ watched: boolean; season: number; episode: number; episodesWatched: number }>(
+      `/library/tv/${tmdbId}/episodes`,
+      { method: 'PUT', body },
+    ),
+  setSeasonWatched: (
+    tmdbId: number,
+    season: number,
+    body: {
+      watched?: boolean;
+      episodes?: number[];
+      title?: string;
+      posterPath?: string | null;
+      backdropPath?: string | null;
+      releaseDate?: string | null;
+      totalEpisodes?: number;
+    },
+  ) =>
+    call<{ watched: boolean; season: number; episodesWatched: number }>(
+      `/library/tv/${tmdbId}/seasons/${season}`,
+      { method: 'PUT', body },
+    ),
+
+  /** Aggregate per-title counts (public). */
+  getTitleStats: (mediaType: MediaType, tmdbId: number) =>
+    call<{ want: number; watching: number; watched: number; reviews: number }>(
+      `/title-stats/${mediaType}/${tmdbId}`,
+    ),
 
   exportLibrary: (format: 'velora' | 'simkl' = 'velora') =>
     call<unknown>(`/library/export?format=${format}`),

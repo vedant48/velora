@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     zIndex: 100,
-    backgroundColor: 'rgba(9, 9, 11, 0.72)',
+    backgroundColor: colors.background,
   },
   content: {
     height: 52,

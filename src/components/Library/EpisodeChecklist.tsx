@@ -1,0 +1,397 @@
+import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Swipeable } from 'react-native-gesture-handler';
+import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { colors } from '../../theme/colors';
+import { Episode } from '../../api/types';
+import { veloraApi, Review } from '../../api/velora';
+import { RateReviewSheet } from './RateReviewSheet';
+import { SeasonReviewCards } from './SeasonReviewCards';
+
+const HINT_KEY = '@velora_episode_swipe_hint_seen';
+
+interface EpisodeChecklistProps {
+  seriesId: number;
+  title: string;
+  posterPath: string | null;
+  seasonNumber: number;
+  seasonYear?: string;
+  episodes: Episode[];
+  loadingEpisodes: boolean;
+  signedIn: boolean;
+  /** Called after progress mutations so the page can refresh counts. */
+  onChanged?: () => void;
+  /** Increment to force a progress reload (series-wide menu actions). */
+  refreshKey?: number;
+}
+
+/**
+ * Must-style season episode list: number + blue dot (unwatched) or check
+ * (watched), title, air date. Swipe right on an unwatched row marks it
+ * watched, with a one-time hint. Footer: season-level bulk actions and the
+ * season review cards.
+ */
+export const EpisodeChecklist = memo(function EpisodeChecklist({
+  seriesId,
+  title,
+  posterPath,
+  seasonNumber,
+  seasonYear,
+  episodes,
+  loadingEpisodes,
+  signedIn,
+  onChanged,
+  refreshKey = 0,
+}: EpisodeChecklistProps) {
+  const [watchedSet, setWatchedSet] = useState<Set<string>>(new Set());
+  const [busy, setBusy] = useState(false);
+  const [showHint, setShowHint] = useState(false);
+  const [rateVisible, setRateVisible] = useState(false);
+  const [seasonReview, setSeasonReview] = useState<Review | null>(null);
+  const swipeRefs = useRef<Map<number, Swipeable>>(new Map());
+
+  // Load per-episode progress for the whole series (all seasons, cheap single call)
+  useEffect(() => {
+    if (!signedIn) {
+      setWatchedSet(new Set());
+      return;
+    }
+    let cancelled = false;
+    veloraApi
+      .getEpisodeProgress(seriesId)
+      .then(({ watched }) => {
+        if (cancelled) return;
+        setWatchedSet(new Set(watched.map((w) => `${w.season}:${w.episode}`)));
+      })
+      .catch(() => undefined);
+    return () => {
+      cancelled = true;
+    };
+  }, [signedIn, seriesId, refreshKey]);
+
+  // One-time swipe hint
+  useEffect(() => {
+    if (!signedIn) return;
+    AsyncStorage.getItem(HINT_KEY).then((v) => {
+      if (!v) setShowHint(true);
+    });
+  }, [signedIn]);
+
+  const dismissHint = useCallback(() => {
+    setShowHint(false);
+    void AsyncStorage.setItem(HINT_KEY, '1');
+  }, []);
+
+  // Own review/rating for this season (drives the pill badge + footer state)
+  const loadSeasonReview = useCallback(() => {
+    if (!signedIn) {
+      setSeasonReview(null);
+      return;
+    }
+    veloraApi
+      .me()
+      .then((me) =>
+        veloraApi.getReviews('tv', seriesId, seasonNumber).then(({ reviews }) => {
+          setSeasonReview(reviews.find((r) => r.user_id === me.user.id) ?? null);
+        }),
+      )
+      .catch(() => setSeasonReview(null));
+  }, [signedIn, seriesId, seasonNumber]);
+
+  useEffect(() => {
+    loadSeasonReview();
+  }, [loadSeasonReview]);
+
+  const watchedCount = useMemo(
+    () => episodes.filter((e) => watchedSet.has(`${e.season_number}:${e.episode_number}`)).length,
+    [episodes, watchedSet],
+  );
+  const allWatched = episodes.length > 0 && watchedCount === episodes.length;
+
+  const markEpisode = useCallback(
+    async (ep: Episode) => {
+      if (!signedIn || busy) return;
+      setBusy(true);
+      dismissHint();
+      try {
+        await veloraApi.setEpisodeWatched(seriesId, {
+          season: ep.season_number,
+          episode: ep.episode_number,
+          watched: true,
+          title,
+          posterPath,
+        });
+        setWatchedSet((prev) => new Set(prev).add(`${ep.season_number}:${ep.episode_number}`));
+        onChanged?.();
+      } catch {
+        // keep state
+      } finally {
+        setBusy(false);
+      }
+      swipeRefs.current.get(ep.episode_number)?.close();
+    },
+    [signedIn, busy, seriesId, title, posterPath, dismissHint, onChanged],
+  );
+
+  const setWholeSeason = useCallback(
+    async (watched: boolean) => {
+      if (!signedIn || busy) return;
+      setBusy(true);
+      try {
+        await veloraApi.setSeasonWatched(seriesId, seasonNumber, {
+          watched,
+          episodes: episodes.map((e) => e.episode_number),
+          title,
+          posterPath,
+        });
+        if (!watched) {
+          // User-confirmed: unwatching clears that season's rating/review.
+          await veloraApi.deleteReview('tv', seriesId, seasonNumber).catch(() => undefined);
+          setSeasonReview(null);
+        }
+        setWatchedSet((prev) => {
+          const next = new Set(prev);
+          for (const e of episodes) {
+            const k = `${e.season_number}:${e.episode_number}`;
+            if (watched) next.add(k);
+            else next.delete(k);
+          }
+          return next;
+        });
+        onChanged?.();
+      } catch {
+        // keep state
+      } finally {
+        setBusy(false);
+      }
+    },
+    [signedIn, busy, seriesId, seasonNumber, episodes, title, posterPath, onChanged],
+  );
+
+  const renderLeftActions = useCallback(
+    (ep: Episode) => (
+      <View style={styles.swipeAction}>
+        <Ionicons name="checkmark" size={22} color="#FFF" />
+      </View>
+    ),
+    [],
+  );
+
+  if (!signedIn) return null;
+
+  return (
+    <View style={styles.container}>
+      {loadingEpisodes ? (
+        <View style={styles.loadingRow}>
+          <ActivityIndicator color={colors.trackBlue} size="small" />
+          <Text style={styles.loadingText}>Loading episodes...</Text>
+        </View>
+      ) : episodes.length === 0 ? (
+        <Text style={styles.emptyText}>No episodes available for this season.</Text>
+      ) : (
+        <View>
+          {episodes.map((ep, index) => {
+            const key = `${ep.season_number}:${ep.episode_number}`;
+            const isWatched = watchedSet.has(key);
+            const row = (
+              <View style={styles.row}>
+                <Text style={styles.epNumber}>{ep.episode_number}</Text>
+                {isWatched ? (
+                  <Ionicons name="checkmark" size={17} color={colors.trackBlue} style={styles.epMark} />
+                ) : (
+                  <View style={styles.epDot} />
+                )}
+                <View style={styles.epTextWrap}>
+                  <Text style={styles.epTitle} numberOfLines={1}>
+                    {ep.name}
+                  </Text>
+                  {!!ep.air_date && <Text style={styles.epDate}>{formatAirDate(ep.air_date)}</Text>}
+                </View>
+              </View>
+            );
+
+            const hint = index === 0 && showHint && !isWatched;
+
+            return (
+              <View key={ep.id || ep.episode_number}>
+                {hint && (
+                  <Pressable style={styles.hint} onPress={dismissHint}>
+                    <Ionicons name="swap-horizontal" size={14} color={colors.trackBlue} />
+                    <Text style={styles.hintText}>Swipe right to mark watched</Text>
+                  </Pressable>
+                )}
+                {isWatched ? (
+                  row
+                ) : (
+                  <Swipeable
+                    ref={(r) => {
+                      if (r) swipeRefs.current.set(ep.episode_number, r);
+                    }}
+                    renderLeftActions={() => renderLeftActions(ep)}
+                    onSwipeableOpen={() => void markEpisode(ep)}
+                    overshootLeft={false}
+                    friction={1.6}
+                  >
+                    {row}
+                  </Swipeable>
+                )}
+                {index < episodes.length - 1 && <View style={styles.divider} />}
+              </View>
+            );
+          })}
+
+          {/* Season-level footer */}
+          <View style={styles.footer}>
+            {busy && <ActivityIndicator size="small" color={colors.trackBlue} />}
+            {!allWatched ? (
+              <Pressable
+                onPress={() => void setWholeSeason(true)}
+                style={({ pressed }) => [styles.footerButton, pressed && { opacity: 0.8 }]}
+                accessibilityRole="button"
+              >
+                <Text style={styles.footerButtonText}>Mark all as watched</Text>
+              </Pressable>
+            ) : (
+              <>
+                <Pressable
+                  onPress={() => setRateVisible(true)}
+                  style={({ pressed }) => [styles.footerButton, pressed && { opacity: 0.8 }]}
+                  accessibilityRole="button"
+                >
+                  <Text style={styles.footerButtonText}>
+                    {seasonReview?.rating != null ? `Rate season  ★ ${seasonReview.rating}` : 'Rate season'}
+                  </Text>
+                </Pressable>
+                <Pressable
+                  onPress={() => void setWholeSeason(false)}
+                  style={({ pressed }) => [styles.footerButton, pressed && { opacity: 0.8 }]}
+                  accessibilityRole="button"
+                >
+                  <Text style={styles.footerButtonText}>Mark all as unwatched</Text>
+                </Pressable>
+              </>
+            )}
+          </View>
+
+          {/* Season review cards; seasonReview in deps so a fresh save shows immediately */}
+          <SeasonReviewCards seriesId={seriesId} seasonNumber={seasonNumber} refreshSignal={seasonReview?.updated_at ?? seasonReview?.id ?? null} />
+
+          <RateReviewSheet
+            visible={rateVisible}
+            title={title}
+            subtitle={`Season ${seasonNumber}${seasonYear ? ` (${seasonYear})` : ''}`}
+            posterPath={posterPath}
+            initialRating={seasonReview?.rating ?? null}
+            initialBody={seasonReview?.body ?? ''}
+            onClose={() => setRateVisible(false)}
+            onSave={(rating, body) => {
+              setRateVisible(false);
+              void veloraApi
+                .putReview('tv', seriesId, { rating, body: body || undefined, seasonNumber })
+                .then(() => {
+                  loadSeasonReview();
+                  onChanged?.();
+                })
+                .catch(() => undefined);
+            }}
+          />
+        </View>
+      )}
+    </View>
+  );
+});
+
+function formatAirDate(iso: string): string {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso;
+  return d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+}
+
+const styles = StyleSheet.create({
+  container: { marginTop: 2 },
+  loadingRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    paddingVertical: 20,
+  },
+  loadingText: { color: colors.textSecondary, fontSize: 13 },
+  emptyText: { color: colors.textTertiary, fontSize: 13, paddingVertical: 12 },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 15,
+    backgroundColor: colors.background,
+  },
+  epNumber: {
+    width: 26,
+    color: colors.textSecondary,
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  epMark: { marginRight: 2 },
+  epDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: colors.trackBlue,
+    marginHorizontal: 4,
+  },
+  epTextWrap: { flex: 1, marginLeft: 10 },
+  epTitle: {
+    color: colors.textPrimary,
+    fontSize: 15,
+    fontWeight: '700',
+  },
+  epDate: {
+    color: colors.textSecondary,
+    fontSize: 13,
+    marginTop: 2,
+  },
+  divider: {
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: 'rgba(255,255,255,0.16)',
+  },
+  swipeAction: {
+    backgroundColor: colors.trackBlue,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    paddingHorizontal: 20,
+  },
+  hint: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    alignSelf: 'flex-start',
+    backgroundColor: 'rgba(46, 123, 246, 0.14)',
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    marginBottom: 6,
+  },
+  hintText: {
+    color: colors.trackBlue,
+    fontSize: 12,
+    fontWeight: '700',
+  },
+  footer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+    marginTop: 16,
+  },
+  footerButton: {
+    backgroundColor: '#3A3A42',
+    borderRadius: 22,
+    paddingHorizontal: 18,
+    paddingVertical: 11,
+  },
+  footerButtonText: {
+    color: colors.textPrimary,
+    fontSize: 14,
+    fontWeight: '700',
+  },
+});

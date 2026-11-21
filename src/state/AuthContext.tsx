@@ -16,8 +16,8 @@ function offerWatchlistMigration(): void {
     .then((needed) => {
       if (!needed) return;
       Alert.alert(
-        'Bring your old watchlist?',
-        'Your locally saved watchlist will be added to your account. Tracked titles and ratings are visible to other signed-in Velora members; you can make your profile private anytime in Settings.',
+        'Bring your saved list?',
+        'Titles saved on this device will be added to your account as Want. Tracked titles and ratings are visible to other signed-in Velora members; you can make your profile private anytime in Settings.',
         [
           { text: 'Not now', style: 'cancel' },
           {

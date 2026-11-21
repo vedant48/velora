@@ -5,25 +5,32 @@ import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '../../theme/colors';
 import { useAuth } from '../../state/AuthContext';
-import { veloraApi, LibraryItem, UserStats } from '../../api/velora';
+import { veloraApi, LibraryItem, UserStats, Review } from '../../api/velora';
 import { LibraryCard } from '../../components/Library/LibraryCard';
+import { ActionSheet } from '../../components/Library/ActionSheet';
 import { checkForUpdate, downloadAndInstall } from '../../services/updates';
 
-type TabKey = 'watched' | 'want' | 'series';
+type TabKey = 'want' | 'watched' | 'series' | 'insights';
+type SortKey = 'recent' | 'title' | 'rating';
 
 const TABS: { key: TabKey; label: string }[] = [
-  { key: 'watched', label: 'Watched' },
   { key: 'want', label: 'Want' },
+  { key: 'watched', label: 'Watched' },
   { key: 'series', label: 'Series' },
+  { key: 'insights', label: 'Insights' },
 ];
 
-/** Must-style profile: stats + rank, Watched/Want/Series tabs with personal ratings. */
+/** Must-style profile: name left/avatar right, rank + stats, tabs, 2-column grid. */
 export const LibraryScreen: React.FC = () => {
   const navigation = useNavigation<any>();
   const { user, logout, apiReady } = useAuth();
   const [stats, setStats] = useState<UserStats | null>(null);
-  const [tab, setTab] = useState<TabKey>('watched');
+  const [tab, setTab] = useState<TabKey>('want');
+  const [sort, setSort] = useState<SortKey>('recent');
+  const [sortSheetVisible, setSortSheetVisible] = useState(false);
   const [items, setItems] = useState<LibraryItem[]>([]);
+  const [allItems, setAllItems] = useState<LibraryItem[]>([]);
+  const [myReviews, setMyReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
   const [updateProgress, setUpdateProgress] = useState<number | null>(null);
 
@@ -65,10 +72,12 @@ export const LibraryScreen: React.FC = () => {
   useEffect(() => {
     if (!user) return;
     veloraApi.getUser(user.username).then(({ stats }) => setStats(stats)).catch(() => undefined);
+    veloraApi.getLibrary().then(({ items }) => setAllItems(items)).catch(() => undefined);
+    veloraApi.getMyReviews().then(({ reviews }) => setMyReviews(reviews)).catch(() => undefined);
   }, [user]);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user || tab === 'insights') return;
     let cancelled = false;
     setLoading(true);
     const mediaType = tab === 'series' ? 'tv' : undefined;
@@ -86,6 +95,15 @@ export const LibraryScreen: React.FC = () => {
       cancelled = true;
     };
   }, [user, tab]);
+
+  const sortedItems = useMemo(() => {
+    const list = [...items];
+    if (sort === 'title') list.sort((a, b) => a.title.localeCompare(b.title));
+    else if (sort === 'rating')
+      list.sort((a, b) => (b.rating ?? -1) - (a.rating ?? -1));
+    else list.sort((a, b) => (a.updated_at < b.updated_at ? 1 : -1));
+    return list;
+  }, [items, sort]);
 
   const openItem = useCallback(
     (item: LibraryItem) => {
@@ -115,6 +133,7 @@ export const LibraryScreen: React.FC = () => {
           try {
             await veloraApi.removeItem(item.media_type, item.tmdb_id);
             setItems((prev) => prev.filter((i) => i.id !== item.id));
+            setAllItems((prev) => prev.filter((i) => i.id !== item.id));
           } catch {
             // keep item
           }
@@ -130,43 +149,67 @@ export const LibraryScreen: React.FC = () => {
 
   const keyExtractor = useCallback((i: LibraryItem) => i.id, []);
   const renderItem = useCallback(
-    ({ item }: { item: LibraryItem }) => <LibraryCard item={item} onPress={openItem} onLongPress={removeItem} />,
+    ({ item }: { item: LibraryItem }) => (
+      <View style={styles.gridCell}>
+        <LibraryCard item={item} onPress={openItem} onLongPress={removeItem} />
+      </View>
+    ),
     [openItem, removeItem],
   );
+
+  const insights = useMemo(() => {
+    if (tab !== 'insights') return null;
+    const watchedMovies = allItems.filter((i) => i.media_type === 'movie' && i.status === 'watched');
+    const series = allItems.filter((i) => i.media_type === 'tv');
+    const episodes = series.reduce((sum, i) => sum + i.episodes_watched, 0);
+    const rated = myReviews.filter((r) => r.rating != null);
+    const avg = rated.length
+      ? (rated.reduce((s, r) => s + (r.rating ?? 0), 0) / rated.length).toFixed(1)
+      : null;
+    const dist = Array.from({ length: 11 }, (_, v) => rated.filter((r) => r.rating === v).length);
+    const maxDist = Math.max(1, ...dist);
+    return { watchedMovies: watchedMovies.length, series: series.length, episodes, avg, dist, maxDist, ratedCount: rated.length };
+  }, [tab, allItems, myReviews]);
 
   const header = useMemo(
     () => (
       <View style={styles.header}>
-        <View style={styles.avatar}>
-          <Text style={styles.avatarText}>{(user?.displayName?.[0] ?? '?').toUpperCase()}</Text>
+        {/* Name left, avatar right */}
+        <View style={styles.identityRow}>
+          <View style={styles.identityText}>
+            <Text style={styles.name}>{user?.displayName}</Text>
+            <Text style={styles.username}>@{user?.username}</Text>
+            {!!user?.bio && <Text style={styles.bio} numberOfLines={2}>{user.bio}</Text>}
+          </View>
+          <View style={styles.avatar}>
+            <Text style={styles.avatarText}>{(user?.displayName?.[0] ?? '?').toUpperCase()}</Text>
+          </View>
         </View>
-        <Text style={styles.name}>{user?.displayName}</Text>
-        <Text style={styles.username}>@{user?.username}</Text>
-        {!!user?.bio && <Text style={styles.bio}>{user.bio}</Text>}
+
+        {/* Stats row */}
         <View style={styles.statsRow}>
-          <Stat label="Watched" value={stats?.watched} />
-          <Stat label="Want" value={stats?.want} />
-          <Stat label="Series" value={stats?.series} />
           <Stat label="Rank" value={stats ? `#${stats.rank}` : undefined} />
+          <Stat label="Want" value={stats?.want} />
+          <Stat label="Watched" value={stats?.watched} />
+          <Stat label="Series" value={stats?.series} />
         </View>
+
         <View style={styles.actionsRow}>
-          <Pressable onPress={shareProfile} style={styles.actionButton}>
-            <Ionicons name="share-social-outline" size={15} color={colors.textPrimary} />
-            <Text style={styles.actionText}>Share</Text>
+          <Pressable onPress={shareProfile} style={styles.iconAction} accessibilityLabel="Share profile">
+            <Ionicons name="share-social-outline" size={17} color={colors.textPrimary} />
           </Pressable>
-          <Pressable onPress={() => navigation.navigate('Activity')} style={styles.actionButton}>
-            <Ionicons name="pulse-outline" size={15} color={colors.textPrimary} />
-            <Text style={styles.actionText}>Activity</Text>
+          <Pressable onPress={() => navigation.navigate('Activity')} style={styles.iconAction} accessibilityLabel="Activity">
+            <Ionicons name="pulse-outline" size={17} color={colors.textPrimary} />
           </Pressable>
-          <Pressable onPress={() => navigation.navigate('Account')} style={styles.actionButton}>
-            <Ionicons name="settings-outline" size={15} color={colors.textPrimary} />
-            <Text style={styles.actionText}>Settings</Text>
+          <Pressable onPress={() => navigation.navigate('Account')} style={styles.iconAction} accessibilityLabel="Settings">
+            <Ionicons name="settings-outline" size={17} color={colors.textPrimary} />
           </Pressable>
-          <Pressable onPress={handleUpdateCheck} style={styles.actionButton}>
-            <Ionicons name="cloud-download-outline" size={15} color={colors.textPrimary} />
-            <Text style={styles.actionText}>
-              {updateProgress !== null ? `${Math.round(updateProgress * 100)}%` : 'Update'}
-            </Text>
+          <Pressable onPress={handleUpdateCheck} style={styles.iconAction} accessibilityLabel="Check for update">
+            {updateProgress !== null ? (
+              <Text style={styles.updatePct}>{Math.round(updateProgress * 100)}%</Text>
+            ) : (
+              <Ionicons name="cloud-download-outline" size={17} color={colors.textPrimary} />
+            )}
           </Pressable>
           <Pressable
             onPress={() =>
@@ -175,22 +218,33 @@ export const LibraryScreen: React.FC = () => {
                 { text: 'Log out', style: 'destructive', onPress: () => void logout() },
               ])
             }
-            style={styles.actionButton}
+            style={styles.iconAction}
+            accessibilityLabel="Log out"
           >
-            <Ionicons name="log-out-outline" size={15} color={colors.textPrimary} />
-            <Text style={styles.actionText}>Log out</Text>
+            <Ionicons name="log-out-outline" size={17} color={colors.textPrimary} />
           </Pressable>
         </View>
+
+        <View style={styles.divider} />
+
+        {/* Tabs + filter */}
         <View style={styles.tabsRow}>
-          {TABS.map((t) => (
-            <Pressable key={t.key} onPress={() => setTab(t.key)} style={[styles.tab, tab === t.key && styles.tabActive]}>
-              <Text style={[styles.tabText, tab === t.key && styles.tabTextActive]}>{t.label}</Text>
+          <View style={styles.tabsGroup}>
+            {TABS.map((t) => (
+              <Pressable key={t.key} onPress={() => setTab(t.key)} style={[styles.tab, tab === t.key && styles.tabActive]}>
+                <Text style={[styles.tabText, tab === t.key && styles.tabTextActive]}>{t.label}</Text>
+              </Pressable>
+            ))}
+          </View>
+          {tab !== 'insights' && (
+            <Pressable onPress={() => setSortSheetVisible(true)} style={styles.filterButton} accessibilityLabel="Sort">
+              <Ionicons name="funnel-outline" size={16} color={colors.textSecondary} />
             </Pressable>
-          ))}
+          )}
         </View>
       </View>
     ),
-    [user, stats, tab, shareProfile, logout],
+    [user, stats, tab, shareProfile, logout, handleUpdateCheck, updateProgress, navigation],
   );
 
   if (!apiReady || !user) {
@@ -213,21 +267,70 @@ export const LibraryScreen: React.FC = () => {
   }
 
   return (
-    <FlashList
-      data={items}
-      keyExtractor={keyExtractor}
-      renderItem={renderItem}
-      numColumns={3}
-      ListHeaderComponent={header}
-      contentContainerStyle={styles.listContent}
-      ListEmptyComponent={
-        loading ? (
-          <ActivityIndicator color={colors.primary} style={{ marginTop: 32 }} />
-        ) : (
-          <Text style={styles.emptyText}>Nothing here yet. Rate and track from any title page.</Text>
-        )
-      }
-    />
+    <View style={styles.root}>
+      <FlashList
+        data={tab === 'insights' ? [] : sortedItems}
+        keyExtractor={keyExtractor}
+        renderItem={renderItem}
+        numColumns={2}
+        ListHeaderComponent={
+          <View>
+            {header}
+            {tab === 'insights' && insights && (
+              <View style={styles.insights}>
+                <View style={styles.insightRow}>
+                  <InsightCell label="Movies watched" value={insights.watchedMovies} />
+                  <InsightCell label="Series tracked" value={insights.series} />
+                  <InsightCell label="Episodes" value={insights.episodes} />
+                </View>
+                <View style={styles.insightBlock}>
+                  <Text style={styles.insightHeading}>Average rating</Text>
+                  <Text style={styles.insightBig}>{insights.avg ?? '-'}</Text>
+                  <Text style={styles.insightSub}>{insights.ratedCount} rated titles & seasons</Text>
+                </View>
+                <View style={styles.insightBlock}>
+                  <Text style={styles.insightHeading}>Rating distribution</Text>
+                  <View style={styles.distRow}>
+                    {insights.dist.map((count, v) => (
+                      <View key={v} style={styles.distCol}>
+                        <View style={styles.distBarTrack}>
+                          <View
+                            style={[
+                              styles.distBarFill,
+                              { height: Math.max((count / insights.maxDist) * 72, count > 0 ? 4 : 1) },
+                            ]}
+                          />
+                        </View>
+                        <Text style={styles.distLabel}>{v}</Text>
+                      </View>
+                    ))}
+                  </View>
+                </View>
+              </View>
+            )}
+          </View>
+        }
+        contentContainerStyle={styles.listContent}
+        ListEmptyComponent={
+          tab === 'insights' ? null : loading ? (
+            <ActivityIndicator color={colors.primary} style={{ marginTop: 32 }} />
+          ) : (
+            <Text style={styles.emptyText}>Nothing here yet. Rate and track from any title page.</Text>
+          )
+        }
+      />
+
+      <ActionSheet
+        visible={sortSheetVisible}
+        onClose={() => setSortSheetVisible(false)}
+        showCancel={false}
+        options={[
+          { label: 'Recently updated', onPress: () => setSort('recent') },
+          { label: 'Title A-Z', onPress: () => setSort('title') },
+          { label: 'Highest rated', onPress: () => setSort('rating') },
+        ]}
+      />
+    </View>
   );
 };
 
@@ -240,49 +343,119 @@ const Stat = memo(function Stat({ label, value }: { label: string; value?: numbe
   );
 });
 
+const InsightCell = memo(function InsightCell({ label, value }: { label: string; value: number }) {
+  return (
+    <View style={styles.insightCell}>
+      <Text style={styles.insightCellValue}>{value}</Text>
+      <Text style={styles.insightCellLabel}>{label}</Text>
+    </View>
+  );
+});
+
 const styles = StyleSheet.create({
-  listContent: { paddingHorizontal: 10, paddingTop: 60, paddingBottom: 110 },
-  header: { alignItems: 'center', gap: 6, paddingBottom: 16 },
+  root: { flex: 1, backgroundColor: colors.background },
+  listContent: { paddingHorizontal: 12, paddingTop: 60, paddingBottom: 110 },
+  gridCell: { flex: 1 / 2, padding: 5 },
+  header: { gap: 12, paddingBottom: 14, paddingHorizontal: 4 },
+  identityRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 14,
+  },
+  identityText: { flex: 1, gap: 2 },
   avatar: {
-    width: 72,
-    height: 72,
-    borderRadius: 36,
-    backgroundColor: colors.primary,
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: colors.trackBlue,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  avatarText: { fontSize: 30, fontWeight: '900', color: '#fff' },
-  name: { fontSize: 20, fontWeight: '800', color: colors.textPrimary },
+  avatarText: { fontSize: 26, fontWeight: '900', color: '#fff' },
+  name: { fontSize: 22, fontWeight: '800', color: colors.textPrimary },
   username: { fontSize: 13, color: colors.textTertiary },
-  bio: { fontSize: 13, color: colors.textSecondary, textAlign: 'center', paddingHorizontal: 24 },
-  statsRow: { flexDirection: 'row', gap: 22, marginTop: 10 },
-  stat: { alignItems: 'center' },
-  statValue: { fontSize: 17, fontWeight: '800', color: colors.textPrimary },
+  bio: { fontSize: 13, color: colors.textSecondary, marginTop: 4 },
+  statsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingRight: 8,
+    marginTop: 2,
+  },
+  stat: { alignItems: 'flex-start' },
+  statValue: { fontSize: 18, fontWeight: '800', color: colors.textPrimary },
   statLabel: { fontSize: 11, color: colors.textTertiary, marginTop: 1 },
   actionsRow: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
     gap: 10,
-    marginTop: 12,
+    marginTop: 2,
   },
-  actionButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 5,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
+  iconAction: {
+    width: 38,
+    height: 38,
     borderRadius: 10,
     backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.surfaceBorder,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  actionText: { fontSize: 12, fontWeight: '700', color: colors.textPrimary },
-  tabsRow: { flexDirection: 'row', gap: 6, marginTop: 16 },
-  tab: { paddingHorizontal: 18, paddingVertical: 8, borderRadius: 18, backgroundColor: colors.surface },
-  tabActive: { backgroundColor: colors.primary },
+  updatePct: { fontSize: 10, fontWeight: '800', color: colors.textPrimary },
+  divider: {
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: 'rgba(255,255,255,0.16)',
+    marginTop: 4,
+  },
+  tabsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  tabsGroup: { flexDirection: 'row', gap: 6, flexShrink: 1 },
+  tab: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 18, backgroundColor: colors.surface },
+  tabActive: { backgroundColor: colors.trackBlue },
   tabText: { fontSize: 12, fontWeight: '700', color: colors.textTertiary },
   tabTextActive: { color: '#fff' },
+  filterButton: {
+    width: 34,
+    height: 34,
+    borderRadius: 17,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.surface,
+  },
+  insights: { gap: 18, paddingTop: 6, paddingBottom: 20 },
+  insightRow: { flexDirection: 'row', gap: 10 },
+  insightCell: {
+    flex: 1,
+    backgroundColor: colors.surface,
+    borderRadius: 14,
+    paddingVertical: 16,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: colors.surfaceBorder,
+  },
+  insightCellValue: { fontSize: 22, fontWeight: '800', color: colors.textPrimary },
+  insightCellLabel: { fontSize: 11, color: colors.textTertiary, marginTop: 3, fontWeight: '600' },
+  insightBlock: {
+    backgroundColor: colors.surface,
+    borderRadius: 14,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: colors.surfaceBorder,
+  },
+  insightHeading: { fontSize: 13, fontWeight: '800', color: colors.textSecondary, letterSpacing: 0.4 },
+  insightBig: { fontSize: 34, fontWeight: '900', color: colors.textPrimary, marginTop: 6 },
+  insightSub: { fontSize: 12, color: colors.textTertiary, marginTop: 2 },
+  distRow: { flexDirection: 'row', alignItems: 'flex-end', gap: 5, marginTop: 12 },
+  distCol: { flex: 1, alignItems: 'center', gap: 4 },
+  distBarTrack: { height: 76, justifyContent: 'flex-end' },
+  distBarFill: {
+    width: '100%',
+    borderRadius: 3,
+    backgroundColor: colors.trackBlue,
+  },
+  distLabel: { fontSize: 10, color: colors.textTertiary, fontWeight: '700' },
   emptyRoot: {
     flex: 1,
     alignItems: 'center',
@@ -292,7 +465,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
   },
   emptyTitle: { fontSize: 18, fontWeight: '800', color: colors.textPrimary },
-  emptyText: { fontSize: 13, color: colors.textTertiary, textAlign: 'center', lineHeight: 19, paddingHorizontal: 16 },
-  loginButton: { marginTop: 8, backgroundColor: colors.primary, borderRadius: 12, paddingHorizontal: 28, paddingVertical: 12 },
+  emptyText: { fontSize: 13, color: colors.textTertiary, textAlign: 'center', lineHeight: 19, paddingHorizontal: 16, marginTop: 24 },
+  loginButton: { marginTop: 8, backgroundColor: colors.trackBlue, borderRadius: 12, paddingHorizontal: 28, paddingVertical: 12 },
   loginButtonText: { fontSize: 14, fontWeight: '800', color: '#fff' },
 });

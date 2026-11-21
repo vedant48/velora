@@ -6,7 +6,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MainTabParamList } from './types';
 import { HomeScreen } from '../screens/Home/HomeScreen';
 import { SearchScreen } from '../screens/Search/SearchScreen';
-import { WatchlistScreen } from '../screens/Watchlist/WatchlistScreen';
+// WatchlistScreen import removed with the tab (user direction 21 Nov: Want is
+// the watchlist now; screen source stays at ../screens/Watchlist/WatchlistScreen)
 import { LibraryScreen } from '../screens/Profile/LibraryScreen';
 import { DebugScreen } from '../screens/Debug/DebugScreen';
 import { colors } from '../theme/colors';
@@ -47,8 +48,6 @@ export const TabNavigator: React.FC = () => {
             iconName = focused ? 'home' : 'home-outline';
           } else if (route.name === 'SearchTab') {
             iconName = focused ? 'search' : 'search-outline';
-          } else if (route.name === 'WatchlistTab') {
-            iconName = focused ? 'bookmark' : 'bookmark-outline';
           } else if (route.name === 'ProfileTab') {
             iconName = focused ? 'person' : 'person-outline';
           } else if (route.name === 'DebugTab') {
@@ -73,11 +72,15 @@ export const TabNavigator: React.FC = () => {
         component={SearchScreen}
         options={{ tabBarLabel: 'Search' }}
       />
+      {/* Watchlist tab removed (user direction 21 Nov): Want is the unified
+          watchlist, reached from Profile > Want. Screen source kept at
+          ../screens/Watchlist/WatchlistScreen; restore by uncommenting.
       <Tab.Screen
         name="WatchlistTab"
         component={WatchlistScreen}
         options={{ tabBarLabel: 'Watchlist' }}
       />
+      */}
       <Tab.Screen
         name="ProfileTab"
         component={LibraryScreen}

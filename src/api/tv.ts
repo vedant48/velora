@@ -96,3 +96,17 @@ export async function getTVWatchProviders(
   });
 }
 
+
+export interface TvVideoItem {
+  id: string;
+  key: string;
+  name: string;
+  site: string;
+  type: string;
+  official?: boolean;
+}
+
+export async function getTVVideos(id: number, signal?: AbortSignal): Promise<TvVideoItem[]> {
+  const data = await proxyGet<{ results: TvVideoItem[] }>(`/v1/tmdb/3/tv/${id}/videos`, { signal });
+  return data.results || [];
+}

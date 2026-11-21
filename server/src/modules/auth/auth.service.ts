@@ -73,11 +73,14 @@ export class AuthService {
     const res = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(idToken)}`);
     if (!res.ok) throw new UnauthorizedException('Google sign-in token was rejected');
     const claims = (await res.json()) as Record<string, unknown>;
+    // Accept client IDs with or without the .apps.googleusercontent.com suffix:
+    // the token's aud is always the full ID, but config may carry either form.
+    const stripSuffix = (s: string) => s.trim().replace(/\.apps\.googleusercontent\.com$/i, '');
     const allowed = (getEnv().GOOGLE_CLIENT_IDS ?? '')
       .split(',')
-      .map((s) => s.trim())
+      .map(stripSuffix)
       .filter(Boolean);
-    if (allowed.length > 0 && !allowed.includes(String(claims.aud ?? ''))) {
+    if (allowed.length > 0 && !allowed.includes(stripSuffix(String(claims.aud ?? '')))) {
       throw new UnauthorizedException('Google token audience not recognized');
     }
     const verified = claims.email_verified === true || claims.email_verified === 'true';

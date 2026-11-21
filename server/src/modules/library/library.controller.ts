@@ -12,6 +12,26 @@ export class LibraryController {
     return this.library.list(userId, status, mediaType);
   }
 
+  @Get('tv/:tmdbId/episodes')
+  episodeProgress(@CurrentUserId() userId: string, @Param('tmdbId') tmdbId: string) {
+    return this.library.getEpisodeProgress(userId, tmdbId);
+  }
+
+  @Put('tv/:tmdbId/episodes')
+  setEpisode(@CurrentUserId() userId: string, @Param('tmdbId') tmdbId: string, @Body() body: Record<string, unknown>) {
+    return this.library.setEpisodeWatched(userId, tmdbId, body);
+  }
+
+  @Put('tv/:tmdbId/seasons/:season')
+  setSeason(
+    @CurrentUserId() userId: string,
+    @Param('tmdbId') tmdbId: string,
+    @Param('season') season: string,
+    @Body() body: Record<string, unknown>,
+  ) {
+    return this.library.setSeasonWatched(userId, tmdbId, season, body);
+  }
+
   @Post('lookup')
   lookup(@CurrentUserId() userId: string, @Body() body: Record<string, unknown>) {
     return this.library.lookup(userId, body.refs);
@@ -49,8 +69,24 @@ export class LibraryController {
     return this.library.patch(userId, mediaType, tmdbId, body);
   }
 
+  @Post(':mediaType/:tmdbId/move-to-want')
+  moveToWant(@CurrentUserId() userId: string, @Param('mediaType') mediaType: string, @Param('tmdbId') tmdbId: string) {
+    return this.library.moveToWant(userId, mediaType, tmdbId);
+  }
+
   @Delete(':mediaType/:tmdbId')
   remove(@CurrentUserId() userId: string, @Param('mediaType') mediaType: string, @Param('tmdbId') tmdbId: string) {
     return this.library.remove(userId, mediaType, tmdbId);
+  }
+}
+
+/** Aggregate per-title counts for the details page stats row. Public: counts only, no user data. */
+@Controller('title-stats')
+export class TitleStatsController {
+  constructor(private readonly library: LibraryService) {}
+
+  @Get(':mediaType/:tmdbId')
+  stats(@Param('mediaType') mediaType: string, @Param('tmdbId') tmdbId: string) {
+    return this.library.titleStats(mediaType, tmdbId);
   }
 }

@@ -137,10 +137,22 @@ export class LibraryService {
     return this.getOne(userId, mediaType, tmdbId);
   }
 
+  /**
+   * Removes the item plus its dependent user data for the title (confirmed
+   * product behavior 21 Nov): movie removes drop the whole-title review so a
+   * re-add starts fresh; series removes drop episode progress and ALL season
+   * reviews/ratings ("Remove from my Series" is a full reset).
+   */
   async remove(userId: string, mediaTypeRaw: unknown, tmdbIdRaw: unknown) {
     const mediaType = requireMediaType(mediaTypeRaw);
     const tmdbId = requireTmdbId(tmdbIdRaw);
     await this.db.run('DELETE FROM library_items WHERE user_id = ? AND media_type = ? AND tmdb_id = ?', [
+      userId, mediaType, tmdbId,
+    ]);
+    if (mediaType === 'tv') {
+      await this.db.run('DELETE FROM episode_progress WHERE user_id = ? AND tmdb_id = ?', [userId, tmdbId]);
+    }
+    await this.db.run('DELETE FROM reviews WHERE user_id = ? AND media_type = ? AND tmdb_id = ?', [
       userId, mediaType, tmdbId,
     ]);
     return { removed: true };
@@ -150,6 +162,158 @@ export class LibraryService {
     return this.db.first(`${SELECT_ITEM} WHERE user_id = ? AND media_type = ? AND tmdb_id = ?`, [
       userId, mediaType, tmdbId,
     ]);
+  }
+
+  // ---- Per-episode progress (TV) ----
+
+  async getEpisodeProgress(userId: string, tmdbIdRaw: unknown) {
+    const tmdbId = requireTmdbId(tmdbIdRaw);
+    const rows = await this.db.all<{ season: number; episode: number }>(
+      'SELECT season, episode FROM episode_progress WHERE user_id = ? AND tmdb_id = ? ORDER BY season, episode',
+      [userId, tmdbId],
+    );
+    return { watched: rows };
+  }
+
+  /** Optional title metadata so a first episode mark can create the library item. */
+  private episodeMeta(body: Record<string, unknown>) {
+    return {
+      title: optionalString(body.title, 'title', 300),
+      posterPath: optionalString(body.posterPath, 'posterPath', 200),
+      backdropPath: optionalString(body.backdropPath, 'backdropPath', 200),
+      releaseDate: optionalString(body.releaseDate, 'releaseDate', 20),
+      totalEpisodes: optionalInt(body.totalEpisodes, 'totalEpisodes', 0, 100000),
+    };
+  }
+
+  private async ensureTvItem(userId: string, tmdbId: number, body: Record<string, unknown>) {
+    const existing = await this.getOne(userId, 'tv', tmdbId);
+    if (existing) return;
+    const meta = this.episodeMeta(body);
+    if (!meta.title) throw new BadRequestException('Item not in library; title is required to start tracking');
+    await this.upsert(userId, 'tv', tmdbId, {
+      title: meta.title,
+      posterPath: meta.posterPath,
+      backdropPath: meta.backdropPath,
+      releaseDate: meta.releaseDate,
+      status: 'watching',
+      episodesWatched: 0,
+      totalEpisodes: meta.totalEpisodes ?? 0,
+    });
+  }
+
+  private async syncEpisodeCount(userId: string, tmdbId: number) {
+    const row = await this.db.first<{ c: number }>(
+      'SELECT COUNT(*) AS c FROM episode_progress WHERE user_id = ? AND tmdb_id = ?',
+      [userId, tmdbId],
+    );
+    const count = Number(row?.c ?? 0);
+    const item = (await this.getOne(userId, 'tv', tmdbId)) as Record<string, unknown> | undefined;
+    if (item) {
+      const total = Number(item.total_episodes ?? 0);
+      await this.db.run(
+        "UPDATE library_items SET episodes_watched = ?, updated_at = datetime('now') WHERE user_id = ? AND media_type = 'tv' AND tmdb_id = ?",
+        [total > 0 ? Math.min(count, total) : count, userId, tmdbId],
+      );
+    }
+    return count;
+  }
+
+  async setEpisodeWatched(userId: string, tmdbIdRaw: unknown, body: Record<string, unknown>) {
+    const tmdbId = requireTmdbId(tmdbIdRaw);
+    const season = optionalInt(body.season, 'season', 0, 1000);
+    const episode = optionalInt(body.episode, 'episode', 0, 100000);
+    if (season === null || episode === null) throw new BadRequestException('season and episode are required');
+    const watched = body.watched !== false; // default true; pass false to unmark
+    if (watched) await this.ensureTvItem(userId, tmdbId, body);
+    if (watched) {
+      await this.db.run(
+        'INSERT OR IGNORE INTO episode_progress (id, user_id, tmdb_id, season, episode) VALUES (?, ?, ?, ?, ?)',
+        [randomId(), userId, tmdbId, season, episode],
+      );
+    } else {
+      await this.db.run(
+        'DELETE FROM episode_progress WHERE user_id = ? AND tmdb_id = ? AND season = ? AND episode = ?',
+        [userId, tmdbId, season, episode],
+      );
+    }
+    const episodesWatched = await this.syncEpisodeCount(userId, tmdbId);
+    return { watched, season, episode, episodesWatched };
+  }
+
+  /** Mark a whole season watched (episodes = the season's episode numbers) or unwatched. */
+  async setSeasonWatched(userId: string, tmdbIdRaw: unknown, seasonRaw: unknown, body: Record<string, unknown>) {
+    const tmdbId = requireTmdbId(tmdbIdRaw);
+    const season = optionalInt(seasonRaw, 'season', 0, 1000);
+    if (season === null) throw new BadRequestException('invalid season');
+    const watched = body.watched !== false;
+    if (watched) {
+      if (!Array.isArray(body.episodes) || body.episodes.length === 0 || body.episodes.length > 2000) {
+        throw new BadRequestException('episodes must be an array of 1-2000 episode numbers');
+      }
+      await this.ensureTvItem(userId, tmdbId, body);
+      for (const raw of (body.episodes as unknown[]).slice(0, 2000)) {
+        const ep = optionalInt(raw, 'episode', 0, 100000);
+        if (ep === null) throw new BadRequestException('episodes must be integers');
+        await this.db.run(
+          'INSERT OR IGNORE INTO episode_progress (id, user_id, tmdb_id, season, episode) VALUES (?, ?, ?, ?, ?)',
+          [randomId(), userId, tmdbId, season, ep],
+        );
+      }
+    } else {
+      await this.db.run(
+        'DELETE FROM episode_progress WHERE user_id = ? AND tmdb_id = ? AND season = ?',
+        [userId, tmdbId, season],
+      );
+    }
+    const episodesWatched = await this.syncEpisodeCount(userId, tmdbId);
+    return { watched, season, episodesWatched };
+  }
+
+  /**
+   * Move to Want = fresh start (user-confirmed 21 Nov): status becomes
+   * 'want', rating cleared, reviews (all seasons + whole title) and episode
+   * progress deleted.
+   */
+  async moveToWant(userId: string, mediaTypeRaw: unknown, tmdbIdRaw: unknown) {
+    const mediaType = requireMediaType(mediaTypeRaw);
+    const tmdbId = requireTmdbId(tmdbIdRaw);
+    const existing = await this.getOne(userId, mediaType, tmdbId);
+    if (!existing) throw new BadRequestException('Item not in library');
+    await this.db.run(
+      "UPDATE library_items SET status = 'want', rating = NULL, episodes_watched = 0, updated_at = datetime('now') WHERE user_id = ? AND media_type = ? AND tmdb_id = ?",
+      [userId, mediaType, tmdbId],
+    );
+    if (mediaType === 'tv') {
+      await this.db.run('DELETE FROM episode_progress WHERE user_id = ? AND tmdb_id = ?', [userId, tmdbId]);
+    }
+    await this.db.run('DELETE FROM reviews WHERE user_id = ? AND media_type = ? AND tmdb_id = ?', [
+      userId, mediaType, tmdbId,
+    ]);
+    return this.getOne(userId, mediaType, tmdbId);
+  }
+
+  // ---- Aggregate counts for the title page stats row (no private data) ----
+
+  async titleStats(mediaTypeRaw: unknown, tmdbIdRaw: unknown) {
+    const mediaType = requireMediaType(mediaTypeRaw);
+    const tmdbId = requireTmdbId(tmdbIdRaw);
+    const rows = await this.db.all<{ status: string; c: number }>(
+      'SELECT status, COUNT(*) AS c FROM library_items WHERE media_type = ? AND tmdb_id = ? GROUP BY status',
+      [mediaType, tmdbId],
+    );
+    const reviews = await this.db.first<{ c: number }>(
+      'SELECT COUNT(*) AS c FROM reviews WHERE media_type = ? AND tmdb_id = ?',
+      [mediaType, tmdbId],
+    );
+    const by: Record<string, number> = {};
+    for (const r of rows) by[r.status] = Number(r.c);
+    return {
+      want: by.want ?? 0,
+      watching: by.watching ?? 0,
+      watched: by.watched ?? 0,
+      reviews: Number(reviews?.c ?? 0),
+    };
   }
 
   // ---- Export ----

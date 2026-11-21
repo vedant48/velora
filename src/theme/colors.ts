@@ -10,6 +10,10 @@ export const colors = {
   primaryHover: '#F40612',
   primaryGlow: 'rgba(229, 9, 20, 0.35)',
 
+  // Must-style tracking accent: selected status bars, episode checks, Save buttons
+  trackBlue: '#2E7BF6',
+  trackBlueDark: '#1B5FD0',
+
   accentAmber: '#FFB800', // Rating star
   accentCyan: '#00D2FF',
   accentPurple: '#7928CA',

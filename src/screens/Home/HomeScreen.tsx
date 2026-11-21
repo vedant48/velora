@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -20,7 +20,15 @@ import {
   useTrendingTVQuery,
   useGenreMoviesQuery,
   useCollectionQuery,
+  useUpcomingMoviesQuery,
+  useStreamingMoviesQuery,
+  useMovieRecommendationsQuery,
 } from '../../api/queries';
+import { veloraApi, LibraryItem } from '../../api/velora';
+import { useAuth } from '../../state/AuthContext';
+import { TrailersRail } from '../../components/Home/TrailersRail';
+import { WatchNextRail } from '../../components/Home/WatchNextRail';
+import { CollectionsRail } from '../../components/Collections/CollectionsRail';
 import { useContinueWatching } from '../../hooks/useContinueWatching';
 import { Header, ContentFilter } from '../../components/common/Header';
 import { HeroCarousel } from '../../components/HeroCarousel/HeroCarousel';
@@ -45,6 +53,25 @@ export const HomeScreen: React.FC = () => {
   const actionQuery = useGenreMoviesQuery(28); // Action
   const sciFiQuery = useGenreMoviesQuery(878); // Sci-Fi
   const marvelCollectionQuery = useCollectionQuery(86311); // The Avengers Collection
+  const upcomingQuery = useUpcomingMoviesQuery();
+  const streamingQuery = useStreamingMoviesQuery();
+
+  // "For you": recommendations seeded from the user's most recent highly
+  // rated (or latest watched) movie; falls back to trending when signed out.
+  const { user, apiReady } = useAuth();
+  const [recSeedId, setRecSeedId] = useState<number>(0);
+  useEffect(() => {
+    if (!user || !apiReady) return;
+    veloraApi
+      .getLibrary('watched')
+      .then(({ items }) => {
+        const movies = items.filter((i) => i.media_type === 'movie');
+        const rated = movies.filter((i) => (i.rating ?? 0) >= 7);
+        setRecSeedId((rated[0] ?? movies[0])?.tmdb_id ?? 0);
+      })
+      .catch(() => undefined);
+  }, [user, apiReady]);
+  const forYouQuery = useMovieRecommendationsQuery(recSeedId);
 
   const { continueWatchingItems } = useContinueWatching();
 
@@ -54,6 +81,31 @@ export const HomeScreen: React.FC = () => {
       navigation.navigate('Details', { item });
     },
     [navigation]
+  );
+
+  const handleCollectionPress = useCallback(
+    (collectionId: number, collectionName: string) => {
+      (navigation as any).push('Collection', { collectionId, collectionName });
+    },
+    [navigation],
+  );
+
+  const handleWatchNextPress = useCallback(
+    (item: LibraryItem) => {
+      navigation.navigate('Details', {
+        item: {
+          id: item.tmdb_id,
+          media_type: item.media_type,
+          title: item.title,
+          overview: '',
+          poster_path: item.poster_path,
+          backdrop_path: item.backdrop_path,
+          vote_average: 0,
+          release_date: item.release_date ?? undefined,
+        },
+      });
+    },
+    [navigation],
   );
 
   const handleSearchPress = useCallback(() => {
@@ -129,7 +181,9 @@ export const HomeScreen: React.FC = () => {
         onFilterChange={setActiveFilter}
         onSearchPress={handleSearchPress}
         onProfilePress={handleProfilePress}
-        onDebugPress={handleDebugPress}
+        // Debug entry point hidden from the header (user request 21 Nov);
+        // uncomment to restore for local performance work.
+        // onDebugPress={handleDebugPress}
       />
 
       {/* Primary Vertical Virtualized Scroll Container */}
@@ -171,6 +225,10 @@ export const HomeScreen: React.FC = () => {
         {/* --- TV SHOWS FILTER FEED --- */}
         {activeFilter === 'tv' && (
           <>
+            <WatchNextRail onPressItem={handleWatchNextPress} />
+
+            <CollectionsRail onPressCollection={handleCollectionPress} />
+
             <MovieCarousel
               title="Top 10 TV Shows Today"
               subtitle="Trending on TMDB"
@@ -208,28 +266,29 @@ export const HomeScreen: React.FC = () => {
         {activeFilter === 'movies' && (
           <>
             <MovieCarousel
-              title="Top 10 Movies Today"
-              subtitle="Trending on TMDB"
-              data={(trendingQuery.data || []).slice(0, 10)}
-              isLoading={trendingQuery.isLoading}
-              isError={trendingQuery.isError}
-              onRetry={trendingQuery.refetch}
-              onItemPress={handleItemPress}
-              showRank={true}
-            />
-
-            <MovieCarousel
-              title="Popular Blockbusters"
-              subtitle="Global cinema hits"
-              data={popularMoviesQuery.data}
-              isLoading={popularMoviesQuery.isLoading}
-              isError={popularMoviesQuery.isError}
-              onRetry={popularMoviesQuery.refetch}
+              title={user ? 'For you' : 'Trending now'}
+              subtitle={user ? 'Picked from what you rated' : 'Trending on TMDB'}
+              data={user && recSeedId ? forYouQuery.data : (trendingQuery.data || [])}
+              isLoading={user && recSeedId ? forYouQuery.isLoading : trendingQuery.isLoading}
+              isError={user && recSeedId ? forYouQuery.isError : trendingQuery.isError}
+              onRetry={user && recSeedId ? forYouQuery.refetch : trendingQuery.refetch}
               onItemPress={handleItemPress}
             />
 
+            <TrailersRail items={nowPlayingQuery.data ?? []} onItemPress={handleItemPress} />
+
             <MovieCarousel
-              title="Now in Theaters"
+              title="Available for streaming"
+              subtitle="On subscription services in India"
+              data={streamingQuery.data}
+              isLoading={streamingQuery.isLoading}
+              isError={streamingQuery.isError}
+              onRetry={streamingQuery.refetch}
+              onItemPress={handleItemPress}
+            />
+
+            <MovieCarousel
+              title="In Theaters Now"
               subtitle="Fresh off the cinema screen"
               data={nowPlayingQuery.data}
               isLoading={nowPlayingQuery.isLoading}
@@ -239,13 +298,26 @@ export const HomeScreen: React.FC = () => {
             />
 
             <MovieCarousel
-              title="Critically Acclaimed Masterpieces"
-              subtitle="Award winners and legendary films"
-              data={topRatedMoviesQuery.data}
-              isLoading={topRatedMoviesQuery.isLoading}
-              isError={topRatedMoviesQuery.isError}
-              onRetry={topRatedMoviesQuery.refetch}
+              title="Coming Soon"
+              subtitle="Upcoming releases"
+              data={upcomingQuery.data}
+              isLoading={upcomingQuery.isLoading}
+              isError={upcomingQuery.isError}
+              onRetry={upcomingQuery.refetch}
               onItemPress={handleItemPress}
+            />
+
+            <CollectionsRail onPressCollection={handleCollectionPress} />
+
+            <MovieCarousel
+              title="Top 10 Movies Today"
+              subtitle="Trending on TMDB"
+              data={(trendingQuery.data || []).slice(0, 10)}
+              isLoading={trendingQuery.isLoading}
+              isError={trendingQuery.isError}
+              onRetry={trendingQuery.refetch}
+              onItemPress={handleItemPress}
+              showRank={true}
             />
 
             <MovieCarousel

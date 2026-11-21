@@ -115,3 +115,31 @@ export async function getMovieWatchProviders(
   });
 }
 
+
+export interface VideoItem {
+  id: string;
+  key: string;
+  name: string;
+  site: string;
+  type: string;
+  official?: boolean;
+}
+
+export async function getMovieVideos(id: number, signal?: AbortSignal): Promise<VideoItem[]> {
+  const data = await proxyGet<{ results: VideoItem[] }>(`/v1/tmdb/3/movie/${id}/videos`, { signal });
+  return data.results || [];
+}
+
+/** Movies available on subscription streaming in India (TMDB discover, flatrate). */
+export async function getStreamingMovies(page: number = 1, signal?: AbortSignal): Promise<Movie[]> {
+  const data = await proxyGet<TMDBResponse<Movie>>(
+    `/v1/tmdb/3/discover/movie?watch_region=IN&with_watch_monetization_types=flatrate&sort_by=popularity.desc&page=${page}`,
+    { signal },
+  );
+  return data.results || [];
+}
+
+export async function getMovieRecommendations(id: number, signal?: AbortSignal): Promise<Movie[]> {
+  const data = await proxyGet<TMDBResponse<Movie>>(`/v1/tmdb/3/movie/${id}/recommendations`, { signal });
+  return data.results || [];
+}

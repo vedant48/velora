@@ -4,7 +4,10 @@ import Animated, {
   useSharedValue,
   useAnimatedScrollHandler,
 } from 'react-native-reanimated';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { MediaItem } from '../../api/types';
+import { veloraApi } from '../../api/velora';
+import { useAuth } from '../../state/AuthContext';
 import { HeroSlide } from './HeroSlide';
 import { HeroPagination } from './HeroPagination';
 import { HeroSkeleton } from '../Skeleton/HeroSkeleton';
@@ -31,7 +34,63 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = React.memo(
     const isInteracting = useRef(false);
     const resumeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+    // Want toggle ("Want" is the unified watchlist, user direction 21 Nov):
+    // signed-in state comes from the server library; signed-out keeps the
+    // legacy local watchlist, which migrates into library Want on login.
+    const { user } = useAuth();
+    const queryClient = useQueryClient();
     const { isInWatchlist, toggleWatchlist } = useWatchlist();
+    const libraryQuery = useQuery({
+      queryKey: ['library'],
+      queryFn: () => veloraApi.getLibrary(),
+      enabled: !!user,
+    });
+    const libraryStatus = new Map(
+      (libraryQuery.data?.items ?? []).map((i) => [`${i.media_type}-${i.tmdb_id}`, i.status]),
+    );
+    const wantMutation = useMutation({
+      mutationFn: async (item: MediaItem) => {
+        const mediaType = item.media_type ?? 'movie';
+        const status = libraryStatus.get(`${mediaType}-${item.id}`);
+        if (status === 'want') {
+          await veloraApi.removeItem(mediaType, item.id);
+        } else {
+          await veloraApi.upsertItem({
+            mediaType,
+            tmdbId: item.id,
+            title: item.title,
+            posterPath: item.poster_path,
+            backdropPath: item.backdrop_path,
+            releaseDate: item.release_date ?? null,
+            status: 'want',
+          });
+        }
+      },
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['library'] });
+      },
+    });
+
+    const isWanted = useCallback(
+      (item: MediaItem) => {
+        if (!user) return isInWatchlist(item.id);
+        return libraryStatus.get(`${item.media_type ?? 'movie'}-${item.id}`) === 'want';
+      },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      [user, libraryQuery.data, isInWatchlist],
+    );
+
+    const handleWantPress = useCallback(
+      (item: MediaItem) => {
+        if (!user) {
+          toggleWatchlist(item);
+          return;
+        }
+        wantMutation.mutate(item);
+      },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      [user, toggleWatchlist],
+    );
 
     // UI-thread worklet scroll handler (0 JS bridge re-renders)
     const scrollHandler = useAnimatedScrollHandler({
@@ -113,8 +172,8 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = React.memo(
               index={index}
               scrollX={scrollX}
               onPress={onItemPress}
-              onWatchlistPress={toggleWatchlist}
-              isInWatchlist={isInWatchlist(item.id)}
+              onWatchlistPress={handleWantPress}
+              isInWatchlist={isWanted(item)}
             />
           ))}
         </Animated.ScrollView>

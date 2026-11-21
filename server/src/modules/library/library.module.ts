@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { LibraryController } from './library.controller';
+import { LibraryController, TitleStatsController } from './library.controller';
 import { LibraryService } from './library.service';
 
 @Module({
-  controllers: [LibraryController],
+  controllers: [LibraryController, TitleStatsController],
   providers: [LibraryService],
   exports: [LibraryService],
 })

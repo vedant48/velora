@@ -10,6 +10,10 @@ import {
   getSimilarMovies,
   getCollection,
   getMovieWatchProviders,
+  getUpcomingMovies,
+  getStreamingMovies,
+  getMovieRecommendations,
+  getMovieVideos,
 } from './movies';
 import {
   getTrendingTV,
@@ -20,6 +24,7 @@ import {
   getSeasonEpisodes,
   getTVWatchProviders,
   getTVByGenre,
+  getTVVideos,
 } from './tv';
 import {
   getPersonDetails,
@@ -268,3 +273,60 @@ export function useGenreInfiniteQuery(genreId: number, mediaType: 'movie' | 'tv'
 }
 
 
+
+export function useUpcomingMoviesQuery() {
+  return useQuery({
+    queryKey: ['upcoming', 'movies'],
+    queryFn: async ({ signal }) => {
+      const data = await getUpcomingMovies(1, signal);
+      return normalizeMedia(data, 'movie');
+    },
+    staleTime: STALE_TIME,
+    gcTime: GC_TIME,
+  });
+}
+
+export function useStreamingMoviesQuery() {
+  return useQuery({
+    queryKey: ['streaming_in', 'movies'],
+    queryFn: async ({ signal }) => {
+      const data = await getStreamingMovies(1, signal);
+      return normalizeMedia(data, 'movie');
+    },
+    staleTime: STALE_TIME,
+    gcTime: GC_TIME,
+  });
+}
+
+export function useMovieRecommendationsQuery(id: number) {
+  return useQuery({
+    queryKey: ['movie_recs', id],
+    queryFn: async ({ signal }) => {
+      const data = await getMovieRecommendations(id, signal);
+      return normalizeMedia(data, 'movie');
+    },
+    staleTime: STALE_TIME,
+    gcTime: GC_TIME,
+    enabled: Boolean(id),
+  });
+}
+
+export function useMovieVideosQuery(id: number) {
+  return useQuery({
+    queryKey: ['movie_videos', id],
+    queryFn: ({ signal }) => getMovieVideos(id, signal),
+    staleTime: STALE_TIME,
+    gcTime: GC_TIME,
+    enabled: Boolean(id),
+  });
+}
+
+export function useTVVideosQuery(id: number) {
+  return useQuery({
+    queryKey: ['tv_videos', id],
+    queryFn: ({ signal }) => getTVVideos(id, signal),
+    staleTime: STALE_TIME,
+    gcTime: GC_TIME,
+    enabled: Boolean(id),
+  });
+}

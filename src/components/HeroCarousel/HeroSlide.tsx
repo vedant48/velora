@@ -149,7 +149,7 @@ export const HeroSlide: React.FC<HeroSlideProps> = React.memo(
               <Text style={styles.playButtonText}>Details</Text>
             </Pressable>
 
-            {/* Watchlist Toggle Button */}
+            {/* Want Toggle Button (unified watchlist = library Want) */}
             <Pressable
               onPress={handleWatchlist}
               style={[
@@ -157,7 +157,7 @@ export const HeroSlide: React.FC<HeroSlideProps> = React.memo(
                 isInWatchlist && styles.watchlistButtonActive,
               ]}
               accessibilityRole="button"
-              accessibilityLabel="Add to Watchlist"
+              accessibilityLabel="Add to Want"
             >
               <Ionicons
                 name={isInWatchlist ? 'checkmark' : 'add'}
@@ -170,7 +170,7 @@ export const HeroSlide: React.FC<HeroSlideProps> = React.memo(
                   isInWatchlist && { color: colors.primary },
                 ]}
               >
-                {isInWatchlist ? 'In Watchlist' : 'Watchlist'}
+                {isInWatchlist ? 'Wanted' : 'Want'}
               </Text>
             </Pressable>
           </View>

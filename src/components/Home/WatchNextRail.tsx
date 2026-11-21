@@ -1,0 +1,155 @@
+import React, { memo, useEffect, useState } from 'react';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Image } from 'expo-image';
+import { LinearGradient } from 'expo-linear-gradient';
+import { colors } from '../../theme/colors';
+import { veloraApi, LibraryItem } from '../../api/velora';
+import { useAuth } from '../../state/AuthContext';
+import { getImageUrl, IMAGE_CONFIG } from '../../utils/image';
+import { metrics } from '../../theme/metrics';
+
+interface WatchNextRailProps {
+  onPressItem: (item: LibraryItem) => void;
+}
+
+/**
+ * Must-style "Watch next" carousel on the TV Explore tab: large cards for the
+ * signed-in user's in-progress series with a numeric badge of episodes left.
+ * Hidden when signed out or nothing is being watched.
+ */
+export const WatchNextRail = memo(function WatchNextRail({ onPressItem }: WatchNextRailProps) {
+  const { user, apiReady } = useAuth();
+  const [items, setItems] = useState<LibraryItem[]>([]);
+
+  useEffect(() => {
+    if (!user || !apiReady) {
+      setItems([]);
+      return;
+    }
+    let cancelled = false;
+    veloraApi
+      .getLibrary('watching', 'tv')
+      .then(({ items }) => {
+        if (!cancelled) setItems(items);
+      })
+      .catch(() => undefined);
+    return () => {
+      cancelled = true;
+    };
+  }, [user, apiReady]);
+
+  if (items.length === 0) return null;
+
+  const cardWidth = Math.min(metrics.screenWidth - 48, 340);
+  const cardHeight = Math.round(cardWidth * 0.58);
+
+  return (
+    <View style={styles.root}>
+      <Text style={styles.heading}>Watch next</Text>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.scroll}
+        decelerationRate="fast"
+        snapToInterval={cardWidth + 12}
+      >
+        {items.map((item) => {
+          const backdrop = getImageUrl(item.backdrop_path || item.poster_path, 'backdrop');
+          const left = Math.max((item.total_episodes || 0) - item.episodes_watched, 0);
+          return (
+            <Pressable
+              key={item.id}
+              onPress={() => onPressItem(item)}
+              style={({ pressed }) => [{ width: cardWidth }, pressed && { opacity: 0.88 }]}
+              accessibilityRole="button"
+              accessibilityLabel={item.title}
+            >
+              <View style={[styles.card, { width: cardWidth, height: cardHeight }]}>
+                {backdrop ? (
+                  <Image
+                    source={{ uri: backdrop }}
+                    style={StyleSheet.absoluteFill}
+                    contentFit="cover"
+                    transition={IMAGE_CONFIG.transition}
+                    cachePolicy={IMAGE_CONFIG.cachePolicy}
+                    placeholder={IMAGE_CONFIG.placeholder}
+                  />
+                ) : null}
+                <LinearGradient
+                  colors={['transparent', 'rgba(9, 9, 11, 0.9)']}
+                  style={StyleSheet.absoluteFill}
+                />
+                {left > 0 && (
+                  <View style={styles.badge}>
+                    <Text style={styles.badgeText}>{left}</Text>
+                  </View>
+                )}
+                <View style={styles.meta}>
+                  <Text style={styles.name} numberOfLines={1}>
+                    {item.title}
+                  </Text>
+                  <Text style={styles.sub}>
+                    {item.total_episodes > 0
+                      ? `${item.episodes_watched}/${item.total_episodes} episodes`
+                      : `${item.episodes_watched} episodes watched`}
+                  </Text>
+                </View>
+              </View>
+            </Pressable>
+          );
+        })}
+      </ScrollView>
+    </View>
+  );
+});
+
+const styles = StyleSheet.create({
+  root: { marginTop: 18 },
+  heading: {
+    color: colors.textPrimary,
+    fontSize: 17,
+    fontWeight: '800',
+    marginBottom: 10,
+    paddingHorizontal: 16,
+  },
+  scroll: { gap: 12, paddingHorizontal: 16 },
+  card: {
+    borderRadius: 16,
+    overflow: 'hidden',
+    backgroundColor: colors.surfaceLight,
+  },
+  badge: {
+    position: 'absolute',
+    top: 12,
+    right: 12,
+    minWidth: 30,
+    height: 30,
+    borderRadius: 15,
+    paddingHorizontal: 8,
+    backgroundColor: colors.trackBlue,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  badgeText: {
+    color: '#FFF',
+    fontSize: 15,
+    fontWeight: '800',
+  },
+  meta: {
+    position: 'absolute',
+    left: 14,
+    right: 14,
+    bottom: 12,
+  },
+  name: {
+    color: colors.textPrimary,
+    fontSize: 17,
+    fontWeight: '800',
+  },
+  sub: {
+    color: colors.textSecondary,
+    fontSize: 12,
+    fontWeight: '600',
+    marginTop: 2,
+  },
+});
