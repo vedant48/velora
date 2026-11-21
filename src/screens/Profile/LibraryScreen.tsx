@@ -259,7 +259,13 @@ const styles = StyleSheet.create({
   stat: { alignItems: 'center' },
   statValue: { fontSize: 17, fontWeight: '800', color: colors.textPrimary },
   statLabel: { fontSize: 11, color: colors.textTertiary, marginTop: 1 },
-  actionsRow: { flexDirection: 'row', gap: 10, marginTop: 12 },
+  actionsRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    gap: 10,
+    marginTop: 12,
+  },
   actionButton: {
     flexDirection: 'row',
     alignItems: 'center',
