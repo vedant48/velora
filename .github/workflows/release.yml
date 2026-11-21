@@ -123,7 +123,7 @@ jobs:
         working-directory: android
         run: |
           chmod +x gradlew
-          ./gradlew assembleRelease --no-daemon
+          ./gradlew assembleRelease --no-daemon --stacktrace
         env:
           VELORA_UPLOAD_KEYSTORE_PATH: /tmp/velora-upload.keystore
           VELORA_UPLOAD_STORE_PASSWORD: ${{ secrets.VELORA_UPLOAD_STORE_PASSWORD }}
