@@ -4,6 +4,6 @@
  * Until deployed, tracking features run in "offline" mode (local watchlist only).
  */
 export const API_BASE_URL =
-  process.env.EXPO_PUBLIC_API_URL ?? 'https://velora-api.your-subdomain.workers.dev';
+  process.env.EXPO_PUBLIC_API_URL ?? 'https://velora-api.vedant-753.workers.dev';
 
 export const isApiConfigured = !API_BASE_URL.includes('your-subdomain');
