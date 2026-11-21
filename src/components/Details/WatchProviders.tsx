@@ -1,11 +1,11 @@
-import React, { memo } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { Image } from 'expo-image';
+import { memo } from 'react';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useWatchProvidersQuery } from '../../api/queries';
 import { WatchProvider } from '../../api/types';
-import { getPosterUrl } from '../../utils/image';
-import { colors } from '../../theme/colors';
+import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
 import { metrics } from '../../theme/metrics';
+import { getPosterUrl } from '../../utils/image';
 
 interface WatchProvidersProps {
   id: number;
@@ -17,6 +17,8 @@ interface ProviderBadgeProps {
 }
 
 const ProviderBadge = memo(({ provider }: ProviderBadgeProps) => {
+  const { colors } = useAppTheme();
+  const styles = useThemedStyles(createStyles);
   const logoUrl = getPosterUrl(provider.logo_path, 'w185');
 
   return (
@@ -46,6 +48,8 @@ const ProviderBadge = memo(({ provider }: ProviderBadgeProps) => {
 });
 
 export const WatchProviders = memo(({ id, isMovie }: WatchProvidersProps) => {
+  const { colors } = useAppTheme();
+  const styles = useThemedStyles(createStyles);
   const { data, isLoading } = useWatchProvidersQuery(id, isMovie);
 
   if (isLoading || !data?.results) {
@@ -136,7 +140,7 @@ export const WatchProviders = memo(({ id, isMovie }: WatchProvidersProps) => {
   );
 });
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   container: {
     marginTop: metrics.spacingLg,
     marginBottom: metrics.spacingMd,
@@ -154,12 +158,12 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
   },
   hdBadge: {
-    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+    backgroundColor: colors.surfaceLight,
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.12)',
+    borderColor: colors.border,
   },
   hdText: {
     fontSize: 9,
@@ -194,7 +198,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surfaceLight,
     overflow: 'hidden',
     borderWidth: 1.5,
-    borderColor: 'rgba(255, 255, 255, 0.1)',
+    borderColor: colors.border,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,

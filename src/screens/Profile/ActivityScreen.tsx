@@ -1,22 +1,19 @@
-import React from 'react';
-import {
-  ActivityIndicator,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { FlashList } from '@shopify/flash-list';
-import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
-import { useQuery } from '@tanstack/react-query';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { FlashList } from '@shopify/flash-list';
+import { useQuery } from '@tanstack/react-query';
+import { Image } from 'expo-image';
+import React from 'react';
+import { Pressable, RefreshControl, StyleSheet, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ActivityEvent, veloraApi } from '../../api/velora';
+import { AppLoader } from '../../components/common/AppLoader';
+import { ScreenHeader } from '../../components/common/ScreenHeader';
 import { RootStackParamList } from '../../navigation/types';
-import { veloraApi, ActivityEvent } from '../../api/velora';
+import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
+import { ui } from '../../theme/ui';
 import { getImageUrl } from '../../utils/image';
-import { colors } from '../../theme/colors';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 
@@ -49,6 +46,8 @@ function timeAgo(iso: string): string {
 
 /** Must-style friends feed: what people you follow watched, rated and reviewed. */
 export const ActivityScreen: React.FC = () => {
+  const { colors } = useAppTheme();
+  const styles = useThemedStyles(createStyles);
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<Nav>();
 
@@ -62,15 +61,10 @@ export const ActivityScreen: React.FC = () => {
 
   return (
     <View style={[styles.root, { paddingTop: insets.top + 8 }]}>
-      <View style={styles.headerRow}>
-        <Pressable onPress={() => navigation.goBack()} style={styles.back} accessibilityLabel="Back">
-          <Ionicons name="arrow-back" size={22} color={colors.textPrimary} />
-        </Pressable>
-        <Text style={styles.title}>Friends activity</Text>
-      </View>
+      <View style={{paddingHorizontal: 16}}><ScreenHeader title="Friends activity" onBack={() => navigation.goBack()} /></View>
 
       {isLoading ? (
-        <ActivityIndicator color={colors.primary} style={{ marginTop: 40 }} />
+        <AppLoader style={{ marginTop: 40 }} />
       ) : isError ? (
         <View style={styles.empty}>
           <Text style={styles.emptyText}>Could not load the feed.</Text>
@@ -89,8 +83,7 @@ export const ActivityScreen: React.FC = () => {
         <FlashList
           data={feed}
           keyExtractor={(e, i) => `${e.username}-${e.media_type}-${e.tmdb_id}-${i}`}
-          refreshing={isRefetching}
-          onRefresh={() => refetch()}
+          refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={() => refetch()} tintColor={colors.primary} colors={[colors.primary]} />}
           contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 30 }}
           renderItem={({ item }) => (
             <Pressable
@@ -124,7 +117,7 @@ export const ActivityScreen: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
   headerRow: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 16, paddingBottom: 12 },
   back: {
@@ -144,7 +137,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 12,
     backgroundColor: colors.surface,
-    borderRadius: 12,
+    borderRadius: ui.radius.button,
     padding: 10,
     marginBottom: 10,
   },

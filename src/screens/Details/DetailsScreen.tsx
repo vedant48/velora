@@ -1,49 +1,33 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  Pressable,
-  StatusBar,
-  ActivityIndicator,
-  Linking,
-} from 'react-native';
-import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
-import { RootStackParamList } from '../../navigation/types';
-import { MediaItem } from '../../api/types';
-import {
-  useMovieDetailsQuery,
-  useMovieCreditsQuery,
-  useSimilarMoviesQuery,
-  useTVDetailsQuery,
-  useTVCreditsQuery,
-  useSeasonEpisodesQuery,
-  useMovieVideosQuery,
-  useTVVideosQuery,
-} from '../../api/queries';
-import { veloraApi } from '../../api/velora';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { Image } from 'expo-image';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { Linking, Pressable, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useMovieCreditsQuery, useMovieDetailsQuery, useMovieVideosQuery, useSeasonEpisodesQuery, useSimilarMoviesQuery, useTVCreditsQuery, useTVDetailsQuery, useTVVideosQuery } from '../../api/queries';
 import { getSeasonEpisodes } from '../../api/tv';
-import { useLibraryItem } from '../../hooks/useLibraryItem';
-import { useAuth } from '../../state/AuthContext';
-import { MovieCarousel } from '../../components/MovieCarousel/MovieCarousel';
+import { MediaItem } from '../../api/types';
+import { veloraApi } from '../../api/velora';
 import { WatchProviders } from '../../components/Details/WatchProviders';
-import { PersonModal } from '../../components/Person/PersonModal';
-import { TrackingControls } from '../../components/Library/TrackingControls';
 import { EpisodeChecklist } from '../../components/Library/EpisodeChecklist';
 import { ReviewsSection } from '../../components/Library/ReviewsSection';
-import { getImageUrl, IMAGE_CONFIG } from '../../utils/image';
-import { colors } from '../../theme/colors';
+import { TrackingControls } from '../../components/Library/TrackingControls';
+import { MovieCarousel } from '../../components/MovieCarousel/MovieCarousel';
+import { PersonModal } from '../../components/Person/PersonModal';
+import { useLibraryItem } from '../../hooks/useLibraryItem';
+import { RootStackParamList } from '../../navigation/types';
+import { useAuth } from '../../state/AuthContext';
+import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
 import { metrics } from '../../theme/metrics';
+import { getImageUrl, IMAGE_CONFIG } from '../../utils/image';
 
 type DetailsRouteProp = RouteProp<RootStackParamList, 'Details'>;
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 export const DetailsScreen: React.FC = () => {
+  const { colors, mode } = useAppTheme();
+  const styles = useThemedStyles(createStyles);
   const insets = useSafeAreaInsets();
   const route = useRoute<DetailsRouteProp>();
   const navigation = useNavigation<NavigationProp>();
@@ -290,7 +274,7 @@ export const DetailsScreen: React.FC = () => {
 
   return (
     <View style={styles.root}>
-      <StatusBar barStyle="light-content" translucent backgroundColor="transparent" />
+      <StatusBar barStyle={mode === 'dark' ? 'light-content' : 'dark-content'} translucent backgroundColor="transparent" />
 
       {/* Opaque top bar: back + collapse. Content scrolls under it
           without showing through, and the scroll inset below keeps the
@@ -307,7 +291,7 @@ export const DetailsScreen: React.FC = () => {
           hitSlop={8}
           accessibilityLabel="Go back"
         >
-          <Ionicons name="arrow-back" size={20} color="#FFF" />
+          <Ionicons name="arrow-back" size={20} color={colors.textTertiary} />
         </Pressable>
 
         <Pressable
@@ -316,7 +300,7 @@ export const DetailsScreen: React.FC = () => {
           hitSlop={8}
           accessibilityLabel="Close details"
         >
-          <Ionicons name="chevron-down" size={22} color="#FFF" />
+          <Ionicons name="chevron-down" size={22} color={colors.textTertiary} />
         </Pressable>
       </View>
 
@@ -417,7 +401,7 @@ export const DetailsScreen: React.FC = () => {
           </View>
 
           {/* Where to Watch (series: right under stats, per reference) */}
-          {isTV && <WatchProviders id={initialItem.id} isMovie={false} />}
+          <WatchProviders id={initialItem.id} isMovie={isMovie} />
 
           {/* Synopsis */}
           <Text style={styles.sectionHeading}>Overview</Text>
@@ -425,7 +409,7 @@ export const DetailsScreen: React.FC = () => {
             {overview || 'No overview available for this title.'}
           </Text>
 
-          {isMovie && <WatchProviders id={initialItem.id} isMovie={true} />}
+          {!!details?.genres?.length && <View style={styles.genreRow}>{details.genres.map(g => <View key={g.id} style={styles.genrePill}><Text style={styles.genreText}>{g.name}</Text></View>)}</View>}
 
           {/* Seasons & Episodes for TV Series */}
           {isTV && (
@@ -481,13 +465,6 @@ export const DetailsScreen: React.FC = () => {
               />
             </View>
           )}
-
-          {/* Reviews (whole title) */}
-          <ReviewsSection
-            mediaType={isMovie ? 'movie' : 'tv'}
-            tmdbId={initialItem.id}
-            seasonNumber={0}
-          />
 
           {/* Cast Carousel */}
           {cast.length > 0 && (
@@ -583,6 +560,13 @@ export const DetailsScreen: React.FC = () => {
             </View>
           )}
 
+          {/* Reviews (whole title) */}
+          <ReviewsSection
+            mediaType={isMovie ? 'movie' : 'tv'}
+            tmdbId={initialItem.id}
+            seasonNumber={0}
+          />
+
           {/* Similar Titles Carousel */}
           {similarMoviesQuery.data && similarMoviesQuery.data.length > 0 && (
             <View style={styles.similarSection}>
@@ -616,7 +600,10 @@ function formatDateLong(iso: string): string {
   return d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
+  genreRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  genrePill: { paddingHorizontal: 14, paddingVertical: 8, backgroundColor: colors.surface, borderRadius: 18 },
+  genreText: { color: colors.textSecondary, fontSize: 12 },
   root: {
     flex: 1,
     backgroundColor: colors.background,
@@ -644,11 +631,11 @@ const styles = StyleSheet.create({
     width: 38,
     height: 38,
     borderRadius: 19,
-    backgroundColor: 'rgba(14, 14, 20, 0.75)',
+    backgroundColor: colors.surface,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 0.5,
-    borderColor: 'rgba(255, 255, 255, 0.15)',
+    borderColor: colors.border,
   },
   posterSection: {
     alignItems: 'center',
@@ -657,23 +644,24 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
   },
   posterWrap: {
-    width: 232,
+    width: 218,
     aspectRatio: 2 / 3,
     position: 'relative',
+    shadowColor: '#000', shadowOpacity: 0.18, shadowRadius: 16, shadowOffset: { width: 0, height: 10 }, elevation: 10,
   },
   poster: {
-    width: 232,
+    width: 218,
     aspectRatio: 2 / 3,
-    borderRadius: 16,
+    borderRadius: 3,
     backgroundColor: colors.cardBackground,
   },
   playButton: {
     position: 'absolute',
-    bottom: -18,
-    right: -18,
-    width: 62,
-    height: 62,
-    borderRadius: 31,
+    bottom: 12,
+    right: 12,
+    width: 38,
+    height: 38,
+    borderRadius: 19,
     backgroundColor: 'rgba(30, 30, 36, 0.85)',
     alignItems: 'center',
     justifyContent: 'center',
@@ -692,7 +680,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255,255,255,0.2)',
   },
   statusBadgeText: {
-    color: colors.textPrimary,
+    color: '#FFFFFF',
     fontSize: 11,
     fontWeight: '800',
   },
@@ -702,7 +690,7 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   title: {
-    fontSize: 27,
+    fontSize: 18,
     fontWeight: '800',
     color: colors.textPrimary,
     letterSpacing: -0.3,
@@ -715,8 +703,8 @@ const styles = StyleSheet.create({
   },
   dateText: {
     color: colors.textSecondary,
-    fontSize: 15,
-    fontWeight: '600',
+    fontSize: 13,
+    fontWeight: '400',
   },
   endedPill: {
     backgroundColor: colors.surfaceLight,
@@ -736,12 +724,12 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderTopWidth: StyleSheet.hairlineWidth,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderColor: 'rgba(255,255,255,0.14)',
+    borderColor: colors.border,
   },
   statCell: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     alignItems: 'center',
-    gap: 5,
+    gap: 3,
   },
   statValue: {
     color: colors.textPrimary,
@@ -839,8 +827,8 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
   },
   seasonPillActive: {
-    backgroundColor: '#3A3A44',
-    borderColor: '#3A3A44',
+    backgroundColor: colors.surfaceLight,
+    borderColor: colors.borderHighlight,
   },
   seasonPillText: {
     color: colors.textSecondary,

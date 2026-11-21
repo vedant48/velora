@@ -1,13 +1,13 @@
-import React, { memo, useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { colors } from '../../theme/colors';
+import { memo, useCallback, useEffect, useState } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { LibraryItem, LibraryStatus, MediaType, veloraApi } from '../../api/velora';
 import { useAuth } from '../../state/AuthContext';
-import { veloraApi, LibraryItem, MediaType, LibraryStatus } from '../../api/velora';
-import { Pressable } from 'react-native';
+import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
+import { AppLoader } from '../common/AppLoader';
+import { EpisodeTracker } from './EpisodeTracker';
 import { RatingPicker } from './RatingPicker';
 import { StatusPicker } from './StatusPicker';
-import { EpisodeTracker } from './EpisodeTracker';
 
 interface TrackSectionProps {
   mediaType: MediaType;
@@ -29,6 +29,8 @@ export const TrackSection = memo(function TrackSection({
   releaseDate,
   totalEpisodes = 0,
 }: TrackSectionProps) {
+  const { colors } = useAppTheme();
+  const styles = useThemedStyles(createStyles);
   const { user, apiReady } = useAuth();
   const navigation = useNavigation<any>();
   const [item, setItem] = useState<LibraryItem | null>(null);
@@ -114,10 +116,10 @@ export const TrackSection = memo(function TrackSection({
     <View style={styles.container}>
       <View style={styles.headingRow}>
         <Text style={styles.heading}>Track this {mediaType === 'tv' ? 'series' : 'movie'}</Text>
-        {saving && <ActivityIndicator size="small" color={colors.primary} />}
+        {saving && <AppLoader size="small" />}
       </View>
       {loading ? (
-        <ActivityIndicator color={colors.primary} style={{ marginVertical: 12 }} />
+        <AppLoader style={{ marginVertical: 12 }} />
       ) : (
         <>
           <StatusPicker status={item?.status ?? null} onChange={(status) => save({ status: status ?? undefined })} />
@@ -141,7 +143,7 @@ export const TrackSection = memo(function TrackSection({
   );
 });
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   container: {
     marginTop: 24,
     padding: 16,

@@ -1,20 +1,22 @@
-import React, { useCallback } from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { FlashList, ListRenderItem } from '@shopify/flash-list';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../../navigation/types';
+import { FlashList, ListRenderItem } from '@shopify/flash-list';
+import React, { useCallback } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MediaItem } from '../../api/types';
-import { useWatchlist } from '../../hooks/useWatchlist';
 import { MovieCard } from '../../components/MovieCard/MovieCard';
-import { colors } from '../../theme/colors';
+import { useWatchlist } from '../../hooks/useWatchlist';
+import { RootStackParamList } from '../../navigation/types';
+import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
 import { metrics } from '../../theme/metrics';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 export const WatchlistScreen: React.FC = () => {
+  const { colors } = useAppTheme();
+  const styles = useThemedStyles(createStyles);
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<NavigationProp>();
   const { watchlist } = useWatchlist();
@@ -91,7 +93,7 @@ export const WatchlistScreen: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,

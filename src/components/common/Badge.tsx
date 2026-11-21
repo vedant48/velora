@@ -1,7 +1,7 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { colors } from '../../theme/colors';
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
 
 interface BadgeProps {
   rating?: number;
@@ -11,6 +11,8 @@ interface BadgeProps {
 
 export const Badge: React.FC<BadgeProps> = React.memo(
   ({ rating, label, variant = 'default' }) => {
+  const { colors } = useAppTheme();
+  const styles = useThemedStyles(createStyles);
     if (variant === 'rating' && rating !== undefined) {
       return (
         <View style={[styles.badge, styles.ratingBadge]}>
@@ -38,7 +40,7 @@ export const Badge: React.FC<BadgeProps> = React.memo(
 
 Badge.displayName = 'Badge';
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   badge: {
     flexDirection: 'row',
     alignItems: 'center',

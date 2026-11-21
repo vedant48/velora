@@ -1,9 +1,10 @@
-import React, { memo, useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { colors } from '../../theme/colors';
+import { memo, useCallback, useEffect, useState } from 'react';
+import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { MediaType, Review, veloraApi } from '../../api/velora';
 import { useAuth } from '../../state/AuthContext';
-import { veloraApi, MediaType, Review } from '../../api/velora';
+import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
+import { AppLoader } from '../common/AppLoader';
 
 interface ReviewsSectionProps {
   mediaType: MediaType;
@@ -13,6 +14,8 @@ interface ReviewsSectionProps {
 
 /** Reviews list + composer (whole title when seasonNumber is 0/undefined). */
 export const ReviewsSection = memo(function ReviewsSection({ mediaType, tmdbId, seasonNumber = 0 }: ReviewsSectionProps) {
+  const { colors } = useAppTheme();
+  const styles = useThemedStyles(createStyles);
   const { user, apiReady } = useAuth();
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
@@ -65,12 +68,12 @@ export const ReviewsSection = memo(function ReviewsSection({ mediaType, tmdbId, 
             maxLength={2000}
           />
           <Pressable onPress={post} style={[styles.postButton, (!draft.trim() || posting) && { opacity: 0.5 }]} disabled={!draft.trim() || posting}>
-            {posting ? <ActivityIndicator size="small" color="#fff" /> : <Ionicons name="send" size={16} color="#fff" />}
+            {posting ? <AppLoader size="small" onAccent /> : <Ionicons name="send" size={16} color="#fff" />}
           </Pressable>
         </View>
       )}
       {loading ? (
-        <ActivityIndicator color={colors.primary} style={{ marginVertical: 12 }} />
+        <AppLoader style={{ marginVertical: 12 }} />
       ) : reviews.length === 0 ? (
         <Text style={styles.empty}>No reviews yet.</Text>
       ) : (
@@ -93,7 +96,7 @@ export const ReviewsSection = memo(function ReviewsSection({ mediaType, tmdbId, 
   );
 });
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   container: {
     marginTop: 24,
     padding: 16,

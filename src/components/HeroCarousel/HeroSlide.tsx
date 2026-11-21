@@ -1,19 +1,14 @@
-import React, { useCallback } from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
-import Animated, {
-  SharedValue,
-  useAnimatedStyle,
-  interpolate,
-  Extrapolation,
-} from 'react-native-reanimated';
+import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Ionicons } from '@expo/vector-icons';
+import React, { useCallback } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import Animated, { Extrapolation, interpolate, SharedValue, useAnimatedStyle } from 'react-native-reanimated';
 import { MediaItem } from '../../api/types';
-import { getImageUrl, IMAGE_CONFIG } from '../../utils/image';
 import { metrics } from '../../theme/metrics';
-import { colors } from '../../theme/colors';
+import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
 import { typography } from '../../theme/typography';
+import { getImageUrl, IMAGE_CONFIG } from '../../utils/image';
 import { Badge } from '../common/Badge';
 
 interface HeroSlideProps {
@@ -34,6 +29,8 @@ export const HeroSlide: React.FC<HeroSlideProps> = React.memo(
     onWatchlistPress,
     isInWatchlist,
   }) => {
+  const { colors } = useAppTheme();
+  const styles = useThemedStyles(createStyles);
     const width = metrics.screenWidth;
 
     // UI-thread Parallax & Scale interpolation
@@ -125,7 +122,7 @@ export const HeroSlide: React.FC<HeroSlideProps> = React.memo(
           </View>
 
           {/* Title */}
-          <Text style={typography.heroTitle} numberOfLines={2}>
+          <Text style={[typography.heroTitle, { color: '#FFFFFF' }]} numberOfLines={2}>
             {item.title}
           </Text>
 
@@ -182,7 +179,7 @@ export const HeroSlide: React.FC<HeroSlideProps> = React.memo(
 
 HeroSlide.displayName = 'HeroSlide';
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   container: {
     height: metrics.heroHeight,
     position: 'relative',
@@ -206,13 +203,13 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   genreText: {
-    color: colors.textSecondary,
+    color: '#D4D4DA',
     fontSize: 11,
     fontWeight: '700',
     letterSpacing: 1,
   },
   overviewText: {
-    color: colors.textSecondary,
+    color: '#D4D4DA',
     fontSize: 13,
     lineHeight: 18,
   },

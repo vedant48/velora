@@ -1,33 +1,31 @@
-import React, { useState, useCallback, useMemo } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  Pressable,
-  ActivityIndicator,
-} from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { FlashList, ListRenderItem } from '@shopify/flash-list';
 import { Ionicons } from '@expo/vector-icons';
-import { useQuery } from '@tanstack/react-query';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../../navigation/types';
-import { searchMulti, searchMovies, searchTV } from '../../api/search';
-import { veloraApi } from '../../api/velora';
+import { FlashList, ListRenderItem } from '@shopify/flash-list';
+import { useQuery } from '@tanstack/react-query';
+import React, { useCallback, useState } from 'react';
+import { Pressable, StyleSheet, Text, TextInput, useWindowDimensions, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTrendingMoviesQuery } from '../../api/queries';
+import { searchMovies, searchMulti, searchTV } from '../../api/search';
 import { MediaItem } from '../../api/types';
-import { MovieCard } from '../../components/MovieCard/MovieCard';
-import { MovieCardSkeleton } from '../../components/Skeleton/MovieCardSkeleton';
+import { veloraApi } from '../../api/velora';
+import { AppLoader } from '../../components/common/AppLoader';
+import { SearchPoster } from '../../components/Library/SearchPoster';
 import { useDebounce } from '../../hooks/useDebounce';
-import { colors } from '../../theme/colors';
+import { RootStackParamList } from '../../navigation/types';
 import { metrics } from '../../theme/metrics';
+import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 type FilterType = 'all' | 'movie' | 'tv' | 'people';
 
 export const SearchScreen: React.FC = () => {
+  const { colors } = useAppTheme();
+  const styles = useThemedStyles(createStyles);
   const insets = useSafeAreaInsets();
+  const { width: screenWidth } = useWindowDimensions();
+  const suggestions = useTrendingMoviesQuery();
   const navigation = useNavigation<NavigationProp>();
 
   const [inputQuery, setInputQuery] = useState('');
@@ -39,6 +37,11 @@ export const SearchScreen: React.FC = () => {
 
   // 350ms debounce prevents flooding TMDB proxy
   const debouncedQuery = useDebounce(inputQuery, 350);
+
+  const searchScope = `${debouncedQuery}:${filter}`;
+  const searchScopeRef = React.useRef(searchScope);
+  searchScopeRef.current = searchScope;
+  React.useEffect(() => { setIsFetchingMore(false); setPage(1); setHasMore(true); }, [searchScope]);
 
   // TanStack Query for initial page of debounced search
   const { data, isLoading, isFetching, isError, refetch } = useQuery({
@@ -90,7 +93,7 @@ export const SearchScreen: React.FC = () => {
     } else {
       setAllResults([]);
     }
-  }, [data]);
+  }, [data, searchScope]);
 
   // Lazy loading next pages on end reached (content comes in 3 columns)
   const handleLoadMore = useCallback(async () => {
@@ -98,6 +101,7 @@ export const SearchScreen: React.FC = () => {
 
     setIsFetchingMore(true);
     const nextPage = page + 1;
+    const requestScope = searchScope;
 
     try {
       let newItems: MediaItem[] = [];
@@ -121,10 +125,11 @@ export const SearchScreen: React.FC = () => {
         newItems = await searchMulti(debouncedQuery, nextPage);
       }
 
+      if (requestScope !== searchScopeRef.current) return;
       if (newItems && newItems.length > 0) {
         setAllResults((prev) => {
-          const existingIds = new Set(prev.map((i) => i.id));
-          const uniqueNew = newItems.filter((i) => !existingIds.has(i.id));
+          const existingIds = new Set(prev.map((i) => `${i.media_type ?? 'movie'}:${i.id}`));
+          const uniqueNew = newItems.filter((i) => !existingIds.has(`${i.media_type ?? 'movie'}:${i.id}`));
           return [...prev, ...uniqueNew];
         });
         setPage(nextPage);
@@ -133,11 +138,11 @@ export const SearchScreen: React.FC = () => {
         setHasMore(false);
       }
     } catch {
-      setHasMore(false);
+      if (requestScope === searchScopeRef.current) setHasMore(false);
     } finally {
-      setIsFetchingMore(false);
+      if (requestScope === searchScopeRef.current) setIsFetchingMore(false);
     }
-  }, [debouncedQuery, filter, hasMore, isFetchingMore, isLoading, page]);
+  }, [debouncedQuery, filter, hasMore, isFetchingMore, isLoading, page, searchScope]);
 
   const handleClear = useCallback(() => {
     setInputQuery('');
@@ -153,7 +158,7 @@ export const SearchScreen: React.FC = () => {
 
   // Column calculation for 3-column grid
   const numColumns = 3;
-  const availableWidth = metrics.screenWidth - metrics.screenHorizontalPadding * 2;
+  const availableWidth = screenWidth - metrics.screenHorizontalPadding * 2;
   const gap = 10;
   const cardWidth = Math.floor((availableWidth - (numColumns - 1) * gap) / numColumns);
   const cardHeight = Math.floor(cardWidth * 1.5);
@@ -161,24 +166,23 @@ export const SearchScreen: React.FC = () => {
   const renderItem: ListRenderItem<MediaItem> = useCallback(
     ({ item }) => (
       <View style={{ marginBottom: gap }}>
-        <MovieCard
+        <SearchPoster
           item={item}
           onPress={handleItemPress}
           width={cardWidth}
-          height={cardHeight}
-          hasMarginRight={false}
         />
       </View>
     ),
     [cardWidth, cardHeight, handleItemPress]
   );
 
-  const keyExtractor = useCallback((item: MediaItem) => item.id.toString(), []);
+  const keyExtractor = useCallback((item: MediaItem) => `${item.media_type ?? 'movie'}:${item.id}`, []);
 
   return (
     <View style={[styles.container, { paddingTop: Math.max(insets.top, 16) }]}>
       {/* Search Header Input */}
       <View style={styles.header}>
+        <Pressable onPress={() => navigation.navigate('MainTabs', { screen: 'ProfileTab' })} accessibilityRole="button" accessibilityLabel="Back to library" style={{ paddingVertical: 6, alignSelf: 'flex-start' }}><Ionicons name="arrow-back" size={20} color={colors.textSecondary} /></Pressable>
         <View style={styles.searchBar}>
           <Ionicons name="search" size={20} color={colors.textSecondary} style={styles.searchIcon} />
           <TextInput
@@ -192,7 +196,7 @@ export const SearchScreen: React.FC = () => {
             clearButtonMode="never"
           />
           {inputQuery.length > 0 && (
-            <Pressable onPress={handleClear} style={styles.clearButton} hitSlop={8}>
+            <Pressable accessibilityLabel="Clear search" accessibilityRole="button" onPress={handleClear} style={styles.clearButton} hitSlop={8}>
               <Ionicons name="close-circle" size={18} color={colors.textSecondary} />
             </Pressable>
           )}
@@ -244,7 +248,7 @@ export const SearchScreen: React.FC = () => {
             <Text style={styles.stateSubtitle}>Search Velora members by username or name.</Text>
           </View>
         ) : peopleQuery.isLoading ? (
-          <ActivityIndicator color={colors.primary} style={{ marginTop: 40 }} />
+          <AppLoader style={{ marginTop: 40 }} />
         ) : peopleQuery.isError ? (
           <View style={styles.centerState}>
             <Ionicons name="alert-circle-outline" size={48} color={colors.error} />
@@ -279,18 +283,7 @@ export const SearchScreen: React.FC = () => {
           />
         )
       ) : (isLoading || (isFetching && allResults.length === 0)) && debouncedQuery.trim().length > 1 ? (
-        /* 3 rows of 3 columns skeleton (9 cards total) */
-        <View style={styles.skeletonContainer}>
-          {[0, 1, 2].map((rowIdx) => (
-            <View key={rowIdx} style={styles.skeletonRow}>
-              {[0, 1, 2].map((colIdx) => (
-                <View key={colIdx} style={{ width: cardWidth }}>
-                  <MovieCardSkeleton width={cardWidth} height={cardHeight} hasMarginRight={false} />
-                </View>
-              ))}
-            </View>
-          ))}
-        </View>
+        <AppLoader style={{ flex: 1 }} />
       ) : isError && allResults.length === 0 ? (
         <View style={styles.centerState}>
           <Ionicons name="alert-circle-outline" size={48} color={colors.error} />
@@ -309,12 +302,11 @@ export const SearchScreen: React.FC = () => {
           </Text>
         </View>
       ) : debouncedQuery.trim().length <= 1 ? (
-        <View style={styles.centerState}>
-          <Ionicons name="search-outline" size={54} color={colors.textMuted} />
-          <Text style={styles.stateTitle}>Explore Movies & Series</Text>
-          <Text style={styles.stateSubtitle}>
-            Type a title, genre, or keyword to start searching.
-          </Text>
+        <View style={styles.suggestions}>
+          <Text style={styles.suggestedLabel}>Suggested</Text>
+          {suggestions.isLoading ? <AppLoader /> : suggestions.isError ?
+            <Pressable onPress={() => suggestions.refetch()} accessibilityRole="button"><Text style={styles.stateSubtitle}>Could not load suggestions. Tap to retry.</Text></Pressable> :
+            <View style={styles.suggestionsRow}>{suggestions.data?.slice(0, 3).map(item => <SearchPoster key={item.id} item={item} onPress={handleItemPress} width={cardWidth} labels={false} />)}</View>}
         </View>
       ) : (
         <View style={styles.listWrapper}>
@@ -329,13 +321,7 @@ export const SearchScreen: React.FC = () => {
             onEndReachedThreshold={0.5}
             ListFooterComponent={
               isFetchingMore ? (
-                <View style={styles.footerSkeletonRow}>
-                  {[0, 1, 2].map((colIdx) => (
-                    <View key={colIdx} style={{ width: cardWidth }}>
-                      <MovieCardSkeleton width={cardWidth} height={cardHeight} hasMarginRight={false} />
-                    </View>
-                  ))}
-                </View>
+                <AppLoader style={{ paddingVertical: 24 }} />
               ) : null
             }
           />
@@ -345,7 +331,10 @@ export const SearchScreen: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
+  suggestions: { paddingHorizontal: metrics.screenHorizontalPadding, gap: 20 },
+  suggestedLabel: { fontSize: 12, color: colors.textSecondary, fontWeight: '600' },
+  suggestionsRow: { flexDirection: 'row', justifyContent: 'space-between' },
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -388,7 +377,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surfaceLight,
   },
   filterChipActive: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.surfaceLight,
   },
   filterChipText: {
     color: colors.textSecondary,
@@ -396,7 +385,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   filterChipTextActive: {
-    color: '#FFF',
+    color: colors.textPrimary,
   },
   skeletonContainer: {
     paddingHorizontal: metrics.screenHorizontalPadding,

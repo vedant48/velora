@@ -1,20 +1,11 @@
-import React, { memo, useEffect, useState } from 'react';
-import {
-  KeyboardAvoidingView,
-  Modal,
-  Platform,
-  Pressable,
-  ScrollView,
-  Share,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
-import { colors } from '../../theme/colors';
+import { memo, useEffect, useState } from 'react';
+import { Pressable, ScrollView, Share, StyleSheet, Text, TextInput, View } from 'react-native';
+import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
 import { getImageUrl, IMAGE_CONFIG } from '../../utils/image';
+import { AppLoader } from '../common/AppLoader';
+import { BottomSheet } from '../common/BottomSheet';
 
 const RATING_VALUES = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
 
@@ -47,6 +38,8 @@ export const RateReviewSheet = memo(function RateReviewSheet({
   onSave,
   onClose,
 }: RateReviewSheetProps) {
+  const { colors } = useAppTheme();
+  const styles = useThemedStyles(createStyles);
   const [rating, setRating] = useState<number | null>(initialRating);
   const [body, setBody] = useState(initialBody);
 
@@ -69,15 +62,7 @@ export const RateReviewSheet = memo(function RateReviewSheet({
   };
 
   return (
-    <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
-      <KeyboardAvoidingView
-        style={styles.flex}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      >
-        <Pressable style={styles.backdrop} onPress={onClose} accessibilityLabel="Dismiss" />
-        <View style={styles.sheet}>
-          <View style={styles.handle} />
-
+    <BottomSheet visible={visible} onClose={onClose} showHandle>
           {/* Header: poster + title/subtitle */}
           <View style={styles.headerRow}>
             <View style={styles.posterWrap}>
@@ -166,37 +151,15 @@ export const RateReviewSheet = memo(function RateReviewSheet({
             onPress={() => onSave(rating, body.trim())}
             disabled={saving}
             style={({ pressed }) => [styles.saveButton, (pressed || saving) && { opacity: 0.75 }]}
-            accessibilityRole="button"
+            accessibilityRole="button" accessibilityLabel="Save review"
           >
-            <Text style={styles.saveText}>{saving ? 'Saving...' : 'Save'}</Text>
+            {saving ? <AppLoader onAccent /> : <Text style={styles.saveText}>Save</Text>}
           </Pressable>
-        </View>
-      </KeyboardAvoidingView>
-    </Modal>
+    </BottomSheet>
   );
 });
 
-const styles = StyleSheet.create({
-  flex: { flex: 1 },
-  backdrop: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.72)',
-  },
-  sheet: {
-    backgroundColor: '#26262C',
-    borderTopLeftRadius: 22,
-    borderTopRightRadius: 22,
-    paddingBottom: 0,
-  },
-  handle: {
-    alignSelf: 'center',
-    width: 44,
-    height: 5,
-    borderRadius: 3,
-    backgroundColor: 'rgba(255,255,255,0.35)',
-    marginTop: 8,
-    marginBottom: 6,
-  },
+const createStyles = (colors: AppColors) => StyleSheet.create({
   headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -230,7 +193,7 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: StyleSheet.hairlineWidth,
-    backgroundColor: 'rgba(255,255,255,0.18)',
+    backgroundColor: colors.surfaceLight,
   },
   reviewInput: {
     minHeight: 96,
@@ -256,7 +219,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: '#4A4A52',
+    backgroundColor: colors.surfaceLight,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -277,7 +240,7 @@ const styles = StyleSheet.create({
     width: 52,
     height: 52,
     borderRadius: 26,
-    backgroundColor: '#4A4A52',
+    backgroundColor: colors.surfaceLight,
     alignItems: 'center',
     justifyContent: 'center',
   },

@@ -1,22 +1,17 @@
-import React, { useState, useEffect, useRef } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  Pressable,
-  Platform,
-} from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
 import { useQueryClient } from '@tanstack/react-query';
 import { Image } from 'expo-image';
-import { Ionicons } from '@expo/vector-icons';
+import React, { useEffect, useRef, useState } from 'react';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { PROXY_URL, proxyGet } from '../../api/client';
 import { storage } from '../../storage/storage';
-import { colors } from '../../theme/colors';
+import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
 import { metrics } from '../../theme/metrics';
 
 export const DebugScreen: React.FC = () => {
+  const { colors } = useAppTheme();
+  const styles = useThemedStyles(createStyles);
   const insets = useSafeAreaInsets();
   const queryClient = useQueryClient();
 
@@ -226,7 +221,7 @@ export const DebugScreen: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,

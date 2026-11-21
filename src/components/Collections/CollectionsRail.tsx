@@ -1,10 +1,10 @@
-import React, { memo, useEffect, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Image } from 'expo-image';
-import { colors } from '../../theme/colors';
+import { memo, useEffect, useState } from 'react';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { getCollection } from '../../api/movies';
 import { veloraApi } from '../../api/velora';
 import { useAuth } from '../../state/AuthContext';
+import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
 import { getImageUrl, IMAGE_CONFIG } from '../../utils/image';
 
 /** Curated TMDB collections (user confirmed TMDB collections as the source). */
@@ -37,6 +37,8 @@ interface CollectionsRailProps {
  * "likes" count is omitted: no likes system exists.)
  */
 export const CollectionsRail = memo(function CollectionsRail({ onPressCollection }: CollectionsRailProps) {
+  const { colors } = useAppTheme();
+  const styles = useThemedStyles(createStyles);
   const { user, apiReady } = useAuth();
   const [collections, setCollections] = useState<CollectionCard[]>([]);
 
@@ -136,7 +138,7 @@ export const CollectionsRail = memo(function CollectionsRail({ onPressCollection
   );
 });
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   root: { marginTop: 18 },
   heading: {
     color: colors.textPrimary,

@@ -1,15 +1,16 @@
-import React, { useCallback, useMemo } from 'react';
-import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
-import { FlashList } from '@shopify/flash-list';
-import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { FlashList } from '@shopify/flash-list';
+import React, { useCallback, useMemo } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
-import { RootStackParamList } from '../../navigation/types';
-import { MediaItem } from '../../api/types';
 import { useCollectionQuery } from '../../api/queries';
+import { MediaItem } from '../../api/types';
 import { MovieCard } from '../../components/MovieCard/MovieCard';
-import { colors } from '../../theme/colors';
+import { AppLoader } from '../../components/common/AppLoader';
+import { ScreenHeader } from '../../components/common/ScreenHeader';
+import { RootStackParamList } from '../../navigation/types';
+import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
 import { metrics } from '../../theme/metrics';
 
 type CollectionRouteProp = RouteProp<RootStackParamList, 'Collection'>;
@@ -17,6 +18,8 @@ type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 /** Grid of one TMDB collection's movies (opened from the Explore Collections rail). */
 export const CollectionScreen: React.FC = () => {
+  const { colors } = useAppTheme();
+  const styles = useThemedStyles(createStyles);
   const insets = useSafeAreaInsets();
   const route = useRoute<CollectionRouteProp>();
   const navigation = useNavigation<NavigationProp>();
@@ -38,22 +41,17 @@ export const CollectionScreen: React.FC = () => {
         <MovieCard item={item} onPress={handleItemPress} />
       </View>
     ),
-    [handleItemPress],
+    [handleItemPress, styles],
   );
 
   return (
     <View style={[styles.root, { paddingTop: Math.max(insets.top, 12) }]}>
-      <View style={styles.header}>
-        <Pressable onPress={() => navigation.goBack()} style={styles.backButton} hitSlop={8} accessibilityLabel="Go back">
-          <Ionicons name="arrow-back" size={20} color="#FFF" />
-        </Pressable>
-        <Text style={styles.title} numberOfLines={1}>
-          {collectionName}
-        </Text>
-      </View>
+      <View style={{paddingHorizontal: 16}}><ScreenHeader title={collectionName} onBack={() => navigation.goBack()} /></View>
       {query.isLoading ? (
-        <ActivityIndicator color={colors.primary} style={{ marginTop: 40 }} />
-      ) : (
+        <AppLoader style={{ marginTop: 40 }} />
+      ) : query.isError ? (
+        <Pressable accessibilityRole="button" onPress={() => query.refetch()} style={{padding: 24}}><Text style={{color: colors.textPrimary}}>Could not load collection. Tap to retry.</Text></Pressable>
+      ) : data.length === 0 ? <Text style={{padding: 24, color: colors.textSecondary}}>No titles in this collection.</Text> : (
         <FlashList
           data={data}
           keyExtractor={(item) => String(item.id)}
@@ -66,7 +64,7 @@ export const CollectionScreen: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
   header: {
     flexDirection: 'row',

@@ -1,19 +1,20 @@
-import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { RootStackParamList } from './types';
-import { TabNavigator } from './TabNavigator';
+import React from 'react';
+import { AuthScreen } from '../screens/Auth/AuthScreen';
+import { CollectionScreen } from '../screens/Collection/CollectionScreen';
 import { DetailsScreen } from '../screens/Details/DetailsScreen';
 import { GenreScreen } from '../screens/Genre/GenreScreen';
-import { CollectionScreen } from '../screens/Collection/CollectionScreen';
-import { AuthScreen } from '../screens/Auth/AuthScreen';
-import { UserProfileScreen } from '../screens/Profile/UserProfileScreen';
-import { ActivityScreen } from '../screens/Profile/ActivityScreen';
 import { AccountScreen } from '../screens/Profile/AccountScreen';
-import { colors } from '../theme/colors';
+import { ActivityScreen } from '../screens/Profile/ActivityScreen';
+import { UserProfileScreen } from '../screens/Profile/UserProfileScreen';
+import { useAppTheme } from '../theme/ThemeContext';
+import { TabNavigator } from './TabNavigator';
+import { RootStackParamList } from './types';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export const AppNavigator: React.FC = () => {
+  const { colors } = useAppTheme();
   return (
     <Stack.Navigator
       screenOptions={{

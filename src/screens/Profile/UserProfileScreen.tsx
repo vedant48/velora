@@ -1,29 +1,26 @@
-import React, { useCallback, useState } from 'react';
-import {
-  ActivityIndicator,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../../navigation/types';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Image } from 'expo-image';
+import React, { useCallback, useState } from 'react';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { veloraApi } from '../../api/velora';
+import { AppLoader } from '../../components/common/AppLoader';
+import { RootStackParamList } from '../../navigation/types';
 import { useAuth } from '../../state/AuthContext';
+import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
+import { ui } from '../../theme/ui';
 import { getImageUrl } from '../../utils/image';
-import { colors } from '../../theme/colors';
 
 type Nav = NativeStackNavigationProp<RootStackParamList, 'UserProfile'>;
 type Rt = RouteProp<RootStackParamList, 'UserProfile'>;
 
 /** Public profile of another user: stats, match score, follow, their tracked titles. */
 export const UserProfileScreen: React.FC = () => {
+  const { colors } = useAppTheme();
+  const styles = useThemedStyles(createStyles);
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<Nav>();
   const { username } = useRoute<Rt>().params;
@@ -70,7 +67,7 @@ export const UserProfileScreen: React.FC = () => {
   if (profileQuery.isLoading) {
     return (
       <View style={[styles.root, styles.center, { paddingTop: insets.top }]}>
-        <ActivityIndicator color={colors.primary} />
+        <AppLoader />
       </View>
     );
   }
@@ -158,7 +155,7 @@ export const UserProfileScreen: React.FC = () => {
 
       {!isPrivate && !!stats && <Text style={styles.sectionTitle}>Watched</Text>}
       {isPrivate || !stats ? null : libraryQuery.isLoading ? (
-        <ActivityIndicator color={colors.primary} />
+        <AppLoader />
       ) : watched.length === 0 ? (
         <Text style={styles.emptyText}>Nothing watched yet.</Text>
       ) : (
@@ -184,7 +181,7 @@ export const UserProfileScreen: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
   center: { alignItems: 'center', justifyContent: 'center' },
   errorText: { color: colors.textSecondary, fontSize: 14, marginBottom: 12 },
@@ -209,7 +206,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   avatarText: { fontSize: 30, fontWeight: '900', color: colors.primary },
-  name: { fontSize: 22, fontWeight: '800', color: colors.textPrimary },
+  name: { fontSize: ui.type.screenTitle, fontWeight: '800', color: colors.textPrimary },
   username: { fontSize: 13, color: colors.textSecondary },
   bio: { fontSize: 13, color: colors.textSecondary, textAlign: 'center', marginTop: 4 },
   actionRow: { flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: 10 },

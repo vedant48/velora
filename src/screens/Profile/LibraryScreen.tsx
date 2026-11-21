@@ -1,17 +1,20 @@
-import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
-import { ActivityIndicator, Alert, Pressable, Share, StyleSheet, Text, View } from 'react-native';
-import { FlashList } from '@shopify/flash-list';
-import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
-import { colors } from '../../theme/colors';
-import { useAuth } from '../../state/AuthContext';
-import { veloraApi, LibraryItem, UserStats, Review } from '../../api/velora';
-import { LibraryCard } from '../../components/Library/LibraryCard';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { FlashList } from '@shopify/flash-list';
+import React, { memo, useCallback, useMemo, useState } from 'react';
+import { Alert, Pressable, Share, StyleSheet, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { LibraryItem, Review, UserStats, veloraApi } from '../../api/velora';
+import { AppLoader } from '../../components/common/AppLoader';
 import { ActionSheet } from '../../components/Library/ActionSheet';
+import { LibraryCard } from '../../components/Library/LibraryCard';
+import { LibraryQuickAction } from '../../components/Library/LibraryQuickAction';
 import { checkForUpdate, downloadAndInstall } from '../../services/updates';
+import { useAuth } from '../../state/AuthContext';
+import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
 
 type TabKey = 'want' | 'watched' | 'series' | 'insights';
-type SortKey = 'recent' | 'title' | 'rating';
+type SortKey = 'recent' | 'release' | 'title' | 'rating';
 
 const TABS: { key: TabKey; label: string }[] = [
   { key: 'want', label: 'Want' },
@@ -22,7 +25,19 @@ const TABS: { key: TabKey; label: string }[] = [
 
 /** Must-style profile: name left/avatar right, rank + stats, tabs, 2-column grid. */
 export const LibraryScreen: React.FC = () => {
+  const { colors } = useAppTheme();
+  const styles = useThemedStyles(createStyles);
   const navigation = useNavigation<any>();
+  const insets = useSafeAreaInsets();
+  const [headerHeight, setHeaderHeight] = useState(0);
+  const [appliedFilters, setAppliedFilters] = useState({ hideMovies: false, hideSeries: false, hideUnreleased: false });
+  const [appliedSort, setAppliedSort] = useState<SortKey>('recent');
+  const [menuVisible, setMenuVisible] = useState(false);
+  const [quickItem, setQuickItem] = useState<LibraryItem | null>(null);
+  const [hideMovies, setHideMovies] = useState(false);
+  const [hideSeries, setHideSeries] = useState(false);
+  const [hideUnreleased, setHideUnreleased] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
   const { user, logout, apiReady } = useAuth();
   const [stats, setStats] = useState<UserStats | null>(null);
   const [tab, setTab] = useState<TabKey>('want');
@@ -31,6 +46,7 @@ export const LibraryScreen: React.FC = () => {
   const [items, setItems] = useState<LibraryItem[]>([]);
   const [allItems, setAllItems] = useState<LibraryItem[]>([]);
   const [myReviews, setMyReviews] = useState<Review[]>([]);
+  const [loadError, setLoadError] = useState(false);
   const [loading, setLoading] = useState(true);
   const [updateProgress, setUpdateProgress] = useState<number | null>(null);
 
@@ -69,41 +85,41 @@ export const LibraryScreen: React.FC = () => {
     }
   }, [updateProgress]);
 
-  useEffect(() => {
+  useFocusEffect(useCallback(() => {
     if (!user) return;
-    veloraApi.getUser(user.username).then(({ stats }) => setStats(stats)).catch(() => undefined);
-    veloraApi.getLibrary().then(({ items }) => setAllItems(items)).catch(() => undefined);
-    veloraApi.getMyReviews().then(({ reviews }) => setMyReviews(reviews)).catch(() => undefined);
-  }, [user]);
+    let active = true;
+    veloraApi.getUser(user.username).then(({ stats }) => { if (active) setStats(stats); }).catch(() => undefined);
+    veloraApi.getLibrary().then(({ items }) => { if (active) setAllItems(items); }).catch(() => undefined);
+    veloraApi.getMyReviews().then(({ reviews }) => { if (active) setMyReviews(reviews); }).catch(() => undefined);
+    return () => { active = false; };
+  }, [user, refreshKey]));
 
-  useEffect(() => {
+  useFocusEffect(useCallback(() => {
     if (!user || tab === 'insights') return;
-    let cancelled = false;
+    let active = true;
     setLoading(true);
+    setLoadError(false);
     const mediaType = tab === 'series' ? 'tv' : undefined;
     const status = tab === 'series' ? undefined : tab;
-    veloraApi
-      .getLibrary(status, mediaType)
-      .then(({ items }) => {
-        if (!cancelled) setItems(items);
-      })
-      .catch(() => undefined)
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [user, tab]);
+    veloraApi.getLibrary(status, mediaType).then(({ items }) => { if (active) setItems(items); })
+      .catch(() => { if (active) setLoadError(true); })
+      .finally(() => { if (active) setLoading(false); });
+    return () => { active = false; };
+  }, [user, tab, refreshKey]));
 
   const sortedItems = useMemo(() => {
-    const list = [...items];
-    if (sort === 'title') list.sort((a, b) => a.title.localeCompare(b.title));
+    const { hideMovies, hideSeries, hideUnreleased } = appliedFilters;
+    const sort = appliedSort;
+    const now = new Date();
+    const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+    const list = items.filter(i => !(hideMovies && i.media_type === 'movie') && !(hideSeries && i.media_type === 'tv') && !(hideUnreleased && i.release_date && i.release_date > today));
+    if (sort === 'release') list.sort((a, b) => (b.release_date ?? '').localeCompare(a.release_date ?? ''));
+    else if (sort === 'title') list.sort((a, b) => a.title.localeCompare(b.title));
     else if (sort === 'rating')
       list.sort((a, b) => (b.rating ?? -1) - (a.rating ?? -1));
-    else list.sort((a, b) => (a.updated_at < b.updated_at ? 1 : -1));
+    else list.sort((a, b) => b.added_at.localeCompare(a.added_at));
     return list;
-  }, [items, sort]);
+  }, [items, appliedSort, appliedFilters]);
 
   const openItem = useCallback(
     (item: LibraryItem) => {
@@ -145,16 +161,16 @@ export const LibraryScreen: React.FC = () => {
   const shareProfile = useCallback(() => {
     if (!user) return;
     Share.share({ message: `Follow me on Velora: @${user.username}` }).catch(() => undefined);
-  }, [user]);
+  }, [user, refreshKey]);
 
   const keyExtractor = useCallback((i: LibraryItem) => i.id, []);
   const renderItem = useCallback(
     ({ item }: { item: LibraryItem }) => (
       <View style={styles.gridCell}>
-        <LibraryCard item={item} onPress={openItem} onLongPress={removeItem} />
+        <LibraryCard item={item} onPress={openItem} onLongPress={i => i.media_type === 'movie' && i.status === 'want' ? setQuickItem(i) : removeItem(i)} />
       </View>
     ),
-    [openItem, removeItem],
+    [openItem, removeItem, styles],
   );
 
   const insights = useMemo(() => {
@@ -178,7 +194,7 @@ export const LibraryScreen: React.FC = () => {
         <View style={styles.identityRow}>
           <View style={styles.identityText}>
             <Text style={styles.name}>{user?.displayName}</Text>
-            <Text style={styles.username}>@{user?.username}</Text>
+
             {!!user?.bio && <Text style={styles.bio} numberOfLines={2}>{user.bio}</Text>}
           </View>
           <View style={styles.avatar}>
@@ -194,39 +210,6 @@ export const LibraryScreen: React.FC = () => {
           <Stat label="Series" value={stats?.series} />
         </View>
 
-        <View style={styles.actionsRow}>
-          <Pressable onPress={shareProfile} style={styles.iconAction} accessibilityLabel="Share profile">
-            <Ionicons name="share-social-outline" size={17} color={colors.textPrimary} />
-          </Pressable>
-          <Pressable onPress={() => navigation.navigate('Activity')} style={styles.iconAction} accessibilityLabel="Activity">
-            <Ionicons name="pulse-outline" size={17} color={colors.textPrimary} />
-          </Pressable>
-          <Pressable onPress={() => navigation.navigate('Account')} style={styles.iconAction} accessibilityLabel="Settings">
-            <Ionicons name="settings-outline" size={17} color={colors.textPrimary} />
-          </Pressable>
-          <Pressable onPress={handleUpdateCheck} style={styles.iconAction} accessibilityLabel="Check for update">
-            {updateProgress !== null ? (
-              <Text style={styles.updatePct}>{Math.round(updateProgress * 100)}%</Text>
-            ) : (
-              <Ionicons name="cloud-download-outline" size={17} color={colors.textPrimary} />
-            )}
-          </Pressable>
-          <Pressable
-            onPress={() =>
-              Alert.alert('Log out?', undefined, [
-                { text: 'Cancel', style: 'cancel' },
-                { text: 'Log out', style: 'destructive', onPress: () => void logout() },
-              ])
-            }
-            style={styles.iconAction}
-            accessibilityLabel="Log out"
-          >
-            <Ionicons name="log-out-outline" size={17} color={colors.textPrimary} />
-          </Pressable>
-        </View>
-
-        <View style={styles.divider} />
-
         {/* Tabs + filter */}
         <View style={styles.tabsRow}>
           <View style={styles.tabsGroup}>
@@ -237,14 +220,17 @@ export const LibraryScreen: React.FC = () => {
             ))}
           </View>
           {tab !== 'insights' && (
-            <Pressable onPress={() => setSortSheetVisible(true)} style={styles.filterButton} accessibilityLabel="Sort">
+            <Pressable onPress={() => {
+              setHideMovies(appliedFilters.hideMovies); setHideSeries(appliedFilters.hideSeries); setHideUnreleased(appliedFilters.hideUnreleased); setSort(appliedSort);
+              setSortSheetVisible(v => !v);
+            }} style={styles.filterButton} accessibilityLabel="Filter and sort" accessibilityState={{ expanded: sortSheetVisible }}>
               <Ionicons name="funnel-outline" size={16} color={colors.textSecondary} />
             </Pressable>
           )}
         </View>
       </View>
     ),
-    [user, stats, tab, shareProfile, logout, handleUpdateCheck, updateProgress, navigation],
+    [user, stats, tab, shareProfile, logout, handleUpdateCheck, updateProgress, navigation, appliedFilters, appliedSort, sortSheetVisible, colors, styles],
   );
 
   if (!apiReady || !user) {
@@ -267,15 +253,35 @@ export const LibraryScreen: React.FC = () => {
   }
 
   return (
-    <View style={styles.root}>
+    <View style={[styles.root, { paddingTop: insets.top }]}>
+      <View style={styles.topRow}>
+        <Pressable onPress={() => navigation.navigate('Account')} style={styles.topButton} accessibilityLabel="Settings"><Ionicons name="settings-sharp" size={16} color={colors.textTertiary} /></Pressable>
+        <Text style={styles.brand}>VELORA</Text>
+        <Pressable onPress={() => setMenuVisible(true)} style={styles.topButton} accessibilityLabel="More profile actions"><Ionicons name="ellipsis-vertical" size={18} color={colors.textTertiary} /></Pressable>
+      </View>
       <FlashList
-        data={tab === 'insights' ? [] : sortedItems}
+        maintainVisibleContentPosition={{ disabled: true }}
+        data={tab === 'insights' || loading || loadError ? [] : sortedItems}
         keyExtractor={keyExtractor}
         renderItem={renderItem}
         numColumns={2}
+        scrollEnabled={!sortSheetVisible}
         ListHeaderComponent={
-          <View>
+          <View onLayout={e => setHeaderHeight(e.nativeEvent.layout.height)}>
             {header}
+            {sortSheetVisible && tab !== 'insights' && <View style={styles.filters}>
+              <View style={styles.filterChips}>
+                {[
+                  { label: 'Hide Movies', selected: hideMovies, toggle: () => setHideMovies(v => !v) },
+                  { label: 'Hide Series', selected: hideSeries, toggle: () => setHideSeries(v => !v) },
+                  { label: 'Hide Unreleased', selected: hideUnreleased, toggle: () => setHideUnreleased(v => !v) },
+                ].map(c => <Pressable key={c.label} accessibilityLabel={c.label} onPress={c.toggle} accessibilityRole="checkbox" accessibilityState={{ checked: c.selected }} style={[styles.filterChip, c.selected && styles.filterChipSelected]}><Text style={styles.tabText}>{c.label}</Text></Pressable>)}
+              </View>
+              <View style={styles.filterChips}>{([
+                ['recent', 'Date added'], ['release', 'Release date'], ['title', 'Title A-Z'], ['rating', 'Highest rated'],
+              ] as const).map(([key, label]) => <Pressable key={key} onPress={() => setSort(key)} accessibilityRole="radio" accessibilityState={{ selected: sort === key }} style={styles.filterChip}><Text style={[styles.tabText, sort === key && { color: colors.primary }]}>{label}</Text></Pressable>)}</View>
+              <Pressable accessibilityLabel="Apply filters" onPress={() => { setAppliedFilters({ hideMovies, hideSeries, hideUnreleased }); setAppliedSort(sort); setSortSheetVisible(false); }} style={styles.apply}><Text style={styles.tabText}>Apply</Text></Pressable>
+            </View>}
             {tab === 'insights' && insights && (
               <View style={styles.insights}>
                 <View style={styles.insightRow}>
@@ -313,28 +319,31 @@ export const LibraryScreen: React.FC = () => {
         contentContainerStyle={styles.listContent}
         ListEmptyComponent={
           tab === 'insights' ? null : loading ? (
-            <ActivityIndicator color={colors.primary} style={{ marginTop: 32 }} />
+            <AppLoader style={{ marginTop: 32 }} />
+          ) : loadError ? (
+            <Pressable onPress={() => setRefreshKey(k => k + 1)} accessibilityRole="button"><Text style={styles.emptyText}>Could not load your library. Tap to retry.</Text></Pressable>
           ) : (
             <Text style={styles.emptyText}>Nothing here yet. Rate and track from any title page.</Text>
           )
         }
       />
 
-      <ActionSheet
-        visible={sortSheetVisible}
-        onClose={() => setSortSheetVisible(false)}
-        showCancel={false}
-        options={[
-          { label: 'Recently updated', onPress: () => setSort('recent') },
-          { label: 'Title A-Z', onPress: () => setSort('title') },
-          { label: 'Highest rated', onPress: () => setSort('rating') },
-        ]}
-      />
+      {sortSheetVisible && <Pressable accessibilityLabel="Dismiss filters without applying" onPress={() => setSortSheetVisible(false)} style={[styles.filterScrim, { top: insets.top + 34 + 8 + headerHeight }]} />}
+      <ActionSheet visible={menuVisible} onClose={() => setMenuVisible(false)} options={[
+        { label: 'Share profile', onPress: shareProfile },
+        { label: 'Activity', onPress: () => navigation.navigate('Activity') },
+        { label: updateProgress === null ? 'Check for update' : `Downloading ${Math.round(updateProgress * 100)}%`, onPress: handleUpdateCheck },
+        { label: 'Log out', onPress: () => Alert.alert('Log out?', undefined, [{ text: 'Cancel', style: 'cancel' }, { text: 'Log out', style: 'destructive', onPress: () => void logout() }]) },
+      ]} />
+      {quickItem && <LibraryQuickAction item={quickItem} onClose={() => setQuickItem(null)} onChanged={() => setRefreshKey(k => k + 1)} />}
+
     </View>
   );
 };
 
 const Stat = memo(function Stat({ label, value }: { label: string; value?: number | string }) {
+  const { colors } = useAppTheme();
+  const styles = useThemedStyles(createStyles);
   return (
     <View style={styles.stat}>
       <Text style={styles.statValue}>{value ?? '-'}</Text>
@@ -344,6 +353,8 @@ const Stat = memo(function Stat({ label, value }: { label: string; value?: numbe
 });
 
 const InsightCell = memo(function InsightCell({ label, value }: { label: string; value: number }) {
+  const { colors } = useAppTheme();
+  const styles = useThemedStyles(createStyles);
   return (
     <View style={styles.insightCell}>
       <Text style={styles.insightCellValue}>{value}</Text>
@@ -352,10 +363,19 @@ const InsightCell = memo(function InsightCell({ label, value }: { label: string;
   );
 });
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
+  filterScrim: { position: 'absolute', left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.55)' },
+  topRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 10 },
+  topButton: { width: 34, height: 34, alignItems: 'center', justifyContent: 'center' },
+  brand: { fontSize: 9, letterSpacing: 2, color: colors.primary, fontWeight: '700' },
+  filters: { padding: 12, gap: 10 },
+  filterChips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  filterChip: { paddingHorizontal: 12, paddingVertical: 8, borderRadius: 20, backgroundColor: colors.surface },
+  filterChipSelected: { backgroundColor: colors.surfaceLight },
+  apply: { alignSelf: 'center', paddingHorizontal: 30, paddingVertical: 9, borderRadius: 20, backgroundColor: colors.surface },
   root: { flex: 1, backgroundColor: colors.background },
-  listContent: { paddingHorizontal: 12, paddingTop: 60, paddingBottom: 110 },
-  gridCell: { flex: 1 / 2, padding: 5 },
+  listContent: { paddingHorizontal: 12, paddingTop: 8, paddingBottom: 110 },
+  gridCell: { flex: 1 / 2, padding: 1 },
   header: { gap: 12, paddingBottom: 14, paddingHorizontal: 4 },
   identityRow: {
     flexDirection: 'row',
@@ -365,25 +385,26 @@ const styles = StyleSheet.create({
   },
   identityText: { flex: 1, gap: 2 },
   avatar: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
+    width: 52,
+    height: 52,
+    borderRadius: 26,
     backgroundColor: colors.trackBlue,
     alignItems: 'center',
     justifyContent: 'center',
   },
   avatarText: { fontSize: 26, fontWeight: '900', color: '#fff' },
-  name: { fontSize: 22, fontWeight: '800', color: colors.textPrimary },
+  name: { fontSize: 21, fontWeight: '700', color: colors.textPrimary },
   username: { fontSize: 13, color: colors.textTertiary },
   bio: { fontSize: 13, color: colors.textSecondary, marginTop: 4 },
   statsRow: {
+    paddingVertical: 12,
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingRight: 8,
     marginTop: 2,
   },
-  stat: { alignItems: 'flex-start' },
-  statValue: { fontSize: 18, fontWeight: '800', color: colors.textPrimary },
+  stat: { flex: 1, alignItems: 'center' },
+  statValue: { fontSize: 13, fontWeight: '600', color: colors.textPrimary },
   statLabel: { fontSize: 11, color: colors.textTertiary, marginTop: 1 },
   actionsRow: {
     flexDirection: 'row',
@@ -411,11 +432,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  tabsGroup: { flexDirection: 'row', gap: 6, flexShrink: 1 },
-  tab: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 18, backgroundColor: colors.surface },
-  tabActive: { backgroundColor: colors.trackBlue },
-  tabText: { fontSize: 12, fontWeight: '700', color: colors.textTertiary },
-  tabTextActive: { color: '#fff' },
+  tabsGroup: { flexDirection: 'row', gap: 2, flexShrink: 1 },
+  tab: { paddingHorizontal: 8, paddingVertical: 8, borderRadius: 18, backgroundColor: 'transparent' },
+  tabActive: { backgroundColor: colors.surfaceLight },
+  tabText: { fontSize: 11, fontWeight: '700', color: colors.textTertiary },
+  tabTextActive: { color: colors.textPrimary },
   filterButton: {
     width: 34,
     height: 34,

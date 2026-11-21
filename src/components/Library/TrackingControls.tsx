@@ -1,10 +1,10 @@
-import React, { memo, useCallback, useMemo, useState } from 'react';
-import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import { colors } from '../../theme/colors';
-import { MediaType } from '../../api/velora';
-import { useLibraryItem, LibraryMeta, fetchOwnReview } from '../../hooks/useLibraryItem';
+import { memo, useCallback, useMemo, useState } from 'react';
+import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
+import { LibraryMeta, fetchOwnReview, useLibraryItem } from '../../hooks/useLibraryItem';
+import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
+import { AppLoader } from '../common/AppLoader';
 import { ActionSheet, ActionSheetOption } from './ActionSheet';
 import { RateReviewSheet } from './RateReviewSheet';
 
@@ -30,6 +30,8 @@ type SheetKind = 'none' | 'want' | 'watched' | 'watching' | 'rate';
  * with an ellipsis that opens the status action sheet.
  */
 export const TrackingControls = memo(function TrackingControls(props: TrackingControlsProps) {
+  const { colors } = useAppTheme();
+  const styles = useThemedStyles(createStyles);
   const { mediaType, tmdbId, title, posterPath, onMarkAllWatched, onMarkAllUnwatched, onChanged } = props;
   const navigation = useNavigation<any>();
   const lib = props.lib;
@@ -56,6 +58,7 @@ export const TrackingControls = memo(function TrackingControls(props: TrackingCo
   );
 
   if (!apiReady) return null;
+  if (lib.loading) return <AppLoader style={{ paddingVertical: 16 }} />;
 
   if (!signedIn) {
     return (
@@ -115,10 +118,10 @@ export const TrackingControls = memo(function TrackingControls(props: TrackingCo
             onPress={() => void lib.setStatus('want').then(onChanged)}
             style={({ pressed }) => [styles.pill, pressed && styles.pillPressed]}
             accessibilityRole="button"
-            accessibilityLabel="Want"
+            accessibilityLabel="Want" disabled={saving}
           >
             {saving ? (
-              <ActivityIndicator size="small" color={colors.textPrimary} />
+              <AppLoader size="small" />
             ) : (
               <Text style={styles.pillText}>Want</Text>
             )}
@@ -133,7 +136,7 @@ export const TrackingControls = memo(function TrackingControls(props: TrackingCo
             }}
             style={({ pressed }) => [styles.pill, pressed && styles.pillPressed]}
             accessibilityRole="button"
-            accessibilityLabel={secondStatus}
+            accessibilityLabel={secondStatus} disabled={saving}
           >
             <Text style={styles.pillText}>{secondStatus}</Text>
           </Pressable>
@@ -143,17 +146,16 @@ export const TrackingControls = memo(function TrackingControls(props: TrackingCo
           onPress={() => setSheet(status === 'want' ? 'want' : status === 'watched' ? 'watched' : 'watching')}
           style={({ pressed }) => [styles.statusBar, pressed && { opacity: 0.85 }]}
           accessibilityRole="button"
-          accessibilityLabel={`${activeLabel}, options`}
+          accessibilityLabel={`${activeLabel}, options`} disabled={saving}
         >
           <View style={styles.statusBarCenter}>
-            <Ionicons name="checkmark" size={20} color="#FFF" />
-            <Text style={styles.statusBarText}>{activeLabel}</Text>
+            <>{saving ? <AppLoader onAccent /> : <><Ionicons name="checkmark" size={20} color="#FFF" /><Text style={styles.statusBarText}>{activeLabel}</Text></>}</>
           </View>
           <Ionicons name="ellipsis-horizontal" size={20} color="#FFF" style={styles.statusBarEllipsis} />
         </Pressable>
       )}
 
-      <ActionSheet visible={sheet === 'want'} options={wantOptions} onClose={() => setSheet('none')} />
+      <ActionSheet showCancel={false} visible={sheet === 'want'} options={wantOptions} onClose={() => setSheet('none')} />
       <ActionSheet visible={sheet === 'watched'} options={watchedOptions} onClose={() => setSheet('none')} />
       <ActionSheet visible={sheet === 'watching'} options={watchingOptions} onClose={() => setSheet('none')} />
 
@@ -166,21 +168,20 @@ export const TrackingControls = memo(function TrackingControls(props: TrackingCo
         initialBody={prefill.body}
         saving={saving}
         onClose={() => setSheet('none')}
-        onSave={(rating, body) => {
-          setSheet('none');
+        onSave={async (rating, body) => {
           const target = status === null || status === 'want' ? 'watched' : status;
-          if (target === 'watched') {
-            void lib.setStatusWithReview('watched', rating, body).then(onChanged);
-          } else {
-            void lib.saveReview(rating, body).then(onChanged);
-          }
+          const saved = target === 'watched'
+            ? await lib.setStatusWithReview('watched', rating, body)
+            : await lib.saveReview(rating, body);
+          if (saved) { setSheet('none'); onChanged?.(); }
+          else Alert.alert('Could not save', 'Your draft is still here. Please try again.');
         }}
       />
     </View>
   );
 });
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   container: { marginTop: 4 },
   pillsRow: {
     flexDirection: 'row',
@@ -192,7 +193,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 14,
     borderRadius: 26,
-    backgroundColor: '#2E2E36',
+    backgroundColor: colors.surfaceLight,
   },
   pillPressed: { opacity: 0.8 },
   pillText: {

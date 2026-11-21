@@ -1,16 +1,12 @@
-import React, { useCallback } from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withSpring,
-} from 'react-native-reanimated';
 import { Image } from 'expo-image';
+import React, { useCallback } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { MediaItem } from '../../api/types';
-import { getImageUrl, IMAGE_CONFIG } from '../../utils/image';
 import { metrics } from '../../theme/metrics';
-import { colors } from '../../theme/colors';
+import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
 import { typography } from '../../theme/typography';
+import { getImageUrl, IMAGE_CONFIG } from '../../utils/image';
 import { Badge } from '../common/Badge';
 import { ProgressBar } from '../ProgressBar/ProgressBar';
 
@@ -43,6 +39,8 @@ const MovieCardComponent: React.FC<MovieCardProps> = ({
   showTitle = false,
   hasMarginRight = true,
 }) => {
+  const { colors } = useAppTheme();
+  const styles = useThemedStyles(createStyles);
   const scale = useSharedValue(1);
 
   const handlePressIn = useCallback(() => {
@@ -115,7 +113,7 @@ const MovieCardComponent: React.FC<MovieCardProps> = ({
 
       {/* Optional Title under card */}
       {showTitle && (
-        <Text style={typography.cardTitle} numberOfLines={1}>
+        <Text style={[typography.cardTitle, { color: colors.textPrimary }]} numberOfLines={1}>
           {item.title}
         </Text>
       )}
@@ -125,6 +123,8 @@ const MovieCardComponent: React.FC<MovieCardProps> = ({
 
 // Custom equality to guarantee zero unnecessary re-renders in FlashList
 export const MovieCard = React.memo(MovieCardComponent, (prev, next) => {
+  const { colors } = useAppTheme();
+  const styles = useThemedStyles(createStyles);
   return (
     prev.item.id === next.item.id &&
     prev.item.poster_path === next.item.poster_path &&
@@ -140,7 +140,7 @@ export const MovieCard = React.memo(MovieCardComponent, (prev, next) => {
 
 MovieCard.displayName = 'MovieCard';
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   wrapper: {
     marginRight: metrics.carouselItemGap,
   },

@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
-import { StyleSheet } from 'react-native';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { NavigationContainer, DarkTheme } from '@react-navigation/native';
+import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { StatusBar } from 'expo-status-bar';
+import { useState } from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { AnimatedSplash } from './src/components/Splash/AnimatedSplash';
 import { AppNavigator } from './src/navigation/AppNavigator';
 import { AuthProvider } from './src/state/AuthContext';
-import { AnimatedSplash } from './src/components/Splash/AnimatedSplash';
-import { colors } from './src/theme/colors';
+import { ThemeProvider, useAppTheme } from './src/theme/ThemeContext';
 
 // Ultra-performant TanStack Query client with aggressive caching
 const queryClient = new QueryClient({
@@ -23,30 +22,25 @@ const queryClient = new QueryClient({
   },
 });
 
-const VeloraTheme = {
-  ...DarkTheme,
-  colors: {
-    ...DarkTheme.colors,
-    background: colors.background,
-    card: colors.cardBackground,
-    text: colors.textPrimary,
-    border: colors.border,
-    primary: colors.primary,
-  },
-};
-
 export default function App() {
+  return <ThemeProvider><ThemedApp /></ThemeProvider>;
+}
+
+function ThemedApp() {
+  const { colors, mode, ready } = useAppTheme();
+  const base = mode === 'dark' ? DarkTheme : DefaultTheme;
+  const theme = { ...base, colors: { ...base.colors, background: colors.background, card: colors.cardBackground, text: colors.textPrimary, border: colors.border, primary: colors.primary } };
   const [isSplashDone, setIsSplashDone] = useState(false);
 
   return (
-    <GestureHandlerRootView style={styles.root}>
+    <GestureHandlerRootView style={{flex: 1, backgroundColor: colors.background}}>
       <SafeAreaProvider>
         <QueryClientProvider client={queryClient}>
           <AuthProvider>
-          <NavigationContainer theme={VeloraTheme}>
-            <StatusBar style="light" />
+          {ready && <NavigationContainer theme={theme}>
+            <StatusBar style={mode === 'dark' ? 'light' : 'dark'} />
             <AppNavigator />
-          </NavigationContainer>
+          </NavigationContainer>}
           </AuthProvider>
         </QueryClientProvider>
 
@@ -58,10 +52,3 @@ export default function App() {
     </GestureHandlerRootView>
   );
 }
-
-const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-});
