@@ -1,5 +1,6 @@
 import { Platform } from 'react-native';
 import * as Application from 'expo-application';
+import Constants from 'expo-constants';
 import * as FileSystem from 'expo-file-system/legacy';
 import * as Crypto from 'expo-crypto';
 import * as IntentLauncher from 'expo-intent-launcher';
@@ -43,10 +44,20 @@ function compareVersions(a: string, b: string): number {
  * - version comes from the release tag, compared with the installed version;
  * - the APK asset is matched by name pattern, and its SHA-256 is verified
  *   against the checksums.txt asset published by our own CI before install;
+ * - the release's cert-fingerprint.txt must match this build's own signing
+ *   certificate (injected at build time as extra.certSha256): a build signed
+ *   with a different key is never offered as an in-app update, so e.g. a
+ *   migration-bridge install is not prompted to "update" to a final build it
+ *   cannot install over itself - that transition is a guided reinstall;
  * - Android PackageManager additionally enforces that an update is signed by
  *   the same certificate and has the same package name, so a tampered or
  *   differently-signed APK cannot install over the app.
  */
+function normalizeCertSha256(v: string | null | undefined): string | null {
+  if (!v) return null;
+  const hex = v.replace(/[^0-9a-f]/gi, '').toUpperCase();
+  return hex.length === 64 ? hex : null;
+}
 export async function checkForUpdate(): Promise<UpdateInfo | null> {
   if (Platform.OS !== 'android') return null;
   const currentVersion = Application.nativeApplicationVersion ?? '0.0.0';
@@ -67,6 +78,24 @@ export async function checkForUpdate(): Promise<UpdateInfo | null> {
   const assets = json.assets ?? [];
   const apk = assets.find((a) => a.name.toLowerCase().endsWith('.apk')) ?? null;
   const checksums = assets.find((a) => /checksums?\.txt$/i.test(a.name) || /\.sha256$/i.test(a.name)) ?? null;
+  const certAsset = assets.find((a) => /cert-fingerprint\.txt$/i.test(a.name)) ?? null;
+
+  // Signature-continuity gate: never offer an update signed by a different key.
+  const ownCert = normalizeCertSha256(
+    (Constants.expoConfig?.extra as { certSha256?: string | null } | undefined)?.certSha256,
+  );
+  if (ownCert) {
+    if (!certAsset) return null; // cannot verify signature continuity - fail closed
+    try {
+      const certRes = await fetch(certAsset.browser_download_url);
+      const certText = certRes.ok ? await certRes.text() : '';
+      const m = certText.match(/SHA256:\s*([0-9A-Fa-f:]+)/);
+      const releaseCert = normalizeCertSha256(m?.[1] ?? null);
+      if (!releaseCert || releaseCert !== ownCert) return null;
+    } catch {
+      return null;
+    }
+  }
 
   let expectedSha256: string | null = null;
   if (apk && checksums) {
