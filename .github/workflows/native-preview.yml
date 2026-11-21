@@ -38,7 +38,7 @@ jobs:
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
           script: |
             adb install preview/velora-preview.apk
-            python3 scripts/native-preview-smoke.py
+            python3 scripts/native-horizontal-scroll.py
       - name: Collect emulator diagnostics
         if: always()
         run: |
