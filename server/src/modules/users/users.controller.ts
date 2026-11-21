@@ -1,5 +1,5 @@
-import { Body, Controller, Get, Param, Patch, Query, UseGuards } from '@nestjs/common';
-import { AuthGuard, CurrentUserId, OptionalAuthGuard } from '../../common/auth.guard';
+import { Body, Controller, Delete, Get, Param, Patch, Query, UseGuards } from '@nestjs/common';
+import { AuthGuard, CurrentUserId } from '../../common/auth.guard';
 import { UsersService } from './users.service';
 
 @Controller('users')
@@ -7,6 +7,7 @@ export class UsersController {
   constructor(private readonly users: UsersService) {}
 
   @Get('search')
+  @UseGuards(AuthGuard)
   search(@Query('q') q: string) {
     return this.users.search(q);
   }
@@ -17,14 +18,21 @@ export class UsersController {
     return this.users.updateMe(userId, body);
   }
 
+  @Delete('me')
+  @UseGuards(AuthGuard)
+  deleteMe(@CurrentUserId() userId: string) {
+    return this.users.deleteMe(userId);
+  }
+
   @Get(':username')
-  @UseGuards(OptionalAuthGuard)
+  @UseGuards(AuthGuard)
   profile(@Param('username') username: string, @CurrentUserId() viewerId?: string) {
     return this.users.publicProfile(username, viewerId);
   }
 
   @Get(':username/library')
-  publicLibrary(@Param('username') username: string, @Query('status') status?: string) {
-    return this.users.publicLibrary(username, status);
+  @UseGuards(AuthGuard)
+  publicLibrary(@Param('username') username: string, @CurrentUserId() viewerId: string, @Query('status') status?: string) {
+    return this.users.publicLibrary(username, status, viewerId);
   }
 }

@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { DatabaseService } from '../../common/database.service';
 import { PublicUser, toPublicUser } from '../auth/auth.service';
 import { optionalString, requireString } from '../../common/validate';
@@ -54,7 +54,7 @@ export class UsersService {
 
   async publicProfile(usernameRaw: string, viewerId?: string) {
     const username = usernameRaw.trim().toLowerCase();
-    const row = await this.db.first<Parameters<typeof toPublicUser>[0]>(
+    const row = await this.db.first<Parameters<typeof toPublicUser>[0] & { is_private: number }>(
       'SELECT * FROM users WHERE username = ?',
       [username],
     );
@@ -66,17 +66,33 @@ export class UsersService {
         row.id,
       ]));
     }
-    return { user: toPublicUser(row), stats: await this.stats(row.id), isFollowing };
+    const isPrivate = row.is_private === 1;
+    const isSelf = viewerId === row.id;
+    // Private accounts: profile basics stay discoverable, library and stats are hidden from others.
+    const stats = isPrivate && !isSelf ? null : await this.stats(row.id);
+    return { user: toPublicUser(row), stats, isFollowing, isPrivate };
   }
 
   async updateMe(userId: string, body: Record<string, unknown>) {
     const displayName = optionalString(body.displayName, 'displayName', 50);
     const bio = optionalString(body.bio, 'bio', 300);
-    if (displayName === null && bio === null) throw new BadRequestException('Nothing to update');
+    const isPrivate = typeof body.isPrivate === 'boolean' ? body.isPrivate : null;
+    if (displayName === null && bio === null && isPrivate === null) throw new BadRequestException('Nothing to update');
     if (displayName !== null) await this.db.run('UPDATE users SET display_name = ? WHERE id = ?', [displayName, userId]);
     if (bio !== null) await this.db.run('UPDATE users SET bio = ? WHERE id = ?', [bio, userId]);
-    const row = await this.db.first<Parameters<typeof toPublicUser>[0]>('SELECT * FROM users WHERE id = ?', [userId]);
-    return { user: toPublicUser(row!) };
+    if (isPrivate !== null) await this.db.run('UPDATE users SET is_private = ? WHERE id = ?', [isPrivate ? 1 : 0, userId]);
+    const row = await this.db.first<Parameters<typeof toPublicUser>[0] & { is_private: number }>('SELECT * FROM users WHERE id = ?', [userId]);
+    return { user: toPublicUser(row!), isPrivate: row!.is_private === 1 };
+  }
+
+  /** Permanently deletes the account and every row it owns. */
+  async deleteMe(userId: string) {
+    await this.db.run('DELETE FROM follows WHERE follower_id = ? OR followee_id = ?', [userId, userId]);
+    await this.db.run('DELETE FROM reviews WHERE user_id = ?', [userId]);
+    await this.db.run('DELETE FROM library_items WHERE user_id = ?', [userId]);
+    await this.db.run('DELETE FROM simkl_connections WHERE user_id = ?', [userId]);
+    await this.db.run('DELETE FROM users WHERE id = ?', [userId]);
+    return { deleted: true };
   }
 
   async search(qRaw: unknown) {
@@ -89,11 +105,14 @@ export class UsersService {
     return { users };
   }
 
-  /** Public library of a user, one status bucket at a time. */
-  async publicLibrary(usernameRaw: string, statusRaw: unknown) {
+  /** Public library of a user, one status bucket at a time. Private accounts: owner only. */
+  async publicLibrary(usernameRaw: string, statusRaw: unknown, viewerId?: string) {
     const username = usernameRaw.trim().toLowerCase();
-    const row = await this.db.first<{ id: string }>('SELECT id FROM users WHERE username = ?', [username]);
+    const row = await this.db.first<{ id: string; is_private: number }>('SELECT id, is_private FROM users WHERE username = ?', [username]);
     if (!row) throw new NotFoundException('User not found');
+    if (row.is_private === 1 && viewerId !== row.id) {
+      throw new ForbiddenException('This account is private');
+    }
     const status = statusRaw === undefined ? null : String(statusRaw);
     const where = status ? 'AND status = ?' : '';
     const params: unknown[] = status ? [row.id, status] : [row.id];

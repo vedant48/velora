@@ -2,7 +2,35 @@ import React, { createContext, useCallback, useContext, useEffect, useMemo, useS
 import { Platform } from 'react-native';
 import { isApiConfigured, GOOGLE_WEB_CLIENT_ID } from '../config';
 import { veloraApi, VeloraUser, setToken, getToken } from '../api/velora';
-import { migrateLocalWatchlist } from '../services/migration';
+import { migrateLocalWatchlist, needsMigration } from '../services/migration';
+import { Alert } from 'react-native';
+
+/**
+ * Legacy local watchlists predate accounts. Before importing one, disclose
+ * that tracked titles live on a member-visible profile (private mode exists
+ * in Settings) and get an explicit yes. "Not now" leaves local data in place
+ * and asks again at the next login.
+ */
+function offerWatchlistMigration(): void {
+  void needsMigration()
+    .then((needed) => {
+      if (!needed) return;
+      Alert.alert(
+        'Bring your old watchlist?',
+        'Your locally saved watchlist will be added to your account. Tracked titles and ratings are visible to other signed-in Velora members; you can make your profile private anytime in Settings.',
+        [
+          { text: 'Not now', style: 'cancel' },
+          {
+            text: 'Add to my account',
+            onPress: () => {
+              void migrateLocalWatchlist().catch(() => undefined);
+            },
+          },
+        ],
+      );
+    })
+    .catch(() => undefined);
+}
 
 /** Lazily loaded so the app still runs where the native module is unavailable (Expo Go / web). */
 async function googleIdToken(): Promise<string | null> {
@@ -51,7 +79,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (!token) return;
         const { user: me } = await veloraApi.me();
         if (!cancelled) setUser(me);
-        void migrateLocalWatchlist().catch(() => undefined);
+        offerWatchlistMigration();
       } catch {
         // Expired/invalid token or unreachable API: drop session, stay logged out.
         await setToken(null);
@@ -69,14 +97,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const res = await veloraApi.login(username, password);
     await setToken(res.token);
     setUser(res.user);
-    void migrateLocalWatchlist().catch(() => undefined);
+    offerWatchlistMigration();
   }, []);
 
   const signup = useCallback(async (username: string, password: string, displayName?: string) => {
     const res = await veloraApi.signup(username, password, displayName);
     await setToken(res.token);
     setUser(res.user);
-    void migrateLocalWatchlist().catch(() => undefined);
+    offerWatchlistMigration();
   }, []);
 
   const loginWithGoogle = useCallback(async (): Promise<'ok' | 'cancelled'> => {
@@ -85,7 +113,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const res = await veloraApi.googleLogin(idToken);
     await setToken(res.token);
     setUser(res.user);
-    void migrateLocalWatchlist().catch(() => undefined);
+    offerWatchlistMigration();
     return 'ok';
   }, []);
 

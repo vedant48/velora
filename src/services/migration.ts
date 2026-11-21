@@ -11,6 +11,14 @@ export interface MigrationResult {
   imported: number;
 }
 
+/** True when a legacy local watchlist exists and has not been migrated yet. */
+export async function needsMigration(): Promise<boolean> {
+  const already = await storage.getItem<boolean>(MIGRATED_KEY, false);
+  if (already) return false;
+  const local = await storage.getItem<MediaItem[]>(WATCHLIST_KEY, []);
+  return localWatchlistToImport(local).length > 0;
+}
+
 /**
  * One-time import of the pre-account local watchlist (v1.1.0 AsyncStorage)
  * into the signed-in user's server library. Runs after every successful

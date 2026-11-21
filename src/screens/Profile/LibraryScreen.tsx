@@ -158,6 +158,10 @@ export const LibraryScreen: React.FC = () => {
             <Ionicons name="pulse-outline" size={15} color={colors.textPrimary} />
             <Text style={styles.actionText}>Activity</Text>
           </Pressable>
+          <Pressable onPress={() => navigation.navigate('Account')} style={styles.actionButton}>
+            <Ionicons name="settings-outline" size={15} color={colors.textPrimary} />
+            <Text style={styles.actionText}>Settings</Text>
+          </Pressable>
           <Pressable onPress={handleUpdateCheck} style={styles.actionButton}>
             <Ionicons name="cloud-download-outline" size={15} color={colors.textPrimary} />
             <Text style={styles.actionText}>

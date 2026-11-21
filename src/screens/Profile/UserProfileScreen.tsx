@@ -41,6 +41,7 @@ export const UserProfileScreen: React.FC = () => {
   const libraryQuery = useQuery({
     queryKey: ['userLibrary', username],
     queryFn: () => veloraApi.getUserLibrary(username, 'watched'),
+    enabled: !profileQuery.data?.isPrivate,
   });
 
   const matchQuery = useQuery({
@@ -85,7 +86,7 @@ export const UserProfileScreen: React.FC = () => {
     );
   }
 
-  const { user, stats, isFollowing } = profileQuery.data;
+  const { user, stats, isFollowing, isPrivate } = profileQuery.data;
   const match = matchQuery.data;
   const watched = libraryQuery.data?.items ?? [];
 
@@ -129,6 +130,12 @@ export const UserProfileScreen: React.FC = () => {
           <Text style={styles.hint}>Log in to follow and see your match score.</Text>
         )}
 
+        {isPrivate || !stats ? (
+          <View style={styles.matchBadge}>
+            <Ionicons name="lock-closed" size={14} color={colors.textSecondary} />
+            <Text style={[styles.matchText, { color: colors.textSecondary }]}>Private account</Text>
+          </View>
+        ) : (
         <View style={styles.statsRow}>
           {(
             [
@@ -146,10 +153,11 @@ export const UserProfileScreen: React.FC = () => {
             </View>
           ))}
         </View>
+        )}
       </View>
 
-      <Text style={styles.sectionTitle}>Watched</Text>
-      {libraryQuery.isLoading ? (
+      {!isPrivate && !!stats && <Text style={styles.sectionTitle}>Watched</Text>}
+      {isPrivate || !stats ? null : libraryQuery.isLoading ? (
         <ActivityIndicator color={colors.primary} />
       ) : watched.length === 0 ? (
         <Text style={styles.emptyText}>Nothing watched yet.</Text>

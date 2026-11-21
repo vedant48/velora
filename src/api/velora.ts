@@ -121,10 +121,11 @@ export const veloraApi = {
   googleLogin: (idToken: string) =>
     call<{ token: string; user: VeloraUser }>('/auth/google', { method: 'POST', body: { idToken } }),
   me: () => call<{ user: VeloraUser }>('/auth/me'),
-  updateMe: (patch: { displayName?: string; bio?: string }) =>
-    call<{ user: VeloraUser }>('/users/me', { method: 'PATCH', body: patch }),
+  updateMe: (patch: { displayName?: string; bio?: string; isPrivate?: boolean }) =>
+    call<{ user: VeloraUser; isPrivate: boolean }>('/users/me', { method: 'PATCH', body: patch }),
+  deleteMe: () => call<{ deleted: boolean }>('/users/me', { method: 'DELETE' }),
   getUser: (username: string) =>
-    call<{ user: VeloraUser; stats: UserStats; isFollowing: boolean }>(`/users/${encodeURIComponent(username)}`),
+    call<{ user: VeloraUser; stats: UserStats | null; isFollowing: boolean; isPrivate?: boolean }>(`/users/${encodeURIComponent(username)}`),
   getUserLibrary: (username: string, status?: LibraryStatus) =>
     call<{ items: LibraryItem[] }>(`/users/${encodeURIComponent(username)}/library${status ? `?status=${status}` : ''}`),
   searchUsers: (q: string) => call<{ users: VeloraUser[] }>(`/users/search?q=${encodeURIComponent(q)}`),
@@ -159,6 +160,9 @@ export const veloraApi = {
 
   exportLibrary: (format: 'velora' | 'simkl' = 'velora') =>
     call<unknown>(`/library/export?format=${format}`),
+  /** SIMKL CSV export returns { filename, contentType, csv }. */
+  exportLibraryCsv: () =>
+    call<{ filename: string; contentType: string; csv: string }>('/library/export?format=simkl'),
   importLibrary: (format: 'velora' | 'simkl', data: unknown) =>
     call<{ imported: number; unresolved?: unknown[] }>('/library/import', { method: 'POST', body: { format, data } }),
 

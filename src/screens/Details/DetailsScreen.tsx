@@ -345,7 +345,11 @@ export const DetailsScreen: React.FC = () => {
             totalEpisodes={isTV ? Number((details as any)?.number_of_episodes ?? 0) : 0}
           />
 
-          <ReviewsSection mediaType={isMovie ? 'movie' : 'tv'} tmdbId={initialItem.id} />
+          <ReviewsSection
+            mediaType={isMovie ? 'movie' : 'tv'}
+            tmdbId={initialItem.id}
+            seasonNumber={isTV ? selectedSeason : 0}
+          />
 
           {/* Synopsis */}
           <Text style={styles.sectionHeading}>Storyline</Text>
