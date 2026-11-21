@@ -109,8 +109,8 @@ jobs:
         if: ${{ env.HAS_UPLOAD_KEY == 'true' && !contains(steps.stamp.outputs.tag, '-bridge') }}
         run: |
           set -e
-          keytool -list -v -keystore /tmp/velora-upload.keystore -alias "$VELORA_UPLOAD_KEY_ALIAS" -storepass "$VELORA_UPLOAD_STORE_PASSWORD" 2>/dev/null | grep -m1 'Keystore type'
-          keytool -certreq -keystore /tmp/velora-upload.keystore -alias "$VELORA_UPLOAD_KEY_ALIAS" -storepass "$VELORA_UPLOAD_STORE_PASSWORD" -keypass "$VELORA_UPLOAD_KEY_PASSWORD" -file /tmp/verify.csr
+          keytool -list -v -keystore /tmp/velora-upload.keystore -alias "$VELORA_UPLOAD_KEY_ALIAS" -storepass "$VELORA_UPLOAD_STORE_PASSWORD" | grep -m1 'Keystore type'
+          keytool -certreq -keystore /tmp/velora-upload.keystore -alias "$VELORA_UPLOAD_KEY_ALIAS" -storepass "$VELORA_UPLOAD_STORE_PASSWORD" -keypass "$VELORA_UPLOAD_STORE_PASSWORD" -file /tmp/verify.csr
           echo "key-entry access verified (private key decrypts with provided key password)"
         env:
           VELORA_UPLOAD_STORE_PASSWORD: ${{ secrets.VELORA_UPLOAD_STORE_PASSWORD }}

@@ -18,7 +18,7 @@ block = """
             storeFile file(System.getenv('VELORA_UPLOAD_KEYSTORE_PATH') ?: 'missing-upload.keystore')
             storePassword System.getenv('VELORA_UPLOAD_STORE_PASSWORD')
             keyAlias System.getenv('VELORA_UPLOAD_KEY_ALIAS')
-            keyPassword System.getenv('VELORA_UPLOAD_KEY_PASSWORD')
+            keyPassword System.getenv('VELORA_UPLOAD_STORE_PASSWORD')  // PKCS12: key entry uses the store password
         }
 """
 # Insert the release signingConfig right after the debug block's closing brace inside signingConfigs
