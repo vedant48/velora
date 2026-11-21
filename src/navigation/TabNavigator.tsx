@@ -83,11 +83,16 @@ export const TabNavigator: React.FC = () => {
         component={LibraryScreen}
         options={{ tabBarLabel: 'Profile' }}
       />
-      <Tab.Screen
-        name="DebugTab"
-        component={DebugScreen}
-        options={{ tabBarLabel: 'Performance' }}
-      />
+      {/* Debug/Performance tab: dev-only. Hidden from release builds; the
+          code stays here (commented intent, not deleted) so local performance
+          work can restore it by running a dev build or uncommenting. */}
+      {__DEV__ ? (
+        <Tab.Screen
+          name="DebugTab"
+          component={DebugScreen}
+          options={{ tabBarLabel: 'Performance' }}
+        />
+      ) : null}
     </Tab.Navigator>
   );
 };
