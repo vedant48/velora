@@ -120,7 +120,7 @@ export const TrackSection = memo(function TrackSection({
         <ActivityIndicator color={colors.primary} style={{ marginVertical: 12 }} />
       ) : (
         <>
-          <StatusPicker status={item?.status ?? null} onChange={(status) => save({ status })} />
+          <StatusPicker status={item?.status ?? null} onChange={(status) => save({ status: status ?? undefined })} />
           <Text style={styles.subheading}>Your rating</Text>
           <RatingPicker rating={item?.rating ?? null} onChange={(rating) => save({ rating })} />
           {mediaType === 'tv' && item?.status === 'watching' && (
