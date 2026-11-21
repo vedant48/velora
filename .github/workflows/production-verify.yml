@@ -35,9 +35,12 @@ jobs:
           target: google_apis
           arch: x86_64
           profile: pixel_2
+          ram-size: 3072
           disable-animations: false
-          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
+          emulator-options: -no-window -gpu swiftshader -no-snapshot -noaudio -no-boot-anim
           script: |
+            adb shell wm size 720x1280
+            adb shell wm density 320
             mkdir -p native-evidence
             adb shell getprop ro.product.cpu.abilist > native-evidence/emulator-abis.txt
             adb install baseline.apk > native-evidence/baseline-install.txt 2>&1 || true
@@ -46,6 +49,13 @@ jobs:
             mv native-evidence swipe-evidence
             python3 scripts/native-production-smoke.py
             mv swipe-evidence native-evidence/swipe
+      - name: Preserve host diagnostics
+        if: always()
+        run: |
+          mkdir -p native-evidence
+          free -m > native-evidence/host-memory.txt
+          sudo dmesg | tail -150 > native-evidence/host-kernel.txt
+          ps aux | grep -E 'emulator|qemu' > native-evidence/host-processes.txt || true
       - uses: actions/upload-artifact@v4
         if: always()
         with:
