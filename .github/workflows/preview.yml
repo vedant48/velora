@@ -34,9 +34,9 @@ jobs:
           d=json.load(open(p))
           d['expo']['name']='Velora Preview'
           d['expo']['slug']='velora-preview'
-          d['expo']['version']='1.4.1-preview.2'
+          d['expo']['version']='1.4.1-preview.3'
           d['expo']['android']['package']='com.vedant.velora.preview'
-          d['expo']['android']['versionCode']=2
+          d['expo']['android']['versionCode']=3
           json.dump(d,open(p,'w'),indent=2)
           PY
           npx expo prebuild --platform android --clean --no-install
