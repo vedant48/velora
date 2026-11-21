@@ -15,11 +15,11 @@ jobs:
       - name: Await preview APK build
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh run watch 44942713398 --interval 60 --exit-status
+        run: gh run watch 44950850882 --interval 60 --exit-status
       - uses: actions/download-artifact@v4
         with:
           name: velora-preview
-          run-id: 44942713398
+          run-id: 44950850882
           github-token: ${{ github.token }}
           path: preview
       - name: Enable emulator acceleration
