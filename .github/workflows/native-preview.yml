@@ -29,6 +29,7 @@ jobs:
           sudo udevadm trigger --name-match=kvm
       - name: Install Android emulator image
         run: |
+          export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$PATH"
           yes | sdkmanager 'system-images;android-35;google_apis;x86_64' 'emulator' 'platform-tools' || true
           echo no | avdmanager create avd --force --name velora-test --package 'system-images;android-35;google_apis;x86_64' --device pixel_2
       - name: Boot emulator and check real APK
