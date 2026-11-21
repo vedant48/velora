@@ -121,22 +121,9 @@ const MovieCardComponent: React.FC<MovieCardProps> = ({
   );
 };
 
-// Custom equality to guarantee zero unnecessary re-renders in FlashList
-export const MovieCard = React.memo(MovieCardComponent, (prev, next) => {
-  const { colors } = useAppTheme();
-  const styles = useThemedStyles(createStyles);
-  return (
-    prev.item.id === next.item.id &&
-    prev.item.poster_path === next.item.poster_path &&
-    prev.width === next.width &&
-    prev.height === next.height &&
-    prev.rank === next.rank &&
-    prev.progress === next.progress &&
-    prev.duration === next.duration &&
-    prev.showTitle === next.showTitle &&
-    prev.hasMarginRight === next.hasMarginRight
-  );
-});
+// Use React's prop comparison. Theme hooks belong only in the component,
+// never in a memo comparator invoked during list recycling.
+export const MovieCard = React.memo(MovieCardComponent);
 
 MovieCard.displayName = 'MovieCard';
 

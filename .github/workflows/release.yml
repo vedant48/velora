@@ -84,7 +84,9 @@ jobs:
         run: npm ci || npm install
 
       - name: Test updater checksum verification
-        run: npm run test:updates
+        run: |
+          npx tsc --noEmit
+          node --test tests/*.test.cjs
 
       - name: 🏷️ Stamp app version from tag
         id: stamp
@@ -128,7 +130,7 @@ jobs:
           printf '\n' >> android/gradle.properties
           sed -i '/reactNativeArchitectures=/d' android/gradle.properties || true
           sed -i '/^expo\.inlineModules\.watchedDirectories=/d' android/gradle.properties || true
-          echo "reactNativeArchitectures=arm64-v8a" >> android/gradle.properties
+          echo "reactNativeArchitectures=arm64-v8a,x86_64" >> android/gradle.properties
           echo "expo.useLegacyPackaging=true" >> android/gradle.properties
           echo "android.enableMinifyInReleaseBuilds=true" >> android/gradle.properties
           echo "android.enableShrinkResourcesInReleaseBuilds=true" >> android/gradle.properties
@@ -217,6 +219,17 @@ jobs:
           CERT=$(unzip -p "./velora-${TAG}.apk" META-INF/CERT.RSA 2>/dev/null | keytool -printcert 2>/dev/null | grep -E 'SHA1:|SHA256:' || echo 'unavailable')
           echo "$CERT" >> $GITHUB_STEP_SUMMARY
           echo "$CERT"
+
+      - name: Preserve signed APK for native verification before publication
+        uses: actions/upload-artifact@v4
+        with:
+          name: velora-production-candidate
+          path: |
+            ${{ steps.prepare_apk.outputs.apk_file }}
+            ${{ steps.checksum.outputs.checksum_file }}
+            cert-fingerprint.txt
+          retention-days: 1
+          if-no-files-found: error
 
       - name: 🔎 Re-check published release before upload
         id: release_recheck

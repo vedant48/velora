@@ -5,6 +5,7 @@ import React, { memo, useCallback, useMemo, useState } from 'react';
 import { Alert, Pressable, Share, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LibraryItem, Review, UserStats, veloraApi } from '../../api/velora';
+import { AppButton } from '../../components/common/AppButton';
 import { AppLoader } from '../../components/common/AppLoader';
 import { ActionSheet } from '../../components/Library/ActionSheet';
 import { LibraryCard } from '../../components/Library/LibraryCard';
@@ -244,9 +245,7 @@ export const LibraryScreen: React.FC = () => {
             : 'Backend not configured yet. Set EXPO_PUBLIC_API_URL to enable accounts.'}
         </Text>
         {apiReady && (
-          <Pressable style={styles.loginButton} onPress={() => navigation.navigate('Auth')}>
-            <Text style={styles.loginButtonText}>Log in / Sign up</Text>
-          </Pressable>
+          <AppButton title="Log in / Sign up" style={{ marginTop: 8 }} onPress={() => navigation.navigate('Auth')} />
         )}
       </View>
     );
@@ -487,6 +486,4 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   },
   emptyTitle: { fontSize: 18, fontWeight: '800', color: colors.textPrimary },
   emptyText: { fontSize: 13, color: colors.textTertiary, textAlign: 'center', lineHeight: 19, paddingHorizontal: 16, marginTop: 24 },
-  loginButton: { marginTop: 8, backgroundColor: colors.trackBlue, borderRadius: 12, paddingHorizontal: 28, paddingVertical: 12 },
-  loginButtonText: { fontSize: 14, fontWeight: '800', color: '#fff' },
 });

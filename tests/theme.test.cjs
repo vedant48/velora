@@ -29,3 +29,15 @@ test('native app config does not pin System mode to light', () => {
   assert.ok(config.plugins.includes('expo-system-ui'));
   assert.ok(dependencies['expo-system-ui']);
 });
+
+// Native preview found dark text over artwork in light mode and a one-off CTA.
+test('artwork badges keep contrasting white labels in either theme', () => {
+  const badge = fs.readFileSync(require.resolve('../src/components/common/Badge.tsx'), 'utf8');
+  assert.match(badge, /ratingText: \{\s*color: '#FFFFFF'/);
+  assert.match(badge, /hdText: \{\s*color: '#FFFFFF'/);
+});
+test('signed-out library uses the shared primary button', () => {
+  const library = fs.readFileSync(require.resolve('../src/screens/Profile/LibraryScreen.tsx'), 'utf8');
+  assert.match(library, /<AppButton title="Log in \/ Sign up"/);
+  assert.doesNotMatch(library, /loginButton:/);
+});

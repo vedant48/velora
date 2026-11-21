@@ -1,20 +1,18 @@
-# Velora v1.3.0
+# Velora v1.4.2
 
-First production release signed with the new secure upload key.
+## Fixes and changes
+- Fix a poster-card hook error that could close the app during horizontal carousel updates.
+- Improve light-mode rating contrast on artwork and use the shared primary action in the signed-out library.
+- Shared buttons, text fields, headers, loader and contextual bottom sheets.
+- Saved System, Light and Dark appearance choices, with System as the default.
+- Updated library, search, filters and title actions while retaining Want, review and per-season rating behavior.
 
-**Install note:** uninstall any older Velora build before installing this one. The signing key changed, so Android cannot update the old app in place. Your watchlist, ratings and watch progress are tied to your account and come back after sign-in.
+## Update
+Use Check for update in Velora. This normal release keeps the production package and signing key used by v1.4.1. Android will ask you to confirm installation. Do not uninstall v1.4.1 to update.
 
-## What is in this build
-- Cloud sync: watchlist, ratings, reviews and watch progress live in your account
-- Email + Google sign-in
-- Public profiles, match percentage, follow/unfollow, friends activity feed
-- Private account mode (Settings)
-- Account settings: edit profile, export library (JSON / SIMKL CSV), delete account
-- In-app update checker with checksum + signature verification (fails closed)
-- Per-season ratings and reviews for TV shows
-- Performance-focused rebuild of the tracking UI
+This is a first-pass design update, not an exact copy of Must. Automated checks do not prove every authenticated flow or smoothness on every phone.
 
 ## Files
-- `velora-v1.3.0.apk`: the app
-- `velora-v1.3.0-checksums.txt`: SHA-256 of the APK (the in-app updater checks this before installing)
-- `cert-fingerprint.txt`: signing certificate fingerprints
+- `velora-v1.4.2.apk`: production Android app
+- `velora-v1.4.2-checksums.txt`: SHA-256 checked before installation
+- `cert-fingerprint.txt`: release signing certificate fingerprint

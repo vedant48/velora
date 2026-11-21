@@ -56,8 +56,9 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   starIcon: {
     marginRight: 3,
   },
+  // Rating badges keep a dark artwork scrim in either app theme.
   ratingText: {
-    color: colors.textPrimary,
+    color: '#FFFFFF',
     fontSize: 11,
     fontWeight: '700',
   },
@@ -67,7 +68,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     borderColor: 'rgba(255, 255, 255, 0.3)',
   },
   hdText: {
-    color: colors.textPrimary,
+    color: '#FFFFFF',
     fontSize: 9,
     fontWeight: '800',
     letterSpacing: 0.5,
