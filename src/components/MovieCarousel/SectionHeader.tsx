@@ -1,9 +1,9 @@
-import React from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { colors } from '../../theme/colors';
-import { typography } from '../../theme/typography';
+import React from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { metrics } from '../../theme/metrics';
+import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
+import { typography } from '../../theme/typography';
 
 interface SectionHeaderProps {
   title: string;
@@ -13,11 +13,13 @@ interface SectionHeaderProps {
 
 export const SectionHeader: React.FC<SectionHeaderProps> = React.memo(
   ({ title, subtitle, onSeeAllPress }) => {
+  const { colors } = useAppTheme();
+  const styles = useThemedStyles(createStyles);
     return (
       <View style={styles.container}>
         <View style={styles.titleColumn}>
-          <Text style={typography.sectionTitle}>{title}</Text>
-          {subtitle ? <Text style={typography.caption}>{subtitle}</Text> : null}
+          <Text style={[typography.sectionTitle, { color: colors.textPrimary }]}>{title}</Text>
+          {subtitle ? <Text style={[typography.caption, { color: colors.textTertiary }]}>{subtitle}</Text> : null}
         </View>
 
         {onSeeAllPress && (
@@ -37,7 +39,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = React.memo(
 
 SectionHeader.displayName = 'SectionHeader';
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',

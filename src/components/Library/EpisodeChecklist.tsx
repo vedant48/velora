@@ -1,11 +1,12 @@
-import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
-import { Swipeable } from 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { colors } from '../../theme/colors';
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Swipeable } from 'react-native-gesture-handler';
 import { Episode } from '../../api/types';
-import { veloraApi, Review } from '../../api/velora';
+import { Review, veloraApi } from '../../api/velora';
+import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
+import { AppLoader } from '../common/AppLoader';
 import { RateReviewSheet } from './RateReviewSheet';
 import { SeasonReviewCards } from './SeasonReviewCards';
 
@@ -44,6 +45,8 @@ export const EpisodeChecklist = memo(function EpisodeChecklist({
   onChanged,
   refreshKey = 0,
 }: EpisodeChecklistProps) {
+  const { colors } = useAppTheme();
+  const styles = useThemedStyles(createStyles);
   const [watchedSet, setWatchedSet] = useState<Set<string>>(new Set());
   const [busy, setBusy] = useState(false);
   const [showHint, setShowHint] = useState(false);
@@ -175,7 +178,7 @@ export const EpisodeChecklist = memo(function EpisodeChecklist({
         <Ionicons name="checkmark" size={22} color="#FFF" />
       </View>
     ),
-    [],
+    [styles],
   );
 
   if (!signedIn) return null;
@@ -184,7 +187,7 @@ export const EpisodeChecklist = memo(function EpisodeChecklist({
     <View style={styles.container}>
       {loadingEpisodes ? (
         <View style={styles.loadingRow}>
-          <ActivityIndicator color={colors.trackBlue} size="small" />
+          <AppLoader size="small" />
           <Text style={styles.loadingText}>Loading episodes...</Text>
         </View>
       ) : episodes.length === 0 ? (
@@ -243,7 +246,7 @@ export const EpisodeChecklist = memo(function EpisodeChecklist({
 
           {/* Season-level footer */}
           <View style={styles.footer}>
-            {busy && <ActivityIndicator size="small" color={colors.trackBlue} />}
+            {busy && <AppLoader size="small" />}
             {!allWatched ? (
               <Pressable
                 onPress={() => void setWholeSeason(true)}
@@ -308,7 +311,7 @@ function formatAirDate(iso: string): string {
   return d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   container: { marginTop: 2 },
   loadingRow: {
     flexDirection: 'row',
@@ -352,7 +355,7 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: StyleSheet.hairlineWidth,
-    backgroundColor: 'rgba(255,255,255,0.16)',
+    backgroundColor: colors.surfaceLight,
   },
   swipeAction: {
     backgroundColor: colors.trackBlue,
@@ -384,7 +387,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   footerButton: {
-    backgroundColor: '#3A3A42',
+    backgroundColor: colors.surfaceLight,
     borderRadius: 22,
     paddingHorizontal: 18,
     paddingVertical: 11,

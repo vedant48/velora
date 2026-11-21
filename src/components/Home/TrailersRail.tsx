@@ -1,13 +1,13 @@
-import React, { memo, useCallback } from 'react';
-import { Linking, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
-import { colors } from '../../theme/colors';
-import { MediaItem } from '../../api/types';
+import { Image } from 'expo-image';
+import { memo, useCallback } from 'react';
+import { Linking, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { getMovieVideos } from '../../api/movies';
 import { getTVVideos } from '../../api/tv';
-import { getImageUrl, IMAGE_CONFIG } from '../../utils/image';
+import { MediaItem } from '../../api/types';
 import { metrics } from '../../theme/metrics';
+import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
+import { getImageUrl, IMAGE_CONFIG } from '../../utils/image';
 
 interface TrailersRailProps {
   title?: string;
@@ -22,6 +22,8 @@ interface TrailersRailProps {
  * without a trailer fall back to the details page.
  */
 export const TrailersRail = memo(function TrailersRail({ title = 'Trailers', items, onItemPress }: TrailersRailProps) {
+  const { colors } = useAppTheme();
+  const styles = useThemedStyles(createStyles);
   const openTrailer = useCallback(
     async (item: MediaItem) => {
       try {
@@ -86,7 +88,7 @@ export const TrailersRail = memo(function TrailersRail({ title = 'Trailers', ite
   );
 });
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   root: { marginTop: 18 },
   heading: {
     color: colors.textPrimary,

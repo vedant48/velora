@@ -1,6 +1,8 @@
-import React, { memo } from 'react';
-import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
-import { colors } from '../../theme/colors';
+import { memo } from 'react';
+import { Pressable, StyleSheet, Text } from 'react-native';
+import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
+import { ui } from '../../theme/ui';
+import { BottomSheet } from '../common/BottomSheet';
 
 export interface ActionSheetOption {
   label: string;
@@ -13,6 +15,7 @@ interface ActionSheetProps {
   options: ActionSheetOption[];
   onClose: () => void;
   showCancel?: boolean;
+  dismissOnSelect?: boolean;
 }
 
 /** Must-style bottom action sheet over a dimmed backdrop. */
@@ -21,16 +24,18 @@ export const ActionSheet = memo(function ActionSheet({
   options,
   onClose,
   showCancel = true,
+  dismissOnSelect = true,
 }: ActionSheetProps) {
+  const { colors } = useAppTheme();
+  const styles = useThemedStyles(createStyles);
   return (
-    <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
-      <Pressable style={styles.backdrop} onPress={onClose} accessibilityLabel="Dismiss">
-        <Pressable style={styles.sheet} onPress={(e) => e.stopPropagation()}>
+    <BottomSheet visible={visible} onClose={onClose}>
           {options.map((opt) => (
             <Pressable
               key={opt.label}
+              accessibilityLabel={opt.label}
               onPress={() => {
-                onClose();
+                if (dismissOnSelect) onClose();
                 opt.onPress();
               }}
               style={({ pressed }) => [styles.option, pressed && styles.optionPressed]}
@@ -50,35 +55,22 @@ export const ActionSheet = memo(function ActionSheet({
               <Text style={styles.optionText}>Cancel</Text>
             </Pressable>
           )}
-        </Pressable>
-      </Pressable>
-    </Modal>
+    </BottomSheet>
   );
 });
 
-const styles = StyleSheet.create({
-  backdrop: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.72)',
-    justifyContent: 'flex-end',
-  },
-  sheet: {
-    backgroundColor: '#2A2A30',
-    borderTopLeftRadius: 22,
-    borderTopRightRadius: 22,
-    paddingTop: 8,
-    paddingBottom: 34,
-  },
+const createStyles = (colors: AppColors) => StyleSheet.create({
   option: {
     alignItems: 'center',
-    paddingVertical: 18,
+    paddingVertical: ui.space.lg,
+    minHeight: ui.control.minHeight,
   },
   optionPressed: {
-    backgroundColor: 'rgba(255, 255, 255, 0.06)',
+    backgroundColor: colors.surface,
   },
   optionText: {
     color: colors.textPrimary,
-    fontSize: 17,
+    fontSize: ui.type.body,
     fontWeight: '600',
   },
   destructiveText: {
@@ -86,7 +78,7 @@ const styles = StyleSheet.create({
   },
   cancel: {
     borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: 'rgba(255, 255, 255, 0.12)',
+    borderTopColor: colors.border,
     marginTop: 4,
   },
 });

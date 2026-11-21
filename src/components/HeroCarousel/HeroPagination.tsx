@@ -1,12 +1,7 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import Animated, {
-  SharedValue,
-  useAnimatedStyle,
-  interpolate,
-  Extrapolation,
-} from 'react-native-reanimated';
-import { colors } from '../../theme/colors';
+import { StyleSheet, View } from 'react-native';
+import Animated, { Extrapolation, interpolate, SharedValue, useAnimatedStyle } from 'react-native-reanimated';
+import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
 import { metrics } from '../../theme/metrics';
 
 interface HeroPaginationProps {
@@ -16,6 +11,8 @@ interface HeroPaginationProps {
 
 const Dot: React.FC<{ index: number; scrollX: SharedValue<number> }> = React.memo(
   ({ index, scrollX }) => {
+  const { colors } = useAppTheme();
+  const styles = useThemedStyles(createStyles);
     const width = metrics.screenWidth;
 
     const animatedDotStyle = useAnimatedStyle(() => {
@@ -50,6 +47,8 @@ Dot.displayName = 'HeroPaginationDot';
 
 export const HeroPagination: React.FC<HeroPaginationProps> = React.memo(
   ({ total, scrollX }) => {
+  const { colors } = useAppTheme();
+  const styles = useThemedStyles(createStyles);
     if (total <= 1) return null;
 
     return (
@@ -64,7 +63,7 @@ export const HeroPagination: React.FC<HeroPaginationProps> = React.memo(
 
 HeroPagination.displayName = 'HeroPagination';
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   container: {
     position: 'absolute',
     bottom: 12,

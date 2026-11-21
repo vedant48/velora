@@ -1,12 +1,12 @@
-import React, { memo, useEffect, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
-import { colors } from '../../theme/colors';
-import { veloraApi, LibraryItem } from '../../api/velora';
+import { memo, useEffect, useState } from 'react';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { LibraryItem, veloraApi } from '../../api/velora';
 import { useAuth } from '../../state/AuthContext';
-import { getImageUrl, IMAGE_CONFIG } from '../../utils/image';
 import { metrics } from '../../theme/metrics';
+import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
+import { getImageUrl, IMAGE_CONFIG } from '../../utils/image';
 
 interface WatchNextRailProps {
   onPressItem: (item: LibraryItem) => void;
@@ -18,6 +18,8 @@ interface WatchNextRailProps {
  * Hidden when signed out or nothing is being watched.
  */
 export const WatchNextRail = memo(function WatchNextRail({ onPressItem }: WatchNextRailProps) {
+  const { colors } = useAppTheme();
+  const styles = useThemedStyles(createStyles);
   const { user, apiReady } = useAuth();
   const [items, setItems] = useState<LibraryItem[]>([]);
 
@@ -103,7 +105,7 @@ export const WatchNextRail = memo(function WatchNextRail({ onPressItem }: WatchN
   );
 });
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   root: { marginTop: 18 },
   heading: {
     color: colors.textPrimary,
@@ -142,12 +144,12 @@ const styles = StyleSheet.create({
     bottom: 12,
   },
   name: {
-    color: colors.textPrimary,
+    color: '#FFFFFF',
     fontSize: 17,
     fontWeight: '800',
   },
   sub: {
-    color: colors.textSecondary,
+    color: '#D4D4DA',
     fontSize: 12,
     fontWeight: '600',
     marginTop: 2,

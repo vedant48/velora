@@ -1,7 +1,7 @@
-import React, { memo, useCallback } from 'react';
+import { memo, useCallback } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
-import { colors } from '../../theme/colors';
+import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -13,6 +13,8 @@ interface RatingChipProps {
 
 /** 0-10 chip with UI-thread spring feedback. */
 const RatingChip = memo(function RatingChip({ value, selected, onSelect }: RatingChipProps) {
+  const { colors } = useAppTheme();
+  const styles = useThemedStyles(createStyles);
   const scale = useSharedValue(1);
   const style = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
   return (
@@ -39,6 +41,8 @@ interface RatingPickerProps {
 
 /** Must-style 0-10 rating row. */
 export const RatingPicker = memo(function RatingPicker({ rating, onChange }: RatingPickerProps) {
+  const { colors } = useAppTheme();
+  const styles = useThemedStyles(createStyles);
   const handleSelect = useCallback((v: number | null) => onChange(v), [onChange]);
   return (
     <View style={styles.row}>
@@ -49,7 +53,7 @@ export const RatingPicker = memo(function RatingPicker({ rating, onChange }: Rat
   );
 });
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   row: {
     flexDirection: 'row',
     flexWrap: 'wrap',

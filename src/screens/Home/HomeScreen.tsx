@@ -1,44 +1,28 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import {
-  ScrollView,
-  StyleSheet,
-  View,
-  StatusBar,
-  RefreshControl,
-} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../../navigation/types';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { RefreshControl, ScrollView, StatusBar, StyleSheet, View } from 'react-native';
+import { useCollectionQuery, useGenreMoviesQuery, useMovieRecommendationsQuery, useNowPlayingMoviesQuery, usePopularMoviesQuery, usePopularTVQuery, useStreamingMoviesQuery, useTopRatedMoviesQuery, useTopRatedTVQuery, useTrendingMoviesQuery, useTrendingTVQuery, useUpcomingMoviesQuery } from '../../api/queries';
 import { MediaItem } from '../../api/types';
-import {
-  useTrendingMoviesQuery,
-  usePopularMoviesQuery,
-  useTopRatedMoviesQuery,
-  useNowPlayingMoviesQuery,
-  usePopularTVQuery,
-  useTopRatedTVQuery,
-  useTrendingTVQuery,
-  useGenreMoviesQuery,
-  useCollectionQuery,
-  useUpcomingMoviesQuery,
-  useStreamingMoviesQuery,
-  useMovieRecommendationsQuery,
-} from '../../api/queries';
-import { veloraApi, LibraryItem } from '../../api/velora';
-import { useAuth } from '../../state/AuthContext';
+import { LibraryItem, veloraApi } from '../../api/velora';
+import { CollectionsRail } from '../../components/Collections/CollectionsRail';
+import { AppLoader } from '../../components/common/AppLoader';
+import { ContentFilter, Header } from '../../components/common/Header';
+import { HeroCarousel } from '../../components/HeroCarousel/HeroCarousel';
 import { TrailersRail } from '../../components/Home/TrailersRail';
 import { WatchNextRail } from '../../components/Home/WatchNextRail';
-import { CollectionsRail } from '../../components/Collections/CollectionsRail';
-import { useContinueWatching } from '../../hooks/useContinueWatching';
-import { Header, ContentFilter } from '../../components/common/Header';
-import { HeroCarousel } from '../../components/HeroCarousel/HeroCarousel';
 import { MovieCarousel } from '../../components/MovieCarousel/MovieCarousel';
-import { colors } from '../../theme/colors';
+import { useContinueWatching } from '../../hooks/useContinueWatching';
+import { RootStackParamList } from '../../navigation/types';
+import { useAuth } from '../../state/AuthContext';
 import { metrics } from '../../theme/metrics';
+import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 export const HomeScreen: React.FC = () => {
+  const { colors, mode } = useAppTheme();
+  const styles = useThemedStyles(createStyles);
   const navigation = useNavigation<NavigationProp>();
   const [activeFilter, setActiveFilter] = React.useState<ContentFilter>('all');
 
@@ -173,7 +157,7 @@ export const HomeScreen: React.FC = () => {
 
   return (
     <View style={styles.root}>
-      <StatusBar barStyle="light-content" translucent backgroundColor="transparent" />
+      <StatusBar barStyle={mode === 'dark' ? 'light-content' : 'dark-content'} translucent backgroundColor="transparent" />
 
       {/* Floating Glass Header with Netflix-Style Filter Pills */}
       <Header
@@ -187,7 +171,7 @@ export const HomeScreen: React.FC = () => {
       />
 
       {/* Primary Vertical Virtualized Scroll Container */}
-      <ScrollView
+      {isHeroLoading && heroItems.length === 0 ? <AppLoader style={{flex: 1}} /> : <ScrollView
         style={styles.container}
         contentContainerStyle={styles.contentContainer}
         showsVerticalScrollIndicator={false}
@@ -482,12 +466,12 @@ export const HomeScreen: React.FC = () => {
 
         {/* Bottom padding for tab bar */}
         <View style={styles.bottomSpacer} />
-      </ScrollView>
+      </ScrollView>}
     </View>
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   root: {
     flex: 1,
     backgroundColor: colors.background,

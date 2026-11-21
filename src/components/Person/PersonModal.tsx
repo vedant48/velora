@@ -1,22 +1,14 @@
-import React, { memo, useState, useMemo } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Modal,
-  Pressable,
-  ScrollView,
-  Dimensions,
-  ActivityIndicator,
-} from 'react-native';
-import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
-import { usePersonDetailsQuery, usePersonCreditsQuery } from '../../api/queries';
+import { Image } from 'expo-image';
+import { memo, useMemo, useState } from 'react';
+import { Dimensions, Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { usePersonCreditsQuery, usePersonDetailsQuery } from '../../api/queries';
 import { MediaItem, PersonCreditItem } from '../../api/types';
-import { getPosterUrl } from '../../utils/image';
-import { colors } from '../../theme/colors';
+import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
 import { metrics } from '../../theme/metrics';
+import { getPosterUrl } from '../../utils/image';
 import { MovieCard } from '../MovieCard/MovieCard';
+import { AppLoader } from '../common/AppLoader';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -29,6 +21,8 @@ interface PersonModalProps {
 
 export const PersonModal = memo(
   ({ visible, personId, onClose, onSelectMedia }: PersonModalProps) => {
+  const { colors } = useAppTheme();
+  const styles = useThemedStyles(createStyles);
     const [isBioExpanded, setIsBioExpanded] = useState(false);
 
     const { data: person, isLoading: isPersonLoading } = usePersonDetailsQuery(personId);
@@ -102,7 +96,7 @@ export const PersonModal = memo(
 
             {isLoading && !person ? (
               <View style={styles.centerLoading}>
-                <ActivityIndicator size="large" color={colors.primary} />
+                <AppLoader size="large" />
                 <Text style={styles.loadingText}>Loading details...</Text>
               </View>
             ) : (
@@ -221,7 +215,7 @@ export const PersonModal = memo(
   }
 );
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   overlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.75)',

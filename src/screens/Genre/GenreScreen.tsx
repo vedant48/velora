@@ -1,28 +1,24 @@
-import React, { useCallback, useMemo, useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Pressable,
-  ActivityIndicator,
-} from 'react-native';
-import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { FlashList, ListRenderItem } from '@shopify/flash-list';
-import { RootStackParamList } from '../../navigation/types';
-import { MediaItem } from '../../api/types';
+import React, { useCallback, useMemo, useState } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useGenreInfiniteQuery } from '../../api/queries';
+import { MediaItem } from '../../api/types';
 import { MovieCard } from '../../components/MovieCard/MovieCard';
-import { MovieCardSkeleton } from '../../components/Skeleton/MovieCardSkeleton';
-import { colors } from '../../theme/colors';
+import { AppLoader } from '../../components/common/AppLoader';
+import { RootStackParamList } from '../../navigation/types';
+import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
 import { metrics } from '../../theme/metrics';
 
 type GenreRouteProp = RouteProp<RootStackParamList, 'Genre'>;
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 export const GenreScreen: React.FC = () => {
+  const { colors } = useAppTheme();
+  const styles = useThemedStyles(createStyles);
   const insets = useSafeAreaInsets();
   const route = useRoute<GenreRouteProp>();
   const navigation = useNavigation<NavigationProp>();
@@ -33,6 +29,8 @@ export const GenreScreen: React.FC = () => {
   const {
     data,
     isLoading,
+    isError,
+    refetch,
     isFetchingNextPage,
     hasNextPage,
     fetchNextPage,
@@ -137,16 +135,10 @@ export const GenreScreen: React.FC = () => {
 
       {/* Grid Content */}
       {isLoading ? (
-        <View style={styles.skeletonGrid}>
-          {Array.from({ length: 9 }).map((_, index) => (
-            <View key={`genre-skeleton-${index}`} style={{ marginBottom: gap }}>
-              <MovieCardSkeleton
-                width={cardWidth}
-                height={cardHeight}
-                hasMarginRight={false}
-              />
-            </View>
-          ))}
+        <AppLoader style={{ flex: 1 }} />
+      ) : isError && items.length === 0 ? (
+        <View style={styles.emptyContainer}><Text style={styles.emptyTitle}>Could not load titles</Text>
+          <Pressable onPress={() => refetch()} accessibilityRole="button"><Text style={styles.emptySubtitle}>Tap to retry</Text></Pressable>
         </View>
       ) : items.length === 0 ? (
         <View style={styles.emptyContainer}>
@@ -169,7 +161,7 @@ export const GenreScreen: React.FC = () => {
           ListFooterComponent={
             isFetchingNextPage ? (
               <View style={styles.footerLoader}>
-                <ActivityIndicator size="small" color={colors.primary} />
+                <AppLoader size="small" />
               </View>
             ) : (
               <View style={{ height: 40 }} />
@@ -181,7 +173,7 @@ export const GenreScreen: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,

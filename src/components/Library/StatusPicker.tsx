@@ -1,8 +1,8 @@
-import React, { memo } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { colors } from '../../theme/colors';
+import { memo } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import type { LibraryStatus } from '../../api/velora';
+import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
 
 const OPTIONS: { key: LibraryStatus; label: string; icon: keyof typeof Ionicons.glyphMap }[] = [
   { key: 'want', label: 'Want', icon: 'bookmark-outline' },
@@ -17,6 +17,8 @@ interface StatusPickerProps {
 
 /** Must-style list membership: tap to set, tap again to remove. */
 export const StatusPicker = memo(function StatusPicker({ status, onChange }: StatusPickerProps) {
+  const { colors } = useAppTheme();
+  const styles = useThemedStyles(createStyles);
   return (
     <View style={styles.row}>
       {OPTIONS.map((opt) => {
@@ -38,7 +40,7 @@ export const StatusPicker = memo(function StatusPicker({ status, onChange }: Sta
   );
 });
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   row: {
     flexDirection: 'row',
     gap: 8,

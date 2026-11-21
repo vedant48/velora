@@ -1,8 +1,8 @@
-import React, { memo, useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { colors } from '../../theme/colors';
-import { veloraApi, Review } from '../../api/velora';
+import { memo, useEffect, useState } from 'react';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Review, veloraApi } from '../../api/velora';
+import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
 
 interface SeasonReviewCardsProps {
   seriesId: number;
@@ -17,6 +17,8 @@ export const SeasonReviewCards = memo(function SeasonReviewCards({
   seasonNumber,
   refreshSignal = null,
 }: SeasonReviewCardsProps) {
+  const { colors } = useAppTheme();
+  const styles = useThemedStyles(createStyles);
   const [reviews, setReviews] = useState<Review[]>([]);
 
   useEffect(() => {
@@ -79,12 +81,12 @@ export const SeasonReviewCards = memo(function SeasonReviewCards({
   );
 });
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   root: { marginTop: 18 },
   scroll: { gap: 12, paddingRight: 16 },
   card: {
     width: 250,
-    backgroundColor: '#232329',
+    backgroundColor: colors.surfaceLight,
     borderRadius: 14,
     padding: 14,
     gap: 8,

@@ -1,8 +1,8 @@
-import React from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import React from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { colors } from '../../theme/colors';
+import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
 import { metrics } from '../../theme/metrics';
 
 export type ContentFilter = 'all' | 'tv' | 'movies';
@@ -23,6 +23,8 @@ export const Header: React.FC<HeaderProps> = React.memo(
     activeFilter = 'all',
     onFilterChange,
   }) => {
+  const { colors } = useAppTheme();
+  const styles = useThemedStyles(createStyles);
     const insets = useSafeAreaInsets();
 
     return (
@@ -115,7 +117,7 @@ export const Header: React.FC<HeaderProps> = React.memo(
 
 Header.displayName = 'Header';
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   container: {
     position: 'absolute',
     top: 0,
@@ -169,7 +171,7 @@ const styles = StyleSheet.create({
   iconButton: {
     padding: 6,
     borderRadius: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+    backgroundColor: colors.surfaceLight,
   },
   profileAvatar: {
     width: 32,
@@ -198,9 +200,9 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 14,
     borderRadius: 16,
-    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+    backgroundColor: colors.surfaceLight,
     borderWidth: 0.5,
-    borderColor: 'rgba(255, 255, 255, 0.12)',
+    borderColor: colors.border,
   },
   filterPillActive: {
     backgroundColor: colors.primary,

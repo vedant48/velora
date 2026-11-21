@@ -1,18 +1,16 @@
-import React, { useRef, useEffect, useCallback } from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
-import Animated, {
-  useSharedValue,
-  useAnimatedScrollHandler,
-} from 'react-native-reanimated';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import React, { useCallback, useEffect, useRef } from 'react';
+import { ScrollView, StyleSheet, View } from 'react-native';
+import Animated, { useAnimatedScrollHandler, useSharedValue } from 'react-native-reanimated';
 import { MediaItem } from '../../api/types';
 import { veloraApi } from '../../api/velora';
-import { useAuth } from '../../state/AuthContext';
-import { HeroSlide } from './HeroSlide';
-import { HeroPagination } from './HeroPagination';
-import { HeroSkeleton } from '../Skeleton/HeroSkeleton';
 import { useWatchlist } from '../../hooks/useWatchlist';
+import { useAuth } from '../../state/AuthContext';
 import { metrics } from '../../theme/metrics';
+import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
+import { AppLoader } from '../common/AppLoader';
+import { HeroPagination } from './HeroPagination';
+import { HeroSlide } from './HeroSlide';
 
 interface HeroCarouselProps {
   items: MediaItem[];
@@ -28,6 +26,8 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = React.memo(
     onItemPress,
     autoplayIntervalMs = 6000,
   }) => {
+    const { colors } = useAppTheme();
+    const styles = useThemedStyles(createStyles);
     const scrollX = useSharedValue(0);
     const scrollViewRef = useRef<ScrollView>(null);
     const currentIndex = useRef(0);
@@ -142,7 +142,7 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = React.memo(
     }, [isLoading, items.length, autoplayIntervalMs]);
 
     if (isLoading) {
-      return <HeroSkeleton />;
+      return <View style={[styles.container, { justifyContent: 'center' }]}><AppLoader /></View>;
     }
 
     if (!items || items.length === 0) {
@@ -187,11 +187,11 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = React.memo(
 
 HeroCarousel.displayName = 'HeroCarousel';
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   container: {
     height: metrics.heroHeight,
     position: 'relative',
-    backgroundColor: '#09090B',
+    backgroundColor: colors.background,
   },
   scroll: {
     flex: 1,

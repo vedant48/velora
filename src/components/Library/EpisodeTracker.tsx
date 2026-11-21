@@ -1,7 +1,7 @@
-import React, { memo } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { colors } from '../../theme/colors';
+import { memo } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
 
 interface EpisodeTrackerProps {
   watched: number;
@@ -11,6 +11,8 @@ interface EpisodeTrackerProps {
 
 /** Must-style "N episodes left" tracker. */
 export const EpisodeTracker = memo(function EpisodeTracker({ watched, total, onChange }: EpisodeTrackerProps) {
+  const { colors } = useAppTheme();
+  const styles = useThemedStyles(createStyles);
   const left = Math.max(total - watched, 0);
   const progress = total > 0 ? Math.min(watched / total, 1) : 0;
   return (
@@ -45,7 +47,7 @@ export const EpisodeTracker = memo(function EpisodeTracker({ watched, total, onC
   );
 });
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   container: {
     gap: 8,
   },

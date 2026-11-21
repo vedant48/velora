@@ -20,8 +20,8 @@ export const colors = {
 
   textPrimary: '#FFFFFF',
   textSecondary: '#A1A1AA',
-  textTertiary: '#71717A',
-  textMuted: '#52525B',
+  textTertiary: '#8A8A94',
+  textMuted: '#85858F',
 
   border: '#22222C',
   borderHighlight: '#3F3F4E',

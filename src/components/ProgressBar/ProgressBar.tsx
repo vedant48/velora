@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { colors } from '../../theme/colors';
+import { StyleSheet, View } from 'react-native';
+import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
 
 interface ProgressBarProps {
   progress: number;
@@ -10,6 +10,8 @@ interface ProgressBarProps {
 
 export const ProgressBar: React.FC<ProgressBarProps> = React.memo(
   ({ progress, duration, height = 3.5 }) => {
+  const { colors } = useAppTheme();
+  const styles = useThemedStyles(createStyles);
     const ratio = duration > 0 ? Math.min(Math.max(progress / duration, 0), 1) : 0;
     const percentage = `${Math.round(ratio * 100)}%`;
 
@@ -23,7 +25,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = React.memo(
 
 ProgressBar.displayName = 'ProgressBar';
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   container: {
     width: '100%',
     backgroundColor: 'rgba(255, 255, 255, 0.25)',

@@ -1,20 +1,22 @@
+import { Ionicons } from '@expo/vector-icons';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { MainTabParamList } from './types';
 import { HomeScreen } from '../screens/Home/HomeScreen';
 import { SearchScreen } from '../screens/Search/SearchScreen';
+import { MainTabParamList } from './types';
 // WatchlistScreen import removed with the tab (user direction 21 Nov: Want is
 // the watchlist now; screen source stays at ../screens/Watchlist/WatchlistScreen)
-import { LibraryScreen } from '../screens/Profile/LibraryScreen';
 import { DebugScreen } from '../screens/Debug/DebugScreen';
-import { colors } from '../theme/colors';
+import { LibraryScreen } from '../screens/Profile/LibraryScreen';
+import { AppColors, useAppTheme, useThemedStyles } from '../theme/ThemeContext';
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
 export const TabNavigator: React.FC = () => {
+  const { colors } = useAppTheme();
+  const styles = useThemedStyles(createStyles);
   const insets = useSafeAreaInsets();
 
   return (
@@ -26,7 +28,7 @@ export const TabNavigator: React.FC = () => {
           bottom: 0,
           left: 0,
           right: 0,
-          backgroundColor: 'rgba(14, 14, 20, 0.94)',
+          backgroundColor: colors.cardBackground,
           borderTopColor: colors.border,
           borderTopWidth: 0.5,
           height: 60 + Math.max(insets.bottom - 6, 0),
@@ -70,7 +72,7 @@ export const TabNavigator: React.FC = () => {
       <Tab.Screen
         name="SearchTab"
         component={SearchScreen}
-        options={{ tabBarLabel: 'Search' }}
+        options={{ tabBarLabel: 'Search', tabBarStyle: { display: 'none' } }}
       />
       {/* Watchlist tab removed (user direction 21 Nov): Want is the unified
           watchlist, reached from Profile > Want. Screen source kept at
@@ -100,7 +102,7 @@ export const TabNavigator: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   iconWrapper: {
     alignItems: 'center',
     justifyContent: 'center',

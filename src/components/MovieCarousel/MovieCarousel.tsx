@@ -1,14 +1,14 @@
-import React, { useCallback, useRef } from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
-import { FlashList, ListRenderItem, ViewToken } from '@shopify/flash-list';
 import { Ionicons } from '@expo/vector-icons';
+import { FlashList, ListRenderItem, ViewToken } from '@shopify/flash-list';
+import React, { useCallback, useRef } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { MediaItem } from '../../api/types';
+import { metrics } from '../../theme/metrics';
+import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
+import { getImageUrl, prefetchImagesWindow } from '../../utils/image';
+import { AppLoader } from '../common/AppLoader';
 import { MovieCard } from '../MovieCard/MovieCard';
 import { SectionHeader } from './SectionHeader';
-import { SectionSkeleton } from '../Skeleton/SectionSkeleton';
-import { prefetchImagesWindow, getImageUrl } from '../../utils/image';
-import { metrics } from '../../theme/metrics';
-import { colors } from '../../theme/colors';
 
 interface MovieCarouselProps {
   title: string;
@@ -40,6 +40,8 @@ export const MovieCarousel: React.FC<MovieCarouselProps> = React.memo(
     cardHeight = metrics.posterHeight,
     progressMap,
   }) => {
+  const { colors } = useAppTheme();
+  const styles = useThemedStyles(createStyles);
     // Intelligent viewport prefetching window
     const lastPrefetchedIndex = useRef<number>(-1);
 
@@ -86,7 +88,7 @@ export const MovieCarousel: React.FC<MovieCarouselProps> = React.memo(
     const keyExtractor = useCallback((item: MediaItem) => item.id.toString(), []);
 
     if (isLoading) {
-      return <SectionSkeleton cardWidth={cardWidth} cardHeight={cardHeight} />;
+      return <View style={styles.container}><SectionHeader title={title} subtitle={subtitle} /><AppLoader style={{ height: cardHeight }} /></View>;
     }
 
     if (isError) {
@@ -139,7 +141,7 @@ export const MovieCarousel: React.FC<MovieCarouselProps> = React.memo(
 
 MovieCarousel.displayName = 'MovieCarousel';
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   container: {
     marginVertical: 14,
   },
