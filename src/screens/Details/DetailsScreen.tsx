@@ -35,6 +35,8 @@ import { PersonModal } from '../../components/Person/PersonModal';
 import { getImageUrl, IMAGE_CONFIG } from '../../utils/image';
 import { formatRuntime, formatYear, formatRating } from '../../utils/format';
 import { colors } from '../../theme/colors';
+import { TrackSection } from '../../components/Library/TrackSection';
+import { ReviewsSection } from '../../components/Library/ReviewsSection';
 import { metrics } from '../../theme/metrics';
 import { typography } from '../../theme/typography';
 
@@ -331,6 +333,19 @@ export const DetailsScreen: React.FC = () => {
               </Text>
             </Pressable>
           </View>
+
+          {/* Must-style tracking: list status + rating + episode progress */}
+          <TrackSection
+            mediaType={isMovie ? 'movie' : 'tv'}
+            tmdbId={initialItem.id}
+            title={initialItem.title}
+            posterPath={initialItem.poster_path}
+            backdropPath={initialItem.backdrop_path}
+            releaseDate={initialItem.release_date}
+            totalEpisodes={isTV ? Number((details as any)?.number_of_episodes ?? 0) : 0}
+          />
+
+          <ReviewsSection mediaType={isMovie ? 'movie' : 'tv'} tmdbId={initialItem.id} />
 
           {/* Synopsis */}
           <Text style={styles.sectionHeading}>Storyline</Text>

@@ -7,7 +7,7 @@ import { MainTabParamList } from './types';
 import { HomeScreen } from '../screens/Home/HomeScreen';
 import { SearchScreen } from '../screens/Search/SearchScreen';
 import { WatchlistScreen } from '../screens/Watchlist/WatchlistScreen';
-import { ProfileScreen } from '../screens/Profile/ProfileScreen';
+import { LibraryScreen } from '../screens/Profile/LibraryScreen';
 import { DebugScreen } from '../screens/Debug/DebugScreen';
 import { colors } from '../theme/colors';
 
@@ -80,7 +80,7 @@ export const TabNavigator: React.FC = () => {
       />
       <Tab.Screen
         name="ProfileTab"
-        component={ProfileScreen}
+        component={LibraryScreen}
         options={{ tabBarLabel: 'Profile' }}
       />
       <Tab.Screen
