@@ -72,6 +72,14 @@ jobs:
           echo "apk_file=${APK_FILE}" >> $GITHUB_OUTPUT
           echo "tag=${TAG}" >> $GITHUB_OUTPUT
 
+      - name: 🔐 Generate SHA-256 checksum (verified by the in-app updater before install)
+        run: |
+          CHECKSUM_FILE="velora-${{ steps.prepare_apk.outputs.tag }}-checksums.txt"
+          sha256sum "./${{ steps.prepare_apk.outputs.apk_file }}" > "./${CHECKSUM_FILE}"
+          cat "./${CHECKSUM_FILE}"
+          echo "checksum_file=${CHECKSUM_FILE}" >> $GITHUB_OUTPUT
+        id: checksum
+
       - name: 🚀 Publish GitHub Release
         uses: softprops/action-gh-release@v2
         with:
@@ -80,6 +88,8 @@ jobs:
           body_path: RELEASE_NOTES.md
           draft: false
           prerelease: false
-          files: ${{ steps.prepare_apk.outputs.apk_file }}
+          files: |
+            ${{ steps.prepare_apk.outputs.apk_file }}
+            ${{ steps.checksum.outputs.checksum_file }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

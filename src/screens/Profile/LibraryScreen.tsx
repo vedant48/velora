@@ -7,6 +7,7 @@ import { colors } from '../../theme/colors';
 import { useAuth } from '../../state/AuthContext';
 import { veloraApi, LibraryItem, UserStats } from '../../api/velora';
 import { LibraryCard } from '../../components/Library/LibraryCard';
+import { checkForUpdate, downloadAndInstall } from '../../services/updates';
 
 type TabKey = 'watched' | 'want' | 'series';
 
@@ -24,6 +25,42 @@ export const LibraryScreen: React.FC = () => {
   const [tab, setTab] = useState<TabKey>('watched');
   const [items, setItems] = useState<LibraryItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [updateProgress, setUpdateProgress] = useState<number | null>(null);
+
+  const handleUpdateCheck = useCallback(async () => {
+    if (updateProgress !== null) return;
+    try {
+      const info = await checkForUpdate();
+      if (!info) {
+        Alert.alert('Update check failed', 'Could not reach the update server. Try again later.');
+        return;
+      }
+      if (!info.isNewer) {
+        Alert.alert('Velora is up to date', `You are on the latest version (${info.currentVersion}).`);
+        return;
+      }
+      const notes = info.notes ? info.notes.slice(0, 300) : 'A new version is available.';
+      Alert.alert(`Update available: v${info.latestVersion}`, notes, [
+        { text: 'Later', style: 'cancel' },
+        {
+          text: 'Download & install',
+          onPress: () => {
+            setUpdateProgress(0);
+            void downloadAndInstall(info, setUpdateProgress).then((r) => {
+              setUpdateProgress(null);
+              if (!r.ok) {
+                Alert.alert('Update failed', r.error ?? 'Something went wrong');
+              } else {
+                Alert.alert('Ready to install', 'Android will ask you to confirm the update.');
+              }
+            });
+          },
+        },
+      ]);
+    } catch {
+      Alert.alert('Update check failed', 'Could not reach the update server. Try again later.');
+    }
+  }, [updateProgress]);
 
   useEffect(() => {
     if (!user) return;
@@ -120,6 +157,12 @@ export const LibraryScreen: React.FC = () => {
           <Pressable onPress={() => navigation.navigate('Activity')} style={styles.actionButton}>
             <Ionicons name="pulse-outline" size={15} color={colors.textPrimary} />
             <Text style={styles.actionText}>Activity</Text>
+          </Pressable>
+          <Pressable onPress={handleUpdateCheck} style={styles.actionButton}>
+            <Ionicons name="cloud-download-outline" size={15} color={colors.textPrimary} />
+            <Text style={styles.actionText}>
+              {updateProgress !== null ? `${Math.round(updateProgress * 100)}%` : 'Update'}
+            </Text>
           </Pressable>
           <Pressable
             onPress={() =>

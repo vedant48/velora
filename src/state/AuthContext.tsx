@@ -2,6 +2,7 @@ import React, { createContext, useCallback, useContext, useEffect, useMemo, useS
 import { Platform } from 'react-native';
 import { isApiConfigured, GOOGLE_WEB_CLIENT_ID } from '../config';
 import { veloraApi, VeloraUser, setToken, getToken } from '../api/velora';
+import { migrateLocalWatchlist } from '../services/migration';
 
 /** Lazily loaded so the app still runs where the native module is unavailable (Expo Go / web). */
 async function googleIdToken(): Promise<string | null> {
@@ -50,6 +51,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (!token) return;
         const { user: me } = await veloraApi.me();
         if (!cancelled) setUser(me);
+        void migrateLocalWatchlist().catch(() => undefined);
       } catch {
         // Expired/invalid token or unreachable API: drop session, stay logged out.
         await setToken(null);
@@ -67,12 +69,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const res = await veloraApi.login(username, password);
     await setToken(res.token);
     setUser(res.user);
+    void migrateLocalWatchlist().catch(() => undefined);
   }, []);
 
   const signup = useCallback(async (username: string, password: string, displayName?: string) => {
     const res = await veloraApi.signup(username, password, displayName);
     await setToken(res.token);
     setUser(res.user);
+    void migrateLocalWatchlist().catch(() => undefined);
   }, []);
 
   const loginWithGoogle = useCallback(async (): Promise<'ok' | 'cancelled'> => {
@@ -81,6 +85,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const res = await veloraApi.googleLogin(idToken);
     await setToken(res.token);
     setUser(res.user);
+    void migrateLocalWatchlist().catch(() => undefined);
     return 'ok';
   }, []);
 
