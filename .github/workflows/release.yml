@@ -15,7 +15,47 @@ permissions:
   contents: write
 
 jobs:
+  # Idempotency guard: publishing a dispatch-created draft creates the tag, which
+  # re-triggers this workflow via push:tags. Without this guard that rebuild would
+  # overwrite the published release's assets and flip it back to draft.
+  release-guard:
+    runs-on: ubuntu-latest
+    outputs:
+      skip: ${{ steps.check.outputs.skip }}
+    steps:
+      - name: 🔎 Skip if a published release already exists for this tag
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            TAG="${{ github.event.inputs.tag_name || 'v1.0.0' }}"
+          fi
+          # Fail closed: only an explicit 404 means "no release yet". Auth/network
+          # errors abort the run instead of risking an overwrite.
+          OUT=$(gh api -i "repos/${{ github.repository }}/releases/tags/${TAG}" 2>&1) && RC=0 || RC=$?
+          CODE=$(printf '%s\n' "$OUT" | sed -n '1s/.* \([0-9][0-9][0-9]\).*/\1/p')
+          if [ "$CODE" = "200" ]; then
+            DRAFT=$(printf '%s\n' "$OUT" | awk 'f{print} /^\r?$/{f=1}' | jq -r '.draft')
+            if [ "$DRAFT" = "false" ]; then
+              echo "A published release for $TAG already exists; skipping rebuild to preserve its assets."
+              echo "skip=true" >> "$GITHUB_OUTPUT"
+            else
+              echo "Release for $TAG is still a draft; proceeding."
+              echo "skip=false" >> "$GITHUB_OUTPUT"
+            fi
+          elif [ "$CODE" = "404" ]; then
+            echo "No release for $TAG yet; proceeding."
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "::error::Release lookup for $TAG failed (HTTP ${CODE:-unknown}); failing closed to protect any published release."
+            exit 1
+          fi
+
   build-and-release:
+    needs: release-guard
+    if: ${{ needs.release-guard.outputs.skip != 'true' }}
     runs-on: ubuntu-latest
 
     env:
@@ -175,7 +215,31 @@ jobs:
           echo "$CERT" >> $GITHUB_STEP_SUMMARY
           echo "$CERT"
 
+      - name: 🔎 Re-check published release before upload
+        id: release_recheck
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${{ steps.prepare_apk.outputs.tag }}"
+          OUT=$(gh api -i "repos/${{ github.repository }}/releases/tags/${TAG}" 2>&1) && RC=0 || RC=$?
+          CODE=$(printf '%s\n' "$OUT" | sed -n '1s/.* \([0-9][0-9][0-9]\).*/\1/p')
+          if [ "$CODE" = "200" ]; then
+            DRAFT=$(printf '%s\n' "$OUT" | awk 'f{print} /^\r?$/{f=1}' | jq -r '.draft')
+            if [ "$DRAFT" = "false" ]; then
+              echo "A release for $TAG was published while this build ran; NOT overwriting it."
+              echo "skip=true" >> "$GITHUB_OUTPUT"
+            else
+              echo "skip=false" >> "$GITHUB_OUTPUT"
+            fi
+          elif [ "$CODE" = "404" ]; then
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "::error::Release re-check for $TAG failed (HTTP ${CODE:-unknown}); failing closed."
+            exit 1
+          fi
+
       - name: 🚀 Publish GitHub Release
+        if: ${{ steps.release_recheck.outputs.skip != 'true' }}
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.prepare_apk.outputs.tag }}
