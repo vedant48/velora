@@ -83,6 +83,9 @@ jobs:
       - name: 📦 Install npm dependencies
         run: npm ci || npm install
 
+      - name: Test updater checksum verification
+        run: npm run test:updates
+
       - name: 🏷️ Stamp app version from tag
         id: stamp
         run: |

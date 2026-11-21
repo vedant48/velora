@@ -2,6 +2,7 @@ import { Platform } from 'react-native';
 import * as Application from 'expo-application';
 import Constants from 'expo-constants';
 import * as FileSystem from 'expo-file-system/legacy';
+import { File } from 'expo-file-system';
 import * as Crypto from 'expo-crypto';
 import * as IntentLauncher from 'expo-intent-launcher';
 
@@ -159,12 +160,12 @@ export async function downloadAndInstall(
     const result = await download.downloadAsync();
     if (!result?.uri) return { ok: false, error: 'Download failed. Check your connection and retry.' };
 
-    const base64 = await FileSystem.readAsStringAsync(result.uri, { encoding: 'base64' });
-    const actual = (
-      await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, base64, {
-        encoding: Crypto.CryptoEncoding.BASE64,
-      })
-    ).toLowerCase();
+    // Release checksums hash APK bytes, not their Base64 text representation.
+    const bytes = await new File(result.uri).bytes();
+    const digest = await Crypto.digest(Crypto.CryptoDigestAlgorithm.SHA256, bytes);
+    const actual = Array.from(new Uint8Array(digest), (byte) =>
+      byte.toString(16).padStart(2, '0'),
+    ).join('');
     if (actual !== info.expectedSha256) {
       await FileSystem.deleteAsync(result.uri, { idempotent: true }).catch(() => undefined);
       return { ok: false, error: 'Checksum mismatch - the downloaded update failed verification and was deleted.' };
