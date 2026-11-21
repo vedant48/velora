@@ -13,36 +13,8 @@ export interface ContinueWatchingItem {
 
 const CONTINUE_WATCHING_KEY = '@velora_continue_watching';
 
-// Initial curated mock items if empty
-const INITIAL_MOCK_ITEMS: ContinueWatchingItem[] = [
-  {
-    movieId: 969681, // Spider-Man
-    title: 'Spider-Man: Brand New Day',
-    poster_path: '/qeQJx07rK2xm8SD2sJxFKhE7gs0.jpg',
-    backdrop_path: '/qeQJx07rK2xm8SD2sJxFKhE7gs0.jpg',
-    progress: 5400,
-    duration: 7800,
-    media_type: 'movie',
-  },
-  {
-    movieId: 533535, // Deadpool & Wolverine
-    title: 'Deadpool & Wolverine',
-    poster_path: '/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg',
-    backdrop_path: '/yDHYTfA3R0jFYba16jBB1jv8vpH.jpg',
-    progress: 3200,
-    duration: 7600,
-    media_type: 'movie',
-  },
-  {
-    movieId: 94605, // Arcane
-    title: 'Arcane',
-    poster_path: '/fqldf2t8ztc9aiwn397rDit3ua5.jpg',
-    backdrop_path: '/uDgy6hyPd82kOHh6I95FLtLnj6p.jpg',
-    progress: 1800,
-    duration: 2400,
-    media_type: 'tv',
-  },
-];
+// No seeded demo rows: a fresh install has an empty Continue Watching and
+// the Home section stays hidden until the user actually watches something.
 
 type CWListener = () => void;
 const cwListeners = new Set<CWListener>();
@@ -59,7 +31,7 @@ export function useContinueWatching() {
   useEffect(() => {
     if (!isCWInitialized) {
       storage
-        .getItem<ContinueWatchingItem[]>(CONTINUE_WATCHING_KEY, INITIAL_MOCK_ITEMS)
+        .getItem<ContinueWatchingItem[]>(CONTINUE_WATCHING_KEY, [])
         .then((stored) => {
           memoryCW = stored;
           isCWInitialized = true;

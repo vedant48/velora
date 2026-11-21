@@ -75,17 +75,22 @@ jobs:
           if [ ! -f "android/gradlew" ]; then
             npx expo prebuild --platform android --clean
           fi
-          # Ensure arm64-v8a target and compressed native packaging
+          # Ensure arm64-v8a target and compressed native packaging.
+          # prebuild writes expo.inlineModules.watchedDirectories=[] as the LAST
+          # line with NO trailing newline; a plain `echo >>` glues our value onto
+          # it and the glued string reaches the inline-modules mirror CLI as one
+          # broken JSON arg (root cause of the projectsEvaluated node failure).
           mkdir -p android
           touch android/gradle.properties
+          printf '\n' >> android/gradle.properties
           sed -i '/reactNativeArchitectures=/d' android/gradle.properties || true
+          sed -i '/^expo\.inlineModules\.watchedDirectories=/d' android/gradle.properties || true
           echo "reactNativeArchitectures=arm64-v8a" >> android/gradle.properties
           echo "expo.useLegacyPackaging=true" >> android/gradle.properties
           echo "android.enableMinifyInReleaseBuilds=true" >> android/gradle.properties
           echo "android.enableShrinkResourcesInReleaseBuilds=true" >> android/gradle.properties
-          # Guard: without this property the expo inline-modules mirror exec gets a missing CLI arg
-          grep -q 'expo.inlineModules.watchedDirectories' android/gradle.properties || echo 'expo.inlineModules.watchedDirectories=[]' >> android/gradle.properties
-          grep -n 'inlineModules' android/gradle.properties
+          echo 'expo.inlineModules.watchedDirectories=[]' >> android/gradle.properties
+          grep -n 'inlineModules\|reactNativeArchitectures' android/gradle.properties
 
       # Bridge tags (vX.Y.Z-bridge) must stay debug-signed so they install over
       # v1.1.0 as a normal update; upload-key signing is for the final line only.
@@ -122,20 +127,11 @@ jobs:
           echo "VELORA_CERT_SHA256=${CERT_SHA256}" >> "$GITHUB_ENV"
           printf 'SHA256: %s\n' "$CERT_SHA256" > cert-fingerprint.txt
 
-      - name: 🧪 Diagnose inline-modules mirror (temporary)
-        working-directory: android
-        run: |
-          node --no-warnings --eval "require('expo/bin/autolinking')" expo-modules-autolinking mirror-kotlin-inline-modules \
-            --kotlin-files-mirror-directory "$PWD/../node_modules/expo/android/src/main/java/inline/modules" \
-            --inline-modules-list-directory "$PWD/../node_modules/expo/android/build/inline/modules" \
-            --watched-directories-serialized "[]"
-          echo "mirror exit: $?"
-
       - name: 📱 Build Android Release APK
         working-directory: android
         run: |
           chmod +x gradlew
-          ./gradlew assembleRelease --no-daemon --info
+          ./gradlew assembleRelease --no-daemon
         env:
           VELORA_UPLOAD_KEYSTORE_PATH: /tmp/velora-upload.keystore
           VELORA_UPLOAD_STORE_PASSWORD: ${{ secrets.VELORA_UPLOAD_STORE_PASSWORD }}

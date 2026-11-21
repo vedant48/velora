@@ -6,7 +6,6 @@ import {
   ScrollView,
   Pressable,
   StatusBar,
-  Modal,
   ActivityIndicator,
 } from 'react-native';
 import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
@@ -27,7 +26,6 @@ import {
 } from '../../api/queries';
 import { Episode } from '../../api/types';
 import { useWatchlist } from '../../hooks/useWatchlist';
-import { useContinueWatching } from '../../hooks/useContinueWatching';
 import { Badge } from '../../components/common/Badge';
 import { MovieCarousel } from '../../components/MovieCarousel/MovieCarousel';
 import { WatchProviders } from '../../components/Details/WatchProviders';
@@ -54,9 +52,6 @@ export const DetailsScreen: React.FC = () => {
   const isTV = !isMovie;
 
   const [selectedSeason, setSelectedSeason] = useState(1);
-  const [isPlayingMock, setIsPlayingMock] = useState(false);
-  const [playerTitle, setPlayerTitle] = useState(initialItem.title);
-  const [playerSubtitle, setPlayerSubtitle] = useState('Streaming in 4K HDR Dolby Vision');
   const [selectedPersonId, setSelectedPersonId] = useState<number | null>(null);
   const [isPersonModalVisible, setIsPersonModalVisible] = useState(false);
 
@@ -69,7 +64,6 @@ export const DetailsScreen: React.FC = () => {
   const seasonEpisodesQuery = useSeasonEpisodesQuery(isTV ? initialItem.id : 0, selectedSeason);
 
   const { isInWatchlist, toggleWatchlist } = useWatchlist();
-  const { updateProgress } = useContinueWatching();
 
   const isSaved = isInWatchlist(initialItem.id);
 
@@ -111,39 +105,6 @@ export const DetailsScreen: React.FC = () => {
     toggleWatchlist(initialItem);
   }, [initialItem, toggleWatchlist]);
 
-  const handlePlay = useCallback(() => {
-    setPlayerTitle(title);
-    setPlayerSubtitle('Streaming in 4K HDR Dolby Vision');
-    setIsPlayingMock(true);
-    // Save to Continue Watching
-    updateProgress({
-      movieId: initialItem.id,
-      title: initialItem.title,
-      poster_path: initialItem.poster_path,
-      backdrop_path: initialItem.backdrop_path,
-      progress: 600, // 10 minutes watched
-      duration: (runtime || 120) * 60,
-      media_type: initialItem.media_type,
-    });
-  }, [initialItem, runtime, title, updateProgress]);
-
-  const handlePlayEpisode = useCallback(
-    (ep: Episode) => {
-      setPlayerTitle(`${title} • S${selectedSeason} E${ep.episode_number}`);
-      setPlayerSubtitle(ep.name);
-      setIsPlayingMock(true);
-      updateProgress({
-        movieId: initialItem.id,
-        title: `${title} • S${selectedSeason} E${ep.episode_number} - ${ep.name}`,
-        poster_path: ep.still_path || initialItem.poster_path,
-        backdrop_path: ep.still_path || initialItem.backdrop_path,
-        progress: 300,
-        duration: (ep.vote_average ? 45 : 30) * 60,
-        media_type: 'tv',
-      });
-    },
-    [initialItem, selectedSeason, title, updateProgress]
-  );
 
   const handleSimilarItemPress = useCallback(
     (item: MediaItem) => {
@@ -271,7 +232,6 @@ export const DetailsScreen: React.FC = () => {
               </>
             ) : null}
             <Badge rating={initialItem.vote_average} variant="rating" />
-            <Badge variant="hd" />
           </View>
 
           {/* Title */}
@@ -301,15 +261,6 @@ export const DetailsScreen: React.FC = () => {
 
           {/* Big Action CTA Buttons */}
           <View style={styles.actionsRow}>
-            <Pressable
-              onPress={handlePlay}
-              style={styles.playButton}
-              accessibilityRole="button"
-            >
-              <Ionicons name="play" size={20} color="#FFF" />
-              <Text style={styles.playButtonText}>Watch Now</Text>
-            </Pressable>
-
             <Pressable
               onPress={handleWatchlistToggle}
               style={[
@@ -405,9 +356,8 @@ export const DetailsScreen: React.FC = () => {
                   {seasonEpisodesQuery.data.map((ep) => {
                     const epStillUrl = getImageUrl(ep.still_path || backdropUrl, 'backdrop');
                     return (
-                      <Pressable
+                      <View
                         key={ep.id || ep.episode_number}
-                        onPress={() => handlePlayEpisode(ep)}
                         style={styles.episodeCard}
                       >
                         <View style={styles.episodeTopRow}>
@@ -421,9 +371,6 @@ export const DetailsScreen: React.FC = () => {
                               cachePolicy={IMAGE_CONFIG.cachePolicy}
                               placeholder={IMAGE_CONFIG.placeholder}
                             />
-                            <View style={styles.episodePlayOverlay}>
-                              <Ionicons name="play" size={16} color="#FFF" />
-                            </View>
                           </View>
 
                           {/* Episode Meta */}
@@ -451,7 +398,7 @@ export const DetailsScreen: React.FC = () => {
                             {ep.overview}
                           </Text>
                         ) : null}
-                      </Pressable>
+                      </View>
                     );
                   })}
                 </View>
@@ -567,31 +514,6 @@ export const DetailsScreen: React.FC = () => {
           )}
         </View>
       </ScrollView>
-
-      {/* Mock Video Player Modal */}
-      <Modal visible={isPlayingMock} animationType="fade" transparent={false}>
-        <View style={styles.playerContainer}>
-          <StatusBar hidden />
-          <Image
-            source={backdropUrl ? { uri: backdropUrl } : undefined}
-            style={StyleSheet.absoluteFill}
-            contentFit="cover"
-          />
-          <View style={styles.playerOverlay}>
-            <Pressable
-              onPress={() => setIsPlayingMock(false)}
-              style={styles.playerCloseButton}
-            >
-              <Ionicons name="close" size={26} color="#FFF" />
-            </Pressable>
-            <View style={styles.playerCenter}>
-              <Ionicons name="play-circle" size={80} color={colors.primary} />
-              <Text style={styles.playerTitle}>{playerTitle}</Text>
-              <Text style={styles.playerSubtitle}>{playerSubtitle}</Text>
-            </View>
-          </View>
-        </View>
-      </Modal>
 
       {/* Interactive Cast & Crew Person Profile Modal */}
       <PersonModal
