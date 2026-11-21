@@ -34,8 +34,10 @@ jobs:
           target: google_apis
           arch: x86_64
           profile: pixel_2
+          ram-size: 2048
+          cores: 2
           disable-animations: false
-          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -skin 720x1280 -memory 2048
           script: |
             adb install preview/velora-preview.apk
             python3 scripts/native-horizontal-scroll.py
