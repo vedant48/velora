@@ -24,7 +24,13 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-image"
+      "expo-image",
+      [
+        "react-native-nitro-google-signin",
+        {
+          "iosUrlScheme": "com.googleusercontent.apps.1084252468279-dhrg0b1a86r4n1vtlbvavl9l5nm5qkl9"
+        }
+      ]
     ]
   }
 }

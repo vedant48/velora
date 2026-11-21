@@ -5,6 +5,8 @@ import { TabNavigator } from './TabNavigator';
 import { DetailsScreen } from '../screens/Details/DetailsScreen';
 import { GenreScreen } from '../screens/Genre/GenreScreen';
 import { AuthScreen } from '../screens/Auth/AuthScreen';
+import { UserProfileScreen } from '../screens/Profile/UserProfileScreen';
+import { ActivityScreen } from '../screens/Profile/ActivityScreen';
 import { colors } from '../theme/colors';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -37,6 +39,14 @@ export const AppNavigator: React.FC = () => {
       <Stack.Screen
         name="Auth"
         component={AuthScreen}
+        options={{
+          animation: 'fade_from_bottom',
+        }}
+      />
+      <Stack.Screen name="UserProfile" component={UserProfileScreen} />
+      <Stack.Screen
+        name="Activity"
+        component={ActivityScreen}
         options={{
           animation: 'fade_from_bottom',
         }}

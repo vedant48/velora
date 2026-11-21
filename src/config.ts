@@ -7,3 +7,12 @@ export const API_BASE_URL =
   process.env.EXPO_PUBLIC_API_URL ?? 'https://velora-api.vedant-753.workers.dev';
 
 export const isApiConfigured = !API_BASE_URL.includes('your-subdomain');
+
+/**
+ * Google OAuth web client ID used as `webClientId` for native Google sign-in
+ * (react-native-nitro-google-signin). Client IDs are public identifiers, not
+ * secrets; the backend accepts ID tokens whose audience matches this ID or the
+ * Android client ID registered for the release signing certificate.
+ */
+export const GOOGLE_WEB_CLIENT_ID =
+  '1084252468279-dhrg0b1a86r4n1vtlbvavl9l5nm5qkl9.apps.googleusercontent.com';

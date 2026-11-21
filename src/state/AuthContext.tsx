@@ -1,6 +1,26 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { isApiConfigured } from '../config';
+import { Platform } from 'react-native';
+import { isApiConfigured, GOOGLE_WEB_CLIENT_ID } from '../config';
 import { veloraApi, VeloraUser, setToken, getToken } from '../api/velora';
+
+/** Lazily loaded so the app still runs where the native module is unavailable (Expo Go / web). */
+async function googleIdToken(): Promise<string | null> {
+  if (Platform.OS === 'web') throw new Error('Google sign-in is only available in the Android app');
+  const { GoogleOneTapSignIn, isCancelledResponse, isNoSavedCredentialFoundResponse } = await import(
+    'react-native-nitro-google-signin'
+  );
+  GoogleOneTapSignIn.configure({ webClientId: GOOGLE_WEB_CLIENT_ID });
+  await GoogleOneTapSignIn.checkPlayServices();
+  let res = await GoogleOneTapSignIn.signIn();
+  if (isNoSavedCredentialFoundResponse(res)) {
+    // No previously authorized account: show the full account picker.
+    res = await GoogleOneTapSignIn.createAccount();
+  }
+  if (isCancelledResponse(res)) return null;
+  const idToken = res.data?.idToken;
+  if (!idToken) throw new Error('Google did not return an ID token');
+  return idToken;
+}
 
 interface AuthState {
   user: VeloraUser | null;
@@ -9,6 +29,8 @@ interface AuthState {
   apiReady: boolean;
   login: (username: string, password: string) => Promise<void>;
   signup: (username: string, password: string, displayName?: string) => Promise<void>;
+  /** Google sign-in. Resolves without error when the user cancels the picker. */
+  loginWithGoogle: () => Promise<'ok' | 'cancelled'>;
   logout: () => Promise<void>;
   refresh: () => Promise<void>;
 }
@@ -53,6 +75,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(res.user);
   }, []);
 
+  const loginWithGoogle = useCallback(async (): Promise<'ok' | 'cancelled'> => {
+    const idToken = await googleIdToken();
+    if (!idToken) return 'cancelled';
+    const res = await veloraApi.googleLogin(idToken);
+    await setToken(res.token);
+    setUser(res.user);
+    return 'ok';
+  }, []);
+
   const logout = useCallback(async () => {
     await setToken(null);
     setUser(null);
@@ -68,8 +99,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const value = useMemo(
-    () => ({ user, loading, apiReady: isApiConfigured, login, signup, logout, refresh }),
-    [user, loading, login, signup, logout, refresh],
+    () => ({ user, loading, apiReady: isApiConfigured, login, signup, loginWithGoogle, logout, refresh }),
+    [user, loading, login, signup, loginWithGoogle, logout, refresh],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

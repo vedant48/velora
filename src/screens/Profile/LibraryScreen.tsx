@@ -117,6 +117,10 @@ export const LibraryScreen: React.FC = () => {
             <Ionicons name="share-social-outline" size={15} color={colors.textPrimary} />
             <Text style={styles.actionText}>Share</Text>
           </Pressable>
+          <Pressable onPress={() => navigation.navigate('Activity')} style={styles.actionButton}>
+            <Ionicons name="pulse-outline" size={15} color={colors.textPrimary} />
+            <Text style={styles.actionText}>Activity</Text>
+          </Pressable>
           <Pressable
             onPress={() =>
               Alert.alert('Log out?', undefined, [

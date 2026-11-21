@@ -18,13 +18,28 @@ import { useAuth } from '../../state/AuthContext';
 /** Login/signup. Google sign-in slots in here once OAuth client IDs are configured. */
 export const AuthScreen: React.FC = () => {
   const navigation = useNavigation();
-  const { login, signup } = useAuth();
+  const { login, signup, loginWithGoogle } = useAuth();
   const [mode, setMode] = useState<'login' | 'signup'>('login');
   const [username, setUsername] = useState('');
   const [displayName, setDisplayName] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [googleBusy, setGoogleBusy] = useState(false);
+
+  const google = useCallback(async () => {
+    if (googleBusy) return;
+    setError(null);
+    setGoogleBusy(true);
+    try {
+      const result = await loginWithGoogle();
+      if (result === 'ok') navigation.goBack();
+    } catch (e: any) {
+      setError(e?.message ?? 'Google sign-in failed');
+    } finally {
+      setGoogleBusy(false);
+    }
+  }, [googleBusy, loginWithGoogle, navigation]);
 
   const submit = useCallback(async () => {
     if (busy) return;
@@ -96,6 +111,22 @@ export const AuthScreen: React.FC = () => {
         <Pressable onPress={submit} style={[styles.submit, busy && { opacity: 0.6 }]} disabled={busy}>
           {busy ? <ActivityIndicator color="#fff" /> : <Text style={styles.submitText}>{mode === 'login' ? 'Log in' : 'Create account'}</Text>}
         </Pressable>
+
+        <View style={styles.dividerRow}>
+          <View style={styles.divider} />
+          <Text style={styles.dividerText}>or</Text>
+          <View style={styles.divider} />
+        </View>
+        <Pressable onPress={google} style={[styles.googleBtn, googleBusy && { opacity: 0.6 }]} disabled={googleBusy}>
+          {googleBusy ? (
+            <ActivityIndicator color={colors.textPrimary} />
+          ) : (
+            <>
+              <Ionicons name="logo-google" size={18} color={colors.textPrimary} />
+              <Text style={styles.googleText}>Continue with Google</Text>
+            </>
+          )}
+        </Pressable>
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -135,4 +166,19 @@ const styles = StyleSheet.create({
   error: { color: colors.error, fontSize: 13, textAlign: 'center' },
   submit: { marginTop: 6, borderRadius: 12, backgroundColor: colors.primary, paddingVertical: 14, alignItems: 'center' },
   submitText: { fontSize: 15, fontWeight: '800', color: '#fff' },
+  dividerRow: { flexDirection: 'row', alignItems: 'center', gap: 10, marginVertical: 4 },
+  divider: { flex: 1, height: 1, backgroundColor: colors.surfaceBorder },
+  dividerText: { fontSize: 12, color: colors.textMuted },
+  googleBtn: {
+    flexDirection: 'row',
+    gap: 10,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: colors.surfaceBorder,
+    backgroundColor: colors.surface,
+    paddingVertical: 13,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  googleText: { fontSize: 14, fontWeight: '700', color: colors.textPrimary },
 });
