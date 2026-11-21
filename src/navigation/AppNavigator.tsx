@@ -4,6 +4,10 @@ import { RootStackParamList } from './types';
 import { TabNavigator } from './TabNavigator';
 import { DetailsScreen } from '../screens/Details/DetailsScreen';
 import { GenreScreen } from '../screens/Genre/GenreScreen';
+import { AuthScreen } from '../screens/Auth/AuthScreen';
+import { UserProfileScreen } from '../screens/Profile/UserProfileScreen';
+import { ActivityScreen } from '../screens/Profile/ActivityScreen';
+import { AccountScreen } from '../screens/Profile/AccountScreen';
 import { colors } from '../theme/colors';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -31,6 +35,22 @@ export const AppNavigator: React.FC = () => {
         component={GenreScreen}
         options={{
           animation: 'slide_from_right',
+        }}
+      />
+      <Stack.Screen
+        name="Auth"
+        component={AuthScreen}
+        options={{
+          animation: 'fade_from_bottom',
+        }}
+      />
+      <Stack.Screen name="UserProfile" component={UserProfileScreen} />
+      <Stack.Screen name="Account" component={AccountScreen} />
+      <Stack.Screen
+        name="Activity"
+        component={ActivityScreen}
+        options={{
+          animation: 'fade_from_bottom',
         }}
       />
     </Stack.Navigator>

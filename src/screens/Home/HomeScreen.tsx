@@ -84,7 +84,7 @@ export const HomeScreen: React.FC = () => {
       overview: '',
       poster_path: item.poster_path,
       backdrop_path: item.backdrop_path,
-      vote_average: 8.5,
+      vote_average: 0,
       media_type: item.media_type,
     }));
   }, [continueWatchingItems]);
@@ -155,7 +155,7 @@ export const HomeScreen: React.FC = () => {
           onItemPress={handleItemPress}
         />
 
-        {/* 2. Continue Watching (Local Persistent Mock System) */}
+        {/* 2. Continue Watching (hidden until the user has real progress) */}
         {filteredContinueWatching.length > 0 && (
           <MovieCarousel
             title="Continue Watching"
@@ -173,7 +173,7 @@ export const HomeScreen: React.FC = () => {
           <>
             <MovieCarousel
               title="Top 10 TV Shows Today"
-              subtitle="Most streamed series right now"
+              subtitle="Trending on TMDB"
               data={(trendingTVQuery.data || []).slice(0, 10)}
               isLoading={trendingTVQuery.isLoading}
               isError={trendingTVQuery.isError}
@@ -209,7 +209,7 @@ export const HomeScreen: React.FC = () => {
           <>
             <MovieCarousel
               title="Top 10 Movies Today"
-              subtitle="Most watched movies on Velora"
+              subtitle="Trending on TMDB"
               data={(trendingQuery.data || []).slice(0, 10)}
               isLoading={trendingQuery.isLoading}
               isError={trendingQuery.isError}
@@ -301,7 +301,7 @@ export const HomeScreen: React.FC = () => {
           <>
             <MovieCarousel
               title="Top 10 Trending Today"
-              subtitle="Most watched across Velora"
+              subtitle="Trending on TMDB"
               data={(trendingQuery.data || []).slice(0, 10)}
               isLoading={trendingQuery.isLoading}
               isError={trendingQuery.isError}

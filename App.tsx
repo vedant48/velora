@@ -6,6 +6,7 @@ import { NavigationContainer, DarkTheme } from '@react-navigation/native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { StatusBar } from 'expo-status-bar';
 import { AppNavigator } from './src/navigation/AppNavigator';
+import { AuthProvider } from './src/state/AuthContext';
 import { AnimatedSplash } from './src/components/Splash/AnimatedSplash';
 import { colors } from './src/theme/colors';
 
@@ -41,10 +42,12 @@ export default function App() {
     <GestureHandlerRootView style={styles.root}>
       <SafeAreaProvider>
         <QueryClientProvider client={queryClient}>
+          <AuthProvider>
           <NavigationContainer theme={VeloraTheme}>
             <StatusBar style="light" />
             <AppNavigator />
           </NavigationContainer>
+          </AuthProvider>
         </QueryClientProvider>
 
         {/* Netflix-Style Cinematic Animated Space Splash Screen */}

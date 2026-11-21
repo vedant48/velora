@@ -121,7 +121,6 @@ export const HeroSlide: React.FC<HeroSlideProps> = React.memo(
             {item.vote_average > 0 && (
               <Badge rating={item.vote_average} variant="rating" />
             )}
-            <Badge variant="hd" />
             <Text style={styles.genreText}>FEATURED</Text>
           </View>
 
@@ -146,8 +145,8 @@ export const HeroSlide: React.FC<HeroSlideProps> = React.memo(
               accessibilityRole="button"
               accessibilityLabel={`Watch ${item.title}`}
             >
-              <Ionicons name="play" size={18} color="#FFF" />
-              <Text style={styles.playButtonText}>Watch Now</Text>
+              <Ionicons name="information-circle-outline" size={18} color="#FFF" />
+              <Text style={styles.playButtonText}>Details</Text>
             </Pressable>
 
             {/* Watchlist Toggle Button */}

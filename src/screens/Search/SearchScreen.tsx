@@ -15,6 +15,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../navigation/types';
 import { searchMulti, searchMovies, searchTV } from '../../api/search';
+import { veloraApi } from '../../api/velora';
 import { MediaItem } from '../../api/types';
 import { MovieCard } from '../../components/MovieCard/MovieCard';
 import { MovieCardSkeleton } from '../../components/Skeleton/MovieCardSkeleton';
@@ -23,7 +24,7 @@ import { colors } from '../../theme/colors';
 import { metrics } from '../../theme/metrics';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
-type FilterType = 'all' | 'movie' | 'tv';
+type FilterType = 'all' | 'movie' | 'tv' | 'people';
 
 export const SearchScreen: React.FC = () => {
   const insets = useSafeAreaInsets();
@@ -68,8 +69,16 @@ export const SearchScreen: React.FC = () => {
         return searchMulti(debouncedQuery, 1, signal);
       }
     },
-    enabled: debouncedQuery.trim().length > 1,
+    enabled: filter !== 'people' && debouncedQuery.trim().length > 1,
     staleTime: 5 * 60 * 1000,
+  });
+
+  // Must-style quick action: find friends by username or display name
+  const peopleQuery = useQuery({
+    queryKey: ['userSearch', debouncedQuery],
+    queryFn: () => veloraApi.searchUsers(debouncedQuery),
+    enabled: filter === 'people' && debouncedQuery.trim().length > 1,
+    staleTime: 60 * 1000,
   });
 
   // Sync initial query data into accumulated results array
@@ -215,11 +224,61 @@ export const SearchScreen: React.FC = () => {
               TV Series
             </Text>
           </Pressable>
+          <Pressable
+            onPress={() => setFilter('people')}
+            style={[styles.filterChip, filter === 'people' && styles.filterChipActive]}
+          >
+            <Text style={[styles.filterChipText, filter === 'people' && styles.filterChipTextActive]}>
+              People
+            </Text>
+          </Pressable>
         </View>
       </View>
 
       {/* Main Content Area */}
-      {(isLoading || (isFetching && allResults.length === 0)) && debouncedQuery.trim().length > 1 ? (
+      {filter === 'people' ? (
+        debouncedQuery.trim().length <= 1 ? (
+          <View style={styles.centerState}>
+            <Ionicons name="people-outline" size={54} color={colors.textMuted} />
+            <Text style={styles.stateTitle}>Find friends</Text>
+            <Text style={styles.stateSubtitle}>Search Velora members by username or name.</Text>
+          </View>
+        ) : peopleQuery.isLoading ? (
+          <ActivityIndicator color={colors.primary} style={{ marginTop: 40 }} />
+        ) : peopleQuery.isError ? (
+          <View style={styles.centerState}>
+            <Ionicons name="alert-circle-outline" size={48} color={colors.error} />
+            <Text style={styles.stateTitle}>Search failed</Text>
+            <Pressable onPress={() => peopleQuery.refetch()} style={styles.retryBtn}>
+              <Text style={styles.retryBtnText}>Retry</Text>
+            </Pressable>
+          </View>
+        ) : (peopleQuery.data?.users.length ?? 0) === 0 ? (
+          <View style={styles.centerState}>
+            <Ionicons name="person-outline" size={48} color={colors.textTertiary} />
+            <Text style={styles.stateTitle}>No members found</Text>
+            <Text style={styles.stateSubtitle}>Nobody matches "{debouncedQuery}" yet.</Text>
+          </View>
+        ) : (
+          <FlashList
+            data={peopleQuery.data?.users ?? []}
+            keyExtractor={(u) => u.id}
+            contentContainerStyle={styles.listContent}
+            renderItem={({ item: u }) => (
+              <Pressable style={styles.userRow} onPress={() => navigation.navigate('UserProfile', { username: u.username })}>
+                <View style={styles.userAvatar}>
+                  <Text style={styles.userAvatarText}>{(u.displayName || u.username).slice(0, 1).toUpperCase()}</Text>
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.userName}>{u.displayName}</Text>
+                  <Text style={styles.userHandle}>@{u.username}</Text>
+                </View>
+                <Ionicons name="chevron-forward" size={18} color={colors.textTertiary} />
+              </Pressable>
+            )}
+          />
+        )
+      ) : (isLoading || (isFetching && allResults.length === 0)) && debouncedQuery.trim().length > 1 ? (
         /* 3 rows of 3 columns skeleton (9 cards total) */
         <View style={styles.skeletonContainer}>
           {[0, 1, 2].map((rowIdx) => (
@@ -348,6 +407,26 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 10,
   },
+  userRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    backgroundColor: colors.surface,
+    borderRadius: 12,
+    padding: 12,
+    marginBottom: 10,
+  },
+  userAvatar: {
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    backgroundColor: colors.surfaceLight,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  userAvatarText: { fontSize: 17, fontWeight: '900', color: colors.primary },
+  userName: { fontSize: 14, fontWeight: '700', color: colors.textPrimary },
+  userHandle: { fontSize: 12, color: colors.textSecondary, marginTop: 1 },
   listWrapper: {
     flex: 1,
   },

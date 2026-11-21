@@ -18,6 +18,10 @@ jobs:
   build-and-release:
     runs-on: ubuntu-latest
 
+    env:
+      # secrets context is not allowed in step `if:`; evaluate once here.
+      HAS_UPLOAD_KEY: ${{ secrets.VELORA_UPLOAD_KEYSTORE_BASE64 != '' }}
+
     steps:
       - name: 📥 Checkout repository
         uses: actions/checkout@v4
@@ -39,47 +43,151 @@ jobs:
       - name: 📦 Install npm dependencies
         run: npm ci || npm install
 
+      - name: 🏷️ Stamp app version from tag
+        id: stamp
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            TAG="${{ github.event.inputs.tag_name || 'v1.0.0' }}"
+          fi
+          VERSION="${TAG#v}"
+          MAJOR=$(echo "$VERSION" | cut -d. -f1)
+          MINOR=$(echo "$VERSION" | cut -d. -f2)
+          PATCH=$(echo "$VERSION" | cut -d. -f3 | cut -d- -f1)
+          CODE=$(( ${MAJOR:-0} * 10000 + ${MINOR:-0} * 100 + ${PATCH:-0} ))
+          python3 - "$VERSION" "$CODE" <<'PY'
+          import json, sys
+          version, code = sys.argv[1], int(sys.argv[2])
+          with open('app.json') as f:
+              d = json.load(f)
+          d['expo']['version'] = version
+          d['expo']['android']['versionCode'] = code
+          with open('app.json', 'w') as f:
+              json.dump(d, f, indent=2)
+              f.write('\n')
+          print(f"stamped version={version} versionCode={code}")
+          PY
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+
       - name: 🛠️ Ensure Android directory & optimized Gradle properties
         run: |
           if [ ! -f "android/gradlew" ]; then
             npx expo prebuild --platform android --clean
           fi
-          # Ensure arm64-v8a target and compressed native packaging
+          # Ensure arm64-v8a target and compressed native packaging.
+          # prebuild writes expo.inlineModules.watchedDirectories=[] as the LAST
+          # line with NO trailing newline; a plain `echo >>` glues our value onto
+          # it and the glued string reaches the inline-modules mirror CLI as one
+          # broken JSON arg (root cause of the projectsEvaluated node failure).
           mkdir -p android
           touch android/gradle.properties
+          printf '\n' >> android/gradle.properties
           sed -i '/reactNativeArchitectures=/d' android/gradle.properties || true
+          sed -i '/^expo\.inlineModules\.watchedDirectories=/d' android/gradle.properties || true
           echo "reactNativeArchitectures=arm64-v8a" >> android/gradle.properties
           echo "expo.useLegacyPackaging=true" >> android/gradle.properties
           echo "android.enableMinifyInReleaseBuilds=true" >> android/gradle.properties
           echo "android.enableShrinkResourcesInReleaseBuilds=true" >> android/gradle.properties
+          echo 'expo.inlineModules.watchedDirectories=[]' >> android/gradle.properties
+          grep -n 'inlineModules\|reactNativeArchitectures' android/gradle.properties
+
+      # Bridge tags (vX.Y.Z-bridge) must stay debug-signed so they install over
+      # v1.1.0 as a normal update; upload-key signing is for the final line only.
+      - name: 🔑 Apply release signing (upload key from repo secrets)
+        if: ${{ env.HAS_UPLOAD_KEY == 'true' && !contains(steps.stamp.outputs.tag, '-bridge') }}
+        run: |
+          echo "${{ secrets.VELORA_UPLOAD_KEYSTORE_BASE64 }}" | base64 -d > /tmp/velora-upload.keystore
+          python3 scripts/apply-release-signing.py
+        env:
+          VELORA_UPLOAD_KEYSTORE_PATH: /tmp/velora-upload.keystore
+          VELORA_UPLOAD_STORE_PASSWORD: ${{ secrets.VELORA_UPLOAD_STORE_PASSWORD }}
+          VELORA_UPLOAD_KEY_ALIAS: ${{ secrets.VELORA_UPLOAD_KEY_ALIAS }}
+          VELORA_UPLOAD_KEY_PASSWORD: ${{ secrets.VELORA_UPLOAD_KEY_PASSWORD }}
+
+      - name: 🔍 Verify upload key access (fail fast, before the full build)
+        if: ${{ env.HAS_UPLOAD_KEY == 'true' && !contains(steps.stamp.outputs.tag, '-bridge') }}
+        run: |
+          set -e
+          keytool -list -keystore /tmp/velora-upload.keystore -alias "$VELORA_UPLOAD_KEY_ALIAS" -storepass "$VELORA_UPLOAD_STORE_PASSWORD"
+          keytool -certreq -keystore /tmp/velora-upload.keystore -alias "$VELORA_UPLOAD_KEY_ALIAS" -storepass "$VELORA_UPLOAD_STORE_PASSWORD" -keypass "$VELORA_UPLOAD_STORE_PASSWORD" -file /tmp/verify.csr
+          echo "key-entry access verified (private key decrypts with provided key password)"
+        env:
+          VELORA_UPLOAD_STORE_PASSWORD: ${{ secrets.VELORA_UPLOAD_STORE_PASSWORD }}
+          VELORA_UPLOAD_KEY_ALIAS: ${{ secrets.VELORA_UPLOAD_KEY_ALIAS }}
+          VELORA_UPLOAD_KEY_PASSWORD: ${{ secrets.VELORA_UPLOAD_KEY_PASSWORD }}
+
+      - name: 🔏 Compute signing cert SHA-256 (feeds updater signature gate)
+        id: cert
+        run: |
+          set -e
+          if [ -f /tmp/velora-upload.keystore ]; then
+            KS=/tmp/velora-upload.keystore
+            ALIAS="${{ secrets.VELORA_UPLOAD_KEY_ALIAS }}"
+            PASS="${{ secrets.VELORA_UPLOAD_STORE_PASSWORD }}"
+          else
+            KS=android/app/debug.keystore
+            ALIAS=androiddebugkey
+            PASS=android
+          fi
+          CERT_SHA256=$(keytool -list -v -keystore "$KS" -alias "$ALIAS" -storepass "$PASS" 2>/dev/null | grep -m1 'SHA256:' | sed 's/.*SHA256:[[:space:]]*//')
+          if [ -z "$CERT_SHA256" ]; then
+            echo "::error::could not compute signing certificate SHA-256"
+            exit 1
+          fi
+          echo "cert_sha256=${CERT_SHA256}"
+          echo "VELORA_CERT_SHA256=${CERT_SHA256}" >> "$GITHUB_ENV"
+          printf 'SHA256: %s\n' "$CERT_SHA256" > cert-fingerprint.txt
 
       - name: 📱 Build Android Release APK
         working-directory: android
         run: |
           chmod +x gradlew
           ./gradlew assembleRelease --no-daemon
+        env:
+          VELORA_UPLOAD_KEYSTORE_PATH: /tmp/velora-upload.keystore
+          VELORA_UPLOAD_STORE_PASSWORD: ${{ secrets.VELORA_UPLOAD_STORE_PASSWORD }}
+          VELORA_UPLOAD_KEY_ALIAS: ${{ secrets.VELORA_UPLOAD_KEY_ALIAS }}
+          VELORA_UPLOAD_KEY_PASSWORD: ${{ secrets.VELORA_UPLOAD_KEY_PASSWORD }}
 
       - name: 🔍 Locate & Prepare APK
         id: prepare_apk
         run: |
-          TAG="${{ github.ref_name }}"
-          if [ -z "$TAG" ] || [ "$TAG" = "main" ]; then
-            TAG="${{ github.event.inputs.tag_name || 'v1.0.0' }}"
-          fi
+          TAG="${{ steps.stamp.outputs.tag }}"
           APK_FILE="velora-${TAG}.apk"
           cp android/app/build/outputs/apk/release/app-release.apk "./${APK_FILE}"
           ls -lh "./${APK_FILE}"
           echo "apk_file=${APK_FILE}" >> $GITHUB_OUTPUT
           echo "tag=${TAG}" >> $GITHUB_OUTPUT
 
+      - name: 🔐 Generate SHA-256 checksum (verified by the in-app updater before install)
+        id: checksum
+        run: |
+          CHECKSUM_FILE="velora-${{ steps.prepare_apk.outputs.tag }}-checksums.txt"
+          sha256sum "./${{ steps.prepare_apk.outputs.apk_file }}" > "./${CHECKSUM_FILE}"
+          cat "./${CHECKSUM_FILE}"
+          echo "checksum_file=${CHECKSUM_FILE}" >> $GITHUB_OUTPUT
+
+      - name: 🔐 Record signing certificate fingerprint (for audit + OAuth registration)
+        run: |
+          TAG="${{ steps.prepare_apk.outputs.tag }}"
+          CERT=$(unzip -p "./velora-${TAG}.apk" META-INF/CERT.RSA 2>/dev/null | keytool -printcert 2>/dev/null | grep -E 'SHA1:|SHA256:' || echo 'unavailable')
+          echo "$CERT" >> $GITHUB_STEP_SUMMARY
+          echo "$CERT"
+
       - name: 🚀 Publish GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.prepare_apk.outputs.tag }}
-          name: Velora ${{ steps.prepare_apk.outputs.tag }}
+          name: Velora ${{ steps.prepare_apk.outputs.tag }}${{ contains(steps.prepare_apk.outputs.tag, '-') && ' (migration bridge)' || '' }}
           body_path: RELEASE_NOTES.md
-          draft: false
-          prerelease: false
-          files: ${{ steps.prepare_apk.outputs.apk_file }}
+          # Artifacts stay draft until the human gate (verified backup, migration
+          # verification, policy approval) explicitly clears publication.
+          draft: true
+          prerelease: ${{ contains(steps.prepare_apk.outputs.tag, '-') }}
+          files: |
+            ${{ steps.prepare_apk.outputs.apk_file }}
+            ${{ steps.checksum.outputs.checksum_file }}
+            cert-fingerprint.txt
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

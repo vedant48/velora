@@ -1,0 +1,19 @@
+name = "velora-api"
+main = "dist/worker.bundle.js"
+compatibility_date = "2026-09-01"
+compatibility_flags = ["nodejs_compat"]
+
+# tsc first (emits real decorator metadata NestJS DI needs), then wrangler bundles dist/.
+[build]
+command = "npm run build"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "velora-db"
+database_id = "85f53079-bd75-4d78-9ad2-893c18817e80"
+migrations_dir = "migrations"
+
+# Secrets are NOT stored here. Set once with:
+#   npx wrangler secret put JWT_SECRET
+# For local dev, create server/.dev.vars (gitignored) with:
+#   JWT_SECRET=dev-only-secret-change-me
