@@ -1,0 +1,53 @@
+name: Verify isolated preview on Android emulator
+on:
+  push:
+    branches: ['build/velora-preview-1']
+    paths: ['.github/workflows/native-preview.yml']
+permissions:
+  contents: read
+  actions: read
+jobs:
+  native:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - name: Await preview APK build
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh run watch 44939859491 --interval 60 --exit-status
+      - uses: actions/download-artifact@v4
+        with:
+          name: velora-preview
+          run-id: 44939859491
+          github-token: ${{ github.token }}
+          path: preview
+      - name: Enable emulator acceleration
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Install Android emulator image
+        run: |
+          yes | sdkmanager 'system-images;android-35;google_apis;x86_64' 'emulator' 'platform-tools' || true
+          echo no | avdmanager create avd --force --name velora-test --package 'system-images;android-35;google_apis;x86_64' --device pixel_2
+      - name: Boot emulator and check real APK
+        run: |
+          export PATH="$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$PATH"
+          emulator -avd velora-test -no-window -no-audio -no-boot-anim -gpu swiftshader_indirect -no-snapshot > /tmp/emulator.log 2>&1 &
+          adb wait-for-device
+          timeout 240 bash -c 'until [ "$(adb shell getprop sys.boot_completed | tr -d "\r")" = 1 ]; do sleep 3; done'
+          adb shell input keyevent 82
+          adb install preview/velora-preview.apk
+          python3 scripts/native-preview-smoke.py
+      - name: Collect emulator diagnostics
+        if: always()
+        run: |
+          mkdir -p native-evidence
+          cp /tmp/emulator.log native-evidence/emulator.log || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: velora-native-evidence
+          path: native-evidence/
+          retention-days: 1
