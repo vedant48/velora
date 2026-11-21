@@ -161,7 +161,9 @@ jobs:
           tag_name: ${{ steps.prepare_apk.outputs.tag }}
           name: Velora ${{ steps.prepare_apk.outputs.tag }}${{ contains(steps.prepare_apk.outputs.tag, '-') && ' (migration bridge)' || '' }}
           body_path: RELEASE_NOTES.md
-          draft: false
+          # Artifacts stay draft until the human gate (verified backup, migration
+          # verification, policy approval) explicitly clears publication.
+          draft: true
           prerelease: ${{ contains(steps.prepare_apk.outputs.tag, '-') }}
           files: |
             ${{ steps.prepare_apk.outputs.apk_file }}
