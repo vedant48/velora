@@ -83,6 +83,9 @@ jobs:
           echo "expo.useLegacyPackaging=true" >> android/gradle.properties
           echo "android.enableMinifyInReleaseBuilds=true" >> android/gradle.properties
           echo "android.enableShrinkResourcesInReleaseBuilds=true" >> android/gradle.properties
+          # Guard: without this property the expo inline-modules mirror exec gets a missing CLI arg
+          grep -q 'expo.inlineModules.watchedDirectories' android/gradle.properties || echo 'expo.inlineModules.watchedDirectories=[]' >> android/gradle.properties
+          grep -n 'inlineModules' android/gradle.properties
 
       # Bridge tags (vX.Y.Z-bridge) must stay debug-signed so they install over
       # v1.1.0 as a normal update; upload-key signing is for the final line only.
@@ -132,7 +135,7 @@ jobs:
         working-directory: android
         run: |
           chmod +x gradlew
-          ./gradlew assembleRelease --no-daemon --stacktrace
+          ./gradlew assembleRelease --no-daemon --info
         env:
           VELORA_UPLOAD_KEYSTORE_PATH: /tmp/velora-upload.keystore
           VELORA_UPLOAD_STORE_PASSWORD: ${{ secrets.VELORA_UPLOAD_STORE_PASSWORD }}
