@@ -43,20 +43,35 @@ export class UsersController {
 
   /**
    * A user's profile photo. Avatars are profile basics: visible to signed-in
-   * members like display name and bio, including for private accounts. The
-   * ?v=<avatarAt> query makes URLs immutable per version, so responses are
-   * cacheable; replacing or removing a photo changes or deletes the version.
+   * members like display name and bio, including for private accounts.
+   * The client appends ?v=<avatarAt>, which busts caches on replacement;
+   * removal returns 404 at the origin immediately. Because photos are
+   * user-controlled, cache lifetime is deliberately short (5 minutes plus
+   * revalidation): a removed or replaced photo can linger in client/edge
+   * caches at most that long, and conditional revalidation keeps repeat
+   * views cheap. Removed photos are never promised as instantly gone from
+   * every cache.
    */
   @Get(':username/avatar')
   @UseGuards(AuthGuard)
-  async avatar(@Param('username') username: string, @Res() res: Response) {
+  async avatar(@Param('username') username: string, @Req() req: Request, @Res() res: Response) {
     const found = await this.users.getAvatar(username);
-    if (!found) throw new NotFoundException('No profile photo');
+    if (!found) {
+      res.set('Cache-Control', 'no-store');
+      throw new NotFoundException('No profile photo');
+    }
+    const etag = `W/"avatar-${found.data.length}-${Date.parse(found.updatedAt) || 0}"`;
     res.set({
       'Content-Type': found.mime,
-      'Cache-Control': 'public, max-age=86400, immutable',
+      'Cache-Control': 'public, max-age=300, must-revalidate',
+      ETag: etag,
+      'Last-Modified': new Date(found.updatedAt).toUTCString(),
       'X-Content-Type-Options': 'nosniff',
     });
+    if (req.headers['if-none-match'] === etag) {
+      res.status(304).end();
+      return;
+    }
     res.send(Buffer.from(found.data));
   }
 
