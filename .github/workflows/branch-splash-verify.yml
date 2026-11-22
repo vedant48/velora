@@ -21,7 +21,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build-candidate:
@@ -151,3 +151,24 @@ jobs:
           name: velora-branch-splash-evidence
           path: splash-evidence/
           retention-days: 1
+      # Artifacts need GitHub auth to download, so the frames are also pushed
+      # to a dedicated evidence branch (plain git fetch can read them).
+      - name: Publish evidence to ci-evidence branch
+        if: always()
+        run: |
+          git config user.email "ci@velora.local"
+          git config user.name "velora-ci"
+          git fetch origin ci-evidence/brand-splash-v 2>/dev/null || true
+          if git rev-parse --verify origin/ci-evidence/brand-splash-v >/dev/null 2>&1; then
+            git checkout -B ci-evidence/brand-splash-v origin/ci-evidence/brand-splash-v
+          else
+            git checkout --orphan ci-evidence/brand-splash-v
+            git rm -rf . >/dev/null 2>&1 || true
+          fi
+          rm -rf frames
+          mkdir -p frames
+          cp -r splash-evidence/. frames/
+          printf 'run_id=%s\nsha=%s\ndate=%s\n' "${{ github.run_id }}" "${{ github.sha }}" "$(date -u +%FT%TZ)" > frames/META.txt
+          git add -A
+          git commit -m "Splash evidence for ${{ github.sha }} (run ${{ github.run_id }})" || echo "no changes"
+          git push origin ci-evidence/brand-splash-v
