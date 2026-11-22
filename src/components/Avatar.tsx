@@ -1,15 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Image, Text, View } from 'react-native';
-import { avatarUrl, getToken, VeloraUser } from '../api/velora';
+import { avatarUrl, sessionToken, VeloraUser } from '../api/velora';
 import { useAppTheme } from '../theme/ThemeContext';
-
-// The avatar endpoint requires a bearer token like the rest of the API.
-// Token is stable per session; cache the storage read module-wide.
-let tokenPromise: Promise<string | null> | null = null;
-function sessionToken(): Promise<string | null> {
-  if (!tokenPromise) tokenPromise = getToken().catch(() => null);
-  return tokenPromise;
-}
 
 /**
  * Shared user avatar: profile photo when the user has one, otherwise a

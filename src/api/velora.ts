@@ -83,7 +83,18 @@ export async function getToken(): Promise<string | null> {
   return storage.getItem<string | null>(TOKEN_KEY, null);
 }
 
+let cachedSessionToken: Promise<string | null> | null = null;
+
+/** Session token, cached process-wide. Reset whenever the token changes
+ *  (login/logout/switch), so avatar image loads never use a stale or
+ *  previous-session credential. */
+export function sessionToken(): Promise<string | null> {
+  if (!cachedSessionToken) cachedSessionToken = getToken().catch(() => null);
+  return cachedSessionToken;
+}
+
 export async function setToken(token: string | null): Promise<void> {
+  cachedSessionToken = null;
   await storage.setItem(TOKEN_KEY, token);
 }
 

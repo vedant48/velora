@@ -12,10 +12,12 @@ on:
     paths:
       - '.github/workflows/branch-splash-verify.yml'
       - 'scripts/native-splash-frames.py'
-      - 'src/components/Splash/**'
+      - 'src/**'
       - 'App.tsx'
       - 'app.json'
       - 'assets/**'
+      - 'package.json'
+      - 'package-lock.json'
   workflow_dispatch:
 
 permissions:
