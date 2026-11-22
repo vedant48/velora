@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import Animated, {
   Easing,
@@ -22,6 +22,8 @@ interface AnimatedSplashProps {
   /** True once the app (theme preference + navigation) is ready to show. */
   appReady: boolean;
   onFinish: () => void;
+  /** Called once the overlay's first frame has painted (native splash handoff). */
+  onFirstFrame?: () => void;
 }
 
 /**
@@ -41,8 +43,21 @@ interface AnimatedSplashProps {
 const MIN_REVEAL_MS = 1350;
 const MAX_HOLD_MS = 4500;
 
-export const AnimatedSplash: React.FC<AnimatedSplashProps> = ({ appReady, onFinish }) => {
+export const AnimatedSplash: React.FC<AnimatedSplashProps> = ({ appReady, onFinish, onFirstFrame }) => {
   const { colors } = useAppTheme();
+
+  // The sequence is anchored to the overlay's first painted frame, not to JS
+  // mount: on slow renderers paint can lag mount by a second or more, and a
+  // mount-based clock can play the V/wordmark beats entirely off-screen.
+  const [painted, setPainted] = useState(false);
+
+  const handleLayout = () => {
+    if (painted) return;
+    requestAnimationFrame(() => {
+      setPainted(true);
+      onFirstFrame?.();
+    });
+  };
 
   const logoScale = useSharedValue(0.72);
   const logoOpacity = useSharedValue(0);
@@ -74,6 +89,8 @@ export const AnimatedSplash: React.FC<AnimatedSplashProps> = ({ appReady, onFini
   finishRef.current = finish;
 
   useEffect(() => {
+    if (!painted) return;
+    startedAt.current = Date.now();
     // 1. V enters: quick fade + spring settle.
     logoOpacity.value = withTiming(1, { duration: 260 });
     logoScale.value = withSpring(1, { damping: 13, stiffness: 150, mass: 0.7 });
@@ -102,10 +119,10 @@ export const AnimatedSplash: React.FC<AnimatedSplashProps> = ({ appReady, onFini
     const hard = setTimeout(() => finishRef.current(), MAX_HOLD_MS);
     return () => clearTimeout(hard);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [painted]);
 
   useEffect(() => {
-    if (!appReady) return;
+    if (!appReady || !painted) return;
     const elapsed = Date.now() - startedAt.current;
     const remaining = Math.max(MIN_REVEAL_MS - elapsed, 0);
     const t = setTimeout(() => finishRef.current(), remaining);
@@ -130,6 +147,7 @@ export const AnimatedSplash: React.FC<AnimatedSplashProps> = ({ appReady, onFini
   return (
     <Animated.View
       style={[styles.container, { backgroundColor: colors.background }, containerStyle]}
+      onLayout={handleLayout}
     >
       <Animated.View style={[styles.glow, glowStyle]}>
         <Image source={GLOW} style={styles.glowImage} contentFit="contain" />
