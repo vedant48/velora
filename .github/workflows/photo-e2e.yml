@@ -158,7 +158,7 @@ jobs:
         run: |
           git config user.email "ci@velora.local"
           git config user.name "velora-ci"
-          git fetch origin ci-evidence/photo-e2e 2>/dev/null || true
+          git fetch origin '+refs/heads/ci-evidence/*:refs/remotes/origin/ci-evidence/*' 2>/dev/null || true
           if git rev-parse --verify origin/ci-evidence/photo-e2e >/dev/null 2>&1; then
             git checkout -B ci-evidence/photo-e2e origin/ci-evidence/photo-e2e
           else
