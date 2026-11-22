@@ -180,11 +180,11 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
+    overflow: 'hidden',
     borderWidth: 1.5,
-    borderColor: '#FFF',
+    borderColor: colors.surfaceBorder,
   },
   avatarInitial: {
     color: '#FFF',

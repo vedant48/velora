@@ -8,6 +8,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AnimatedSplash } from './src/components/Splash/AnimatedSplash';
 import { AppNavigator } from './src/navigation/AppNavigator';
 import { AuthProvider } from './src/state/AuthContext';
+import { SplashDoneProvider } from './src/state/SplashContext';
 import { ThemeProvider, useAppTheme } from './src/theme/ThemeContext';
 
 // Keep the native splash up until the JS splash overlay has mounted with the
@@ -57,10 +58,10 @@ function ThemedApp() {
       <SafeAreaProvider>
         <QueryClientProvider client={queryClient}>
           <AuthProvider>
-          {ready && <NavigationContainer theme={theme}>
+          {ready && <SplashDoneProvider value={isSplashDone}><NavigationContainer theme={theme}>
             <StatusBar style={mode === 'dark' ? 'light' : 'dark'} />
             <AppNavigator />
-          </NavigationContainer>}
+          </NavigationContainer></SplashDoneProvider>}
           </AuthProvider>
         </QueryClientProvider>
 

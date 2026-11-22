@@ -48,8 +48,16 @@ for mode, night in (('dark', 'yes'), ('light', 'no')):
     adb('shell', 'am', 'force-stop', pkg)
     time.sleep(1)
     adb('logcat', '-c')
+    # Startup clip: motion evidence for the V -> wordmark -> app sequence.
+    # screenrecord stops itself at the time limit; pulled after the frames.
+    clip_remote = f'/sdcard/boot-{mode}.mp4'
+    adb('shell', 'rm', '-f', clip_remote, check=False)
+    recorder = subprocess.Popen(
+        ['adb', 'shell', 'screenrecord', '--time-limit', '12', clip_remote],
+        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    time.sleep(0.3)
     adb('shell', 'monkey', '-p', pkg, '-c', 'android.intent.category.LAUNCHER', '1')
-    marks = [0.5, 1.0, 1.6, 2.4, 3.4, 5.0]
+    marks = [0.5, 0.9, 1.3, 1.7, 2.1, 2.5, 3.0, 3.6, 4.3, 5.0]
     elapsed = 0.0
     frames = []
     for mark in marks:
@@ -60,6 +68,8 @@ for mode, night in (('dark', 'yes'), ('light', 'no')):
         stats = frame_stats(out / f'{name}.png')
         stats['mark_s'] = mark
         frames.append(stats)
+    recorder.wait(timeout=20)
+    subprocess.run(['adb', 'pull', clip_remote, str(out / f'{mode}-boot.mp4')], check=False, capture_output=True)
     adb('shell', 'uiautomator', 'dump', '/sdcard/window.xml', check=False)
     (out / f'{mode}-window.xml').write_bytes(adb('shell', 'cat', '/sdcard/window.xml'))
     results['modes'][mode] = {
