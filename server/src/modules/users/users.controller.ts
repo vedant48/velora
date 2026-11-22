@@ -60,12 +60,12 @@ export class UsersController {
       res.set('Cache-Control', 'no-store');
       throw new NotFoundException('No profile photo');
     }
-    const etag = `W/"avatar-${found.data.length}-${Date.parse(found.updatedAt) || 0}"`;
+    const etag = `W/"avatar-${found.data.length}-${found.updatedAt}"`;
     res.set({
       'Content-Type': found.mime,
       'Cache-Control': 'public, max-age=300, must-revalidate',
       ETag: etag,
-      'Last-Modified': new Date(found.updatedAt).toUTCString(),
+      'Last-Modified': new Date(found.updatedAt.split('#')[0]).toUTCString(),
       'X-Content-Type-Options': 'nosniff',
     });
     if (req.headers['if-none-match'] === etag) {

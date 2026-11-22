@@ -108,7 +108,8 @@ export class UsersService {
     }
     const mime = detectImageMime(bytes);
     if (!mime) throw new BadRequestException('Only JPEG or PNG images are supported');
-    const now = new Date().toISOString();
+    // Unique per write, even for concurrent same-millisecond uploads: ISO time + random suffix.
+    const now = `${new Date().toISOString()}#${crypto.randomUUID().slice(0, 8)}`;
     await this.db.batch([
       {
         sql: 'INSERT INTO user_avatars (user_id, mime, data, updated_at) VALUES (?, ?, ?, ?) '

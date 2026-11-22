@@ -115,11 +115,11 @@ async function call<T>(
   }
 }
 
-/** URL of a user's avatar image, cache-busted per change. Null when the user has no photo. */
+/** URL of a user's avatar image, cache-busted per change. Null when the user has no photo.
+ *  avatarAt is an opaque server revision marker (unique per write), used verbatim. */
 export function avatarUrl(username: string, avatarAt: string | null | undefined): string | null {
   if (!avatarAt) return null;
-  const v = Date.parse(avatarAt);
-  return `${API_BASE_URL}/api/users/${encodeURIComponent(username)}/avatar?v=${Number.isFinite(v) ? v : 0}`;
+  return `${API_BASE_URL}/api/users/${encodeURIComponent(username)}/avatar?v=${encodeURIComponent(avatarAt)}`;
 }
 
 export const veloraApi = {

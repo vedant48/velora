@@ -50,7 +50,7 @@ export const AccountScreen: React.FC = () => {
       setPhotoBusy(true);
       const prepared = await ImageManipulator.manipulateAsync(
         asset.uri,
-        [{ resize: { width: 512 } }],
+        [{ resize: { width: 256 } }],
         { compress: 0.8, format: ImageManipulator.SaveFormat.JPEG },
       );
       await veloraApi.uploadAvatar(prepared.uri);

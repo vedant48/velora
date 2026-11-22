@@ -76,7 +76,8 @@ beforeEach(() => {
 test('upload stores jpeg and exposes avatarAt on the user payload', async () => {
   const bytes = jpeg(1024);
   const { avatarAt } = await users.setAvatar('u1', bytes);
-  assert.ok(avatarAt && !Number.isNaN(Date.parse(avatarAt)));
+  assert.ok(avatarAt && !Number.isNaN(Date.parse(avatarAt.split('#')[0])));
+  assert.match(avatarAt!, /#.{8}$/); // unique revision suffix
   const row = sqlite.prepare('SELECT avatar_at FROM users WHERE id = ?').get('u1') as { avatar_at: string };
   assert.equal(row.avatar_at, avatarAt);
   const found = await users.getAvatar('alice');
@@ -141,6 +142,29 @@ test('account deletion purges the avatar row', async () => {
   assert.equal(await users.getAvatar('alice'), null);
   const n = (sqlite.prepare('SELECT COUNT(*) AS n FROM user_avatars').get() as { n: number }).n;
   assert.equal(n, 0);
+});
+
+test('concurrent same-millisecond replaces still get unique revisions', async () => {
+  const RealDate = Date;
+  const fixed = RealDate.parse('2026-11-22T12:00:00.000Z');
+  // Freeze the clock so both writes happen at the identical millisecond.
+  // @ts-ignore deliberate test stub
+  globalThis.Date = class extends RealDate {
+    constructor() { super(fixed); }
+    static now() { return fixed; }
+  };
+  try {
+    const a = await users.setAvatar('u1', jpeg(100));
+    const b = await users.setAvatar('u1', jpeg(101));
+    assert.notEqual(a.avatarAt, b.avatarAt);
+    // Both carry the frozen ISO time; uniqueness comes from the suffix.
+    assert.ok(a.avatarAt!.startsWith('2026-11-22T12:00:00.000Z'));
+    assert.ok(b.avatarAt!.startsWith('2026-11-22T12:00:00.000Z'));
+    const u = sqlite.prepare('SELECT avatar_at FROM users WHERE id = ?').get('u1') as { avatar_at: string };
+    assert.equal(u.avatar_at, b.avatarAt);
+  } finally {
+    globalThis.Date = RealDate;
+  }
 });
 
 test('avatarAt flows into the public user payload; null means initial-avatar fallback', async () => {
