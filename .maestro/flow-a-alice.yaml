@@ -1,9 +1,9 @@
-# Flow A: log in as the seeded user, verify her photo renders in the app
-# (authenticated image load), remove it via the UI, verify the initial
-# fallback everywhere, then set a saved DARK theme override (device stays
-# light) for the theme-mismatch cold-start check.
 appId: com.vedant.velora
 ---
+# Flow A: log in as e2e_alice (seeded with a photo), prove the avatar renders
+# in every owner surface, remove the photo, prove the letter fallback returns
+# everywhere, then leave the app in saved-dark state for the mismatch probe.
+# Asserts are sync gates only; the screenshots carry the visual evidence.
 - launchApp
 - tapOn: "Profile"
 - tapOn: "Log in / Sign up"
@@ -13,8 +13,9 @@ appId: com.vedant.velora
 - inputText: "e2e-alice-pass-1"
 - hideKeyboard
 - tapOn: "Log in"
-- assertVisible:
-    text: "E2E Alice"
+- extendedWaitUntil:
+    visible:
+      text: "E2E Alice"
     timeout: 20000
 - takeScreenshot: a1-library-photo
 - tapOn: "Home"
@@ -24,9 +25,9 @@ appId: com.vedant.velora
 - assertVisible: "Change photo"
 - takeScreenshot: a3-settings-photo
 - tapOn: "Remove profile photo"
-- tapOn: "Remove"
-- assertVisible:
-    text: "Change photo"
+- tapOn: "^Remove$"
+- extendedWaitUntil:
+    notVisible: "Remove profile photo"
     timeout: 10000
 - takeScreenshot: a4-settings-fallback
 - tapOn: "Back"

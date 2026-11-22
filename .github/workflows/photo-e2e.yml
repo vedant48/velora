@@ -153,21 +153,25 @@ jobs:
       - name: Backend log tail
         if: always()
         run: tail -n 60 /tmp/wrangler-dev.log || true
-      - name: Publish evidence to ci-evidence/photo-e2e branch
+      - name: Publish evidence to ci-evidence branch
         if: always()
         run: |
           git config user.email "ci@velora.local"
           git config user.name "velora-ci"
           git fetch origin '+refs/heads/ci-evidence/*:refs/remotes/origin/ci-evidence/*' 2>/dev/null || true
+          EV=$(mktemp -d)
           if git rev-parse --verify origin/ci-evidence/photo-e2e >/dev/null 2>&1; then
-            git checkout -B ci-evidence/photo-e2e origin/ci-evidence/photo-e2e
+            git worktree add "$EV" ci-evidence/photo-e2e
           else
-            git checkout --orphan ci-evidence/photo-e2e
-            git rm -rf . >/dev/null 2>&1 || true
+            git worktree add --detach "$EV"
+            git -C "$EV" checkout --orphan ci-evidence/photo-e2e
+            git -C "$EV" rm -rf . >/dev/null 2>&1 || true
           fi
-          rm -rf frames && mkdir -p frames
-          cp -r photo-evidence/. frames/ 2>/dev/null || true
-          printf 'run_id=%s\nsha=%s\ndate=%s\n' "${{ github.run_id }}" "${{ github.sha }}" "$(date -u +%FT%TZ)" > frames/META.txt
-          git add frames
-          git commit -m "Photo e2e evidence for ${{ github.sha }} (run ${{ github.run_id }})" || echo "no changes"
-          git push origin ci-evidence/photo-e2e
+          find "$EV" -maxdepth 1 -mindepth 1 -not -name .git -exec rm -rf {} +
+          mkdir -p "$EV/frames"
+          cp -r evidence/. "$EV/frames/" 2>/dev/null || true
+          printf 'run_id=%s\nsha=%s\ndate=%s\n' "${{ github.run_id }}" "${{ github.sha }}" "$(date -u +%FT%TZ)" > "$EV/frames/META.txt"
+          git -C "$EV" add -A
+          git -C "$EV" commit -m "Photo e2e evidence for ${{ github.sha }} (run ${{ github.run_id }})" || echo "no changes"
+          git -C "$EV" push origin ci-evidence/photo-e2e
+          git worktree remove --force "$EV" || true

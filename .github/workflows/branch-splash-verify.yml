@@ -159,16 +159,19 @@ jobs:
           git config user.email "ci@velora.local"
           git config user.name "velora-ci"
           git fetch origin '+refs/heads/ci-evidence/*:refs/remotes/origin/ci-evidence/*' 2>/dev/null || true
+          EV=$(mktemp -d)
           if git rev-parse --verify origin/ci-evidence/brand-splash-v >/dev/null 2>&1; then
-            git checkout -B ci-evidence/brand-splash-v origin/ci-evidence/brand-splash-v
+            git worktree add "$EV" ci-evidence/brand-splash-v
           else
-            git checkout --orphan ci-evidence/brand-splash-v
-            git rm -rf . >/dev/null 2>&1 || true
+            git worktree add --detach "$EV"
+            git -C "$EV" checkout --orphan ci-evidence/brand-splash-v
+            git -C "$EV" rm -rf . >/dev/null 2>&1 || true
           fi
-          rm -rf frames
-          mkdir -p frames
-          cp -r splash-evidence/. frames/
-          printf 'run_id=%s\nsha=%s\ndate=%s\n' "${{ github.run_id }}" "${{ github.sha }}" "$(date -u +%FT%TZ)" > frames/META.txt
-          git add frames
-          git commit -m "Splash evidence for ${{ github.sha }} (run ${{ github.run_id }})" || echo "no changes"
-          git push origin ci-evidence/brand-splash-v
+          find "$EV" -maxdepth 1 -mindepth 1 -not -name .git -exec rm -rf {} +
+          mkdir -p "$EV/frames"
+          cp -r splash-evidence/. "$EV/frames/" 2>/dev/null || true
+          printf 'run_id=%s\nsha=%s\ndate=%s\n' "${{ github.run_id }}" "${{ github.sha }}" "$(date -u +%FT%TZ)" > "$EV/frames/META.txt"
+          git -C "$EV" add -A
+          git -C "$EV" commit -m "Splash evidence for ${{ github.sha }} (run ${{ github.run_id }})" || echo "no changes"
+          git -C "$EV" push origin ci-evidence/brand-splash-v
+          git worktree remove --force "$EV" || true
