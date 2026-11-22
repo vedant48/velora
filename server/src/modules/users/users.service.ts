@@ -1,4 +1,4 @@
-import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException, PayloadTooLargeException } from '@nestjs/common';
 import { DatabaseService } from '../../common/database.service';
 import { PublicUser, toPublicUser } from '../auth/auth.service';
 import { optionalString, requireString } from '../../common/validate';
@@ -91,9 +91,55 @@ export class UsersService {
     await this.db.run('DELETE FROM reviews WHERE user_id = ?', [userId]);
     await this.db.run('DELETE FROM library_items WHERE user_id = ?', [userId]);
     await this.db.run('DELETE FROM simkl_connections WHERE user_id = ?', [userId]);
+    await this.db.run('DELETE FROM user_avatars WHERE user_id = ?', [userId]);
     await this.db.run('DELETE FROM users WHERE id = ?', [userId]);
     return { deleted: true };
   }
+
+  /**
+   * Stores the caller's profile photo. Only JPEG/PNG up to MAX_AVATAR_BYTES
+   * are accepted; magic bytes are checked because the server cannot
+   * re-encode untrusted images on the free Worker runtime.
+   */
+  async setAvatar(userId: string, bytes: Uint8Array) {
+    if (!bytes || bytes.length === 0) throw new BadRequestException('No image data received');
+    if (bytes.length > UsersService.MAX_AVATAR_BYTES) {
+      throw new PayloadTooLargeException('Image must be 400 KB or smaller after compression');
+    }
+    const mime = detectImageMime(bytes);
+    if (!mime) throw new BadRequestException('Only JPEG or PNG images are supported');
+    const now = new Date().toISOString();
+    await this.db.batch([
+      {
+        sql: 'INSERT INTO user_avatars (user_id, mime, data, updated_at) VALUES (?, ?, ?, ?) '
+           + 'ON CONFLICT(user_id) DO UPDATE SET mime = excluded.mime, data = excluded.data, updated_at = excluded.updated_at',
+        params: [userId, mime, bytes, now],
+      },
+      { sql: 'UPDATE users SET avatar_at = ? WHERE id = ?', params: [now, userId] },
+    ]);
+    return { avatarAt: now };
+  }
+
+  async removeAvatar(userId: string) {
+    await this.db.batch([
+      { sql: 'DELETE FROM user_avatars WHERE user_id = ?', params: [userId] },
+      { sql: 'UPDATE users SET avatar_at = NULL WHERE id = ?', params: [userId] },
+    ]);
+    return { removed: true };
+  }
+
+  /** Photo bytes for a username, or null when the user has no photo. */
+  async getAvatar(usernameRaw: string): Promise<{ mime: string; data: Uint8Array; updatedAt: string } | null> {
+    const username = usernameRaw.trim().toLowerCase();
+    const row = await this.db.first<{ mime: string; data: Uint8Array; updated_at: string }>(
+      'SELECT a.mime, a.data, a.updated_at FROM user_avatars a JOIN users u ON u.id = a.user_id WHERE u.username = ?',
+      [username],
+    );
+    if (!row) return null;
+    return { mime: row.mime, data: row.data, updatedAt: row.updated_at };
+  }
+
+  private static readonly MAX_AVATAR_BYTES = 400 * 1024;
 
   async search(qRaw: unknown) {
     const q = requireString(qRaw, 'q', 50);
@@ -125,4 +171,15 @@ export class UsersService {
     );
     return { items };
   }
+}
+
+function detectImageMime(bytes: Uint8Array): 'image/jpeg' | 'image/png' | null {
+  if (bytes.length >= 3 && bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff) return 'image/jpeg';
+  if (
+    bytes.length >= 8 && bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4e && bytes[3] === 0x47
+    && bytes[4] === 0x0d && bytes[5] === 0x0a && bytes[6] === 0x1a && bytes[7] === 0x0a
+  ) {
+    return 'image/png';
+  }
+  return null;
 }

@@ -2,6 +2,8 @@ import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Avatar } from '../../components/Avatar';
+import { useAuth } from '../../state/AuthContext';
 import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
 import { metrics } from '../../theme/metrics';
 
@@ -12,6 +14,7 @@ export const ProfileScreen: React.FC = () => {
   const [wifiOnly, setWifiOnly] = React.useState(true);
   const [autoPlayNext, setAutoPlayNext] = React.useState(true);
   const [spatialAudio, setSpatialAudio] = React.useState(true);
+  const { user } = useAuth();
 
   return (
     <View style={[styles.container, { paddingTop: Math.max(insets.top, 16) }]}>
@@ -21,11 +24,9 @@ export const ProfileScreen: React.FC = () => {
       >
         {/* User Card */}
         <View style={styles.userCard}>
-          <View style={styles.avatar}>
-            <Text style={styles.avatarText}>V</Text>
-          </View>
+          <Avatar user={user} size={60} />
           <View style={styles.userInfo}>
-            <Text style={styles.userName}>Vedant</Text>
+            <Text style={styles.userName}>{user?.displayName ?? 'Velora member'}</Text>
             <View style={styles.planBadge}>
               <Text style={styles.planBadgeText}>VELORA ULTRA 4K</Text>
             </View>

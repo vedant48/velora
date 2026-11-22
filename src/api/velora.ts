@@ -13,6 +13,8 @@ export interface VeloraUser {
   displayName: string;
   bio: string;
   createdAt: string;
+  /** ISO timestamp of the last avatar change; null when the user has no photo. */
+  avatarAt: string | null;
 }
 
 export interface UserStats {
@@ -113,6 +115,13 @@ async function call<T>(
   }
 }
 
+/** URL of a user's avatar image, cache-busted per change. Null when the user has no photo. */
+export function avatarUrl(username: string, avatarAt: string | null | undefined): string | null {
+  if (!avatarAt) return null;
+  const v = Date.parse(avatarAt);
+  return `${API_BASE_URL}/api/users/${encodeURIComponent(username)}/avatar?v=${Number.isFinite(v) ? v : 0}`;
+}
+
 export const veloraApi = {
   signup: (username: string, password: string, displayName?: string) =>
     call<{ token: string; user: VeloraUser }>('/auth/signup', { method: 'POST', body: { username, password, displayName } }),
@@ -124,6 +133,28 @@ export const veloraApi = {
   updateMe: (patch: { displayName?: string; bio?: string; isPrivate?: boolean }) =>
     call<{ user: VeloraUser; isPrivate: boolean }>('/users/me', { method: 'PATCH', body: patch }),
   deleteMe: () => call<{ deleted: boolean }>('/users/me', { method: 'DELETE' }),
+  /** Upload a prepared (cropped + compressed) avatar image.
+   *  Accepts any fetchable local URI; the server re-validates the bytes. */
+  uploadAvatar: async (imageUri: string): Promise<{ avatarAt: string | null }> => {
+    const token = await getToken();
+    const fileRes = await fetch(imageUri);
+    const blob = await fileRes.blob();
+    const res = await fetch(`${API_BASE_URL}/api/users/me/avatar`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/octet-stream',
+        Accept: 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: blob,
+    });
+    const json = (await res.json().catch(() => null)) as Record<string, unknown> | null;
+    if (!res.ok) {
+      throw new ApiError((json?.message as string) ?? `Request failed (${res.status})`, res.status, '/users/me/avatar');
+    }
+    return json as { avatarAt: string | null };
+  },
+  removeAvatar: () => call<{ avatarAt: string | null }>('/users/me/avatar', { method: 'DELETE' }),
   getUser: (username: string) =>
     call<{ user: VeloraUser; stats: UserStats | null; isFollowing: boolean; isPrivate?: boolean }>(`/users/${encodeURIComponent(username)}`),
   getUserLibrary: (username: string, status?: LibraryStatus) =>

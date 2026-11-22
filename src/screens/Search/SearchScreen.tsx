@@ -16,6 +16,7 @@ import { useDebounce } from '../../hooks/useDebounce';
 import { RootStackParamList } from '../../navigation/types';
 import { metrics } from '../../theme/metrics';
 import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
+import { Avatar } from '../../components/Avatar';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 type FilterType = 'all' | 'movie' | 'tv' | 'people';
@@ -270,9 +271,7 @@ export const SearchScreen: React.FC = () => {
             contentContainerStyle={styles.listContent}
             renderItem={({ item: u }) => (
               <Pressable style={styles.userRow} onPress={() => navigation.navigate('UserProfile', { username: u.username })}>
-                <View style={styles.userAvatar}>
-                  <Text style={styles.userAvatarText}>{(u.displayName || u.username).slice(0, 1).toUpperCase()}</Text>
-                </View>
+                <Avatar user={u} size={44} />
                 <View style={{ flex: 1 }}>
                   <Text style={styles.userName}>{u.displayName}</Text>
                   <Text style={styles.userHandle}>@{u.username}</Text>

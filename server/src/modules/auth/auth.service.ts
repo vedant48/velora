@@ -12,6 +12,9 @@ export interface PublicUser {
   displayName: string;
   bio: string;
   createdAt: string;
+  /** ISO time of the last avatar change, or null when the user has no photo.
+   *  Clients build the photo URL as /api/users/<username>/avatar?v=<avatarAt>. */
+  avatarAt: string | null;
 }
 
 interface UserRow {
@@ -22,10 +25,11 @@ interface UserRow {
   password_hash: string;
   email: string | null;
   created_at: string;
+  avatar_at?: string | null;
 }
 
 export function toPublicUser(row: UserRow): PublicUser {
-  return { id: row.id, username: row.username, displayName: row.display_name, bio: row.bio, createdAt: row.created_at };
+  return { id: row.id, username: row.username, displayName: row.display_name, bio: row.bio, createdAt: row.created_at, avatarAt: row.avatar_at ?? null };
 }
 
 @Injectable()
