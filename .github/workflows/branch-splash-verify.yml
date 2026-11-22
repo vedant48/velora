@@ -4,6 +4,7 @@ name: Branch splash native verification
 # signed release APK (production signing identity, never published) and
 # captures cold-start splash frames on an emulator. No release, no tag,
 # no draft. Artifacts expire after 1 day.
+# Retry 1: first run hit a transient gradle plugin resolution error.
 
 on:
   push:
