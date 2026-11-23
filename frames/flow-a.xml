@@ -1,6 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <testsuites>
-  <testsuite name="Test Suite" device="test" tests="1" failures="0" time="91.594" timestamp="2026-11-23T15:46:34">
-    <testcase id="flow-a-alice" name="flow-a-alice" classname="flow-a-alice" file=".maestro/flow-a-alice.yaml" time="91.572" timestamp="2026-11-23T15:46:34" status="SUCCESS"/>
+  <testsuite name="Test Suite" device="test" tests="1" failures="1" time="22.066" timestamp="2026-11-23T16:10:43">
+    <testcase id="flow-a-alice" name="flow-a-alice" classname="flow-a-alice" file=".maestro/flow-a-alice.yaml" time="22.04" timestamp="2026-11-23T16:10:43" status="ERROR">
+      <failure>Element not found: Text matching regex: Profile</failure>
+    </testcase>
   </testsuite>
 </testsuites>
