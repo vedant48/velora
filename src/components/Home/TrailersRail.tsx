@@ -1,5 +1,6 @@
+import { FlatList } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Image } from 'expo-image';
+import { CachedImage as Image } from '../../experience/CachedImage';
 import { memo, useCallback } from 'react';
 import { Linking, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { getMovieVideos } from '../../api/movies';
@@ -51,8 +52,7 @@ export const TrailersRail = memo(function TrailersRail({ title = 'Trailers', ite
   return (
     <View style={styles.root}>
       <Text style={styles.heading}>{title}</Text>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.scroll}>
-        {items.slice(0, 12).map((item) => {
+      <FlatList horizontal data={items.slice(0, 12)} keyExtractor={item => `${item.media_type}-${item.id}`} initialNumToRender={2} maxToRenderPerBatch={2} windowSize={3} showsHorizontalScrollIndicator={false} contentContainerStyle={styles.scroll} renderItem={({ item }) => {
           const backdrop = getImageUrl(item.backdrop_path || item.poster_path, 'backdrop');
           return (
             <Pressable
@@ -82,8 +82,7 @@ export const TrailersRail = memo(function TrailersRail({ title = 'Trailers', ite
               </Text>
             </Pressable>
           );
-        })}
-      </ScrollView>
+        }} />
     </View>
   );
 });

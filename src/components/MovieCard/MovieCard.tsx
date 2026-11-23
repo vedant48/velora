@@ -1,4 +1,4 @@
-import { Image } from 'expo-image';
+import { CachedImage as Image } from '../../experience/CachedImage';
 import React, { useCallback } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
@@ -7,6 +7,7 @@ import { metrics } from '../../theme/metrics';
 import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
 import { typography } from '../../theme/typography';
 import { getImageUrl, IMAGE_CONFIG } from '../../utils/image';
+import { motion } from '../../experience/motion';
 import { Badge } from '../common/Badge';
 import { ProgressBar } from '../ProgressBar/ProgressBar';
 
@@ -24,11 +25,7 @@ interface MovieCardProps {
   trackingStatus?: string;
 }
 
-const SPRING_CONFIG = {
-  damping: 15,
-  stiffness: 300,
-  mass: 0.5,
-};
+const SPRING_CONFIG = motion.press;
 
 const MovieCardComponent: React.FC<MovieCardProps> = ({
   item,

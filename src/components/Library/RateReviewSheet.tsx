@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Image } from 'expo-image';
+import { CachedImage as Image } from '../../experience/CachedImage';
 import { memo, useEffect, useState } from 'react';
 import { Pressable, ScrollView, Share, StyleSheet, Text, TextInput, View } from 'react-native';
 import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';

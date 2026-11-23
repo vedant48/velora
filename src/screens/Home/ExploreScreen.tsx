@@ -1,6 +1,7 @@
+import { LazySection, ViewportContext } from '../../experience/LazySection';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import React, { useCallback, useEffect, useState } from 'react';
-import { RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { RefreshControl, ScrollView, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useMovieRecommendationsQuery, useNowPlayingMoviesQuery, useStreamingMoviesQuery, useTrendingMoviesQuery, useTrendingTVQuery, useUpcomingMoviesQuery } from '../../api/queries';
 import { MediaItem } from '../../api/types';
@@ -14,6 +15,8 @@ import { useAuth } from '../../state/AuthContext';
 import { useAppTheme } from '../../theme/ThemeContext';
 
 export function ExploreScreen({ kind }: { kind: 'movies' | 'tv' | 'all' }) {
+  const [offset, setOffset] = useState(0);
+  const { height: viewportHeight } = useWindowDimensions();
   const { colors } = useAppTheme();
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<any>();
@@ -43,22 +46,22 @@ export function ExploreScreen({ kind }: { kind: 'movies' | 'tv' | 'all' }) {
   const forYou = seed ? recommended : trending;
   const rail = (title: string, query: typeof trending) => <MovieCarousel title={title} data={query.data} isLoading={query.isLoading} isError={query.isError} onRetry={query.refetch} onItemPress={open} cardWidth={124} cardHeight={186} minimal trackingStatus={tracked} />;
   return <View style={{ flex: 1, backgroundColor: colors.background, paddingTop: insets.top }}>
-    <ScrollView contentContainerStyle={{ paddingBottom: insets.bottom + 88 }} showsVerticalScrollIndicator={false} refreshControl={<RefreshControl refreshing={trending.isRefetching || television.isRefetching} onRefresh={() => { void trending.refetch(); void television.refetch(); void nowPlaying.refetch(); void upcoming.refetch(); void streaming.refetch(); if (seed) void recommended.refetch(); }} tintColor={colors.primary} />}>
+    <ViewportContext.Provider value={{ offset, height: viewportHeight }}><ScrollView onScroll={e => setOffset(Math.floor(e.nativeEvent.contentOffset.y / 160) * 160)} scrollEventThrottle={100} contentContainerStyle={{ paddingBottom: insets.bottom + 88 }} showsVerticalScrollIndicator={false} refreshControl={<RefreshControl refreshing={trending.isRefetching || television.isRefetching} onRefresh={() => { void trending.refetch(); void television.refetch(); void nowPlaying.refetch(); void upcoming.refetch(); void streaming.refetch(); if (seed) void recommended.refetch(); }} tintColor={colors.primary} />}>
       <Text accessibilityRole="header" style={[styles.title, { color: colors.textPrimary }]}>{kind === 'tv' ? 'TV Shows' : kind === 'movies' ? 'Movies' : 'Explore All'}</Text>
       {kind !== 'tv' && <>
-        {rail(seed ? 'For you' : 'Trending movies', forYou)}
-        <TrailersRail items={nowPlaying.data ?? []} onItemPress={open} />
-        {rail('Available for streaming', streaming)}
-        {rail('In Theaters Now', nowPlaying)}
-        {rail('Coming Soon', upcoming)}
+        <LazySection>{rail(seed ? 'For you' : 'Trending movies', forYou)}</LazySection>
+        <LazySection height={230}><TrailersRail items={nowPlaying.data ?? []} onItemPress={open} /></LazySection>
+        <LazySection>{rail('Available for streaming', streaming)}</LazySection>
+        <LazySection>{rail('In Theaters Now', nowPlaying)}</LazySection>
+        <LazySection>{rail('Coming Soon', upcoming)}</LazySection>
       </>}
       {kind !== 'movies' && <>
-        <WatchNextRail onPressItem={openSeries} showEmpty />
-        <TVCollections />
-        {rail('Trending TV shows', television)}
+        <LazySection height={340}><WatchNextRail onPressItem={openSeries} showEmpty /></LazySection>
+        <LazySection height={750}><TVCollections /></LazySection>
+        <LazySection>{rail('Trending TV shows', television)}</LazySection>
       </>}
-      {kind !== 'tv' && collections}
-    </ScrollView>
+      {kind !== 'tv' && <LazySection height={700}>{collections}</LazySection>}
+    </ScrollView></ViewportContext.Provider>
   </View>;
 }
 export const MoviesExploreScreen = () => <ExploreScreen kind="movies" />;

@@ -1,11 +1,12 @@
+import { Expandable } from '../../experience/Expandable';
+import { ratingDistribution } from '../../experience/ratingDistribution';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { FlashList } from '@shopify/flash-list';
 import React, { memo, useCallback, useMemo, useState } from 'react';
 import { Alert, Pressable, RefreshControl, Share, StyleSheet, Text, View } from 'react-native';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
-import { LibraryTab, tabAfterSwipe } from './libraryTabs';
+import { ContentPager } from '../../experience/ContentPager';
+import { LibraryTab } from './libraryTabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LibraryItem, Review, UserStats, veloraApi } from '../../api/velora';
 import { AppButton } from '../../components/common/AppButton';
@@ -34,7 +35,6 @@ export const LibraryScreen: React.FC = () => {
   const styles = useThemedStyles(createStyles);
   const navigation = useNavigation<any>();
   const insets = useSafeAreaInsets();
-  const [headerHeight, setHeaderHeight] = useState(0);
   const [appliedFilters, setAppliedFilters] = useState({ hideMovies: false, hideSeries: false, hideUnreleased: false });
   const [appliedSort, setAppliedSort] = useState<SortKey>('recent');
   const [menuVisible, setMenuVisible] = useState(false);
@@ -60,20 +60,8 @@ export const LibraryScreen: React.FC = () => {
   const [tab, setTab] = useState<TabKey>('want');
   const [sort, setSort] = useState<SortKey>('recent');
   const [sortSheetVisible, setSortSheetVisible] = useState(false);
-  const pageOffset = useSharedValue(0);
-  const finishSwipe = useCallback((dx: number, dy: number, velocity: number) => {
-    setTab(current => tabAfterSwipe(current, dx, dy, velocity));
-  }, []);
-  const pageGesture = useMemo(() => Gesture.Pan()
-    .enabled(!sortSheetVisible && !menuVisible && !quickItem)
-    .activeOffsetX([-22, 22]).failOffsetY([-16, 16])
-    .onUpdate(e => { pageOffset.value = Math.max(-32, Math.min(32, e.translationX * 0.15)); })
-    .onEnd((e, success) => {
-      if (success) runOnJS(finishSwipe)(e.translationX, e.translationY, e.velocityX);
-      pageOffset.value = withTiming(0, { duration: 160 });
-    }).onFinalize(() => { pageOffset.value = withTiming(0, { duration: 160 }); }),
-    [sortSheetVisible, menuVisible, quickItem, pageOffset, finishSwipe]);
-  const pageStyle = useAnimatedStyle(() => ({ transform: [{ translateX: pageOffset.value }] }));
+  const selectTab = useCallback((next: TabKey) => { setSortSheetVisible(false); setTab(next); }, []);
+  const onPageChange = useCallback((index: number) => setTab(TABS[index].key), []);
 
   const [items, setItems] = useState<LibraryItem[]>([]);
   const [allItems, setAllItems] = useState<LibraryItem[]>([]);
@@ -137,20 +125,22 @@ export const LibraryScreen: React.FC = () => {
     return () => { active = false; };
   }, [user?.username, refreshKey]));
 
-  const sortedItems = useMemo(() => {
+  const itemsByTab = useMemo(() => {
     const { hideMovies, hideSeries, hideUnreleased } = appliedFilters;
     const sort = appliedSort;
     const now = new Date();
     const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-    const scoped = items.filter(i => tab === 'series' ? i.media_type === 'tv' : i.status === tab);
+    const forTab = (pageTab: TabKey) => {
+    const scoped = items.filter(i => pageTab === 'series' ? i.media_type === 'tv' : i.status === pageTab);
     const list = scoped.filter(i => !(hideMovies && i.media_type === 'movie') && !(hideSeries && i.media_type === 'tv') && !(hideUnreleased && i.release_date && i.release_date > today));
     if (sort === 'release') list.sort((a, b) => (b.release_date ?? '').localeCompare(a.release_date ?? ''));
     else if (sort === 'title') list.sort((a, b) => a.title.localeCompare(b.title));
     else if (sort === 'rating')
       list.sort((a, b) => (b.rating ?? -1) - (a.rating ?? -1));
     else list.sort((a, b) => b.added_at.localeCompare(a.added_at));
-    return list;
-  }, [items, appliedSort, appliedFilters, tab]);
+    return list; };
+    return { want: forTab('want'), watched: forTab('watched'), series: forTab('series'), insights: [] };
+  }, [items, appliedSort, appliedFilters]);
 
   const openItem = useCallback(
     (item: LibraryItem) => {
@@ -205,7 +195,6 @@ export const LibraryScreen: React.FC = () => {
   );
 
   const insights = useMemo(() => {
-    if (tab !== 'insights') return null;
     const watchedMovies = allItems.filter((i) => i.media_type === 'movie' && i.status === 'watched');
     const series = allItems.filter((i) => i.media_type === 'tv');
     const episodes = series.reduce((sum, i) => sum + i.episodes_watched, 0);
@@ -213,10 +202,10 @@ export const LibraryScreen: React.FC = () => {
     const avg = rated.length
       ? (rated.reduce((s, r) => s + (r.rating ?? 0), 0) / rated.length).toFixed(1)
       : null;
-    const dist = Array.from({ length: 11 }, (_, v) => rated.filter((r) => r.rating === v).length);
+    const dist = ratingDistribution(rated.map(r => r.rating));
     const maxDist = Math.max(1, ...dist);
     return { watchedMovies: watchedMovies.length, series: series.length, episodes, avg, dist, maxDist, ratedCount: rated.length };
-  }, [tab, allItems, myReviews]);
+  }, [allItems, myReviews]);
 
   const header = useMemo(
     () => (
@@ -243,7 +232,7 @@ export const LibraryScreen: React.FC = () => {
         <View style={styles.tabsRow}>
           <View style={styles.tabsGroup}>
             {TABS.map((t) => (
-              <Pressable key={t.key} testID={`library-tab-${t.key}`} accessibilityRole="tab" accessibilityState={{ selected: tab === t.key }} accessibilityLabel={t.label} onPress={() => { setTab(t.key); setSortSheetVisible(false); }} style={[styles.tab, tab === t.key && styles.tabActive]}>
+              <Pressable key={t.key} testID={`library-tab-${t.key}`} accessibilityRole="tab" accessibilityState={{ selected: tab === t.key }} accessibilityLabel={t.label} onPress={() => selectTab(t.key)} style={[styles.tab, tab === t.key && styles.tabActive]}>
                 <Text style={[styles.tabText, tab === t.key && styles.tabTextActive]}>{t.label}</Text>
               </Pressable>
             ))}
@@ -259,7 +248,7 @@ export const LibraryScreen: React.FC = () => {
         </View>
       </View>
     ),
-    [user, stats, tab, shareProfile, logout, handleUpdateCheck, updateProgress, navigation, appliedFilters, appliedSort, sortSheetVisible, colors, styles],
+    [user, stats, tab, shareProfile, logout, handleUpdateCheck, updateProgress, navigation, selectTab, appliedFilters, appliedSort, sortSheetVisible, colors, styles],
   );
 
   if (!apiReady || !user) {
@@ -286,18 +275,9 @@ export const LibraryScreen: React.FC = () => {
         <Text style={styles.brand}>VELORA</Text>
         <Pressable onPress={() => setMenuVisible(true)} style={styles.topButton} accessibilityLabel="More profile actions"><Ionicons name="ellipsis-vertical" size={18} color={colors.textTertiary} /></Pressable>
       </View>
-      <GestureDetector gesture={pageGesture}><Animated.View style={[{ flex: 1 }, pageStyle]}><FlashList
-        maintainVisibleContentPosition={{ disabled: true }}
-        data={tab === 'insights' || loading || loadError ? [] : sortedItems}
-        keyExtractor={keyExtractor}
-        renderItem={renderItem}
-        numColumns={2}
-        scrollEnabled={!sortSheetVisible}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refreshProfile} tintColor="transparent" colors={["transparent"]} progressBackgroundColor="transparent" />}
-        ListHeaderComponent={
-          <View onLayout={e => setHeaderHeight(e.nativeEvent.layout.height)}>
-            {header}
-            {sortSheetVisible && tab !== 'insights' && <View style={styles.filters}>
+      <View style={{ paddingHorizontal: 20, paddingTop: 14 }}>{header}</View>
+      <Expandable open={sortSheetVisible && tab !== 'insights'}>
+            <View style={styles.filters}>
               <View style={styles.filterChips}>
                 {[
                   { label: 'Hide Movies', selected: hideMovies, toggle: () => setHideMovies(v => !v) },
@@ -309,8 +289,20 @@ export const LibraryScreen: React.FC = () => {
                 ['recent', 'Date added'], ['release', 'Release date'], ['title', 'Title A-Z'], ['rating', 'Highest rated'],
               ] as const).map(([key, label]) => <Pressable key={key} onPress={() => setSort(key)} accessibilityRole="radio" accessibilityState={{ selected: sort === key }} style={styles.filterChip}><Text style={[styles.tabText, sort === key && { color: colors.primary }]}>{label}</Text></Pressable>)}</View>
               <Pressable accessibilityLabel="Apply filters" onPress={() => { setAppliedFilters({ hideMovies, hideSeries, hideUnreleased }); setAppliedSort(sort); setSortSheetVisible(false); }} style={styles.apply}><Text style={styles.tabText}>Apply</Text></Pressable>
-            </View>}
-            {tab === 'insights' && insights && (
+            </View>
+      </Expandable>
+      <View style={{ flex: 1 }}>
+      <ContentPager index={TABS.findIndex(t => t.key === tab)} onIndexChange={onPageChange} enabled={!sortSheetVisible && !menuVisible && !quickItem}>
+          {TABS.map(({ key: pageTab }) => <View key={pageTab} style={{ flex: 1 }}>
+            <FlashList
+              testID={`library-page-${pageTab}`}
+              maintainVisibleContentPosition={{ disabled: true }}
+              data={pageTab === 'insights' || loading || loadError ? [] : itemsByTab[pageTab]}
+              keyExtractor={keyExtractor} renderItem={renderItem} numColumns={2}
+              drawDistance={280}
+              scrollEnabled={!sortSheetVisible}
+              refreshControl={<RefreshControl refreshing={refreshing && tab === pageTab} onRefresh={refreshProfile} colors={['#000000']} tintColor="#000000" progressBackgroundColor="#FFFFFF" />}
+              ListHeaderComponent={<>            {pageTab === 'insights' && insights && (
               <View style={styles.insights}>
                 <View style={styles.insightRow}>
                   <InsightCell label="Movies watched" value={insights.watchedMovies} />
@@ -341,23 +333,14 @@ export const LibraryScreen: React.FC = () => {
                   </View>
                 </View>
               </View>
-            )}
-          </View>
-        }
-        contentContainerStyle={styles.listContent}
-        ListEmptyComponent={
-          tab === 'insights' ? null : loading ? (
-            <AppLoader style={{ marginTop: 32 }} />
-          ) : loadError ? (
-            <Pressable onPress={() => setRefreshKey(k => k + 1)} accessibilityRole="button"><Text style={styles.emptyText}>Could not load your library. Tap to retry.</Text></Pressable>
-          ) : (
-            <Text style={styles.emptyText}>Nothing here yet. Rate and track from any title page.</Text>
-          )
-        }
-      /></Animated.View></GestureDetector>
-
-      {refreshing && <View pointerEvents="none" style={{ position: 'absolute', top: '48%', alignSelf: 'center', width: 42, height: 42, borderRadius: 21, backgroundColor: '#FFFFFF', alignItems: 'center', justifyContent: 'center', elevation: 5 }}><AppLoader onAccent={false} refresh /></View>}
-      {sortSheetVisible && <Pressable accessibilityLabel="Dismiss filters without applying" onPress={() => setSortSheetVisible(false)} style={[styles.filterScrim, { top: insets.top + 34 + 8 + headerHeight }]} />}
+            )}</>}
+              contentContainerStyle={styles.listContent}
+              ListEmptyComponent={pageTab === 'insights' ? null : loading ? <AppLoader style={{ marginTop: 32 }} /> : loadError ? <Pressable onPress={() => setRefreshKey(k => k + 1)} accessibilityRole="button"><Text style={styles.emptyText}>Could not load your library. Tap to retry.</Text></Pressable> : <Text style={styles.emptyText}>Nothing here yet. Rate and track from any title page.</Text>}
+            />
+          </View>)}
+      </ContentPager>
+          {sortSheetVisible && <Pressable accessibilityLabel="Dismiss filters without applying" onPress={() => setSortSheetVisible(false)} style={[StyleSheet.absoluteFill, styles.filterScrim]} />}
+      </View>
       <ActionSheet visible={menuVisible} onClose={() => setMenuVisible(false)} options={[
         { label: 'Share profile', onPress: shareProfile },
         { label: 'Activity', onPress: () => navigation.navigate('Activity') },
@@ -393,7 +376,7 @@ const InsightCell = memo(function InsightCell({ label, value }: { label: string;
 });
 
 const createStyles = (colors: AppColors) => StyleSheet.create({
-  filterScrim: { position: 'absolute', left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.55)' },
+  filterScrim: { position: 'absolute', left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(255,255,255,0.55)' },
   topRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 10 },
   topButton: { width: 34, height: 34, alignItems: 'center', justifyContent: 'center' },
   brand: { fontSize: 9, letterSpacing: 2, color: colors.primary, fontWeight: '700' },
@@ -500,7 +483,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   insightSub: { fontSize: 12, color: colors.textTertiary, marginTop: 2 },
   distRow: { flexDirection: 'row', alignItems: 'flex-end', gap: 5, marginTop: 12 },
   distCol: { flex: 1, alignItems: 'center', gap: 4 },
-  distBarTrack: { height: 76, justifyContent: 'flex-end' },
+  distBarTrack: { height: 76, width: '100%', justifyContent: 'flex-end' },
   distBarFill: {
     width: '100%',
     borderRadius: 3,

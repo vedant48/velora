@@ -1,4 +1,5 @@
-import { Image } from 'expo-image';
+import { FlatList } from 'react-native';
+import { CachedImage as Image } from '../../experience/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { memo, useEffect, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -49,14 +50,14 @@ export const WatchNextRail = memo(function WatchNextRail({ onPressItem, showEmpt
   return (
     <View style={styles.root}>
       <Text style={styles.heading}>Watch next</Text>
-      <ScrollView
+      <FlatList
+        data={items} keyExtractor={item => item.id} initialNumToRender={2} maxToRenderPerBatch={2} windowSize={3}
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.scroll}
         decelerationRate="fast"
         snapToInterval={cardWidth + 12}
-      >
-        {items.map((item) => {
+        renderItem={({ item }) => {
           const backdrop = getImageUrl(item.poster_path, 'poster');
           const left = Math.max((item.total_episodes || 0) - item.episodes_watched, 0);
           return (
@@ -100,8 +101,7 @@ export const WatchNextRail = memo(function WatchNextRail({ onPressItem, showEmpt
               </View>
             </Pressable>
           );
-        })}
-      </ScrollView>
+        }} />
     </View>
   );
 });

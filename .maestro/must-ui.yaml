@@ -14,31 +14,51 @@ appId: com.vedant.velora
     visible: E2E Alice
     timeout: 20000
 - takeScreenshot: home-dark
+# Short horizontal drag cancels and stays on Want.
 - swipe:
-    start: 20%, 65%
-    end: 85%, 65%
-    duration: 500
-- takeScreenshot: swipe-watched
-- swipe:
-    start: 20%, 65%
-    end: 85%, 65%
-    duration: 500
-- takeScreenshot: swipe-series
-- swipe:
-    start: 20%, 65%
-    end: 85%, 65%
-    duration: 500
-- assertVisible: Average rating
-- takeScreenshot: swipe-insights
+    start: 65%, 67%
+    end: 59%, 67%
+    duration: 800
+- assertVisible: Pulp Fiction
+- takeScreenshot: cancelled-drag
 - swipe:
     start: 85%, 65%
     end: 20%, 65%
-    duration: 500
+    duration: 1200
+- assertVisible: Inception
+- takeScreenshot: swipe-watched
+- swipe:
+    start: 85%, 65%
+    end: 20%, 65%
+    duration: 1200
+- assertVisible: Breaking Bad
+- takeScreenshot: swipe-series
+- swipe:
+    start: 85%, 65%
+    end: 20%, 65%
+    duration: 1200
+- assertVisible: Average rating
+- takeScreenshot: swipe-insights
+- swipe:
+    start: 20%, 65%
+    end: 85%, 65%
+    duration: 1200
+- assertVisible: Breaking Bad
 - takeScreenshot: reverse-series
+- tapOn:
+    id: library-tab-watched
+- assertVisible: Inception
+- tapOn:
+    id: library-tab-want
+- assertVisible: Pulp Fiction
+- tapOn: Filter and sort
+- takeScreenshot: filter-open
+- tapOn: Apply filters
+- takeScreenshot: filter-closed
 - tapOn:
     id: library-tab-want
 - swipe:
-    start: 50%, 32%
+    start: 50%, 42%
     end: 50%, 78%
     duration: 700
 - takeScreenshot: pull-refresh
@@ -55,7 +75,7 @@ appId: com.vedant.velora
 - takeScreenshot: movies-lower
 - swipe:
     direction: DOWN
-    duration: 500
+    duration: 1200
 - takeScreenshot: explore-movies
 - tapOn: Explore TV Series
 - assertVisible: TV Shows

@@ -15,7 +15,7 @@ const RESOLUTIONS: Record<ImageType, string> = {
  * Generates an optimized, proxied image URL.
  * Routes through the high-performance wsrv.nl edge CDN proxy to prevent direct
  * connections to image.tmdb.org (which are throttled/blocked on Indian ISPs)
- * and to automatically serve compressed WebP format for 60/120 FPS rendering.
+ * and to serve compressed WebP images. Rendering smoothness needs native testing.
  */
 export function getImageUrl(
   path: string | null | undefined,

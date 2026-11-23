@@ -1,3 +1,4 @@
+import { motion } from '../experience/motion';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import { TVCollectionScreen } from '../screens/Collection/TVCollectionScreen';
@@ -22,7 +23,7 @@ export const AppNavigator: React.FC = () => {
         headerShown: false,
         contentStyle: { backgroundColor: colors.background },
         animation: 'slide_from_right',
-        animationDuration: 220,
+        animationDuration: motion.stackMs,
       }}
     >
       <Stack.Screen name="MainTabs" component={TabNavigator} />
