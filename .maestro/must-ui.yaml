@@ -35,7 +35,8 @@ appId: com.vedant.velora
     end: 20%, 65%
     duration: 500
 - takeScreenshot: reverse-series
-- tapOn: Want
+- tapOn:
+    id: library-tab-want
 - swipe:
     start: 50%, 32%
     end: 50%, 78%
@@ -49,7 +50,13 @@ appId: com.vedant.velora
 - takeScreenshot: explore-movies
 - tapOn: Explore TV Series
 - assertVisible: TV Shows
+- extendedWaitUntil:
+    visible: Sci-Fi & Fantasy TV
+    timeout: 25000
 - takeScreenshot: explore-tv
+- tapOn: Sci-Fi & Fantasy TV
+- takeScreenshot: tv-collection
+- tapOn: Back
 - tapOn: Explore All
 - assertVisible: Explore All
 - takeScreenshot: explore-all

@@ -16,6 +16,7 @@ export type MainTabParamList = {
 export type RootStackParamList = {
   MainTabs: NavigatorScreenParams<MainTabParamList>;
   Details: { item: MediaItem };
+  TVCollection: { title: string; items: MediaItem[] };
   Genre: { genreId: number; genreName: string; mediaType?: 'movie' | 'tv' };
   Collection: { collectionId: number; collectionName: string };
   Auth: undefined;

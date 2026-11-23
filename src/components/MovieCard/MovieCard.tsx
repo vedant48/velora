@@ -21,6 +21,7 @@ interface MovieCardProps {
   showTitle?: boolean;
   hasMarginRight?: boolean;
   minimal?: boolean;
+  trackingStatus?: string;
 }
 
 const SPRING_CONFIG = {
@@ -40,6 +41,7 @@ const MovieCardComponent: React.FC<MovieCardProps> = ({
   showTitle = false,
   hasMarginRight = true,
   minimal = false,
+  trackingStatus,
 }) => {
   const { colors } = useAppTheme();
   const styles = useThemedStyles(createStyles);
@@ -91,6 +93,7 @@ const MovieCardComponent: React.FC<MovieCardProps> = ({
           placeholder={IMAGE_CONFIG.placeholder}
         />
 
+        {minimal && trackingStatus && <View style={{ position: 'absolute', right: 5, top: 5, borderRadius: 5, paddingVertical: 2, paddingHorizontal: 5, backgroundColor: colors.glassDark }}><Text style={{ fontSize: 11, color: colors.textPrimary, fontWeight: '700' }}>{trackingStatus === 'want' ? 'Want' : trackingStatus === 'watched' ? 'Watched' : 'Watching'}</Text></View>}
         {/* Top-Right Rating Badge */}
         {!minimal && item.vote_average > 0 && (
           <View style={styles.badgeContainer}>

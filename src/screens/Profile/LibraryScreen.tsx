@@ -243,7 +243,7 @@ export const LibraryScreen: React.FC = () => {
         <View style={styles.tabsRow}>
           <View style={styles.tabsGroup}>
             {TABS.map((t) => (
-              <Pressable key={t.key} accessibilityRole="tab" accessibilityState={{ selected: tab === t.key }} accessibilityLabel={t.label} onPress={() => { setTab(t.key); setSortSheetVisible(false); }} style={[styles.tab, tab === t.key && styles.tabActive]}>
+              <Pressable key={t.key} testID={`library-tab-${t.key}`} accessibilityRole="tab" accessibilityState={{ selected: tab === t.key }} accessibilityLabel={t.label} onPress={() => { setTab(t.key); setSortSheetVisible(false); }} style={[styles.tab, tab === t.key && styles.tabActive]}>
                 <Text style={[styles.tabText, tab === t.key && styles.tabTextActive]}>{t.label}</Text>
               </Pressable>
             ))}

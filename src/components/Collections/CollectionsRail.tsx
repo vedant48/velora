@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { memo, useEffect, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -102,7 +103,7 @@ export const CollectionsRail = memo(function CollectionsRail({ onPressCollection
               accessibilityRole="button"
               accessibilityLabel={c.name}
             >
-              <Text style={{ fontSize: 36, textAlign: 'center' }}>🎬</Text>
+              <Ionicons name="film-outline" size={36} color={colors.textSecondary} />
               <Text style={styles.name} numberOfLines={2}>
                 {c.name}
               </Text>
