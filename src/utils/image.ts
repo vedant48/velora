@@ -58,9 +58,10 @@ export async function prefetchImagesWindow(urls: (string | null | undefined)[]) 
   for (const url of validUrls) {
     prefetchedUrls.add(url);
     try {
-      await Image.prefetch(url);
+      const ok = await Image.prefetch(url, { cachePolicy: 'memory-disk' });
+      if (!ok) prefetchedUrls.delete(url);
     } catch {
-      // Ignore prefetch failures silently
+      prefetchedUrls.delete(url); // Failed prefetch must not poison later retries.
     }
   }
 }

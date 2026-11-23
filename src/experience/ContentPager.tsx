@@ -2,7 +2,7 @@ import { pageAfterDrag, resistedOffset } from './pagerPolicy';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { View, useWindowDimensions } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
+import Animated, { cancelAnimation, runOnJS, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { motion } from './motion';
 
 /** Persistent pages below a stationary screen header. Finger left goes next.
@@ -26,7 +26,7 @@ export function ContentPager({ index, onIndexChange, children, enabled = true }:
   const commit = useCallback((next: number) => onIndexChange(next), [onIndexChange]);
   const gesture = useMemo(() => Gesture.Pan().enabled(enabled)
     .activeOffsetX([-14, 14]).failOffsetY([-12, 12])
-    .onStart(() => { origin.value = offset.value; })
+    .onStart(() => { cancelAnimation(offset); origin.value = offset.value; })
     .onUpdate(e => {
       const next = origin.value + e.translationX;
       offset.value = resistedOffset(next, count, width);
