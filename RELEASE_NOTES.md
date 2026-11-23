@@ -1,13 +1,11 @@
-## Velora 1.4.4
+## Smoother navigation and poster loading
 
-- Open on Home/profile with your photo, account statistics and two-column library.
-- Five bottom destinations: Home, Explore Movies, Explore TV Series, Explore All and Search.
-- Swipe right through Want, Watched, Series and Insights. Swipe left to go back, or tap a tab.
-- Pull down to refresh your profile and library. A white circular indicator appears while existing posters stay visible.
-- Separate movie discovery rails, trailers, subscription-provider results for India, current cinema releases and upcoming titles.
-- Portrait Watch next series cards, real account tracking badges and Velora-owned TV genre collections from TMDB with watched progress and title grids.
-- Add TMDB attribution in Settings, About & Credits.
+- Profile pages follow your finger: swipe right-to-left from Want to Watched, Series and Insights. The profile header stays in place, and short drags settle back.
+- Already-loaded library pages and posters stay visible when switching pages or returning from Search, Details or Settings. Background refresh no longer replaces them with a spinner.
+- Shared image loading uses memory/disk caching, a first-load placeholder and fade, and a retry state if an image cannot load. Lower Explore sections and horizontal rails load near the viewport instead of mounting every poster at once.
+- Filter and sort controls expand and close with an animated transition. Cards, sheets and navigation share motion settings.
+- Rating distribution bars render correctly, including half-star ratings. Profile pull-to-refresh uses the white native indicator with a dark spinner.
 
-This is not a claim of identical Must timing or every Must feature. Velora's TV collections use TMDB genres, not Must editorial lists; collection likes are not implemented. Catalog results and availability depend on the external data source. Existing accounts, lists, photos and signing are preserved. No new paid service is required.
+No library, ratings, reviews, episode progress or profile-photo migration. No Must or other platform importer in this update.
 
-The native startup screen follows device appearance before the saved app theme loads; a small native-to-app logo shift and network-content loading can still occur.
+Native Android motion was checked with a synthetic test account. Catalog loading still depends on network availability. This is not a measured10x speedup or a guarantee of identical performance on every device. Existing Android splash-theme limitations remain unchanged.
