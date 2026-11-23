@@ -59,14 +59,17 @@ appId: com.vedant.velora
 - takeScreenshot: explore-movies
 - tapOn: Explore TV Series
 - assertVisible: TV Shows
-- scrollUntilVisible:
-    element: Sci-Fi & Fantasy TV
-    direction: DOWN
+- swipe:
+    start: 50%, 78%
+    end: 50%, 32%
+    duration: 600
+- extendedWaitUntil:
+    visible: Sci-Fi & Fantasy TV
     timeout: 45000
 - takeScreenshot: explore-tv
 - tapOn: Sci-Fi & Fantasy TV
 - takeScreenshot: tv-collection
-- tapOn: Back
+- back
 - tapOn: Explore All
 - assertVisible: Explore All
 - takeScreenshot: explore-all
