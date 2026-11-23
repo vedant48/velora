@@ -10,6 +10,7 @@ adb reverse tcp:8787 tcp:8787
 adb install candidate/app-release.apk
 adb shell wm size 720x1280
 adb shell wm density 320
+python3 scripts/emulator-ready.py || exit 1
 python3 scripts/native-splash-frames.py
 adb shell cmd uimode night no
 status=0

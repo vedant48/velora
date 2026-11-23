@@ -47,6 +47,7 @@ for mode, night in (('dark', 'yes'), ('light', 'no')):
     time.sleep(2)
     adb('shell', 'am', 'force-stop', pkg)
     time.sleep(1)
+    subprocess.run(['python3', 'scripts/emulator-ready.py'], check=True)
     adb('logcat', '-c')
     # Startup clip: motion evidence for the V -> wordmark -> app sequence.
     # screenrecord stops itself at the time limit; pulled after the frames.
