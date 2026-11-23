@@ -72,7 +72,7 @@ export const TabNavigator: React.FC = () => {
       <Tab.Screen
         name="ProfileTab"
         component={LibraryScreen}
-        options={{ tabBarLabel: 'Home' }}
+        options={{ tabBarLabel: 'Home', tabBarAccessibilityLabel: 'Home' }}
       />
       <Tab.Screen
         name="HomeTab"
@@ -84,7 +84,7 @@ export const TabNavigator: React.FC = () => {
       <Tab.Screen
         name="SearchTab"
         component={SearchScreen}
-        options={{ tabBarLabel: 'Search', tabBarStyle: { display: 'none' } }}
+        options={{ tabBarLabel: 'Search', tabBarAccessibilityLabel: 'Search', tabBarStyle: { display: 'none' } }}
       />
       {/* Watchlist tab removed (user direction 21 Nov): Want is the unified
           watchlist, reached from Profile > Want. Screen source kept at

@@ -42,17 +42,27 @@ appId: com.vedant.velora
     end: 50%, 78%
     duration: 700
 - takeScreenshot: pull-refresh
+- assertVisible: Want
 - assertVisible: E2E Alice
 - tapOn: Explore Movies
 - extendedWaitUntil:
     visible: Movies
     timeout: 15000
+- scrollUntilVisible:
+    element: Coming Soon
+    direction: DOWN
+    timeout: 45000
+- takeScreenshot: movies-lower
+- swipe:
+    direction: DOWN
+    duration: 500
 - takeScreenshot: explore-movies
 - tapOn: Explore TV Series
 - assertVisible: TV Shows
-- extendedWaitUntil:
-    visible: Sci-Fi & Fantasy TV
-    timeout: 25000
+- scrollUntilVisible:
+    element: Sci-Fi & Fantasy TV
+    direction: DOWN
+    timeout: 45000
 - takeScreenshot: explore-tv
 - tapOn: Sci-Fi & Fantasy TV
 - takeScreenshot: tv-collection
