@@ -8,3 +8,10 @@ test('Android authenticated avatar uses array source so RN forwards headers', ()
   const arrayBranch = rn.slice(rn.indexOf('if (Array.isArray(source_))'), rn.indexOf('const {uri, width: sourceWidth'));
   assert.match(arrayBranch, /nativeProps.headers = sourceHeaders/);
 });
+
+test('splash readiness timer reruns on first paint and native handoff keeps V opaque', () => {
+  const src = fs.readFileSync('src/components/Splash/AnimatedSplash.tsx', 'utf8');
+  assert.match(src, /\[appReady, painted\]/);
+  assert.match(src, /logoOpacity = useSharedValue\(1\)/);
+  assert.match(src, /logoScale = useSharedValue\(1\)/);
+});

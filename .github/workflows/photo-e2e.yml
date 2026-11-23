@@ -142,7 +142,7 @@ jobs:
           arch: x86_64
           profile: pixel_2
           ram-size: 3072
-          disable-animations: true
+          disable-animations: false
           emulator-options: -no-window -gpu swiftshader -no-snapshot -noaudio -no-boot-anim
           script: bash scripts/e2e-emulator.sh
       - name: Backend log tail
@@ -165,6 +165,8 @@ jobs:
           find "$EV" -maxdepth 1 -mindepth 1 -not -name .git -exec rm -rf {} +
           mkdir -p "$EV/frames"
           cp -r photo-evidence/. "$EV/frames/" 2>/dev/null || true
+          mkdir -p "$EV/frames/splash"
+          cp -r splash-evidence/. "$EV/frames/splash/" 2>/dev/null || true
           printf 'run_id=%s\nsha=%s\ndate=%s\n' "${{ github.run_id }}" "${{ github.sha }}" "$(date -u +%FT%TZ)" > "$EV/frames/META.txt"
           git -C "$EV" add -A
           git -C "$EV" commit -m "Photo e2e evidence for ${{ github.sha }} (run ${{ github.run_id }})" || echo "no changes"

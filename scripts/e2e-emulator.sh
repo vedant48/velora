@@ -8,6 +8,9 @@ mkdir -p photo-evidence
 pip install --quiet pillow
 adb reverse tcp:8787 tcp:8787
 adb install candidate/app-release.apk
+adb shell wm size 720x1280
+adb shell wm density 320
+python3 scripts/native-splash-frames.py
 adb shell cmd uimode night no
 status=0
 maestro test --format junit --output photo-evidence/flow-a.xml --test-output-dir photo-evidence/maestro-a .maestro/flow-a-alice.yaml || status=1

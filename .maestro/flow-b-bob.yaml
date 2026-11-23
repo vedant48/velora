@@ -4,7 +4,15 @@ appId: com.vedant.velora
 # view alice as a member (photo must render for other users), then log back
 # in as alice (fresh token) and prove her photo still loads for her.
 - launchApp
-- tapOn: "Profile"
+- extendedWaitUntil:
+    visible: "Home"
+    timeout: 20000
+- tapOn:
+    point: "83%,94%"
+    retryTapIfNoChange: true
+- extendedWaitUntil:
+    visible: "E2E Alice"
+    timeout: 20000
 - tapOn: "More profile actions"
 - tapOn: "^Log out$"
 - tapOn: "^Log out$"

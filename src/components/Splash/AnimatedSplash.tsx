@@ -59,8 +59,8 @@ export const AnimatedSplash: React.FC<AnimatedSplashProps> = ({ appReady, onFini
     });
   };
 
-  const logoScale = useSharedValue(0.72);
-  const logoOpacity = useSharedValue(0);
+  const logoScale = useSharedValue(1);
+  const logoOpacity = useSharedValue(1);
   const glowOpacity = useSharedValue(0);
   const wordOpacity = useSharedValue(0);
   const wordSpacing = useSharedValue(0);
@@ -127,7 +127,7 @@ export const AnimatedSplash: React.FC<AnimatedSplashProps> = ({ appReady, onFini
     const remaining = Math.max(MIN_REVEAL_MS - elapsed, 0);
     const t = setTimeout(() => finishRef.current(), remaining);
     return () => clearTimeout(t);
-  }, [appReady]);
+  }, [appReady, painted]);
 
   const containerStyle = useAnimatedStyle(() => ({
     opacity: containerOpacity.value,
