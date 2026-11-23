@@ -50,14 +50,17 @@ export const AnimatedSplash: React.FC<AnimatedSplashProps> = ({ appReady, onFini
   // mount: on slow renderers paint can lag mount by a second or more, and a
   // mount-based clock can play the V/wordmark beats entirely off-screen.
   const [painted, setPainted] = useState(false);
+  const [laidOut, setLaidOut] = useState(false);
+  const [logoLoaded, setLogoLoaded] = useState(false);
 
-  const handleLayout = () => {
-    if (painted) return;
-    requestAnimationFrame(() => {
+  useEffect(() => {
+    if (!laidOut || !logoLoaded || painted) return;
+    const frame = requestAnimationFrame(() => {
       setPainted(true);
       onFirstFrame?.();
     });
-  };
+    return () => cancelAnimationFrame(frame);
+  }, [laidOut, logoLoaded, painted, onFirstFrame]);
 
   const logoScale = useSharedValue(1);
   const logoOpacity = useSharedValue(1);
@@ -147,13 +150,13 @@ export const AnimatedSplash: React.FC<AnimatedSplashProps> = ({ appReady, onFini
   return (
     <Animated.View
       style={[styles.container, { backgroundColor: colors.background }, containerStyle]}
-      onLayout={handleLayout}
+      onLayout={() => setLaidOut(true)}
     >
       <Animated.View style={[styles.glow, glowStyle]}>
         <Image source={GLOW} style={styles.glowImage} contentFit="contain" />
       </Animated.View>
       <Animated.View style={[styles.logo, logoStyle]}>
-        <Image source={V_MARK} style={styles.logoImage} contentFit="contain" />
+        <Image source={V_MARK} style={styles.logoImage} contentFit="contain" onLoad={() => setLogoLoaded(true)} />
       </Animated.View>
       <Animated.Text style={[styles.wordmark, { color: colors.textPrimary }, wordStyle]}>
         VELORA

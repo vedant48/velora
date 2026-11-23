@@ -15,3 +15,9 @@ test('splash readiness timer reruns on first paint and native handoff keeps V op
   assert.match(src, /logoOpacity = useSharedValue\(1\)/);
   assert.match(src, /logoScale = useSharedValue\(1\)/);
 });
+
+test('native handoff waits for decoded V as well as layout', () => {
+ const src=fs.readFileSync('src/components/Splash/AnimatedSplash.tsx','utf8');
+ assert.match(src,/!laidOut \|\| !logoLoaded \|\| painted/);
+ assert.match(src,/onLoad=\{\(\) => setLogoLoaded\(true\)\}/);
+});
