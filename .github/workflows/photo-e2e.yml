@@ -7,6 +7,9 @@ name: Photo end-to-end verification
 # Remove this workflow before the production merge.
 
 on:
+  push:
+    branches: [feature/brand-splash-v]
+    paths: [.ci/verify-once]
   workflow_dispatch:
 
 permissions:

@@ -7,6 +7,9 @@ name: Branch splash native verification
 # Retry 1: first run hit a transient gradle plugin resolution error.
 
 on:
+  push:
+    branches: [feature/brand-splash-v]
+    paths: [.ci/verify-once]
   workflow_dispatch:
 
 permissions:
