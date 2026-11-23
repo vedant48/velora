@@ -4,8 +4,13 @@ import subprocess,time,xml.etree.ElementTree as ET,re
 def adb(*args):
     return subprocess.run(['adb',*args],capture_output=True,check=True).stdout
 for attempt in range(2):
-    adb('shell','uiautomator','dump','/sdcard/ready.xml')
-    xml=adb('shell','cat','/sdcard/ready.xml').decode()
+    for ready_attempt in range(4):
+        adb('shell','uiautomator','dump','/sdcard/ready.xml')
+        result=subprocess.run(['adb','shell','cat','/sdcard/ready.xml'],capture_output=True)
+        if result.returncode==0: break
+        time.sleep(2)
+    else: raise RuntimeError('Device UI dump unavailable after bounded readiness retries')
+    xml=result.stdout.decode()
     if "Pixel Launcher isn't responding" not in xml:
         print('Device has no launcher ANR dialog')
         break
