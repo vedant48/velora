@@ -54,6 +54,12 @@ export const AnimatedSplash: React.FC<AnimatedSplashProps> = ({ appReady, onFini
   const [logoLoaded, setLogoLoaded] = useState(false);
 
   useEffect(() => {
+    // Bounded decode failure fallback. Never leave the app behind native splash.
+    const timeout = setTimeout(() => setLogoLoaded(true), 2200);
+    return () => clearTimeout(timeout);
+  }, []);
+
+  useEffect(() => {
     if (!laidOut || !logoLoaded || painted) return;
     const frame = requestAnimationFrame(() => {
       setPainted(true);
@@ -156,7 +162,7 @@ export const AnimatedSplash: React.FC<AnimatedSplashProps> = ({ appReady, onFini
         <Image source={GLOW} style={styles.glowImage} contentFit="contain" />
       </Animated.View>
       <Animated.View style={[styles.logo, logoStyle]}>
-        <Image source={V_MARK} style={styles.logoImage} contentFit="contain" onLoad={() => setLogoLoaded(true)} />
+        <Image source={V_MARK} style={styles.logoImage} contentFit="contain" onLoad={() => setLogoLoaded(true)} onError={() => setLogoLoaded(true)} />
       </Animated.View>
       <Animated.Text style={[styles.wordmark, { color: colors.textPrimary }, wordStyle]}>
         VELORA
