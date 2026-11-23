@@ -3,7 +3,7 @@ import { ratingDistribution } from '../../experience/ratingDistribution';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { FlashList } from '@shopify/flash-list';
-import React, { memo, useCallback, useMemo, useState } from 'react';
+import React, { memo, useCallback, useMemo, useRef, useState } from 'react';
 import { Alert, Pressable, RefreshControl, Share, StyleSheet, Text, View } from 'react-native';
 import { ContentPager } from '../../experience/ContentPager';
 import { LibraryTab } from './libraryTabs';
@@ -68,6 +68,7 @@ export const LibraryScreen: React.FC = () => {
   const [myReviews, setMyReviews] = useState<Review[]>([]);
   const [loadError, setLoadError] = useState(false);
   const [loading, setLoading] = useState(true);
+  const loadedUsername = useRef<string | null>(null);
   const [updateProgress, setUpdateProgress] = useState<number | null>(null);
 
   const handleUpdateCheck = useCallback(async () => {
@@ -106,24 +107,21 @@ export const LibraryScreen: React.FC = () => {
   }, [updateProgress]);
 
   useFocusEffect(useCallback(() => {
-    if (!user) return;
+    if (!user || !apiReady) return;
     let active = true;
-    veloraApi.getUser(user.username).then(({ stats }) => { if (active) setStats(stats); }).catch(() => undefined);
-    veloraApi.getLibrary().then(({ items }) => { if (active) setAllItems(items); }).catch(() => undefined);
-    veloraApi.getMyReviews().then(({ reviews }) => { if (active) setMyReviews(reviews); }).catch(() => undefined);
-    return () => { active = false; };
-  }, [user?.username, refreshKey]));
-
-  useFocusEffect(useCallback(() => {
-    if (!user) return;
-    let active = true;
-    setLoading(true);
+    const hadContent = loadedUsername.current === user.username;
+    setLoading(!hadContent);
     setLoadError(false);
-    veloraApi.getLibrary().then(({ items }) => { if (active) setItems(items); })
-      .catch(() => { if (active) setLoadError(true); })
+    if (!hadContent) { setItems([]); setAllItems([]); setStats(null); setMyReviews([]); }
+    veloraApi.getUser(user.username).then(({ stats }) => { if (active) setStats(stats); }).catch(() => undefined);
+    veloraApi.getMyReviews().then(({ reviews }) => { if (active) setMyReviews(reviews); }).catch(() => undefined);
+    // Focus refresh must not unmount cached posters or discard each page's scroll.
+    veloraApi.getLibrary().then(({ items }) => {
+      if (active) { setItems(items); setAllItems(items); loadedUsername.current = user.username; }
+    }).catch(() => { if (active && !hadContent) setLoadError(true); })
       .finally(() => { if (active) setLoading(false); });
     return () => { active = false; };
-  }, [user?.username, refreshKey]));
+  }, [user?.username, apiReady, refreshKey]));
 
   const itemsByTab = useMemo(() => {
     const { hideMovies, hideSeries, hideUnreleased } = appliedFilters;
