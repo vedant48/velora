@@ -33,13 +33,17 @@ appId: com.vedant.velora
     visible:
       text: "E2E Alice"
     timeout: 15000
+- hideKeyboard
 - tapOn: "E2E Alice"
+- extendedWaitUntil:
+    visible: "Follow"
+    timeout: 15000
 - extendedWaitUntil:
     visible:
       text: "@e2e_alice"
     timeout: 10000
 - takeScreenshot: b1-member-view-photo
-- tapOn: "Back"
+- back
 - tapOn: "Back to library"
 - tapOn: "More profile actions"
 - tapOn: "^Log out$"
