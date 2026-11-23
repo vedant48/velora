@@ -1,0 +1,76 @@
+appId: com.vedant.velora
+---
+# Flow B: reseed alice's photo, log out alice, log in as e2e_bob (no photo),
+# view alice as a member (photo must render for other users), then log back
+# in as alice (fresh token) and prove her photo still loads for her.
+- launchApp
+- extendedWaitUntil:
+    visible: "Home"
+    timeout: 20000
+- tapOn:
+    point: "83%,94%"
+    retryTapIfNoChange: true
+- extendedWaitUntil:
+    visible: "E2E Alice"
+    timeout: 20000
+- tapOn: "More profile actions"
+- tapOn: "^Log out$"
+- tapOn: "^Log out$"
+- extendedWaitUntil:
+    visible:
+      text: "Log in / Sign up"
+    timeout: 10000
+- tapOn: "Log in / Sign up"
+- tapOn: "Username"
+- inputText: "e2e_bob"
+- tapOn: "Password"
+- inputText: "e2e-bob-pass-1"
+- hideKeyboard
+- tapOn:
+    text: "Log in"
+    below: "Password"
+- extendedWaitUntil:
+    visible:
+      text: "E2E Bob"
+    timeout: 20000
+- tapOn: "Search"
+- tapOn: "People"
+- tapOn: "Search movies, TV shows, actors..."
+- inputText: "e2e_alice"
+- extendedWaitUntil:
+    visible:
+      text: "E2E Alice"
+    timeout: 15000
+- hideKeyboard
+- tapOn: "E2E Alice"
+- extendedWaitUntil:
+    visible: "Follow"
+    timeout: 15000
+- extendedWaitUntil:
+    visible:
+      text: "@e2e_alice"
+    timeout: 10000
+- takeScreenshot: b1-member-view-photo
+- back
+- tapOn: "Back to library"
+- tapOn: "More profile actions"
+- tapOn: "^Log out$"
+- tapOn: "^Log out$"
+- extendedWaitUntil:
+    visible:
+      text: "Log in / Sign up"
+    timeout: 10000
+- tapOn: "Log in / Sign up"
+- tapOn: "Username"
+- inputText: "e2e_alice"
+- tapOn: "Password"
+- inputText: "e2e-alice-pass-1"
+- hideKeyboard
+- tapOn:
+    text: "Log in"
+    below: "Password"
+- extendedWaitUntil:
+    visible:
+      text: "E2E Alice"
+    timeout: 20000
+- takeScreenshot: b2-relogin-photo

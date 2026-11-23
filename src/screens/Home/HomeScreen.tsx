@@ -17,10 +17,12 @@ import { RootStackParamList } from '../../navigation/types';
 import { useAuth } from '../../state/AuthContext';
 import { metrics } from '../../theme/metrics';
 import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
+import { useSplashDone } from '../../state/SplashContext';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 export const HomeScreen: React.FC = () => {
+  const splashDone = useSplashDone();
   const { colors, mode } = useAppTheme();
   const styles = useThemedStyles(createStyles);
   const navigation = useNavigation<NavigationProp>();
@@ -171,7 +173,7 @@ export const HomeScreen: React.FC = () => {
       />
 
       {/* Primary Vertical Virtualized Scroll Container */}
-      {isHeroLoading && heroItems.length === 0 ? <AppLoader style={{flex: 1}} /> : <ScrollView
+      {isHeroLoading && heroItems.length === 0 ? (splashDone ? <AppLoader style={{flex: 1}} /> : null) : <ScrollView
         style={styles.container}
         contentContainerStyle={styles.contentContainer}
         showsVerticalScrollIndicator={false}

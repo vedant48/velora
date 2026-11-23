@@ -7,6 +7,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LibraryItem, Review, UserStats, veloraApi } from '../../api/velora';
 import { AppButton } from '../../components/common/AppButton';
 import { AppLoader } from '../../components/common/AppLoader';
+import { Avatar } from '../../components/Avatar';
 import { ActionSheet } from '../../components/Library/ActionSheet';
 import { LibraryCard } from '../../components/Library/LibraryCard';
 import { LibraryQuickAction } from '../../components/Library/LibraryQuickAction';
@@ -198,9 +199,7 @@ export const LibraryScreen: React.FC = () => {
 
             {!!user?.bio && <Text style={styles.bio} numberOfLines={2}>{user.bio}</Text>}
           </View>
-          <View style={styles.avatar}>
-            <Text style={styles.avatarText}>{(user?.displayName?.[0] ?? '?').toUpperCase()}</Text>
-          </View>
+          <Avatar user={user} size={52} />
         </View>
 
         {/* Stats row */}

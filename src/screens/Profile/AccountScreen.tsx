@@ -1,6 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import * as FileSystem from 'expo-file-system/legacy';
+import * as ImageManipulator from 'expo-image-manipulator';
+import * as ImagePicker from 'expo-image-picker';
 import * as Sharing from 'expo-sharing';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Alert, Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
@@ -9,6 +11,7 @@ import { veloraApi } from '../../api/velora';
 import { AppButton } from '../../components/common/AppButton';
 import { AppTextField } from '../../components/common/AppTextField';
 import { ScreenHeader } from '../../components/common/ScreenHeader';
+import { Avatar } from '../../components/Avatar';
 import { useAuth } from '../../state/AuthContext';
 import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
 import { ui } from '../../theme/ui';
@@ -26,6 +29,56 @@ export const AccountScreen: React.FC = () => {
   const [isPrivate, setIsPrivate] = useState(false);
   const [saving, setSaving] = useState(false);
   const [busy, setBusy] = useState<string | null>(null);
+  const [photoBusy, setPhotoBusy] = useState(false);
+
+  const changePhoto = useCallback(async () => {
+    if (photoBusy) return;
+    try {
+      const perm = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (!perm.granted) {
+        Alert.alert('Photos access needed', 'Allow photo access to choose a profile picture.');
+        return;
+      }
+      const picked = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ['images'],
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 1,
+      });
+      const asset = picked.assets?.[0];
+      if (picked.canceled || !asset) return;
+      setPhotoBusy(true);
+      const prepared = await ImageManipulator.manipulateAsync(
+        asset.uri,
+        [{ resize: { width: 256 } }],
+        { compress: 0.8, format: ImageManipulator.SaveFormat.JPEG },
+      );
+      await veloraApi.uploadAvatar(prepared.uri);
+      await refresh();
+    } catch (e: any) {
+      Alert.alert('Upload failed', e?.message ?? 'Try again later.');
+    } finally {
+      setPhotoBusy(false);
+    }
+  }, [photoBusy, refresh]);
+
+  const removePhoto = useCallback(() => {
+    Alert.alert('Remove photo', 'Remove your profile photo?', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Remove',
+        style: 'destructive',
+        onPress: () => {
+          setPhotoBusy(true);
+          veloraApi
+            .removeAvatar()
+            .then(() => refresh())
+            .catch((e: any) => Alert.alert('Could not remove photo', e?.message ?? 'Try again later.'))
+            .finally(() => setPhotoBusy(false));
+        },
+      },
+    ]);
+  }, [refresh]);
 
   useEffect(() => {
     if (!user) return;
@@ -126,7 +179,21 @@ export const AccountScreen: React.FC = () => {
     >
       <ScreenHeader title="Settings" onBack={() => navigation.goBack()} />
 
-      <View style={styles.avatar}><Text style={styles.avatarLetter}>{user?.displayName?.[0]?.toUpperCase() ?? 'V'}</Text></View>
+      <View style={styles.photoRow}>
+        {user ? (
+          <>
+            <Avatar user={user} size={78} />
+            <View style={{ flex: 1, marginLeft: 14 }}>
+              <AppButton title="Change photo" onPress={changePhoto} loading={photoBusy} />
+              {user.avatarAt ? (
+                <Pressable accessibilityRole="button" accessibilityLabel="Remove profile photo" onPress={removePhoto} disabled={photoBusy} hitSlop={8}>
+                  <Text style={styles.removePhoto}>Remove photo</Text>
+                </Pressable>
+              ) : null}
+            </View>
+          </>
+        ) : null}
+      </View>
       <Text style={styles.section}>Name</Text>
       <AppTextField
         accessibilityLabel="Display name"
@@ -202,8 +269,8 @@ export const AccountScreen: React.FC = () => {
 
 const createStyles = (colors: AppColors) => StyleSheet.create({
   themeChoice: { flex: 1, borderWidth: 1, borderColor: colors.surfaceBorder, paddingVertical: 13, alignItems: 'center', borderRadius: 8 },
-  avatar: { alignSelf: 'center', width: 78, height: 78, borderRadius: 39, backgroundColor: colors.primary, alignItems: 'center', justifyContent: 'center', marginVertical: 18 },
-  avatarLetter: { color: '#FFFFFF', fontSize: 28, fontWeight: '700' },
+  photoRow: { flexDirection: 'row', alignItems: 'center', marginVertical: 18 },
+  removePhoto: { color: colors.primary, fontSize: 14, fontWeight: '600', marginTop: 10, alignSelf: 'flex-start' },
   readonly: { color: colors.textSecondary, paddingVertical: 12, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.border },
   root: { flex: 1, backgroundColor: colors.background },
   back: {

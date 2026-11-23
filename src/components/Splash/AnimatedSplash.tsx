@@ -1,271 +1,206 @@
-import React, { useEffect } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Dimensions,
-  Pressable,
-} from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { StyleSheet } from 'react-native';
 import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-  withSpring,
-  withSequence,
-  withDelay,
   Easing,
   runOnJS,
+  useAnimatedStyle,
+  useSharedValue,
+  withDelay,
+  withSequence,
+  withSpring,
+  withTiming,
 } from 'react-native-reanimated';
-import { LinearGradient } from 'expo-linear-gradient';
-import { colors } from '../../theme/colors';
+import { Image } from 'expo-image';
+import { useAppTheme } from '../../theme/ThemeContext';
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+// Original Velora ribbon-V mark (assets/velora-v.png), brand red on both themes.
+const V_MARK = require('../../../assets/velora-v.png');
+// Soft radial red bloom rendered as an asset (RN views cannot blur).
+const GLOW = require('../../../assets/splash-glow.png');
 
 interface AnimatedSplashProps {
+  /** True once the app (theme preference + navigation) is ready to show. */
+  appReady: boolean;
   onFinish: () => void;
+  /** Called once the overlay's first frame has painted (native splash handoff). */
+  onFirstFrame?: () => void;
 }
 
-export const AnimatedSplash: React.FC<AnimatedSplashProps> = ({ onFinish }) => {
-  // Shared Values for animation sequence
-  const logoScale = useSharedValue(0.3);
-  const logoOpacity = useSharedValue(0);
-  const leftRibbonHeight = useSharedValue(0);
-  const rightRibbonHeight = useSharedValue(0);
-  const textOpacity = useSharedValue(0);
-  const textLetterSpacing = useSharedValue(2);
-  const containerOpacity = useSharedValue(1);
-  const glowOpacity = useSharedValue(0);
+/**
+ * Cinematic V -> VELORA splash.
+ *
+ * Sequence: the ribbon V springs in, the VELORA wordmark reveals out of it,
+ * then the whole layer crossfades into the app. Dismissal is driven by app
+ * readiness plus the short reveal beat - there is no fixed artificial hold.
+ * A hard fallback timer guarantees the app is never trapped behind it.
+ *
+ * Theme: background and wordmark follow the resolved app theme (light or
+ * dark, System included), so there is no theme flash when a saved override
+ * differs from the device appearance once JS is running. The native splash
+ * that shows before JS follows the device appearance; a saved override that
+ * differs from the device theme can only be corrected once JS loads.
+ */
+const MIN_REVEAL_MS = 1350;
+const MAX_HOLD_MS = 4500;
+
+export const AnimatedSplash: React.FC<AnimatedSplashProps> = ({ appReady, onFinish, onFirstFrame }) => {
+  const { colors } = useAppTheme();
+
+  // The sequence is anchored to the overlay's first painted frame, not to JS
+  // mount: on slow renderers paint can lag mount by a second or more, and a
+  // mount-based clock can play the V/wordmark beats entirely off-screen.
+  const [painted, setPainted] = useState(false);
+  const [laidOut, setLaidOut] = useState(false);
+  const [logoLoaded, setLogoLoaded] = useState(false);
 
   useEffect(() => {
-    // 1. Initial spring scale and fade in of the V logo
-    logoOpacity.value = withTiming(1, { duration: 350 });
-    logoScale.value = withSpring(1, {
-      damping: 12,
-      stiffness: 140,
-      mass: 0.8,
-    });
-
-    // 2. Ribbons grow downwards
-    leftRibbonHeight.value = withTiming(1, {
-      duration: 600,
-      easing: Easing.bezier(0.25, 0.1, 0.25, 1),
-    });
-    rightRibbonHeight.value = withDelay(
-      150,
-      withTiming(1, {
-        duration: 600,
-        easing: Easing.bezier(0.25, 0.1, 0.25, 1),
-      })
-    );
-
-    // 3. Ambient Crimson Glow pulse
-    glowOpacity.value = withDelay(
-      400,
-      withSequence(
-        withTiming(0.85, { duration: 500 }),
-        withTiming(0.4, { duration: 600 })
-      )
-    );
-
-    // 4. Reveal "VELORA" typography with expanding letter-spacing
-    textOpacity.value = withDelay(750, withTiming(1, { duration: 500 }));
-    textLetterSpacing.value = withDelay(
-      750,
-      withTiming(6, {
-        duration: 900,
-        easing: Easing.out(Easing.cubic),
-      })
-    );
-
-    // 5. Cinematic Zoom into camera & Dissolve (like Netflix Ta-dum zoom)
-    const timer = setTimeout(() => {
-      logoScale.value = withTiming(3.6, {
-        duration: 650,
-        easing: Easing.in(Easing.cubic),
-      });
-      containerOpacity.value = withTiming(
-        0,
-        {
-          duration: 600,
-          easing: Easing.out(Easing.ease),
-        },
-        (finished) => {
-          if (finished) {
-            runOnJS(onFinish)();
-          }
-        }
-      );
-    }, 1800);
-
-    return () => clearTimeout(timer);
+    // Bounded decode failure fallback. Never leave the app behind native splash.
+    const timeout = setTimeout(() => setLogoLoaded(true), 2200);
+    return () => clearTimeout(timeout);
   }, []);
 
-  const handleSkip = () => {
-    containerOpacity.value = withTiming(0, { duration: 250 }, () => {
-      runOnJS(onFinish)();
+  useEffect(() => {
+    if (!laidOut || !logoLoaded || painted) return;
+    const frame = requestAnimationFrame(() => {
+      setPainted(true);
+      onFirstFrame?.();
     });
+    return () => cancelAnimationFrame(frame);
+  }, [laidOut, logoLoaded, painted, onFirstFrame]);
+
+  const logoScale = useSharedValue(1);
+  const logoOpacity = useSharedValue(1);
+  const glowOpacity = useSharedValue(0);
+  const wordOpacity = useSharedValue(0);
+  const wordSpacing = useSharedValue(0);
+  const wordTranslate = useSharedValue(10);
+  const containerOpacity = useSharedValue(1);
+  const exitScale = useSharedValue(1);
+
+  const startedAt = useRef(Date.now());
+  const finishing = useRef(false);
+
+  const finish = () => {
+    if (finishing.current) return;
+    finishing.current = true;
+    // Smooth continuous handoff: gentle forward scale + crossfade, no hard cut.
+    exitScale.value = withTiming(1.06, { duration: 430, easing: Easing.out(Easing.cubic) });
+    containerOpacity.value = withTiming(
+      0,
+      { duration: 430, easing: Easing.out(Easing.cubic) },
+      (finished) => {
+        if (finished) runOnJS(onFinish)();
+      },
+    );
   };
 
-  const animatedContainerStyle = useAnimatedStyle(() => ({
+  const finishRef = useRef(finish);
+  finishRef.current = finish;
+
+  useEffect(() => {
+    if (!painted) return;
+    startedAt.current = Date.now();
+    // 1. V enters: quick fade + spring settle.
+    logoOpacity.value = withTiming(1, { duration: 260 });
+    logoScale.value = withSpring(1, { damping: 13, stiffness: 150, mass: 0.7 });
+
+    // 2. Ambient glow blooms once, then rests low.
+    glowOpacity.value = withDelay(
+      200,
+      withSequence(
+        withTiming(0.75, { duration: 520, easing: Easing.out(Easing.cubic) }),
+        withTiming(0.38, { duration: 700 }),
+      ),
+    );
+
+    // 3. VELORA reveals out of the V: opacity, letter-spacing, slight rise.
+    wordOpacity.value = withDelay(430, withTiming(1, { duration: 480 }));
+    wordSpacing.value = withDelay(
+      430,
+      withTiming(8, { duration: 640, easing: Easing.out(Easing.cubic) }),
+    );
+    wordTranslate.value = withDelay(
+      430,
+      withTiming(0, { duration: 560, easing: Easing.out(Easing.cubic) }),
+    );
+
+    // Safety: never trap startup behind the splash.
+    const hard = setTimeout(() => finishRef.current(), MAX_HOLD_MS);
+    return () => clearTimeout(hard);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [painted]);
+
+  useEffect(() => {
+    if (!appReady || !painted) return;
+    const elapsed = Date.now() - startedAt.current;
+    const remaining = Math.max(MIN_REVEAL_MS - elapsed, 0);
+    const t = setTimeout(() => finishRef.current(), remaining);
+    return () => clearTimeout(t);
+  }, [appReady, painted]);
+
+  const containerStyle = useAnimatedStyle(() => ({
     opacity: containerOpacity.value,
+    transform: [{ scale: exitScale.value }],
   }));
-
-  const animatedLogoStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: logoScale.value }],
+  const logoStyle = useAnimatedStyle(() => ({
     opacity: logoOpacity.value,
+    transform: [{ scale: logoScale.value }],
   }));
-
-  const animatedTextStyle = useAnimatedStyle(() => ({
-    opacity: textOpacity.value,
-    letterSpacing: textLetterSpacing.value,
-  }));
-
-  const animatedGlowStyle = useAnimatedStyle(() => ({
-    opacity: glowOpacity.value,
+  const glowStyle = useAnimatedStyle(() => ({ opacity: glowOpacity.value }));
+  const wordStyle = useAnimatedStyle(() => ({
+    opacity: wordOpacity.value,
+    letterSpacing: wordSpacing.value,
+    transform: [{ translateY: wordTranslate.value }],
   }));
 
   return (
-    <Animated.View style={[styles.container, animatedContainerStyle]}>
-      <Pressable onPress={handleSkip} style={StyleSheet.absoluteFill}>
-        {/* Deep Cosmic Background with Radial Crimson Ambient */}
-        <LinearGradient
-          colors={['#000000', '#090003', '#000000']}
-          style={StyleSheet.absoluteFill}
-        />
-
-        {/* Ambient Pulsing Crimson Glow behind the logo */}
-        <Animated.View style={[styles.glowOrb, animatedGlowStyle]} />
-
-        <View style={styles.centerContent}>
-          {/* Netflix-Style Stylized 3D Ribbon "V" */}
-          <Animated.View style={[styles.logoWrapper, animatedLogoStyle]}>
-            {/* Left Angled Ribbon */}
-            <View style={styles.ribbonLeft}>
-              <LinearGradient
-                colors={['#7E050B', '#B80710', '#E50914']}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={StyleSheet.absoluteFill}
-              />
-            </View>
-
-            {/* Right Angled Ribbon (Overlapping with 3D drop shadow) */}
-            <View style={styles.ribbonRight}>
-              <LinearGradient
-                colors={['#E50914', '#FF2D39', '#8A050B']}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={StyleSheet.absoluteFill}
-              />
-            </View>
-
-            {/* Central 3D Fold Shadow */}
-            <View style={styles.centerFoldShadow} />
-          </Animated.View>
-
-          {/* Cinematic Velora Brand Name */}
-          <Animated.Text style={[styles.brandText, animatedTextStyle]}>
-            VELORA
-          </Animated.Text>
-
-          <Animated.Text style={[styles.subText, animatedTextStyle]}>
-            STREAMING ORIGINAL
-          </Animated.Text>
-        </View>
-
-        <Text style={styles.skipHint}>Tap anywhere to skip</Text>
-      </Pressable>
+    <Animated.View
+      style={[styles.container, { backgroundColor: colors.background }, containerStyle]}
+      onLayout={() => setLaidOut(true)}
+    >
+      <Animated.View style={[styles.glow, glowStyle]}>
+        <Image source={GLOW} style={styles.glowImage} contentFit="contain" />
+      </Animated.View>
+      <Animated.View style={[styles.logo, logoStyle]}>
+        <Image source={V_MARK} style={styles.logoImage} contentFit="contain" onLoad={() => setLogoLoaded(true)} onError={() => setLogoLoaded(true)} />
+      </Animated.View>
+      <Animated.Text style={[styles.wordmark, { color: colors.textPrimary }, wordStyle]}>
+        VELORA
+      </Animated.Text>
     </Animated.View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    ...(StyleSheet.absoluteFill as any),
+    ...StyleSheet.absoluteFill,
     zIndex: 9999,
-    backgroundColor: '#000000',
-    justifyContent: 'center',
     alignItems: 'center',
-  },
-  glowOrb: {
-    position: 'absolute',
-    width: 280,
-    height: 280,
-    borderRadius: 140,
-    backgroundColor: 'rgba(229, 9, 20, 0.35)',
-    top: SCREEN_HEIGHT * 0.5 - 140,
-    left: SCREEN_WIDTH * 0.5 - 140,
-  },
-  centerContent: {
-    flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-    gap: 16,
   },
-  logoWrapper: {
-    width: 110,
-    height: 120,
-    position: 'relative',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  // Left arm of the "V"
-  ribbonLeft: {
+  glow: {
     position: 'absolute',
-    width: 32,
-    height: 120,
-    borderRadius: 4,
-    transform: [{ rotate: '-24deg' }, { translateX: -20 }],
-    overflow: 'hidden',
-    shadowColor: '#E50914',
-    shadowOffset: { width: -4, height: 4 },
-    shadowOpacity: 0.6,
-    shadowRadius: 10,
+    width: 340,
+    height: 340,
+    // faint ambient bloom behind the mark
+    opacity: 0,
   },
-  // Right arm of the "V" (overlaps left arm)
-  ribbonRight: {
-    position: 'absolute',
-    width: 32,
-    height: 120,
-    borderRadius: 4,
-    transform: [{ rotate: '24deg' }, { translateX: 20 }],
-    overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 0.8,
-    shadowRadius: 12,
+  glowImage: {
+    width: '100%',
+    height: '100%',
   },
-  centerFoldShadow: {
-    position: 'absolute',
-    bottom: 2,
-    width: 22,
-    height: 38,
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',
-    borderRadius: 2,
-    transform: [{ rotate: '-24deg' }],
+  logo: {
+    width: 148,
+    height: 148,
   },
-  brandText: {
-    color: '#FFF',
-    fontSize: 26,
-    fontWeight: '900',
-    letterSpacing: 4,
-    textShadowColor: 'rgba(229, 9, 20, 0.8)',
-    textShadowOffset: { width: 0, height: 0 },
-    textShadowRadius: 18,
+  logoImage: {
+    width: '100%',
+    height: '100%',
   },
-  subText: {
-    color: colors.textTertiary,
-    fontSize: 10,
-    fontWeight: '700',
-    letterSpacing: 3,
-  },
-  skipHint: {
-    position: 'absolute',
-    bottom: 36,
-    alignSelf: 'center',
-    color: 'rgba(255, 255, 255, 0.25)',
-    fontSize: 11,
-    letterSpacing: 0.5,
+  wordmark: {
+    marginTop: 18,
+    fontSize: 30,
+    fontWeight: '800',
+    includeFontPadding: false,
   },
 });

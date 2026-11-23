@@ -2,6 +2,8 @@ import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useAuth } from '../../state/AuthContext';
+import { Avatar } from '../Avatar';
 import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
 import { metrics } from '../../theme/metrics';
 
@@ -26,6 +28,7 @@ export const Header: React.FC<HeaderProps> = React.memo(
   const { colors } = useAppTheme();
   const styles = useThemedStyles(createStyles);
     const insets = useSafeAreaInsets();
+    const { user } = useAuth();
 
     return (
       <View style={[styles.container, { paddingTop: Math.max(insets.top, 10) }]}>
@@ -70,7 +73,7 @@ export const Header: React.FC<HeaderProps> = React.memo(
                 hitSlop={8}
                 accessibilityLabel="Profile"
               >
-                <Text style={styles.avatarInitial}>V</Text>
+                <Avatar user={user} size={32} />
               </Pressable>
             )}
           </View>
@@ -177,11 +180,11 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
+    overflow: 'hidden',
     borderWidth: 1.5,
-    borderColor: '#FFF',
+    borderColor: colors.surfaceBorder,
   },
   avatarInitial: {
     color: '#FFF',

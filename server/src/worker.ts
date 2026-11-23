@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import express from 'express';
 import { NestFactory } from '@nestjs/core';
 import { ExpressAdapter } from '@nestjs/platform-express';
 import { handleAsNodeRequest } from 'cloudflare:node';
@@ -13,8 +14,13 @@ const INTERNAL_PORT = 8787;
 let bootPromise: Promise<void> | null = null;
 
 async function bootstrap(): Promise<void> {
-  const app = await NestFactory.create(AppModule, new ExpressAdapter(), {
+  const server = express();
+  // Avatar upload arrives as raw image bytes; everything else is JSON.
+  server.use('/api/users/me/avatar', express.raw({ type: () => true, limit: '512kb' }));
+  server.use(express.json({ limit: '1mb' }));
+  const app = await NestFactory.create(AppModule, new ExpressAdapter(server), {
     logger: ['error', 'warn'],
+    bodyParser: false,
   });
   app.setGlobalPrefix('api');
   app.enableCors();
@@ -26,12 +32,13 @@ const PRIVACY_HTML = `<!DOCTYPE html>
 <title>Velora Privacy Policy</title></head>
 <body style="max-width: 640px; margin: 24px auto; padding: 0 16px; font-family: system-ui, sans-serif; line-height: 1.55;">
 <h1>Velora Privacy Policy</h1>
-<p><em>Last updated: 21 November 2026</em></p>
+<p><em>Last updated: 22 November 2026</em></p>
 
 <h2>What Velora stores</h2>
 <p>Velora is a personal movie and TV tracker. When you create an account we store:</p>
 <ul>
   <li>Your username, display name and bio.</li>
+  <li>Your profile photo, if you upload one. You can replace or remove it at any time, and it is deleted with your account.</li>
   <li>If you sign up with a password: a salted PBKDF2 hash of your password (never the password itself).</li>
   <li>If you sign in with Google: your Google account ID, email address and display name, as returned by Google after you consent.</li>
   <li>The titles you track (status, ratings, episode progress) and the reviews you write.</li>
@@ -39,7 +46,7 @@ const PRIVACY_HTML = `<!DOCTYPE html>
 </ul>
 
 <h2>What other members can see</h2>
-<p>Velora is a social tracker. Other signed-in members can see your public profile: username, display name, bio, library statistics, the titles in your library, your ratings and reviews, and your follower/following counts. Profiles are public-by-default; you can switch on a private account in Settings, after which only you can see your library and library statistics. Reviews you have written remain visible to other members even with a private account.</p>
+<p>Velora is a social tracker. Other signed-in members can see your public profile: username, display name, bio, profile photo, library statistics, the titles in your library, your ratings and reviews, and your follower/following counts. Profiles are public-by-default; you can switch on a private account in Settings, after which only you can see your library and library statistics. Reviews you have written remain visible to other members even with a private account.</p>
 
 <h2>Who processes your data</h2>
 <p>We do not sell your data and we do not share it with advertisers. Running Velora involves these processors:</p>

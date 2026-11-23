@@ -13,6 +13,7 @@ import { useAuth } from '../../state/AuthContext';
 import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
 import { ui } from '../../theme/ui';
 import { getImageUrl } from '../../utils/image';
+import { Avatar } from '../../components/Avatar';
 
 type Nav = NativeStackNavigationProp<RootStackParamList, 'UserProfile'>;
 type Rt = RouteProp<RootStackParamList, 'UserProfile'>;
@@ -97,9 +98,7 @@ export const UserProfileScreen: React.FC = () => {
       </Pressable>
 
       <View style={styles.header}>
-        <View style={styles.avatar}>
-          <Text style={styles.avatarText}>{(user.displayName || user.username).slice(0, 1).toUpperCase()}</Text>
-        </View>
+        <Avatar user={user} size={72} />
         <Text style={styles.name}>{user.displayName}</Text>
         <Text style={styles.username}>@{user.username}</Text>
         {!!user.bio && <Text style={styles.bio}>{user.bio}</Text>}
