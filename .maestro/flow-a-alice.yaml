@@ -4,6 +4,8 @@ appId: com.vedant.velora
 # in every owner surface, remove the photo, prove the letter fallback returns
 # everywhere, then leave the app in saved-dark state for the mismatch probe.
 # Asserts are sync gates only; the screenshots carry the visual evidence.
+- addMedia:
+    - .maestro/media/velora-picker.jpg
 - launchApp
 - tapOn: "Profile"
 - tapOn: "Log in / Sign up"
@@ -12,7 +14,9 @@ appId: com.vedant.velora
 - tapOn: "Password"
 - inputText: "e2e-alice-pass-1"
 - hideKeyboard
-- tapOn: "Log in"
+- tapOn:
+    text: "Log in"
+    below: "Password"
 - extendedWaitUntil:
     visible:
       text: "E2E Alice"
@@ -24,6 +28,21 @@ appId: com.vedant.velora
 - tapOn: "Settings"
 - assertVisible: "Change photo"
 - takeScreenshot: a3-settings-photo
+- tapOn: "Change photo"
+- runFlow:
+    when:
+      visible: "Allow"
+    commands:
+      - tapOn: "Allow"
+- takeScreenshot: a3b-system-picker
+- tapOn:
+    id: ".*icon_thumbnail"
+- takeScreenshot: a3c-crop
+- tapOn: "(?i)crop|done"
+- extendedWaitUntil:
+    visible: "Change photo"
+    timeout: 20000
+- takeScreenshot: a3d-picked-photo
 - tapOn: "Remove profile photo"
 - tapOn: "^Remove$"
 - extendedWaitUntil:

@@ -7,17 +7,6 @@ name: Branch splash native verification
 # Retry 1: first run hit a transient gradle plugin resolution error.
 
 on:
-  push:
-    branches: ['feature/brand-splash-v']
-    paths:
-      - '.github/workflows/branch-splash-verify.yml'
-      - 'scripts/native-splash-frames.py'
-      - 'src/**'
-      - 'App.tsx'
-      - 'app.json'
-      - 'assets/**'
-      - 'package.json'
-      - 'package-lock.json'
   workflow_dispatch:
 
 permissions:

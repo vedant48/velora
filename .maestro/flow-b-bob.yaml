@@ -18,7 +18,9 @@ appId: com.vedant.velora
 - tapOn: "Password"
 - inputText: "e2e-bob-pass-1"
 - hideKeyboard
-- tapOn: "Log in"
+- tapOn:
+    text: "Log in"
+    below: "Password"
 - extendedWaitUntil:
     visible:
       text: "E2E Bob"
@@ -52,7 +54,9 @@ appId: com.vedant.velora
 - tapOn: "Password"
 - inputText: "e2e-alice-pass-1"
 - hideKeyboard
-- tapOn: "Log in"
+- tapOn:
+    text: "Log in"
+    below: "Password"
 - extendedWaitUntil:
     visible:
       text: "E2E Alice"
