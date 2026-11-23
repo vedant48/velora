@@ -5,7 +5,7 @@ import * as ImageManipulator from 'expo-image-manipulator';
 import * as ImagePicker from 'expo-image-picker';
 import * as Sharing from 'expo-sharing';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Alert, Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
+import { Alert, Image, Linking, Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { veloraApi } from '../../api/velora';
 import { AppButton } from '../../components/common/AppButton';
@@ -257,6 +257,16 @@ export const AccountScreen: React.FC = () => {
         <Ionicons name="download-outline" size={17} color={colors.textPrimary} />
         <Text style={styles.rowButtonText}>{busy === 'simkl' ? 'Preparing...' : 'Export library (SIMKL CSV)'}</Text>
       </Pressable>
+
+      <Text style={styles.section}>About & Credits</Text>
+      <View style={{ padding: 16, borderRadius: 8, backgroundColor: colors.surface, gap: 12 }}>
+        <Text style={{ fontSize: 18, fontWeight: '700', color: colors.textPrimary }}>Velora</Text>
+        <Text style={styles.rowHint}>Track movies and TV series, reviews and episode progress.</Text>
+        <Pressable accessibilityRole="link" accessibilityLabel="The Movie Database" onPress={() => Linking.openURL('https://www.themoviedb.org')}>
+          <Image source={require('../../../assets/credits/tmdb-logo.png')} resizeMode="contain" style={{ width: 110, height: 45, alignSelf: 'flex-start' }} />
+        </Pressable>
+        <Text style={{ fontSize: 13, lineHeight: 19, color: colors.textPrimary }}>This product uses the TMDB API but is not endorsed or certified by TMDB.</Text>
+      </View>
 
       <Text style={styles.section}>Danger zone</Text>
       <Pressable onPress={deleteAccount} style={[styles.rowButton, styles.danger]}>
