@@ -12,8 +12,8 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462893666,
-    "duration" : 4,
+    "timestamp" : 1795467096354,
+    "duration" : 5,
     "sequenceNumber" : 0,
     "depth" : 0,
     "evaluatedCommand" : {
@@ -39,8 +39,8 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462893672,
-    "duration" : 0,
+    "timestamp" : 1795467096362,
+    "duration" : 1,
     "sequenceNumber" : 1,
     "depth" : 0,
     "evaluatedCommand" : {
@@ -61,8 +61,8 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462893672,
-    "duration" : 1502,
+    "timestamp" : 1795467096364,
+    "duration" : 1220,
     "sequenceNumber" : 2,
     "depth" : 0,
     "evaluatedCommand" : {
@@ -87,8 +87,8 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462895174,
-    "duration" : 7289,
+    "timestamp" : 1795467097585,
+    "duration" : 9003,
     "sequenceNumber" : 3,
     "depth" : 0,
     "evaluatedCommand" : {
@@ -119,8 +119,8 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462902465,
-    "duration" : 2892,
+    "timestamp" : 1795467106589,
+    "duration" : 3069,
     "sequenceNumber" : 4,
     "depth" : 0,
     "evaluatedCommand" : {
@@ -145,8 +145,8 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462905358,
-    "duration" : 4407,
+    "timestamp" : 1795467109659,
+    "duration" : 4343,
     "sequenceNumber" : 5,
     "depth" : 0,
     "evaluatedCommand" : {
@@ -171,8 +171,8 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462909769,
-    "duration" : 6964,
+    "timestamp" : 1795467114003,
+    "duration" : 4190,
     "sequenceNumber" : 6,
     "depth" : 0,
     "evaluatedCommand" : {
@@ -197,8 +197,8 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462916733,
-    "duration" : 5128,
+    "timestamp" : 1795467118193,
+    "duration" : 4342,
     "sequenceNumber" : 7,
     "depth" : 0,
     "evaluatedCommand" : {
@@ -216,8 +216,8 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462921862,
-    "duration" : 1230,
+    "timestamp" : 1795467122536,
+    "duration" : 1370,
     "sequenceNumber" : 8,
     "depth" : 0,
     "evaluatedCommand" : {
@@ -245,8 +245,8 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462923092,
-    "duration" : 5024,
+    "timestamp" : 1795467123907,
+    "duration" : 5015,
     "sequenceNumber" : 9,
     "depth" : 0,
     "evaluatedCommand" : {
@@ -281,8 +281,8 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462928116,
-    "duration" : 269,
+    "timestamp" : 1795467128922,
+    "duration" : 1788,
     "sequenceNumber" : 10,
     "depth" : 0,
     "evaluatedCommand" : {
@@ -307,8 +307,8 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462928386,
-    "duration" : 237,
+    "timestamp" : 1795467130711,
+    "duration" : 932,
     "sequenceNumber" : 11,
     "depth" : 0,
     "evaluatedCommand" : {
@@ -325,23 +325,131 @@
 }, {
   "command" : {
     "swipeCommand" : {
-      "startRelative" : "20%, 65%",
-      "endRelative" : "85%, 65%",
-      "duration" : 500,
+      "startRelative" : "65%, 67%",
+      "endRelative" : "59%, 67%",
+      "duration" : 800,
       "optional" : false
     }
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462928623,
-    "duration" : 1801,
+    "timestamp" : 1795467131644,
+    "duration" : 3191,
     "sequenceNumber" : 12,
     "depth" : 0,
     "evaluatedCommand" : {
       "swipeCommand" : {
-        "startRelative" : "20%, 65%",
-        "endRelative" : "85%, 65%",
-        "duration" : 500,
+        "startRelative" : "65%, 67%",
+        "endRelative" : "59%, 67%",
+        "duration" : 800,
+        "optional" : false
+      }
+    }
+  }
+}, {
+  "command" : {
+    "assertConditionCommand" : {
+      "condition" : {
+        "visible" : {
+          "textRegex" : "Pulp Fiction",
+          "optional" : false
+        }
+      },
+      "optional" : false
+    }
+  },
+  "metadata" : {
+    "status" : "COMPLETED",
+    "timestamp" : 1795467134835,
+    "duration" : 285,
+    "sequenceNumber" : 13,
+    "depth" : 0,
+    "evaluatedCommand" : {
+      "assertConditionCommand" : {
+        "condition" : {
+          "visible" : {
+            "textRegex" : "Pulp Fiction",
+            "optional" : false
+          }
+        },
+        "optional" : false
+      }
+    }
+  }
+}, {
+  "command" : {
+    "takeScreenshotCommand" : {
+      "path" : "cancelled-drag",
+      "optional" : false
+    }
+  },
+  "metadata" : {
+    "status" : "COMPLETED",
+    "timestamp" : 1795467135120,
+    "duration" : 969,
+    "sequenceNumber" : 14,
+    "depth" : 0,
+    "evaluatedCommand" : {
+      "takeScreenshotCommand" : {
+        "path" : "cancelled-drag",
+        "optional" : false
+      }
+    },
+    "artifacts" : [ {
+      "type" : "TAKE_SCREENSHOT",
+      "path" : "takeScreenshot/cancelled-drag.png"
+    } ]
+  }
+}, {
+  "command" : {
+    "swipeCommand" : {
+      "startRelative" : "85%, 65%",
+      "endRelative" : "20%, 65%",
+      "duration" : 1200,
+      "optional" : false
+    }
+  },
+  "metadata" : {
+    "status" : "COMPLETED",
+    "timestamp" : 1795467136092,
+    "duration" : 4392,
+    "sequenceNumber" : 15,
+    "depth" : 0,
+    "evaluatedCommand" : {
+      "swipeCommand" : {
+        "startRelative" : "85%, 65%",
+        "endRelative" : "20%, 65%",
+        "duration" : 1200,
+        "optional" : false
+      }
+    }
+  }
+}, {
+  "command" : {
+    "assertConditionCommand" : {
+      "condition" : {
+        "visible" : {
+          "textRegex" : "Inception",
+          "optional" : false
+        }
+      },
+      "optional" : false
+    }
+  },
+  "metadata" : {
+    "status" : "COMPLETED",
+    "timestamp" : 1795467140485,
+    "duration" : 414,
+    "sequenceNumber" : 16,
+    "depth" : 0,
+    "evaluatedCommand" : {
+      "assertConditionCommand" : {
+        "condition" : {
+          "visible" : {
+            "textRegex" : "Inception",
+            "optional" : false
+          }
+        },
         "optional" : false
       }
     }
@@ -355,9 +463,9 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462930425,
-    "duration" : 231,
-    "sequenceNumber" : 13,
+    "timestamp" : 1795467140902,
+    "duration" : 794,
+    "sequenceNumber" : 17,
     "depth" : 0,
     "evaluatedCommand" : {
       "takeScreenshotCommand" : {
@@ -373,23 +481,53 @@
 }, {
   "command" : {
     "swipeCommand" : {
-      "startRelative" : "20%, 65%",
-      "endRelative" : "85%, 65%",
-      "duration" : 500,
+      "startRelative" : "85%, 65%",
+      "endRelative" : "20%, 65%",
+      "duration" : 1200,
       "optional" : false
     }
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462930657,
-    "duration" : 1728,
-    "sequenceNumber" : 14,
+    "timestamp" : 1795467141697,
+    "duration" : 2986,
+    "sequenceNumber" : 18,
     "depth" : 0,
     "evaluatedCommand" : {
       "swipeCommand" : {
-        "startRelative" : "20%, 65%",
-        "endRelative" : "85%, 65%",
-        "duration" : 500,
+        "startRelative" : "85%, 65%",
+        "endRelative" : "20%, 65%",
+        "duration" : 1200,
+        "optional" : false
+      }
+    }
+  }
+}, {
+  "command" : {
+    "assertConditionCommand" : {
+      "condition" : {
+        "visible" : {
+          "textRegex" : "Breaking Bad",
+          "optional" : false
+        }
+      },
+      "optional" : false
+    }
+  },
+  "metadata" : {
+    "status" : "COMPLETED",
+    "timestamp" : 1795467144682,
+    "duration" : 893,
+    "sequenceNumber" : 19,
+    "depth" : 0,
+    "evaluatedCommand" : {
+      "assertConditionCommand" : {
+        "condition" : {
+          "visible" : {
+            "textRegex" : "Breaking Bad",
+            "optional" : false
+          }
+        },
         "optional" : false
       }
     }
@@ -403,9 +541,9 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462932385,
-    "duration" : 210,
-    "sequenceNumber" : 15,
+    "timestamp" : 1795467145576,
+    "duration" : 595,
+    "sequenceNumber" : 20,
     "depth" : 0,
     "evaluatedCommand" : {
       "takeScreenshotCommand" : {
@@ -421,23 +559,23 @@
 }, {
   "command" : {
     "swipeCommand" : {
-      "startRelative" : "20%, 65%",
-      "endRelative" : "85%, 65%",
-      "duration" : 500,
+      "startRelative" : "85%, 65%",
+      "endRelative" : "20%, 65%",
+      "duration" : 1200,
       "optional" : false
     }
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462932596,
-    "duration" : 2096,
-    "sequenceNumber" : 16,
+    "timestamp" : 1795467146171,
+    "duration" : 2826,
+    "sequenceNumber" : 21,
     "depth" : 0,
     "evaluatedCommand" : {
       "swipeCommand" : {
-        "startRelative" : "20%, 65%",
-        "endRelative" : "85%, 65%",
-        "duration" : 500,
+        "startRelative" : "85%, 65%",
+        "endRelative" : "20%, 65%",
+        "duration" : 1200,
         "optional" : false
       }
     }
@@ -456,9 +594,9 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462934692,
-    "duration" : 100,
-    "sequenceNumber" : 17,
+    "timestamp" : 1795467148998,
+    "duration" : 426,
+    "sequenceNumber" : 22,
     "depth" : 0,
     "evaluatedCommand" : {
       "assertConditionCommand" : {
@@ -481,9 +619,9 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462934792,
-    "duration" : 156,
-    "sequenceNumber" : 18,
+    "timestamp" : 1795467149425,
+    "duration" : 480,
+    "sequenceNumber" : 23,
     "depth" : 0,
     "evaluatedCommand" : {
       "takeScreenshotCommand" : {
@@ -499,23 +637,53 @@
 }, {
   "command" : {
     "swipeCommand" : {
-      "startRelative" : "85%, 65%",
-      "endRelative" : "20%, 65%",
-      "duration" : 500,
+      "startRelative" : "20%, 65%",
+      "endRelative" : "85%, 65%",
+      "duration" : 1200,
       "optional" : false
     }
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462934948,
-    "duration" : 2106,
-    "sequenceNumber" : 19,
+    "timestamp" : 1795467149906,
+    "duration" : 2663,
+    "sequenceNumber" : 24,
     "depth" : 0,
     "evaluatedCommand" : {
       "swipeCommand" : {
-        "startRelative" : "85%, 65%",
-        "endRelative" : "20%, 65%",
-        "duration" : 500,
+        "startRelative" : "20%, 65%",
+        "endRelative" : "85%, 65%",
+        "duration" : 1200,
+        "optional" : false
+      }
+    }
+  }
+}, {
+  "command" : {
+    "assertConditionCommand" : {
+      "condition" : {
+        "visible" : {
+          "textRegex" : "Breaking Bad",
+          "optional" : false
+        }
+      },
+      "optional" : false
+    }
+  },
+  "metadata" : {
+    "status" : "COMPLETED",
+    "timestamp" : 1795467152570,
+    "duration" : 207,
+    "sequenceNumber" : 25,
+    "depth" : 0,
+    "evaluatedCommand" : {
+      "assertConditionCommand" : {
+        "condition" : {
+          "visible" : {
+            "textRegex" : "Breaking Bad",
+            "optional" : false
+          }
+        },
         "optional" : false
       }
     }
@@ -529,9 +697,9 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462937054,
-    "duration" : 308,
-    "sequenceNumber" : 20,
+    "timestamp" : 1795467152778,
+    "duration" : 684,
+    "sequenceNumber" : 26,
     "depth" : 0,
     "evaluatedCommand" : {
       "takeScreenshotCommand" : {
@@ -542,6 +710,242 @@
     "artifacts" : [ {
       "type" : "TAKE_SCREENSHOT",
       "path" : "takeScreenshot/reverse-series.png"
+    } ]
+  }
+}, {
+  "command" : {
+    "tapOnElement" : {
+      "selector" : {
+        "idRegex" : "library-tab-watched",
+        "optional" : false
+      },
+      "retryIfNoChange" : false,
+      "waitUntilVisible" : false,
+      "longPress" : false,
+      "optional" : false
+    }
+  },
+  "metadata" : {
+    "status" : "COMPLETED",
+    "timestamp" : 1795467153463,
+    "duration" : 4043,
+    "sequenceNumber" : 27,
+    "depth" : 0,
+    "evaluatedCommand" : {
+      "tapOnElement" : {
+        "selector" : {
+          "idRegex" : "library-tab-watched",
+          "optional" : false
+        },
+        "retryIfNoChange" : false,
+        "waitUntilVisible" : false,
+        "longPress" : false,
+        "optional" : false
+      }
+    }
+  }
+}, {
+  "command" : {
+    "assertConditionCommand" : {
+      "condition" : {
+        "visible" : {
+          "textRegex" : "Inception",
+          "optional" : false
+        }
+      },
+      "optional" : false
+    }
+  },
+  "metadata" : {
+    "status" : "COMPLETED",
+    "timestamp" : 1795467157506,
+    "duration" : 190,
+    "sequenceNumber" : 28,
+    "depth" : 0,
+    "evaluatedCommand" : {
+      "assertConditionCommand" : {
+        "condition" : {
+          "visible" : {
+            "textRegex" : "Inception",
+            "optional" : false
+          }
+        },
+        "optional" : false
+      }
+    }
+  }
+}, {
+  "command" : {
+    "tapOnElement" : {
+      "selector" : {
+        "idRegex" : "library-tab-want",
+        "optional" : false
+      },
+      "retryIfNoChange" : false,
+      "waitUntilVisible" : false,
+      "longPress" : false,
+      "optional" : false
+    }
+  },
+  "metadata" : {
+    "status" : "COMPLETED",
+    "timestamp" : 1795467157697,
+    "duration" : 3011,
+    "sequenceNumber" : 29,
+    "depth" : 0,
+    "evaluatedCommand" : {
+      "tapOnElement" : {
+        "selector" : {
+          "idRegex" : "library-tab-want",
+          "optional" : false
+        },
+        "retryIfNoChange" : false,
+        "waitUntilVisible" : false,
+        "longPress" : false,
+        "optional" : false
+      }
+    }
+  }
+}, {
+  "command" : {
+    "assertConditionCommand" : {
+      "condition" : {
+        "visible" : {
+          "textRegex" : "Pulp Fiction",
+          "optional" : false
+        }
+      },
+      "optional" : false
+    }
+  },
+  "metadata" : {
+    "status" : "COMPLETED",
+    "timestamp" : 1795467160709,
+    "duration" : 96,
+    "sequenceNumber" : 30,
+    "depth" : 0,
+    "evaluatedCommand" : {
+      "assertConditionCommand" : {
+        "condition" : {
+          "visible" : {
+            "textRegex" : "Pulp Fiction",
+            "optional" : false
+          }
+        },
+        "optional" : false
+      }
+    }
+  }
+}, {
+  "command" : {
+    "tapOnElement" : {
+      "selector" : {
+        "textRegex" : "Filter and sort",
+        "optional" : false
+      },
+      "retryIfNoChange" : false,
+      "waitUntilVisible" : false,
+      "longPress" : false,
+      "optional" : false
+    }
+  },
+  "metadata" : {
+    "status" : "COMPLETED",
+    "timestamp" : 1795467160806,
+    "duration" : 2802,
+    "sequenceNumber" : 31,
+    "depth" : 0,
+    "evaluatedCommand" : {
+      "tapOnElement" : {
+        "selector" : {
+          "textRegex" : "Filter and sort",
+          "optional" : false
+        },
+        "retryIfNoChange" : false,
+        "waitUntilVisible" : false,
+        "longPress" : false,
+        "optional" : false
+      }
+    }
+  }
+}, {
+  "command" : {
+    "takeScreenshotCommand" : {
+      "path" : "filter-open",
+      "optional" : false
+    }
+  },
+  "metadata" : {
+    "status" : "COMPLETED",
+    "timestamp" : 1795467163608,
+    "duration" : 166,
+    "sequenceNumber" : 32,
+    "depth" : 0,
+    "evaluatedCommand" : {
+      "takeScreenshotCommand" : {
+        "path" : "filter-open",
+        "optional" : false
+      }
+    },
+    "artifacts" : [ {
+      "type" : "TAKE_SCREENSHOT",
+      "path" : "takeScreenshot/filter-open.png"
+    } ]
+  }
+}, {
+  "command" : {
+    "tapOnElement" : {
+      "selector" : {
+        "textRegex" : "Apply filters",
+        "optional" : false
+      },
+      "retryIfNoChange" : false,
+      "waitUntilVisible" : false,
+      "longPress" : false,
+      "optional" : false
+    }
+  },
+  "metadata" : {
+    "status" : "COMPLETED",
+    "timestamp" : 1795467163774,
+    "duration" : 2550,
+    "sequenceNumber" : 33,
+    "depth" : 0,
+    "evaluatedCommand" : {
+      "tapOnElement" : {
+        "selector" : {
+          "textRegex" : "Apply filters",
+          "optional" : false
+        },
+        "retryIfNoChange" : false,
+        "waitUntilVisible" : false,
+        "longPress" : false,
+        "optional" : false
+      }
+    }
+  }
+}, {
+  "command" : {
+    "takeScreenshotCommand" : {
+      "path" : "filter-closed",
+      "optional" : false
+    }
+  },
+  "metadata" : {
+    "status" : "COMPLETED",
+    "timestamp" : 1795467166324,
+    "duration" : 215,
+    "sequenceNumber" : 34,
+    "depth" : 0,
+    "evaluatedCommand" : {
+      "takeScreenshotCommand" : {
+        "path" : "filter-closed",
+        "optional" : false
+      }
+    },
+    "artifacts" : [ {
+      "type" : "TAKE_SCREENSHOT",
+      "path" : "takeScreenshot/filter-closed.png"
     } ]
   }
 }, {
@@ -559,9 +963,9 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462937362,
-    "duration" : 2869,
-    "sequenceNumber" : 21,
+    "timestamp" : 1795467166540,
+    "duration" : 1596,
+    "sequenceNumber" : 35,
     "depth" : 0,
     "evaluatedCommand" : {
       "tapOnElement" : {
@@ -579,7 +983,7 @@
 }, {
   "command" : {
     "swipeCommand" : {
-      "startRelative" : "50%, 32%",
+      "startRelative" : "50%, 42%",
       "endRelative" : "50%, 78%",
       "duration" : 700,
       "optional" : false
@@ -587,13 +991,13 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462940232,
-    "duration" : 3889,
-    "sequenceNumber" : 22,
+    "timestamp" : 1795467168136,
+    "duration" : 964,
+    "sequenceNumber" : 36,
     "depth" : 0,
     "evaluatedCommand" : {
       "swipeCommand" : {
-        "startRelative" : "50%, 32%",
+        "startRelative" : "50%, 42%",
         "endRelative" : "50%, 78%",
         "duration" : 700,
         "optional" : false
@@ -609,9 +1013,9 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462944122,
-    "duration" : 162,
-    "sequenceNumber" : 23,
+    "timestamp" : 1795467169100,
+    "duration" : 211,
+    "sequenceNumber" : 37,
     "depth" : 0,
     "evaluatedCommand" : {
       "takeScreenshotCommand" : {
@@ -638,9 +1042,9 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462944285,
-    "duration" : 123,
-    "sequenceNumber" : 24,
+    "timestamp" : 1795467169311,
+    "duration" : 67,
+    "sequenceNumber" : 38,
     "depth" : 0,
     "evaluatedCommand" : {
       "assertConditionCommand" : {
@@ -668,9 +1072,9 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462944408,
-    "duration" : 111,
-    "sequenceNumber" : 25,
+    "timestamp" : 1795467169379,
+    "duration" : 77,
+    "sequenceNumber" : 39,
     "depth" : 0,
     "evaluatedCommand" : {
       "assertConditionCommand" : {
@@ -699,9 +1103,9 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462944519,
-    "duration" : 6517,
-    "sequenceNumber" : 26,
+    "timestamp" : 1795467169457,
+    "duration" : 2869,
+    "sequenceNumber" : 40,
     "depth" : 0,
     "evaluatedCommand" : {
       "tapOnElement" : {
@@ -731,9 +1135,9 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462951036,
-    "duration" : 160,
-    "sequenceNumber" : 27,
+    "timestamp" : 1795467172326,
+    "duration" : 459,
+    "sequenceNumber" : 41,
     "depth" : 0,
     "evaluatedCommand" : {
       "assertConditionCommand" : {
@@ -767,9 +1171,9 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462951196,
-    "duration" : 5188,
-    "sequenceNumber" : 28,
+    "timestamp" : 1795467172785,
+    "duration" : 3725,
+    "sequenceNumber" : 42,
     "depth" : 0,
     "evaluatedCommand" : {
       "scrollUntilVisible" : {
@@ -797,9 +1201,9 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462956384,
-    "duration" : 318,
-    "sequenceNumber" : 29,
+    "timestamp" : 1795467176510,
+    "duration" : 182,
+    "sequenceNumber" : 43,
     "depth" : 0,
     "evaluatedCommand" : {
       "takeScreenshotCommand" : {
@@ -816,20 +1220,20 @@
   "command" : {
     "swipeCommand" : {
       "direction" : "DOWN",
-      "duration" : 500,
+      "duration" : 1200,
       "optional" : false
     }
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462956702,
-    "duration" : 1812,
-    "sequenceNumber" : 30,
+    "timestamp" : 1795467176692,
+    "duration" : 2994,
+    "sequenceNumber" : 44,
     "depth" : 0,
     "evaluatedCommand" : {
       "swipeCommand" : {
         "direction" : "DOWN",
-        "duration" : 500,
+        "duration" : 1200,
         "optional" : false
       }
     }
@@ -843,9 +1247,9 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462958515,
-    "duration" : 207,
-    "sequenceNumber" : 31,
+    "timestamp" : 1795467179687,
+    "duration" : 284,
+    "sequenceNumber" : 45,
     "depth" : 0,
     "evaluatedCommand" : {
       "takeScreenshotCommand" : {
@@ -873,9 +1277,9 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462958722,
-    "duration" : 3666,
-    "sequenceNumber" : 32,
+    "timestamp" : 1795467179972,
+    "duration" : 7226,
+    "sequenceNumber" : 46,
     "depth" : 0,
     "evaluatedCommand" : {
       "tapOnElement" : {
@@ -904,9 +1308,9 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462962388,
-    "duration" : 531,
-    "sequenceNumber" : 33,
+    "timestamp" : 1795467187199,
+    "duration" : 198,
+    "sequenceNumber" : 47,
     "depth" : 0,
     "evaluatedCommand" : {
       "assertConditionCommand" : {
@@ -931,9 +1335,9 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462962919,
-    "duration" : 1689,
-    "sequenceNumber" : 34,
+    "timestamp" : 1795467187398,
+    "duration" : 4420,
+    "sequenceNumber" : 48,
     "depth" : 0,
     "evaluatedCommand" : {
       "swipeCommand" : {
@@ -959,9 +1363,9 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462964609,
-    "duration" : 70,
-    "sequenceNumber" : 35,
+    "timestamp" : 1795467191818,
+    "duration" : 104,
+    "sequenceNumber" : 49,
     "depth" : 0,
     "evaluatedCommand" : {
       "assertConditionCommand" : {
@@ -985,9 +1389,9 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462964680,
-    "duration" : 109,
-    "sequenceNumber" : 36,
+    "timestamp" : 1795467191922,
+    "duration" : 177,
+    "sequenceNumber" : 50,
     "depth" : 0,
     "evaluatedCommand" : {
       "takeScreenshotCommand" : {
@@ -1015,9 +1419,9 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462964790,
-    "duration" : 3919,
-    "sequenceNumber" : 37,
+    "timestamp" : 1795467192099,
+    "duration" : 3172,
+    "sequenceNumber" : 51,
     "depth" : 0,
     "evaluatedCommand" : {
       "tapOnElement" : {
@@ -1041,9 +1445,9 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462968709,
-    "duration" : 359,
-    "sequenceNumber" : 38,
+    "timestamp" : 1795467195271,
+    "duration" : 681,
+    "sequenceNumber" : 52,
     "depth" : 0,
     "evaluatedCommand" : {
       "takeScreenshotCommand" : {
@@ -1064,9 +1468,9 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462969068,
-    "duration" : 855,
-    "sequenceNumber" : 39,
+    "timestamp" : 1795467195953,
+    "duration" : 865,
+    "sequenceNumber" : 53,
     "depth" : 0,
     "evaluatedCommand" : {
       "backPressCommand" : {
@@ -1089,9 +1493,9 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462969923,
-    "duration" : 3854,
-    "sequenceNumber" : 40,
+    "timestamp" : 1795467196818,
+    "duration" : 3193,
+    "sequenceNumber" : 54,
     "depth" : 0,
     "evaluatedCommand" : {
       "tapOnElement" : {
@@ -1120,9 +1524,9 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462973777,
-    "duration" : 522,
-    "sequenceNumber" : 41,
+    "timestamp" : 1795467200011,
+    "duration" : 157,
+    "sequenceNumber" : 55,
     "depth" : 0,
     "evaluatedCommand" : {
       "assertConditionCommand" : {
@@ -1145,9 +1549,9 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462974300,
-    "duration" : 173,
-    "sequenceNumber" : 42,
+    "timestamp" : 1795467200169,
+    "duration" : 174,
+    "sequenceNumber" : 56,
     "depth" : 0,
     "evaluatedCommand" : {
       "takeScreenshotCommand" : {
@@ -1175,9 +1579,9 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462974474,
-    "duration" : 2568,
-    "sequenceNumber" : 43,
+    "timestamp" : 1795467200343,
+    "duration" : 3034,
+    "sequenceNumber" : 57,
     "depth" : 0,
     "evaluatedCommand" : {
       "tapOnElement" : {
@@ -1206,9 +1610,9 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462977043,
-    "duration" : 100,
-    "sequenceNumber" : 44,
+    "timestamp" : 1795467203377,
+    "duration" : 102,
+    "sequenceNumber" : 58,
     "depth" : 0,
     "evaluatedCommand" : {
       "assertConditionCommand" : {
@@ -1231,9 +1635,9 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462977144,
-    "duration" : 186,
-    "sequenceNumber" : 45,
+    "timestamp" : 1795467203480,
+    "duration" : 184,
+    "sequenceNumber" : 59,
     "depth" : 0,
     "evaluatedCommand" : {
       "takeScreenshotCommand" : {
@@ -1261,9 +1665,9 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462977329,
-    "duration" : 2887,
-    "sequenceNumber" : 46,
+    "timestamp" : 1795467203665,
+    "duration" : 2807,
+    "sequenceNumber" : 60,
     "depth" : 0,
     "evaluatedCommand" : {
       "tapOnElement" : {
@@ -1293,9 +1697,9 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462980217,
-    "duration" : 4097,
-    "sequenceNumber" : 47,
+    "timestamp" : 1795467206473,
+    "duration" : 4016,
+    "sequenceNumber" : 61,
     "depth" : 0,
     "evaluatedCommand" : {
       "tapOnElement" : {
@@ -1325,9 +1729,9 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462984315,
-    "duration" : 2380,
-    "sequenceNumber" : 48,
+    "timestamp" : 1795467210489,
+    "duration" : 2932,
+    "sequenceNumber" : 62,
     "depth" : 0,
     "evaluatedCommand" : {
       "tapOnElement" : {
@@ -1357,9 +1761,9 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462986695,
-    "duration" : 3247,
-    "sequenceNumber" : 49,
+    "timestamp" : 1795467213421,
+    "duration" : 4014,
+    "sequenceNumber" : 63,
     "depth" : 0,
     "evaluatedCommand" : {
       "tapOnElement" : {
@@ -1383,9 +1787,9 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462989942,
-    "duration" : 427,
-    "sequenceNumber" : 50,
+    "timestamp" : 1795467217435,
+    "duration" : 166,
+    "sequenceNumber" : 64,
     "depth" : 0,
     "evaluatedCommand" : {
       "takeScreenshotCommand" : {
@@ -1407,9 +1811,9 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462990370,
-    "duration" : 58,
-    "sequenceNumber" : 51,
+    "timestamp" : 1795467217601,
+    "duration" : 37,
+    "sequenceNumber" : 65,
     "depth" : 0,
     "evaluatedCommand" : {
       "stopAppCommand" : {
@@ -1427,9 +1831,9 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462990428,
-    "duration" : 1846,
-    "sequenceNumber" : 52,
+    "timestamp" : 1795467217639,
+    "duration" : 1681,
+    "sequenceNumber" : 66,
     "depth" : 0,
     "evaluatedCommand" : {
       "launchAppCommand" : {
@@ -1453,9 +1857,9 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462992274,
-    "duration" : 3943,
-    "sequenceNumber" : 53,
+    "timestamp" : 1795467219320,
+    "duration" : 3815,
+    "sequenceNumber" : 67,
     "depth" : 0,
     "evaluatedCommand" : {
       "assertConditionCommand" : {
@@ -1479,9 +1883,9 @@
   },
   "metadata" : {
     "status" : "COMPLETED",
-    "timestamp" : 1795462996217,
-    "duration" : 649,
-    "sequenceNumber" : 54,
+    "timestamp" : 1795467223138,
+    "duration" : 404,
+    "sequenceNumber" : 68,
     "depth" : 0,
     "evaluatedCommand" : {
       "takeScreenshotCommand" : {
