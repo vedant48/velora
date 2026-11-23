@@ -38,6 +38,14 @@ appId: com.vedant.velora
     end: 20%, 65%
     duration: 1200
 - assertVisible: Average rating
+- scrollUntilVisible:
+    element: Rating distribution
+    direction: DOWN
+    timeout: 15000
+- swipe:
+    start: 50%, 72%
+    end: 50%, 48%
+    duration: 500
 - takeScreenshot: swipe-insights
 - swipe:
     start: 20%, 65%
@@ -58,9 +66,9 @@ appId: com.vedant.velora
 - tapOn:
     id: library-tab-want
 - swipe:
-    start: 50%, 42%
-    end: 50%, 78%
-    duration: 700
+    start: 50%, 50%
+    end: 50%, 85%
+    duration: 1600
 - takeScreenshot: pull-refresh
 - assertVisible: Want
 - assertVisible: E2E Alice
@@ -71,6 +79,9 @@ appId: com.vedant.velora
 - scrollUntilVisible:
     element: Coming Soon
     direction: DOWN
+    timeout: 45000
+- extendedWaitUntil:
+    notVisible: Loading
     timeout: 45000
 - takeScreenshot: movies-lower
 - swipe:

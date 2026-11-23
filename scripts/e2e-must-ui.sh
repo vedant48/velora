@@ -14,6 +14,11 @@ adb shell dumpsys gfxinfo com.vedant.velora reset > photo-evidence/gfx-reset.txt
 set +e
 maestro test --format junit --output photo-evidence/must-ui.xml --test-output-dir photo-evidence/maestro .maestro/must-ui.yaml
 status=$?
+# If the main flow passed, capture profile refresh with a long native drag.
+if [ "$status" = 0 ]; then
+  adb shell input swipe 360 650 360 1080 1500
+  sleep 3
+fi
 adb shell pkill -INT screenrecord || true
 wait "$record_pid" || true
 adb pull /sdcard/must-ui.mp4 photo-evidence/must-ui.mp4 || true

@@ -17,7 +17,7 @@ export const CachedImage = memo(function CachedImage(props: ImageProps) {
   const [failedUri, setFailedUri] = useState<string | null>(null);
   const [attempt, setAttempt] = useState(0);
   if (uri && failedUri === uri) return <Pressable accessibilityRole="button" accessibilityLabel="Image unavailable. Tap to retry" onPress={() => { setFailedUri(null); setAttempt(n => n + 1); }} style={[props.style, { backgroundColor: '#202024', alignItems: 'center', justifyContent: 'center' }]}><Text style={{ color: '#A8A8AE', fontSize: 11 }}>Retry image</Text></Pressable>;
-  return <Image {...props} key={`${uri}:${attempt}`} recyclingKey={uri || undefined} cachePolicy="memory-disk" placeholder={props.placeholder ?? "L67_}#WB00of~qofWBof00of~qof"}
+  return <Image {...props} key={`${uri}:${attempt}`} recyclingKey={uri || undefined} cachePolicy="memory-disk" placeholder={typeof props.placeholder === 'string' && !/^(https?:|data:|file:)/.test(props.placeholder) ? { blurhash: props.placeholder } : props.placeholder ?? { blurhash: "L67_}#WB00of~qofWBof00of~qof" }}
     transition={uri && loaded.has(uri) ? 0 : motion.firstImageMs}
     onLoad={event => { if (uri) { if (loaded.size > 800) loaded.delete(loaded.values().next().value!); loaded.add(uri); } props.onLoad?.(event); }}
     onError={event => { if (uri) setFailedUri(uri); props.onError?.(event); }} />;
