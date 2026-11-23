@@ -4,6 +4,8 @@ import { MediaItem } from '../api/types';
 export type MainTabParamList = {
   HomeTab: undefined;
   SearchTab: undefined;
+  TVTab: undefined;
+  ExploreAllTab: undefined;
   // WatchlistTab: removed 21 Nov (Want is the unified watchlist); type kept
   // commented so restoring the tab is a one-line uncomment.
   // WatchlistTab: undefined;

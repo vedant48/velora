@@ -1,9 +1,9 @@
 export const colors = {
-  background: '#09090B',
+  background: '#101010',
   backgroundSecondary: '#111116',
-  cardBackground: '#141419',
-  surface: '#1A1A22',
-  surfaceLight: '#242430',
+  cardBackground: '#101010',
+  surface: '#242424',
+  surfaceLight: '#303030',
   surfaceBorder: '#2E2E3C',
 
   primary: '#E50914', // Velora cinematic red

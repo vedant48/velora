@@ -102,7 +102,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   backdropWrap: {
     width: metrics.backdropWidth,
     height: metrics.backdropHeight,
-    borderRadius: 12,
+    borderRadius: 4,
     overflow: 'hidden',
     backgroundColor: colors.surfaceLight,
     alignItems: 'center',

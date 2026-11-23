@@ -20,6 +20,7 @@ interface MovieCardProps {
   duration?: number;
   showTitle?: boolean;
   hasMarginRight?: boolean;
+  minimal?: boolean;
 }
 
 const SPRING_CONFIG = {
@@ -38,6 +39,7 @@ const MovieCardComponent: React.FC<MovieCardProps> = ({
   duration,
   showTitle = false,
   hasMarginRight = true,
+  minimal = false,
 }) => {
   const { colors } = useAppTheme();
   const styles = useThemedStyles(createStyles);
@@ -75,7 +77,7 @@ const MovieCardComponent: React.FC<MovieCardProps> = ({
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}
         onPress={handlePress}
-        style={[styles.card, { width, height }]}
+        style={[styles.card, { width, height }, minimal && { borderRadius: 4, borderWidth: 0 }]}
         accessibilityRole="button"
         accessibilityLabel={item.title}
       >
@@ -90,7 +92,7 @@ const MovieCardComponent: React.FC<MovieCardProps> = ({
         />
 
         {/* Top-Right Rating Badge */}
-        {item.vote_average > 0 && (
+        {!minimal && item.vote_average > 0 && (
           <View style={styles.badgeContainer}>
             <Badge rating={item.vote_average} variant="rating" />
           </View>

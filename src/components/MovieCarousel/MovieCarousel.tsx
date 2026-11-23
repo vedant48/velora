@@ -22,6 +22,7 @@ interface MovieCarouselProps {
   showRank?: boolean;
   cardWidth?: number;
   cardHeight?: number;
+  minimal?: boolean;
   progressMap?: Record<number, { progress: number; duration: number }>;
 }
 
@@ -39,6 +40,7 @@ export const MovieCarousel: React.FC<MovieCarouselProps> = React.memo(
     cardWidth = metrics.posterWidth,
     cardHeight = metrics.posterHeight,
     progressMap,
+    minimal = false,
   }) => {
   const { colors } = useAppTheme();
   const styles = useThemedStyles(createStyles);
@@ -73,6 +75,7 @@ export const MovieCarousel: React.FC<MovieCarouselProps> = React.memo(
         return (
           <MovieCard
             item={item}
+            minimal={minimal}
             onPress={onItemPress}
             width={cardWidth}
             height={cardHeight}
@@ -82,7 +85,7 @@ export const MovieCarousel: React.FC<MovieCarouselProps> = React.memo(
           />
         );
       },
-      [cardWidth, cardHeight, onItemPress, progressMap, showRank]
+      [cardWidth, cardHeight, onItemPress, progressMap, showRank, minimal]
     );
 
     const keyExtractor = useCallback((item: MediaItem) => item.id.toString(), []);
