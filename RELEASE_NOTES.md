@@ -1,18 +1,10 @@
-# Velora v1.4.2
+## Velora 1.4.3
 
-## Fixes and changes
-- Fix a poster-card hook error that could close the app during horizontal carousel updates.
-- Improve light-mode rating contrast on artwork and use the shared primary action in the signed-out library.
-- Shared buttons, text fields, headers, loader and contextual bottom sheets.
-- Saved System, Light and Dark appearance choices, with System as the default.
-- Updated library, search, filters and title actions while retaining Want, review and per-season rating behavior.
+- Add profile photos: choose from gallery, square crop, compress, replace and remove. Photos are visible to signed-in members, including when the rest of a profile is private.
+- Show photos consistently in the Home header, your library, Settings and member profiles. Removing a photo restores the initial avatar.
+- New original ribbon-V branding and theme-aware V to VELORA startup reveal.
+- Fix authenticated Android photo loading and account-switch photo credentials.
 
-## Update
-Use Check for update in Velora. This normal release keeps the production package and signing key used by v1.4.1. Android will ask you to confirm installation. Do not uninstall v1.4.1 to update.
+Startup note: the native launch screen follows the device theme before the saved app theme loads. A small logo-size shift can occur at the native-to-app handoff. Home content loads separately and may briefly show a loader on a slow network.
 
-This is a first-pass design update, not an exact copy of Must. Automated checks do not prove every authenticated flow or smoothness on every phone.
-
-## Files
-- `velora-v1.4.2.apk`: production Android app
-- `velora-v1.4.2-checksums.txt`: SHA-256 checked before installation
-- `cert-fingerprint.txt`: release signing certificate fingerprint
+Existing accounts and tracked titles are preserved. No new paid service is required.
