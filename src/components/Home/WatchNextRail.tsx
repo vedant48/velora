@@ -10,6 +10,7 @@ import { getImageUrl, IMAGE_CONFIG } from '../../utils/image';
 
 interface WatchNextRailProps {
   onPressItem: (item: LibraryItem) => void;
+  showEmpty?: boolean;
 }
 
 /**
@@ -17,7 +18,7 @@ interface WatchNextRailProps {
  * signed-in user's in-progress series with a numeric badge of episodes left.
  * Hidden when signed out or nothing is being watched.
  */
-export const WatchNextRail = memo(function WatchNextRail({ onPressItem }: WatchNextRailProps) {
+export const WatchNextRail = memo(function WatchNextRail({ onPressItem, showEmpty = false }: WatchNextRailProps) {
   const { colors } = useAppTheme();
   const styles = useThemedStyles(createStyles);
   const { user, apiReady } = useAuth();
@@ -40,10 +41,10 @@ export const WatchNextRail = memo(function WatchNextRail({ onPressItem }: WatchN
     };
   }, [user, apiReady]);
 
-  if (items.length === 0) return null;
+  if (items.length === 0) return showEmpty ? <View style={styles.root}><Text style={styles.heading}>Watch next</Text><Text style={{ color: colors.textTertiary, paddingHorizontal: 20 }}>Your in-progress series will appear here.</Text></View> : null;
 
-  const cardWidth = Math.min(metrics.screenWidth - 48, 340);
-  const cardHeight = Math.round(cardWidth * 0.58);
+  const cardWidth = Math.min(metrics.screenWidth * 0.58, 340);
+  const cardHeight = Math.round(cardWidth * 1.5);
 
   return (
     <View style={styles.root}>
@@ -56,7 +57,7 @@ export const WatchNextRail = memo(function WatchNextRail({ onPressItem }: WatchN
         snapToInterval={cardWidth + 12}
       >
         {items.map((item) => {
-          const backdrop = getImageUrl(item.backdrop_path || item.poster_path, 'backdrop');
+          const backdrop = getImageUrl(item.poster_path, 'poster');
           const left = Math.max((item.total_episodes || 0) - item.episodes_watched, 0);
           return (
             <Pressable
@@ -81,8 +82,8 @@ export const WatchNextRail = memo(function WatchNextRail({ onPressItem }: WatchN
                   colors={['transparent', 'rgba(9, 9, 11, 0.9)']}
                   style={StyleSheet.absoluteFill}
                 />
-                {left > 0 && (
-                  <View style={styles.badge}>
+                {left > 0 && item.total_episodes > 0 && (
+                  <View accessibilityLabel={`${left} episodes remaining`} style={styles.badge}>
                     <Text style={styles.badgeText}>{left}</Text>
                   </View>
                 )}
@@ -116,7 +117,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   },
   scroll: { gap: 12, paddingHorizontal: 16 },
   card: {
-    borderRadius: 16,
+    borderRadius: 4,
     overflow: 'hidden',
     backgroundColor: colors.surfaceLight,
   },
@@ -126,9 +127,9 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     right: 12,
     minWidth: 30,
     height: 30,
-    borderRadius: 15,
+    borderRadius: 5,
     paddingHorizontal: 8,
-    backgroundColor: colors.trackBlue,
+    backgroundColor: colors.glassDark,
     alignItems: 'center',
     justifyContent: 'center',
   },

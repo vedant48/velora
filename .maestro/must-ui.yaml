@@ -1,0 +1,89 @@
+appId: com.vedant.velora
+---
+- launchApp
+- tapOn: 'Log in / Sign up'
+- tapOn: Username
+- inputText: e2e_alice
+- tapOn: Password
+- inputText: e2e-alice-pass-1
+- hideKeyboard
+- tapOn:
+    text: 'Log in'
+    below: Password
+- extendedWaitUntil:
+    visible: E2E Alice
+    timeout: 20000
+- takeScreenshot: home-dark
+- swipe:
+    start: 20%, 65%
+    end: 85%, 65%
+    duration: 500
+- takeScreenshot: swipe-watched
+- swipe:
+    start: 20%, 65%
+    end: 85%, 65%
+    duration: 500
+- takeScreenshot: swipe-series
+- swipe:
+    start: 20%, 65%
+    end: 85%, 65%
+    duration: 500
+- assertVisible: Average rating
+- takeScreenshot: swipe-insights
+- swipe:
+    start: 85%, 65%
+    end: 20%, 65%
+    duration: 500
+- takeScreenshot: reverse-series
+- tapOn:
+    id: library-tab-want
+- swipe:
+    start: 50%, 32%
+    end: 50%, 78%
+    duration: 700
+- takeScreenshot: pull-refresh
+- assertVisible: Want
+- assertVisible: E2E Alice
+- tapOn: Explore Movies
+- extendedWaitUntil:
+    visible: Movies
+    timeout: 15000
+- scrollUntilVisible:
+    element: Coming Soon
+    direction: DOWN
+    timeout: 45000
+- takeScreenshot: movies-lower
+- swipe:
+    direction: DOWN
+    duration: 500
+- takeScreenshot: explore-movies
+- tapOn: Explore TV Series
+- assertVisible: TV Shows
+- swipe:
+    start: 50%, 78%
+    end: 50%, 32%
+    duration: 600
+- extendedWaitUntil:
+    visible: Sci-Fi & Fantasy TV
+    timeout: 45000
+- takeScreenshot: explore-tv
+- tapOn: Sci-Fi & Fantasy TV
+- takeScreenshot: tv-collection
+- back
+- tapOn: Explore All
+- assertVisible: Explore All
+- takeScreenshot: explore-all
+- tapOn: Search
+- assertVisible: Search movies, TV shows, actors...
+- takeScreenshot: search
+- tapOn: Back to library
+- tapOn: Settings
+- tapOn: Light theme
+- tapOn: Back
+- takeScreenshot: home-light
+- stopApp
+- launchApp
+- extendedWaitUntil:
+    visible: E2E Alice
+    timeout: 15000
+- takeScreenshot: cold-start-home

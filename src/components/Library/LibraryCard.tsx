@@ -47,7 +47,7 @@ export const LibraryCard = memo(function LibraryCard({ item, onPress, onLongPres
 });
 
 const createStyles = (colors: AppColors) => StyleSheet.create({
-  card: { flex: 1, margin: 2 },
+  card: { flex: 1, margin: 0 },
   posterWrap: { borderRadius: 3, overflow: 'hidden' },
   poster: { width: '100%', aspectRatio: 2 / 3, borderRadius: 3, backgroundColor: colors.surface },
   posterFallback: { alignItems: 'center', justifyContent: 'center' },

@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { memo, useEffect, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -24,7 +25,7 @@ interface CollectionCard {
   name: string;
   poster_path: string | null;
   partIds: number[];
-  watched: number;
+  watched: number | null;
 }
 
 interface CollectionsRailProps {
@@ -54,7 +55,7 @@ export const CollectionsRail = memo(function CollectionsRail({ onPressCollection
               name: c.name,
               poster_path: c.poster_path,
               partIds: (c.parts || []).map((p) => p.id),
-              watched: 0,
+              watched: null,
             } as CollectionCard;
           } catch {
             return null;
@@ -89,11 +90,11 @@ export const CollectionsRail = memo(function CollectionsRail({ onPressCollection
 
   return (
     <View style={styles.root}>
-      <Text style={styles.heading}>Collections</Text>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.scroll}>
+      <Text style={styles.heading}>Collections · {collections.length}</Text>
+      <View style={styles.scroll}>
         {collections.map((c) => {
           const poster = getImageUrl(c.poster_path, 'poster');
-          const progress = c.partIds.length > 0 ? c.watched / c.partIds.length : 0;
+          const progress = c.partIds.length > 0 ? (c.watched ?? 0) / c.partIds.length : 0;
           return (
             <Pressable
               key={c.id}
@@ -102,38 +103,15 @@ export const CollectionsRail = memo(function CollectionsRail({ onPressCollection
               accessibilityRole="button"
               accessibilityLabel={c.name}
             >
-              <View style={styles.posterWrap}>
-                {poster ? (
-                  <Image
-                    source={{ uri: poster }}
-                    style={StyleSheet.absoluteFill}
-                    contentFit="cover"
-                    transition={IMAGE_CONFIG.transition}
-                    cachePolicy={IMAGE_CONFIG.cachePolicy}
-                    placeholder={IMAGE_CONFIG.placeholder}
-                  />
-                ) : null}
-              </View>
+              <Ionicons name="film-outline" size={36} color={colors.textSecondary} />
               <Text style={styles.name} numberOfLines={2}>
                 {c.name}
               </Text>
-              {user ? (
-                <View style={styles.progressRow}>
-                  <View style={styles.progressTrack}>
-                    <View style={[styles.progressFill, { flex: Math.max(progress, 0.001) }]} />
-                    <View style={{ flex: Math.max(1 - progress, 0.001) }} />
-                  </View>
-                  <Text style={styles.progressText}>
-                    {c.watched}/{c.partIds.length}
-                  </Text>
-                </View>
-              ) : (
-                <Text style={styles.progressText}>{c.partIds.length} movies</Text>
-              )}
+              <Text style={styles.progressText}>{user && c.watched !== null ? `${c.watched} of ${c.partIds.length}` : `${c.partIds.length} movies`}</Text>
             </Pressable>
           );
         })}
-      </ScrollView>
+      </View>
     </View>
   );
 });
@@ -147,8 +125,8 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     marginBottom: 10,
     paddingHorizontal: 16,
   },
-  scroll: { gap: 12, paddingHorizontal: 16 },
-  card: { width: 130 },
+  scroll: { gap: 12, paddingHorizontal: 20 },
+  card: { alignItems: 'center', justifyContent: 'center', minHeight: 164, padding: 20, borderRadius: 5, backgroundColor: colors.surface },
   posterWrap: {
     width: 130,
     height: 180,
@@ -158,9 +136,10 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   },
   name: {
     color: colors.textPrimary,
-    fontSize: 13,
+    fontSize: 18,
     fontWeight: '700',
-    marginTop: 7,
+    textAlign: 'center',
+    marginTop: 10,
   },
   progressRow: {
     flexDirection: 'row',
@@ -182,8 +161,8 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   },
   progressText: {
     color: colors.textTertiary,
-    fontSize: 11,
-    fontWeight: '700',
+    fontSize: 17,
+    fontWeight: '600',
     marginTop: 4,
   },
 });

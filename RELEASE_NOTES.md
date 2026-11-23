@@ -1,10 +1,13 @@
-## Velora 1.4.3
+## Velora 1.4.4
 
-- Add profile photos: choose from gallery, square crop, compress, replace and remove. Photos are visible to signed-in members, including when the rest of a profile is private.
-- Show photos consistently in the Home header, your library, Settings and member profiles. Removing a photo restores the initial avatar.
-- New original ribbon-V branding and theme-aware V to VELORA startup reveal.
-- Fix authenticated Android photo loading and account-switch photo credentials.
+- Open on Home/profile with your photo, account statistics and two-column library.
+- Five bottom destinations: Home, Explore Movies, Explore TV Series, Explore All and Search.
+- Swipe right through Want, Watched, Series and Insights. Swipe left to go back, or tap a tab.
+- Pull down to refresh your profile and library. A white circular indicator appears while existing posters stay visible.
+- Separate movie discovery rails, trailers, subscription-provider results for India, current cinema releases and upcoming titles.
+- Portrait Watch next series cards, real account tracking badges and Velora-owned TV genre collections from TMDB with watched progress and title grids.
+- Add TMDB attribution in Settings, About & Credits.
 
-Startup note: the native launch screen follows the device theme before the saved app theme loads. A small logo-size shift can occur at the native-to-app handoff. Home content loads separately and may briefly show a loader on a slow network.
+This is not a claim of identical Must timing or every Must feature. Velora's TV collections use TMDB genres, not Must editorial lists; collection likes are not implemented. Catalog results and availability depend on the external data source. Existing accounts, lists, photos and signing are preserved. No new paid service is required.
 
-Existing accounts and tracked titles are preserved. No new paid service is required.
+The native startup screen follows device appearance before the saved app theme loads; a small native-to-app logo shift and network-content loading can still occur.

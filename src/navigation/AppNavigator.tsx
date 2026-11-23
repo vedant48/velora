@@ -1,5 +1,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
+import { TVCollectionScreen } from '../screens/Collection/TVCollectionScreen';
 import { AuthScreen } from '../screens/Auth/AuthScreen';
 import { CollectionScreen } from '../screens/Collection/CollectionScreen';
 import { DetailsScreen } from '../screens/Details/DetailsScreen';
@@ -53,6 +54,7 @@ export const AppNavigator: React.FC = () => {
           animation: 'slide_from_right',
         }}
       />
+      <Stack.Screen name="TVCollection" component={TVCollectionScreen} />
       <Stack.Screen name="UserProfile" component={UserProfileScreen} />
       <Stack.Screen name="Account" component={AccountScreen} />
       <Stack.Screen

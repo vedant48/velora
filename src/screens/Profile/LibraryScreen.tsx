@@ -2,7 +2,10 @@ import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { FlashList } from '@shopify/flash-list';
 import React, { memo, useCallback, useMemo, useState } from 'react';
-import { Alert, Pressable, Share, StyleSheet, Text, View } from 'react-native';
+import { Alert, Pressable, RefreshControl, Share, StyleSheet, Text, View } from 'react-native';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import { LibraryTab, tabAfterSwipe } from './libraryTabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LibraryItem, Review, UserStats, veloraApi } from '../../api/velora';
 import { AppButton } from '../../components/common/AppButton';
@@ -15,7 +18,7 @@ import { checkForUpdate, downloadAndInstall } from '../../services/updates';
 import { useAuth } from '../../state/AuthContext';
 import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
 
-type TabKey = 'want' | 'watched' | 'series' | 'insights';
+type TabKey = LibraryTab;
 type SortKey = 'recent' | 'release' | 'title' | 'rating';
 
 const TABS: { key: TabKey; label: string }[] = [
@@ -40,11 +43,38 @@ export const LibraryScreen: React.FC = () => {
   const [hideSeries, setHideSeries] = useState(false);
   const [hideUnreleased, setHideUnreleased] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
-  const { user, logout, apiReady } = useAuth();
+  const { user, logout, apiReady, refresh: refreshUser } = useAuth();
+  const [refreshing, setRefreshing] = useState(false);
+  const refreshProfile = useCallback(async () => {
+    if (!user || refreshing) return;
+    setRefreshing(true);
+    const results = await Promise.allSettled([refreshUser(), veloraApi.getUser(user.username), veloraApi.getLibrary(), veloraApi.getMyReviews()]);
+    const profile = results[1], library = results[2], reviews = results[3];
+    if (profile.status === 'fulfilled') setStats(profile.value.stats);
+    if (library.status === 'fulfilled') { setAllItems(library.value.items); setItems(library.value.items); }
+    if (reviews.status === 'fulfilled') setMyReviews(reviews.value.reviews);
+    setRefreshing(false);
+    if (results.some(r => r.status === 'rejected')) Alert.alert('Refresh incomplete', 'Some profile data could not be refreshed. Pull down to retry.');
+  }, [user, refreshing, refreshUser]);
   const [stats, setStats] = useState<UserStats | null>(null);
   const [tab, setTab] = useState<TabKey>('want');
   const [sort, setSort] = useState<SortKey>('recent');
   const [sortSheetVisible, setSortSheetVisible] = useState(false);
+  const pageOffset = useSharedValue(0);
+  const finishSwipe = useCallback((dx: number, dy: number, velocity: number) => {
+    setTab(current => tabAfterSwipe(current, dx, dy, velocity));
+  }, []);
+  const pageGesture = useMemo(() => Gesture.Pan()
+    .enabled(!sortSheetVisible && !menuVisible && !quickItem)
+    .activeOffsetX([-22, 22]).failOffsetY([-16, 16])
+    .onUpdate(e => { pageOffset.value = Math.max(-32, Math.min(32, e.translationX * 0.15)); })
+    .onEnd((e, success) => {
+      if (success) runOnJS(finishSwipe)(e.translationX, e.translationY, e.velocityX);
+      pageOffset.value = withTiming(0, { duration: 160 });
+    }).onFinalize(() => { pageOffset.value = withTiming(0, { duration: 160 }); }),
+    [sortSheetVisible, menuVisible, quickItem, pageOffset, finishSwipe]);
+  const pageStyle = useAnimatedStyle(() => ({ transform: [{ translateX: pageOffset.value }] }));
+
   const [items, setItems] = useState<LibraryItem[]>([]);
   const [allItems, setAllItems] = useState<LibraryItem[]>([]);
   const [myReviews, setMyReviews] = useState<Review[]>([]);
@@ -94,34 +124,33 @@ export const LibraryScreen: React.FC = () => {
     veloraApi.getLibrary().then(({ items }) => { if (active) setAllItems(items); }).catch(() => undefined);
     veloraApi.getMyReviews().then(({ reviews }) => { if (active) setMyReviews(reviews); }).catch(() => undefined);
     return () => { active = false; };
-  }, [user, refreshKey]));
+  }, [user?.username, refreshKey]));
 
   useFocusEffect(useCallback(() => {
-    if (!user || tab === 'insights') return;
+    if (!user) return;
     let active = true;
     setLoading(true);
     setLoadError(false);
-    const mediaType = tab === 'series' ? 'tv' : undefined;
-    const status = tab === 'series' ? undefined : tab;
-    veloraApi.getLibrary(status, mediaType).then(({ items }) => { if (active) setItems(items); })
+    veloraApi.getLibrary().then(({ items }) => { if (active) setItems(items); })
       .catch(() => { if (active) setLoadError(true); })
       .finally(() => { if (active) setLoading(false); });
     return () => { active = false; };
-  }, [user, tab, refreshKey]));
+  }, [user?.username, refreshKey]));
 
   const sortedItems = useMemo(() => {
     const { hideMovies, hideSeries, hideUnreleased } = appliedFilters;
     const sort = appliedSort;
     const now = new Date();
     const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-    const list = items.filter(i => !(hideMovies && i.media_type === 'movie') && !(hideSeries && i.media_type === 'tv') && !(hideUnreleased && i.release_date && i.release_date > today));
+    const scoped = items.filter(i => tab === 'series' ? i.media_type === 'tv' : i.status === tab);
+    const list = scoped.filter(i => !(hideMovies && i.media_type === 'movie') && !(hideSeries && i.media_type === 'tv') && !(hideUnreleased && i.release_date && i.release_date > today));
     if (sort === 'release') list.sort((a, b) => (b.release_date ?? '').localeCompare(a.release_date ?? ''));
     else if (sort === 'title') list.sort((a, b) => a.title.localeCompare(b.title));
     else if (sort === 'rating')
       list.sort((a, b) => (b.rating ?? -1) - (a.rating ?? -1));
     else list.sort((a, b) => b.added_at.localeCompare(a.added_at));
     return list;
-  }, [items, appliedSort, appliedFilters]);
+  }, [items, appliedSort, appliedFilters, tab]);
 
   const openItem = useCallback(
     (item: LibraryItem) => {
@@ -163,7 +192,7 @@ export const LibraryScreen: React.FC = () => {
   const shareProfile = useCallback(() => {
     if (!user) return;
     Share.share({ message: `Follow me on Velora: @${user.username}` }).catch(() => undefined);
-  }, [user, refreshKey]);
+  }, [user?.username, refreshKey]);
 
   const keyExtractor = useCallback((i: LibraryItem) => i.id, []);
   const renderItem = useCallback(
@@ -199,12 +228,12 @@ export const LibraryScreen: React.FC = () => {
 
             {!!user?.bio && <Text style={styles.bio} numberOfLines={2}>{user.bio}</Text>}
           </View>
-          <Avatar user={user} size={52} />
+          <Avatar user={user} size={60} />
         </View>
 
         {/* Stats row */}
         <View style={styles.statsRow}>
-          <Stat label="Rank" value={stats ? `#${stats.rank}` : undefined} />
+          <Stat label="Place" value={stats ? `#${stats.rank}` : undefined} />
           <Stat label="Want" value={stats?.want} />
           <Stat label="Watched" value={stats?.watched} />
           <Stat label="Series" value={stats?.series} />
@@ -214,7 +243,7 @@ export const LibraryScreen: React.FC = () => {
         <View style={styles.tabsRow}>
           <View style={styles.tabsGroup}>
             {TABS.map((t) => (
-              <Pressable key={t.key} onPress={() => setTab(t.key)} style={[styles.tab, tab === t.key && styles.tabActive]}>
+              <Pressable key={t.key} testID={`library-tab-${t.key}`} accessibilityRole="tab" accessibilityState={{ selected: tab === t.key }} accessibilityLabel={t.label} onPress={() => { setTab(t.key); setSortSheetVisible(false); }} style={[styles.tab, tab === t.key && styles.tabActive]}>
                 <Text style={[styles.tabText, tab === t.key && styles.tabTextActive]}>{t.label}</Text>
               </Pressable>
             ))}
@@ -224,7 +253,7 @@ export const LibraryScreen: React.FC = () => {
               setHideMovies(appliedFilters.hideMovies); setHideSeries(appliedFilters.hideSeries); setHideUnreleased(appliedFilters.hideUnreleased); setSort(appliedSort);
               setSortSheetVisible(v => !v);
             }} style={styles.filterButton} accessibilityLabel="Filter and sort" accessibilityState={{ expanded: sortSheetVisible }}>
-              <Ionicons name="funnel-outline" size={16} color={colors.textSecondary} />
+              <Ionicons name="filter" size={16} color={colors.textSecondary} />
             </Pressable>
           )}
         </View>
@@ -257,13 +286,14 @@ export const LibraryScreen: React.FC = () => {
         <Text style={styles.brand}>VELORA</Text>
         <Pressable onPress={() => setMenuVisible(true)} style={styles.topButton} accessibilityLabel="More profile actions"><Ionicons name="ellipsis-vertical" size={18} color={colors.textTertiary} /></Pressable>
       </View>
-      <FlashList
+      <GestureDetector gesture={pageGesture}><Animated.View style={[{ flex: 1 }, pageStyle]}><FlashList
         maintainVisibleContentPosition={{ disabled: true }}
         data={tab === 'insights' || loading || loadError ? [] : sortedItems}
         keyExtractor={keyExtractor}
         renderItem={renderItem}
         numColumns={2}
         scrollEnabled={!sortSheetVisible}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refreshProfile} tintColor="transparent" colors={["transparent"]} progressBackgroundColor="transparent" />}
         ListHeaderComponent={
           <View onLayout={e => setHeaderHeight(e.nativeEvent.layout.height)}>
             {header}
@@ -324,8 +354,9 @@ export const LibraryScreen: React.FC = () => {
             <Text style={styles.emptyText}>Nothing here yet. Rate and track from any title page.</Text>
           )
         }
-      />
+      /></Animated.View></GestureDetector>
 
+      {refreshing && <View pointerEvents="none" style={{ position: 'absolute', top: '48%', alignSelf: 'center', width: 42, height: 42, borderRadius: 21, backgroundColor: '#FFFFFF', alignItems: 'center', justifyContent: 'center', elevation: 5 }}><AppLoader onAccent={false} refresh /></View>}
       {sortSheetVisible && <Pressable accessibilityLabel="Dismiss filters without applying" onPress={() => setSortSheetVisible(false)} style={[styles.filterScrim, { top: insets.top + 34 + 8 + headerHeight }]} />}
       <ActionSheet visible={menuVisible} onClose={() => setMenuVisible(false)} options={[
         { label: 'Share profile', onPress: shareProfile },
@@ -372,9 +403,9 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   filterChipSelected: { backgroundColor: colors.surfaceLight },
   apply: { alignSelf: 'center', paddingHorizontal: 30, paddingVertical: 9, borderRadius: 20, backgroundColor: colors.surface },
   root: { flex: 1, backgroundColor: colors.background },
-  listContent: { paddingHorizontal: 12, paddingTop: 8, paddingBottom: 110 },
-  gridCell: { flex: 1 / 2, padding: 1 },
-  header: { gap: 12, paddingBottom: 14, paddingHorizontal: 4 },
+  listContent: { paddingHorizontal: 15, paddingTop: 14, paddingBottom: 100 },
+  gridCell: { flex: 1 / 2, padding: 5 },
+  header: { gap: 0, paddingBottom: 12, paddingHorizontal: 5 },
   identityRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -391,19 +422,19 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     justifyContent: 'center',
   },
   avatarText: { fontSize: 26, fontWeight: '900', color: '#fff' },
-  name: { fontSize: 21, fontWeight: '700', color: colors.textPrimary },
+  name: { fontSize: 27, fontWeight: '700', color: colors.textPrimary },
   username: { fontSize: 13, color: colors.textTertiary },
   bio: { fontSize: 13, color: colors.textSecondary, marginTop: 4 },
   statsRow: {
-    paddingVertical: 12,
+    paddingTop: 32, paddingBottom: 16,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingRight: 8,
-    marginTop: 2,
+    paddingRight: 45,
+    marginTop: 2, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.borderHighlight,
   },
   stat: { flex: 1, alignItems: 'center' },
-  statValue: { fontSize: 13, fontWeight: '600', color: colors.textPrimary },
-  statLabel: { fontSize: 11, color: colors.textTertiary, marginTop: 1 },
+  statValue: { fontSize: 15, fontWeight: '600', color: colors.textPrimary },
+  statLabel: { fontSize: 12, color: colors.textTertiary, marginTop: 1 },
   actionsRow: {
     flexDirection: 'row',
     gap: 10,
@@ -426,14 +457,15 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     marginTop: 4,
   },
   tabsRow: {
+    paddingTop: 16,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
   tabsGroup: { flexDirection: 'row', gap: 2, flexShrink: 1 },
-  tab: { paddingHorizontal: 8, paddingVertical: 8, borderRadius: 18, backgroundColor: 'transparent' },
+  tab: { paddingHorizontal: 9, paddingVertical: 10, borderRadius: 18, backgroundColor: 'transparent' },
   tabActive: { backgroundColor: colors.surfaceLight },
-  tabText: { fontSize: 11, fontWeight: '700', color: colors.textTertiary },
+  tabText: { fontSize: 12, fontWeight: '700', color: colors.textTertiary },
   tabTextActive: { color: colors.textPrimary },
   filterButton: {
     width: 34,
