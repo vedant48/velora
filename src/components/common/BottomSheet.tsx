@@ -1,3 +1,4 @@
+import { motion } from '../../experience/motion';
 import React, { useEffect, useMemo } from 'react';
 import { KeyboardAvoidingView, Modal, Platform, Pressable, StyleProp, View, ViewStyle } from 'react-native';
 import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -19,10 +20,10 @@ export function BottomSheet({ visible, onClose, children, showHandle = false, co
   const pan = useMemo(() => Gesture.Pan().activeOffsetY(8).failOffsetX([-20, 20])
     .onUpdate(event => { offset.value = Math.max(0, event.translationY); })
     .onEnd((event, success) => {
-      if (!success) { offset.value = withSpring(0, { damping: 24, stiffness: 260 }); return; }
+      if (!success) { offset.value = withSpring(0, motion.page); return; }
       if (event.translationY > 80 || (event.velocityY > 800 && event.translationY > 15)) {
-        offset.value = withTiming(height.value + 40, { duration: 180 }, finished => { if (finished) runOnJS(onClose)(); });
-      } else { offset.value = withSpring(0, { damping: 24, stiffness: 260 }); }
+        offset.value = withTiming(height.value + 40, { duration: motion.layoutMs }, finished => { if (finished) runOnJS(onClose)(); });
+      } else { offset.value = withSpring(0, motion.page); }
     }), [height, offset, onClose]);
   const moving = useAnimatedStyle(() => ({ transform: [{ translateY: offset.value }] }));
   const handle = <Animated.View accessibilityLabel="Drag sheet to dismiss" style={{paddingTop: 8, paddingBottom: 12}}>

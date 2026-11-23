@@ -8,6 +8,7 @@ function load() {
   let comparator = null;
   const React = { memo: (component, compare) => { comparator = compare; return component; } };
   const context = { exports: {}, require: name => {
+    if (name.endsWith('experience/motion')) return { motion: { press: {} } };
     if (name === 'react') return { __esModule: true, default: React };
     if (name === 'react-native') return { StyleSheet: { create: x => x } };
     if (name.endsWith('ThemeContext')) return { useAppTheme: () => { throw Error('Invalid hook call outside component'); }, useThemedStyles: () => { throw Error('Invalid hook call outside component'); } };

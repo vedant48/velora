@@ -1,4 +1,4 @@
-import { Image } from 'expo-image';
+import { CachedImage as Image } from '../../experience/CachedImage';
 import { memo } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useWatchProvidersQuery } from '../../api/queries';

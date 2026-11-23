@@ -1,0 +1,16 @@
+appId: com.vedant.velora
+---
+- swipe:
+    start: 50%, 78%
+    end: 50%, 30%
+    duration: 1000
+- takeScreenshot: movies-lower-focused
+- tapOn: Search
+- tapOn: Back to library
+- assertVisible: Pulp Fiction
+- takeScreenshot: focus-return
+- tapOn: Settings
+- tapOn: Light theme
+- tapOn: Back
+- assertVisible: Pulp Fiction
+- takeScreenshot: light-return

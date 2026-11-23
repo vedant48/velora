@@ -15,7 +15,7 @@ const RESOLUTIONS: Record<ImageType, string> = {
  * Generates an optimized, proxied image URL.
  * Routes through the high-performance wsrv.nl edge CDN proxy to prevent direct
  * connections to image.tmdb.org (which are throttled/blocked on Indian ISPs)
- * and to automatically serve compressed WebP format for 60/120 FPS rendering.
+ * and to serve compressed WebP images. Rendering smoothness needs native testing.
  */
 export function getImageUrl(
   path: string | null | undefined,
@@ -58,9 +58,10 @@ export async function prefetchImagesWindow(urls: (string | null | undefined)[]) 
   for (const url of validUrls) {
     prefetchedUrls.add(url);
     try {
-      await Image.prefetch(url);
+      const ok = await Image.prefetch(url, { cachePolicy: 'memory-disk' });
+      if (!ok) prefetchedUrls.delete(url);
     } catch {
-      // Ignore prefetch failures silently
+      prefetchedUrls.delete(url); // Failed prefetch must not poison later retries.
     }
   }
 }
