@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 mkdir -p photo-evidence
-adb reverse tcp:8787 tcp:8787
+node scripts/e2e-delay-proxy.cjs > photo-evidence/delayed-reads.log 2>&1 &
+adb reverse tcp:8787 tcp:8788
 adb install candidate/app-release.apk
 adb shell wm size 720x1280
 adb shell wm density 320
