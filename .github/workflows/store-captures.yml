@@ -1,7 +1,7 @@
 name: Store screenshots from released APK
 on:
   push:
-    branches: [test/uptodown-146-six-captures]
+    branches: [test/uptodown-146-six]
     paths: [.ci/uptodown-captures]
 permissions:
   contents: write
