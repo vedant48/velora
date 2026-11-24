@@ -1,11 +1,9 @@
-## Smoother navigation and poster loading
+## Permission cleanup
 
-- Profile pages follow your finger: swipe right-to-left from Want to Watched, Series and Insights. The profile header stays in place, and short drags settle back.
-- Already-loaded library pages and posters stay visible when switching pages or returning from Search, Details or Settings. Background refresh no longer replaces them with a spinner.
-- Shared image loading uses memory/disk caching, a first-load placeholder and fade, and a retry state if an image cannot load. Lower Explore sections and horizontal rails load near the viewport instead of mounting every poster at once.
-- Filter and sort controls expand and close with an animated transition. Cards, sheets and navigation share motion settings.
-- Rating distribution bars render correctly, including half-star ratings. Profile pull-to-refresh uses the white native indicator with a dark spinner.
+- Removed unused Android microphone, camera and screen-overlay permission declarations.
+- Profile photo selection, crop, upload and removal remain available. Native gallery checks passed on Android 12 and Android 15 using isolated synthetic test data.
+- Existing in-app updater installation permission and Android 12-and-earlier photo storage permissions are retained.
 
-No library, ratings, reviews, episode progress or profile-photo migration. No Must or other platform importer in this update.
+No changes to your account, library, ratings, reviews, episode progress or profile photos. Same app package and signing key, no uninstall needed for existing release-key installations.
 
-Native Android motion was checked with a synthetic test account. Catalog loading still depends on network availability. This is not a measured10x speedup or a guarantee of identical performance on every device. Existing Android splash-theme limitations remain unchanged.
+The final signed APK was checked for the removed permissions and successfully installed over v1.4.5 on Android 12. The complete in-app download-to-installer flow was not re-run in this verification; updater code is unchanged and its integrity tests pass.
