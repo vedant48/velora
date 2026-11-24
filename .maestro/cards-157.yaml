@@ -13,8 +13,8 @@ appId: com.vedant.velora
 - extendedWaitUntil:
     visible: E2E Alice
     timeout: 30000
-# Header: no VELORA text, app icon left, settings + overflow right
-- assertNotVisible: VELORA
+# Header: app icon left, settings + overflow right (no brand text; screenshot is the visual gate -
+# the icon's accessibilityLabel "Velora" makes a text assertNotVisible unusable)
 - assertVisible: Settings
 - assertVisible: More profile actions
 - takeScreenshot: 1-header-icon-tabs
