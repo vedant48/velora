@@ -54,13 +54,6 @@ export const LibraryCard = memo(function LibraryCard({ item, onPress, onLongPres
           </View>
         )}
       </View>
-      {item.media_type === 'tv' && item.status === 'watching' && item.total_episodes > 0 && (
-        <Text style={styles.progress}>
-          {item.total_episodes - item.episodes_watched > 0
-            ? `${item.total_episodes - item.episodes_watched} ep left`
-            : 'Complete'}
-        </Text>
-      )}
     </Pressable>
   );
 });
