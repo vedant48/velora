@@ -16,7 +16,7 @@ jobs:
       - uses: actions/setup-java@v4
         with: { distribution: temurin, java-version: '17' }
       - uses: actions/setup-node@v4
-        with: { node-version: 20, cache: npm }
+        with: { node-version: 22, cache: npm }
       - run: npm ci || npm install
       - name: Prebuild Android and enable cleartext for the local test backend (test build only)
         run: |
