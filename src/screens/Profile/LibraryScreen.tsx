@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { FlashList } from '@shopify/flash-list';
 import React, { memo, useCallback, useMemo, useRef, useState } from 'react';
-import { Alert, Image, Modal, Pressable, RefreshControl, Share, StyleSheet, Text, View } from 'react-native';
+import { Alert, Animated, Image, Modal, Pressable, RefreshControl, Share, StyleSheet, Text, View } from 'react-native';
 import { ContentPager } from '../../experience/ContentPager';
 import { endedCompleteLast, itemInTab, LibraryTab } from './libraryTabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -65,8 +65,21 @@ export const LibraryScreen: React.FC = () => {
   const [tab, setTab] = useState<TabKey>('want');
   const [sort, setSort] = useState<SortKey>('recent');
   const [sortSheetVisible, setSortSheetVisible] = useState(false);
-  const selectTab = useCallback((next: TabKey) => { setSortSheetVisible(false); setTab(next); }, []);
-  const onPageChange = useCallback((index: number) => setTab(TABS[index].key), []);
+  // Collapsing overlay header (owner reference video, 25 Nov): initial order is
+  // app-icon bar, then profile details, then the tab row. On scroll the icon bar
+  // AND the profile details scroll away; only tabs + filter pin at the top.
+  const scrollY = useRef(new Animated.Value(0)).current;
+  const pageOffsets = useRef<Partial<Record<TabKey, number>>>({});
+  const [collapseH, setCollapseH] = useState(0);
+  const [pinnedH, setPinnedH] = useState(0);
+  const collapseRange = Math.max(collapseH, 1);
+  const headerTranslate = useMemo(
+    () => scrollY.interpolate({ inputRange: [0, collapseRange], outputRange: [0, -collapseRange], extrapolate: 'clamp' }),
+    [scrollY, collapseRange],
+  );
+  const syncScrollTo = useCallback((key: TabKey) => { scrollY.setValue(pageOffsets.current[key] ?? 0); }, [scrollY]);
+  const selectTab = useCallback((next: TabKey) => { setSortSheetVisible(false); syncScrollTo(next); setTab(next); }, [syncScrollTo]);
+  const onPageChange = useCallback((index: number) => { syncScrollTo(TABS[index].key); setTab(TABS[index].key); }, [syncScrollTo]);
 
   const [items, setItems] = useState<LibraryItem[]>([]);
   const [allItems, setAllItems] = useState<LibraryItem[]>([]);
@@ -311,31 +324,7 @@ export const LibraryScreen: React.FC = () => {
   }
 
   return (
-    <View style={[styles.root, { paddingTop: insets.top }]}>
-      {/* Owner rule (25 Nov): no VELORA text; app icon only on the left, settings + overflow on the right. */}
-      <View style={styles.topRow}>
-        <Image source={require('../../../assets/icon.png')} style={styles.brandIcon} accessibilityLabel="Velora" />
-        <View style={styles.topActions}>
-          <Pressable onPress={() => navigation.navigate('Account')} style={styles.topButton} accessibilityLabel="Settings"><Ionicons name="settings-sharp" size={16} color={colors.textTertiary} /></Pressable>
-          <Pressable onPress={() => setMenuVisible(true)} style={styles.topButton} accessibilityLabel="More profile actions"><Ionicons name="ellipsis-vertical" size={18} color={colors.textTertiary} /></Pressable>
-        </View>
-      </View>
-      <View style={{ paddingHorizontal: 20, paddingTop: 14 }}>{tabsHeader}</View>
-      <Expandable open={sortSheetVisible && tab !== 'insights'}>
-            <View style={styles.filters}>
-              <View style={styles.filterChips}>
-                {[
-                  { label: 'Hide Movies', selected: hideMovies, toggle: () => setHideMovies(v => !v) },
-                  { label: 'Hide Series', selected: hideSeries, toggle: () => setHideSeries(v => !v) },
-                  { label: 'Hide Unreleased', selected: hideUnreleased, toggle: () => setHideUnreleased(v => !v) },
-                ].map(c => <Pressable key={c.label} accessibilityLabel={c.label} onPress={c.toggle} accessibilityRole="checkbox" accessibilityState={{ checked: c.selected }} style={[styles.filterChip, c.selected && styles.filterChipSelected]}><Text style={styles.tabText}>{c.label}</Text></Pressable>)}
-              </View>
-              <View style={styles.filterChips}>{([
-                ['recent', 'Date added'], ['release', 'Release date'], ['title', 'Title A-Z'], ['rating', 'Highest rated'],
-              ] as const).map(([key, label]) => <Pressable key={key} onPress={() => setSort(key)} accessibilityRole="radio" accessibilityState={{ selected: sort === key }} style={styles.filterChip}><Text style={[styles.tabText, sort === key && { color: colors.primary }]}>{label}</Text></Pressable>)}</View>
-              <Pressable accessibilityLabel="Apply filters" onPress={() => { setAppliedFilters({ hideMovies, hideSeries, hideUnreleased }); setAppliedSort(sort); setSortSheetVisible(false); }} style={styles.apply}><Text style={styles.tabText}>Apply</Text></Pressable>
-            </View>
-      </Expandable>
+    <View style={styles.root}>
       <View style={{ flex: 1 }}>
       <ContentPager index={TABS.findIndex(t => t.key === tab)} onIndexChange={onPageChange} enabled={!sortSheetVisible && !menuVisible && !quickItem}>
           {TABS.map(({ key: pageTab }) => <View key={pageTab} style={{ flex: 1 }}>
@@ -345,9 +334,13 @@ export const LibraryScreen: React.FC = () => {
               data={pageTab === 'insights' || loading || loadError ? [] : itemsByTab[pageTab]}
               keyExtractor={keyExtractor} renderItem={renderItem} numColumns={2}
               drawDistance={280}
+              onScroll={pageTab === tab
+                ? Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], { useNativeDriver: true, listener: (e: any) => { pageOffsets.current[pageTab] = e.nativeEvent.contentOffset.y; } })
+                : (e: any) => { pageOffsets.current[pageTab] = e.nativeEvent.contentOffset.y; }}
+              scrollEventThrottle={16}
               scrollEnabled={!sortSheetVisible}
-              refreshControl={<RefreshControl refreshing={refreshing && tab === pageTab} onRefresh={refreshProfile} colors={['#000000']} tintColor="#000000" progressBackgroundColor="#FFFFFF" />}
-              ListHeaderComponent={<>{profileHeader}            {pageTab === 'insights' && insights && (
+              refreshControl={<RefreshControl refreshing={refreshing && tab === pageTab} onRefresh={refreshProfile} colors={['#000000']} tintColor="#000000" progressBackgroundColor="#FFFFFF" progressViewOffset={insets.top + collapseH + pinnedH} />}
+              ListHeaderComponent={pageTab === 'insights' && insights ? (
               <View style={styles.insights}>
                 <View style={styles.insightRow}>
                   <InsightCell label="Movies watched" value={insights.watchedMovies} />
@@ -378,14 +371,50 @@ export const LibraryScreen: React.FC = () => {
                   </View>
                 </View>
               </View>
-            )}</>}
-              contentContainerStyle={styles.listContent}
+            ) : null}
+              contentContainerStyle={[styles.listContent, { paddingTop: insets.top + collapseH + pinnedH + 14 }]}
               ListEmptyComponent={pageTab === 'insights' ? null : loading ? <AppLoader style={{ marginTop: 32 }} /> : loadError ? <Pressable onPress={() => setRefreshKey(k => k + 1)} accessibilityRole="button"><Text style={styles.emptyText}>Could not load your library. Tap to retry.</Text></Pressable> : <Text style={styles.emptyText}>Nothing here yet. Rate and track from any title page.</Text>}
             />
           </View>)}
       </ContentPager>
           {sortSheetVisible && <Pressable accessibilityLabel="Dismiss filters without applying" onPress={() => setSortSheetVisible(false)} style={[StyleSheet.absoluteFill, styles.filterScrim]} />}
       </View>
+      <Animated.View style={[styles.headerOverlay, { transform: [{ translateY: headerTranslate }] }]}>
+        <View style={{ paddingTop: insets.top, backgroundColor: colors.background }}>
+          <View onLayout={(e) => setCollapseH(e.nativeEvent.layout.height)}>
+      {/* Owner rule (25 Nov): no VELORA text; app icon only on the left, settings + overflow on the right. */}
+            <View style={styles.topRow}>
+              <Image source={require('../../../assets/icon.png')} style={styles.brandIcon} accessibilityLabel="Velora" />
+              <View style={styles.topActions}>
+                <Pressable onPress={() => navigation.navigate('Account')} style={styles.topButton} accessibilityLabel="Settings"><Ionicons name="settings-sharp" size={16} color={colors.textTertiary} /></Pressable>
+                <Pressable onPress={() => setMenuVisible(true)} style={styles.topButton} accessibilityLabel="More profile actions"><Ionicons name="ellipsis-vertical" size={18} color={colors.textTertiary} /></Pressable>
+              </View>
+            </View>
+
+            <View style={{ paddingHorizontal: 15 }}>{profileHeader}</View>
+          </View>
+          <View onLayout={(e) => setPinnedH(e.nativeEvent.layout.height)}>
+            <View style={{ paddingHorizontal: 20, paddingTop: 14 }}>{tabsHeader}</View>
+            <Expandable open={sortSheetVisible && tab !== 'insights'}>
+                  <View style={styles.filters}>
+                    <View style={styles.filterChips}>
+                      {[
+                        { label: 'Hide Movies', selected: hideMovies, toggle: () => setHideMovies(v => !v) },
+                        { label: 'Hide Series', selected: hideSeries, toggle: () => setHideSeries(v => !v) },
+                        { label: 'Hide Unreleased', selected: hideUnreleased, toggle: () => setHideUnreleased(v => !v) },
+                      ].map(c => <Pressable key={c.label} accessibilityLabel={c.label} onPress={c.toggle} accessibilityRole="checkbox" accessibilityState={{ checked: c.selected }} style={[styles.filterChip, c.selected && styles.filterChipSelected]}><Text style={styles.tabText}>{c.label}</Text></Pressable>)}
+                    </View>
+                    <View style={styles.filterChips}>{([
+                      ['recent', 'Date added'], ['release', 'Release date'], ['title', 'Title A-Z'], ['rating', 'Highest rated'],
+                    ] as const).map(([key, label]) => <Pressable key={key} onPress={() => setSort(key)} accessibilityRole="radio" accessibilityState={{ selected: sort === key }} style={styles.filterChip}><Text style={[styles.tabText, sort === key && { color: colors.primary }]}>{label}</Text></Pressable>)}</View>
+                    <Pressable accessibilityLabel="Apply filters" onPress={() => { setAppliedFilters({ hideMovies, hideSeries, hideUnreleased }); setAppliedSort(sort); setSortSheetVisible(false); }} style={styles.apply}><Text style={styles.tabText}>Apply</Text></Pressable>
+                  </View>
+            </Expandable>
+
+          </View>
+        </View>
+      </Animated.View>
+
       <ActionSheet visible={menuVisible} onClose={() => setMenuVisible(false)} options={[
         { label: 'Share profile', onPress: shareProfile },
         { label: 'Activity', onPress: () => navigation.navigate('Activity') },
@@ -441,6 +470,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   filterChipSelected: { backgroundColor: colors.surfaceLight },
   apply: { alignSelf: 'center', paddingHorizontal: 30, paddingVertical: 9, borderRadius: 20, backgroundColor: colors.surface },
   root: { flex: 1, backgroundColor: colors.background },
+  headerOverlay: { position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10, elevation: 10 },
   listContent: { paddingHorizontal: 15, paddingTop: 14, paddingBottom: 100 },
   gridCell: { flex: 1 / 2, padding: 5 },
   header: { gap: 0, paddingBottom: 12, paddingHorizontal: 5 },
