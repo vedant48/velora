@@ -52,7 +52,7 @@ jobs:
           ram-size: 3072
           disable-animations: false
           emulator-options: -no-window -gpu swiftshader -no-snapshot -noaudio -no-boot-anim
-          script: bash scripts/ui-proof-156.sh
+          script: bash scripts/ui-proof-157.sh
       - name: Publish evidence
         if: always()
         run: |
