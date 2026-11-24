@@ -44,15 +44,24 @@ const show = (over = {}) => ({ mustId: 's1', mediaType: 'tv', tmdbId: 20, title:
   seasons: [{ season: 1, rating: 7, review: null, watchedEpisodes: [1, 2, 3] }], ...over });
 const count = (t: string, w = '') => (sqlite.prepare(`SELECT COUNT(*) c FROM ${t} ${w}`).get() as { c: number }).c;
 
-test('creates movie, review, provenance without using source time as added_at', async () => {
+test('creates movie, review, provenance; source modified time is the flagged fallback added_at', async () => {
   const { results } = await lib.importMust('u1', { items: [movie()] });
   assert.equal(results[0].outcome, 'created');
   const row = sqlite.prepare("SELECT * FROM library_items WHERE tmdb_id=10").get() as any;
   assert.equal(row.rating, 8);
   assert.equal(row.status, 'watched');
-  assert.notEqual(row.added_at.slice(0, 4), '2025');
+  assert.equal(row.added_at, '2025-01-01 00:00:00');
+  assert.equal((sqlite.prepare('SELECT added_at_is_fallback f FROM import_sources').get() as any).f, 1);
   assert.equal(count('reviews', "WHERE body='good' AND season_number=0"), 1);
   assert.equal((sqlite.prepare('SELECT source_modified_at s FROM import_sources').get() as any).s, '2025-01-01T00:00:00Z');
+});
+
+test('missing or future source time keeps default added_at, unflagged', async () => {
+  await lib.importMust('u1', { items: [show(), movie({ sourceModifiedAt: '2999-01-01T00:00:00Z', tmdbId: 11, mustId: 'm2' })] });
+  const y = new Date().getFullYear().toString();
+  const rows = sqlite.prepare('SELECT added_at a FROM library_items').all() as any[];
+  for (const r of rows) assert.equal(r.a.slice(0, 4), y);
+  assert.equal(count('import_sources', 'WHERE added_at_is_fallback=1'), 0);
 });
 
 test('never overwrites an existing title, rating or review', async () => {

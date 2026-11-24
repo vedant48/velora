@@ -148,7 +148,7 @@ export const ImportMustScreen: React.FC = () => {
         <>
           <Text style={styles.body}>
             Choose your Must export files (JSON). Velora does not connect to Must. Matching uses TMDB. Titles already in your library are never changed, and
-            original add dates are unknown in Must, so imported titles get today's date.
+            Must has no original add dates, so new titles use Must's last-modified date as their added date (marked as a fallback), or today if that is missing.
           </Text>
           <AppButton title="Choose export files" onPress={pickFiles} />
         </>

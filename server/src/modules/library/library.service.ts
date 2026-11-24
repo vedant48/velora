@@ -502,24 +502,31 @@ export class LibraryService {
         if (!mustId) throw new BadRequestException('mustId is required');
         const existing = await this.getOne(userId, mediaType, tmdbId);
         let outcome: 'created' | 'existing_kept' = 'existing_kept';
+        let addedAt: string | null = null;
         if (!existing) {
           const status = requireStatus(i.status);
           const total = optionalInt(i.totalEpisodes, 'totalEpisodes', 0, 100000) ?? 0;
+          // Must exposes no original add date. Per the user's decision, its last-modified time is used as
+          // added_at when valid (not in the future); the import_sources row flags it as a fallback date.
+          const ms = Date.parse(String(i.sourceModifiedAt ?? ''));
+          if (Number.isFinite(ms) && ms <= Date.now() && ms > Date.parse('2000-01-01')) {
+            addedAt = new Date(ms).toISOString().slice(0, 19).replace('T', ' ');
+          }
           await this.db.run(
             `INSERT OR IGNORE INTO library_items
                (id, user_id, media_type, tmdb_id, title, poster_path, backdrop_path, release_date,
-                status, rating, episodes_watched, total_episodes)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?)`,
+                status, rating, episodes_watched, total_episodes, added_at)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, COALESCE(?, datetime('now')))`,
             [randomId(), userId, mediaType, tmdbId, requireString(i.title, 'title', 300),
              optionalString(i.posterPath, 'posterPath', 200), optionalString(i.backdropPath, 'backdropPath', 200),
-             optionalString(i.releaseDate, 'releaseDate', 20), status, optionalRating(i.rating), total],
+             optionalString(i.releaseDate, 'releaseDate', 20), status, optionalRating(i.rating), total, addedAt],
           );
           outcome = 'created';
         }
         await this.db.run(
-          `INSERT OR IGNORE INTO import_sources (id, user_id, source, source_id, media_type, tmdb_id, source_modified_at)
-           VALUES (?, ?, 'must', ?, ?, ?, ?)`,
-          [randomId(), userId, mustId, mediaType, tmdbId, optionalString(i.sourceModifiedAt, 'sourceModifiedAt', 40)],
+          `INSERT OR IGNORE INTO import_sources (id, user_id, source, source_id, media_type, tmdb_id, source_modified_at, added_at_is_fallback)
+           VALUES (?, ?, 'must', ?, ?, ?, ?, ?)`,
+          [randomId(), userId, mustId, mediaType, tmdbId, optionalString(i.sourceModifiedAt, 'sourceModifiedAt', 40), addedAt ? 1 : 0],
         );
         // Title review (only when the title was created now: an existing review is never replaced).
         const review = i.review as Record<string, unknown> | null | undefined;
