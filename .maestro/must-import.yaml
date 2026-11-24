@@ -1,0 +1,53 @@
+appId: com.vedant.velora
+---
+- launchApp
+- tapOn: "Profile"
+- tapOn: "Log in / Sign up"
+- tapOn: "Username"
+- inputText: "e2e_alice"
+- tapOn: "Password"
+- inputText: "e2e-alice-pass-1"
+- hideKeyboard
+- tapOn:
+    text: "Log in"
+    below: "Password"
+- extendedWaitUntil:
+    visible:
+      text: "E2E Alice"
+    timeout: 20000
+- tapOn: "Profile"
+- tapOn: "Settings"
+- scrollUntilVisible:
+    element: "Import from Must"
+- takeScreenshot: i1-settings-entry
+- tapOn: "Import from Must"
+- takeScreenshot: i2-import-start
+- tapOn: "Choose export files"
+- extendedWaitUntil:
+    visible: ".*(Downloads|Recent|must-synth|Show roots).*"
+    timeout: 15000
+- takeScreenshot: i3-picker
+- runFlow:
+    when:
+      notVisible: "must-synth.json"
+    commands:
+      - tapOn:
+          label: "Open roots"
+          text: ".*(Show roots|Open roots).*"
+          optional: true
+      - tapOn:
+          text: "Downloads"
+          optional: true
+- takeScreenshot: i4-picker-downloads
+- tapOn: "must-synth.json"
+- extendedWaitUntil:
+    visible: "Found 4 titles"
+    timeout: 90000
+- takeScreenshot: i5-preview
+- tapOn: ".*Import [0-9]+ titles"
+- takeScreenshot: i6-confirm
+- tapOn: "Import"
+- extendedWaitUntil:
+    visible: "Import finished"
+    timeout: 90000
+- takeScreenshot: i7-report

@@ -104,8 +104,8 @@ export const ImportMustScreen: React.FC = () => {
       n++;
       if (n % 10 === 0) setProgress(`Preparing ${n} of ${todo.length}`);
       const needsCheck = it.type === 'tv' && it.seasons?.some((s) => s.watchedEpisodes.length > 0);
-      const check = it.type === 'tv' ? await tmdbSeasonCheck(tmdb.id) : null;
-      const built = buildCommitItem(it, tmdb, check ? { tmdbCounts: check.tmdbCounts, totalEpisodes: check.totalEpisodes } : needsCheck ? { tmdbCounts: null, totalEpisodes: 0 } : undefined);
+      const check = it.type === 'tv' ? await tmdbSeasonCheck(tmdb.id, (it.seasons ?? []).filter((s) => s.watchedEpisodes.length > 0).map((s) => s.number)) : null;
+      const built = buildCommitItem(it, tmdb, check ? { tmdbCounts: check.tmdbCounts, tmdbAirDates: check.tmdbAirDates, totalEpisodes: check.totalEpisodes } : needsCheck ? { tmdbCounts: null, totalEpisodes: 0 } : undefined);
       entries.push(built.entry);
       gaps.push(...built.gaps);
     }

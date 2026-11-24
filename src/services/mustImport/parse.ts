@@ -69,6 +69,10 @@ export function parseMustFiles(files: unknown[]): ParseResult {
         const sReview = reviewBody(rows[String(s.season_id)]?.r?.user_product_info?.review);
         const eps = (s.episodes as number[]) ?? [];
         const watched: number[] = [];
+        const dates: (string | null)[] = eps.map((eid) => {
+          const d = rows[String(eid)]?.p?.product?.release_date;
+          return typeof d === 'string' && /^\d{4}-\d{2}-\d{2}/.test(d) ? d.slice(0, 10) : null;
+        });
         eps.forEach((eid, idx) => {
           if (rows[String(eid)]?.p?.user_product_info?.status === 'watched') watched.push(idx + 1);
         });
@@ -78,6 +82,7 @@ export function parseMustFiles(files: unknown[]): ParseResult {
           review: sReview?.body ?? null,
           watchedEpisodes: watched,
           episodeCount: eps.length,
+          episodeDates: dates,
         };
       });
     }

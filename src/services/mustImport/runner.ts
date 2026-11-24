@@ -78,7 +78,10 @@ export async function matchAll(
   return out;
 }
 
-export async function tmdbSeasonCheck(tmdbId: number): Promise<{ tmdbCounts: Record<number, number>; totalEpisodes: number } | null> {
+export async function tmdbSeasonCheck(
+  tmdbId: number,
+  seasonsToVerify: number[] = [],
+): Promise<{ tmdbCounts: Record<number, number>; tmdbAirDates: Record<number, (string | null)[]>; totalEpisodes: number } | null> {
   try {
     const d = await proxyGet<any>(`/v1/tmdb/3/tv/${tmdbId}`, { timeoutMs: 20000 });
     const counts: Record<number, number> = {};
@@ -87,7 +90,17 @@ export async function tmdbSeasonCheck(tmdbId: number): Promise<{ tmdbCounts: Rec
       counts[s.season_number] = s.episode_count;
       if (s.season_number >= 1) total += s.episode_count;
     }
-    return { tmdbCounts: counts, totalEpisodes: total || d.number_of_episodes || 0 };
+    const tmdbAirDates: Record<number, (string | null)[]> = {};
+    for (const n of seasonsToVerify) {
+      if (counts[n] === undefined) continue;
+      try {
+        const sd = await proxyGet<any>(`/v1/tmdb/3/tv/${tmdbId}/season/${n}`, { timeoutMs: 20000 });
+        tmdbAirDates[n] = (sd.episodes ?? []).map((e: any) => e.air_date || null);
+      } catch {
+        // Unverifiable season: payload builder will leave its episodes out and list the gap.
+      }
+    }
+    return { tmdbCounts: counts, tmdbAirDates, totalEpisodes: total || d.number_of_episodes || 0 };
   } catch {
     return null;
   }

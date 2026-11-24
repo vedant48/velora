@@ -3,7 +3,27 @@ import { MustItem, TmdbCandidate } from './types';
 export interface SeasonCheck {
   /** TMDB episode counts by season number; null when TMDB details could not be read. */
   tmdbCounts: Record<number, number> | null;
+  /** TMDB air dates per season (index = episode position), for seasons that were fetched. */
+  tmdbAirDates?: Record<number, (string | null)[]>;
   totalEpisodes: number;
+}
+
+const DAY = 86400000;
+
+/**
+ * Same number of episodes is not enough to trust that episode N is the same episode in both catalogs
+ * (specials, split seasons, reordered episodes). Positions must also agree on air date (1 day of slack
+ * for time zones) wherever both sides know it, and at least half the positions must be comparable.
+ */
+export function episodesAlign(must: (string | null)[], tmdb: (string | null)[] | undefined): boolean {
+  if (!tmdb || must.length !== tmdb.length || must.length === 0) return false;
+  let compared = 0;
+  for (let i = 0; i < must.length; i++) {
+    if (!must[i] || !tmdb[i]) continue;
+    compared++;
+    if (Math.abs(Date.parse(must[i]!) - Date.parse(tmdb[i]!)) > DAY) return false;
+  }
+  return compared * 2 >= must.length;
 }
 
 export interface CommitItem {
@@ -50,6 +70,13 @@ export function buildCommitItem(item: MustItem, tmdb: TmdbCandidate, check?: Sea
               mustId: item.mustId,
               title: item.title,
               note: `Season ${s.number}: ${eps.length} watched episodes not imported (Must lists ${s.episodeCount} episodes, TMDB ${tmdbCount ?? 'unknown'}).`,
+            });
+            eps = [];
+          } else if (!episodesAlign(s.episodeDates, check?.tmdbAirDates?.[s.number])) {
+            gaps.push({
+              mustId: item.mustId,
+              title: item.title,
+              note: `Season ${s.number}: ${eps.length} watched episodes not imported (episode order could not be confirmed against TMDB air dates).`,
             });
             eps = [];
           }

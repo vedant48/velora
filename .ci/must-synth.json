@@ -1,0 +1,16 @@
+{"product":[
+{"user_product_info":{"product_id":1001,"status":"want","rate":3,"reviewed":false,"modified_at":"2025-01-01T00:00:00Z"},"product":{"id":1001,"type":"movie","title":"Inception","release_date":"2010-07-16","poster_file_path":null}},
+{"user_product_info":{"product_id":1002,"status":"watched","rate":10,"reviewed":true,"modified_at":"2025-01-02T00:00:00Z"},"product":{"id":1002,"type":"movie","title":"The Matrix","release_date":"1999-03-31","poster_file_path":null}},
+{"user_product_info":{"product_id":1003,"status":"watching","rate":null,"reviewed":false,"modified_at":"2025-01-03T00:00:00Z"},"product":{"id":1003,"type":"show","title":"Chernobyl","release_date":"2019-05-06","poster_file_path":null}},
+{"user_product_info":{"product_id":1004,"status":"want","rate":null,"reviewed":false,"modified_at":"2025-01-04T00:00:00Z"},"product":{"id":1004,"type":"show","title":"The Bear","release_date":"2022-06-23","poster_file_path":null}}
+],
+"review":[{"user_product_info":{"product_id":1002,"reviewed":true,"review":{"reviewed_at":"2025-01-02T00:00:00Z","body":"SYNTHETIC REVIEW BODY"}}}],
+"detail":{"1003":{"show":{"seasons":[{"season_id":2000,"number":1,"episodes":[2001,2002,2003,2004,2005]}]}}},
+"rows":{
+"2000":{"p":{"user_product_info":{"rate":8,"status":"watching"},"product":{"type":"season"}}},
+"2001":{"p":{"user_product_info":{"status":"watched"},"product":{"type":"episode","release_date":"2019-05-06"}}},
+"2002":{"p":{"user_product_info":{"status":"watched"},"product":{"type":"episode","release_date":"2019-05-13"}}},
+"2003":{"p":{"user_product_info":{"status":"watched"},"product":{"type":"episode","release_date":"2019-05-20"}}},
+"2004":{"p":{"user_product_info":{"status":null},"product":{"type":"episode","release_date":"2019-05-27"}}},
+"2005":{"p":{"user_product_info":{"status":null},"product":{"type":"episode","release_date":"2019-06-03"}}}
+}}

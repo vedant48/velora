@@ -1,0 +1,89 @@
+name: Must import native verification
+# Private branch-scoped test: builds an e2e-only APK pointed at a LOCAL backend with synthetic data.
+# No production backend, no release, no tag. Remove before any merge.
+on:
+  push:
+    branches: [test/must-import-native]
+    paths: [.ci/trigger-native]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - uses: actions/setup-node@v4
+        with: { node-version: 20, cache: npm }
+      - run: npm ci || npm install
+      - run: |
+          npx tsc --noEmit
+          node --test tests/*.test.cjs
+      - name: Prebuild and build local-backend test APK
+        env:
+          EXPO_PUBLIC_API_URL: http://127.0.0.1:8787
+        run: |
+          npx expo prebuild --platform android --clean
+          sed -i 's/<application /<application android:usesCleartextTraffic="true" /' android/app/src/main/AndroidManifest.xml
+          printf '\nreactNativeArchitectures=x86_64\nexpo.useLegacyPackaging=true\n' >> android/gradle.properties
+          cd android && chmod +x gradlew && ./gradlew assembleRelease --no-daemon
+          mkdir -p ../candidate && cp app/build/outputs/apk/release/app-release.apk ../candidate/must-test.apk
+          cd .. && python3 - <<'PY'
+          import zipfile
+          b=zipfile.ZipFile('candidate/must-test.apk').read('assets/index.android.bundle')
+          assert b'http://127.0.0.1:8787' in b
+          assert b'https://velora-api.vedant-753.workers.dev' not in b
+          print('local-only backend URL confirmed in bundle')
+          PY
+      - uses: actions/upload-artifact@v4
+        with: { name: must-test-apk, path: candidate/must-test.apk, retention-days: 1 }
+  e2e:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - uses: actions/download-artifact@v4
+        with: { name: must-test-apk, path: candidate }
+      - name: Install Maestro
+        run: |
+          curl -Ls "https://get.maestro.mobile.dev" | bash
+          echo "$HOME/.maestro/bin" >> "$GITHUB_PATH"
+      - name: Enable emulator acceleration
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Local backend with synthetic users and library
+        run: |
+          ./scripts/e2e-backend.sh
+          node server/scripts/e2e-ui-library.mjs
+      - uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          target: google_apis
+          arch: x86_64
+          profile: pixel_2
+          ram-size: 3072
+          disable-animations: false
+          emulator-options: -no-window -gpu swiftshader -no-snapshot -noaudio -no-boot-anim
+          script: bash scripts/e2e-must-import.sh
+      - name: Backend log tail
+        if: always()
+        run: tail -n 40 /tmp/wrangler-dev.log || true
+      - name: Publish evidence
+        if: always()
+        run: |
+          git config user.email ci@velora.local; git config user.name velora-ci
+          EV=$(mktemp -d); git worktree add --detach "$EV"
+          git -C "$EV" checkout --orphan ci-evidence/must-import-${{ github.run_id }}
+          git -C "$EV" rm -rf . >/dev/null 2>&1 || true
+          cp -r must-evidence/. "$EV/" 2>/dev/null || true
+          printf 'run_id=%s\nsha=%s\nlocal_backend=true\n' "${{ github.run_id }}" "${{ github.sha }}" > "$EV/META.txt"
+          git -C "$EV" add -A; git -C "$EV" commit -m "must import evidence run ${{ github.run_id }}"
+          git -C "$EV" push origin HEAD:ci-evidence/must-import-${{ github.run_id }}

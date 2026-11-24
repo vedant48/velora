@@ -7,6 +7,8 @@ export interface MustSeason {
   /** 1-based episode numbers (position in the season) that Must marks watched. */
   watchedEpisodes: number[];
   episodeCount: number;
+  /** Must's air date per episode position (null when unknown), used to verify episode order against TMDB. */
+  episodeDates: (string | null)[];
 }
 
 export interface MustItem {

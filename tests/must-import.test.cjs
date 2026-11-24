@@ -19,8 +19,9 @@ function load(name) {
 const J = (x) => JSON.parse(JSON.stringify(x));
 const { parseMustFiles } = load('parse');
 const { chooseMatch, normalizeTitle } = load('match');
-const { buildCommitItem, batchEntries } = load('payload');
+const { buildCommitItem, batchEntries, episodesAlign } = load('payload');
 
+const withDates = (o, d) => { for (const [id, date] of Object.entries(d)) o.rows[id].p.product = { release_date: date }; return o; };
 const rec = (id, type, title, status, extra = {}) => ({
   user_product_info: { product_id: id, status, rate: extra.rate ?? null, reviewed: !!extra.review, modified_at: '2025-01-02T00:00:00Z' },
   product: { id, type, title, release_date: extra.date ?? '2020-05-05', poster_file_path: extra.poster ?? null },
@@ -77,12 +78,24 @@ test('matching: poster, unique title+year are sure; everything else needs a pick
   assert.equal(normalizeTitle('Amélie & Co.'), 'amelie and co');
 });
 
+test('episode order must agree on air dates, not just counts', () => {
+  assert.equal(episodesAlign(['2020-01-01', '2020-01-08'], ['2020-01-01', '2020-01-09']), true);
+  assert.equal(episodesAlign(['2020-01-01', '2020-01-08'], ['2020-01-08', '2020-01-01']), false); // same count, swapped order
+  assert.equal(episodesAlign([null, null], ['2020-01-01', '2020-01-08']), false); // nothing comparable
+  assert.equal(episodesAlign(['2020-01-01'], undefined), false);
+  assert.equal(episodesAlign(['2020-01-01'], ['2020-01-01', '2020-01-08']), false);
+});
+
 test('payload: episodes only sent when season counts agree, mismatches are listed as gaps', () => {
-  const item = parseMustFiles([all, shows]).items.find((i) => i.mustId === '3');
-  const ok = buildCommitItem(item, cand(99, 'Show', 2020), { tmdbCounts: { 1: 3, 2: 2 }, totalEpisodes: 5 });
+  const dated = withDates(JSON.parse(JSON.stringify(shows)), { 31: '2020-02-01', 32: '2020-02-08', 33: '2020-02-15', 41: '2021-02-01', 42: '2021-02-08' });
+  const item = parseMustFiles([all, dated]).items.find((i) => i.mustId === '3');
+  const air = { 1: ['2020-02-01', '2020-02-08', '2020-02-15'], 2: ['2021-02-01', '2021-02-08'] };
+  const ok = buildCommitItem(item, cand(99, 'Show', 2020), { tmdbCounts: { 1: 3, 2: 2 }, tmdbAirDates: air, totalEpisodes: 5 });
   assert.deepEqual(J(ok.entry.seasons.map((s) => s.watchedEpisodes)), [[1, 2], [1]]);
   assert.equal(ok.gaps.length, 0);
-  const bad = buildCommitItem(item, cand(99, 'Show', 2020), { tmdbCounts: { 1: 4, 2: 2 }, totalEpisodes: 6 });
+  const reordered = buildCommitItem(item, cand(99, 'Show', 2020), { tmdbCounts: { 1: 3, 2: 2 }, tmdbAirDates: { ...air, 1: ['2020-02-15', '2020-02-08', '2020-02-01'] }, totalEpisodes: 5 });
+  assert.match(reordered.gaps[0].note, /Season 1.*order could not be confirmed/);
+  const bad = buildCommitItem(item, cand(99, 'Show', 2020), { tmdbCounts: { 1: 4, 2: 2 }, tmdbAirDates: air, totalEpisodes: 6 });
   assert.deepEqual(J(bad.entry.seasons.map((s) => [s.season, s.watchedEpisodes])), [[1, []], [2, [1]]]);
   assert.match(bad.gaps[0].note, /Season 1: 2 watched episodes not imported/);
   const unknown = buildCommitItem(item, cand(99, 'Show', 2020), { tmdbCounts: null, totalEpisodes: 0 });
