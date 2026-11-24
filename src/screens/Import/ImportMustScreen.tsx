@@ -7,6 +7,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { veloraApi } from '../../api/velora';
 import { AppButton } from '../../components/common/AppButton';
 import { ScreenHeader } from '../../components/common/ScreenHeader';
+import { mapPool } from '../../services/mustImport/pool';
 import { batchEntries, buildCommitItem, CommitItem, Gap } from '../../services/mustImport/payload';
 import { parseMustFiles } from '../../services/mustImport/parse';
 import { matchAll, tmdbSeasonCheck } from '../../services/mustImport/runner';
@@ -98,17 +99,26 @@ export const ImportMustScreen: React.FC = () => {
     const entries: CommitItem[] = [];
     const todo = items.filter((it) => resolved(it));
     const unmatched = items.filter((it) => !resolved(it)).map((it) => `${it.title}${it.year ? ` (${it.year})` : ''}`);
-    let n = 0;
-    for (const it of todo) {
+    // TMDB season checks are independent: run a few at a time instead of one after another.
+    const checks = await mapPool(
+      todo,
+      6,
+      (it) => {
+        const tmdb = resolved(it)!;
+        return it.type === 'tv'
+          ? tmdbSeasonCheck(tmdb.id, (it.seasons ?? []).filter((s) => s.watchedEpisodes.length > 0).map((s) => s.number))
+          : Promise.resolve(null);
+      },
+      (d) => { if (d % 10 === 0) setProgress(`Preparing ${d} of ${todo.length}`); },
+    );
+    todo.forEach((it, idx) => {
       const tmdb = resolved(it)!;
-      n++;
-      if (n % 10 === 0) setProgress(`Preparing ${n} of ${todo.length}`);
+      const check = checks[idx];
       const needsCheck = it.type === 'tv' && it.seasons?.some((s) => s.watchedEpisodes.length > 0);
-      const check = it.type === 'tv' ? await tmdbSeasonCheck(tmdb.id, (it.seasons ?? []).filter((s) => s.watchedEpisodes.length > 0).map((s) => s.number)) : null;
       const built = buildCommitItem(it, tmdb, check ? { tmdbCounts: check.tmdbCounts, tmdbAirDates: check.tmdbAirDates, totalEpisodes: check.totalEpisodes } : needsCheck ? { tmdbCounts: null, totalEpisodes: 0 } : undefined);
       entries.push(built.entry);
       gaps.push(...built.gaps);
-    }
+    });
     let created = 0, kept = 0, episodes = 0;
     const failed: string[] = [];
     const titleOf = new Map(items.map((i) => [i.mustId, i.title]));

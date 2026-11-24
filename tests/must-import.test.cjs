@@ -139,3 +139,17 @@ test('a single combined file with profile list and series detail is accepted', (
   assert.equal(r.items.length, 1);
   assert.equal(r.items[0].seasons.length, 1);
 });
+
+test('mapPool keeps order, respects the concurrency limit and reports progress', async () => {
+  const { mapPool } = load('pool');
+  let active = 0, peak = 0, last = 0;
+  const out = await mapPool([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 3, async (n) => {
+    active++; peak = Math.max(peak, active);
+    await new Promise((r) => setTimeout(r, 5 * (11 - n)));
+    active--; return n * 2;
+  }, (d) => { last = d; });
+  assert.deepEqual(J(out), [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]);
+  assert.ok(peak <= 3 && peak > 1);
+  assert.equal(last, 10);
+  assert.deepEqual(J(await mapPool([], 4, async (x) => x)), []);
+});

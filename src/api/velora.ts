@@ -257,7 +257,7 @@ export const veloraApi = {
 
   importMust: (items: unknown[]) =>
     call<{ results: { mustId: string; outcome: 'created' | 'existing_kept' | 'failed'; episodesAdded: number; error?: string }[] }>(
-      '/library/import/must', { method: 'POST', body: { items } }),
+      '/library/import/must', { method: 'POST', body: { items }, timeoutMs: 90000 }),
 
   putReview: (mediaType: MediaType, tmdbId: number, body: { body?: string; rating?: number | null; seasonNumber?: number }) =>
     call<Review>(`/reviews/${mediaType}/${tmdbId}`, { method: 'PUT', body }),
