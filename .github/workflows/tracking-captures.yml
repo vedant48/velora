@@ -1,0 +1,62 @@
+name: Capture tracking demo screens
+on:
+  push:
+    branches: [test/tracking-store146]
+    paths: [.ci/tracking-capture]
+permissions:
+  contents: write
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/download-artifact@v4
+        with:
+          name: velora-permissions-local-test
+          path: candidate
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: 45360956953
+      - name: Assert offline isolation before any login
+        run: |
+          python3 - <<'PYTEST'
+          import zipfile
+          b=zipfile.ZipFile('candidate/permission-test.apk').read('assets/index.android.bundle')
+          assert b'http://127.0.0.1:8787' in b
+          assert b'https://velora-api.vedant-753.workers.dev' not in b
+          PYTEST
+      - name: Local demo backend
+        run: |
+          bash scripts/e2e-backend.sh
+          node server/scripts/e2e-ui-library.mjs
+      - name: Enable acceleration
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          target: google_apis
+          arch: x86_64
+          profile: pixel_2
+          ram-size: 3072
+          emulator-options: -no-window -gpu swiftshader -no-snapshot -noaudio -no-boot-anim
+          script: python3 scripts/tracking-captures.py
+      - name: Save demo evidence
+        if: always()
+        run: |
+          git config user.name velora-ci
+          git config user.email ci@velora.local
+          EV=$(mktemp -d)
+          git worktree add --detach "$EV"
+          git -C "$EV" checkout --orphan ci-evidence/tracking-${{ github.run_id }}
+          git -C "$EV" rm -rf .
+          cp -r tracking-captures/. "$EV/" || true
+          printf 'run_id=%s\nlocal_backend=true\n' '${{ github.run_id }}' > "$EV/META.txt"
+          git -C "$EV" add -A
+          git -C "$EV" commit -m 'test: isolated synthetic tracking captures'
+          git -C "$EV" push origin HEAD:ci-evidence/tracking-${{ github.run_id }}

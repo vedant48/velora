@@ -10,4 +10,3 @@ const rows=[
 for(const row of rows){const r=await fetch(`http://127.0.0.1:8787/api/library/${row.mediaType}/${row.tmdbId}`,{method:'PUT',headers:{Authorization:`Bearer ${aliceToken}`,'Content-Type':'application/json'},body:JSON.stringify(row)});if(!r.ok)throw Error(`seed ${row.tmdbId}: ${r.status} ${await r.text()}`);}
 console.log('Seeded5 synthetic-account library items locally');
 
-for (const [id,rating] of [[680,9],[27205,10]]) { const r=await fetch(`http://127.0.0.1:8787/api/reviews/movie/${id}`,{method:'PUT',headers:{Authorization:`Bearer ${aliceToken}`,'Content-Type':'application/json'},body:JSON.stringify({rating,body:'Synthetic local motion check'})});if(!r.ok)throw Error(`review seed: ${r.status} ${await r.text()}`);}
