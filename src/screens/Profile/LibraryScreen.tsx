@@ -335,7 +335,7 @@ export const LibraryScreen: React.FC = () => {
               keyExtractor={keyExtractor} renderItem={renderItem} numColumns={2}
               drawDistance={280}
               onScroll={pageTab === tab
-                ? Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], { useNativeDriver: true, listener: (e: any) => { pageOffsets.current[pageTab] = e.nativeEvent.contentOffset.y; } })
+                ? Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], { useNativeDriver: false, listener: (e: any) => { pageOffsets.current[pageTab] = e.nativeEvent.contentOffset.y; } })
                 : (e: any) => { pageOffsets.current[pageTab] = e.nativeEvent.contentOffset.y; }}
               scrollEventThrottle={16}
               scrollEnabled={!sortSheetVisible}
