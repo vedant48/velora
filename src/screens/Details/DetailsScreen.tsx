@@ -383,7 +383,7 @@ export const DetailsScreen: React.FC = () => {
           <View style={styles.statsRow}>
             {tmdbRating > 0 && (
               <View style={styles.statCell}>
-                <Ionicons name="star" size={15} color={colors.accentAmber} />
+                <Ionicons name="analytics" size={15} color={colors.accentCyan} />
                 <Text style={styles.statValue}>{tmdbRating.toFixed(1)}</Text>
                 <Text style={styles.statLabel}>TMDB</Text>
               </View>

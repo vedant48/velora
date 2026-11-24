@@ -38,6 +38,10 @@ export interface LibraryItem {
   release_date: string | null;
   status: LibraryStatus;
   rating: number | null;
+  /** Series only: more than one season is rated (the card shows the latest rated season plus ..). */
+  more_ratings?: number;
+  /** A non-empty written review exists (title, or any season for a series). */
+  has_review?: number;
   episodes_watched: number;
   total_episodes: number;
   added_at: string;

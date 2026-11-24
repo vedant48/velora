@@ -44,3 +44,23 @@ test('1404-item library is returned whole, Want items (oldest updated_at) includ
   assert.equal(st.watched, 899);
   assert.equal(st.series, 132);
 });
+
+test('series card rating = latest rated season (+more_ratings); movies keep theirs; has_review only for non-empty body', async () => {
+  const { sqlite, db } = setup();
+  const ins = sqlite.prepare(`INSERT INTO library_items (id, user_id, media_type, tmdb_id, title, status, rating) VALUES (?, 'u1', ?, ?, ?, ?, ?)`);
+  ins.run('a', 'tv', 1, 'Multi', 'watched', null);
+  ins.run('b', 'tv', 2, 'None', 'watching', null);
+  ins.run('c', 'movie', 3, 'Movie', 'watched', 7);
+  ins.run('d', 'movie', 4, 'Unrated movie', 'want', null);
+  ins.run('e', 'tv', 5, 'Single', 'watched', null);
+  const rv = sqlite.prepare(`INSERT INTO reviews (id, user_id, media_type, tmdb_id, season_number, rating, body) VALUES (?, 'u1', ?, ?, ?, ?, ?)`);
+  rv.run('r1', 'tv', 1, 1, 8, ''); rv.run('r2', 'tv', 1, 3, 6, ''); rv.run('r3', 'tv', 1, 2, null, '');
+  rv.run('r4', 'tv', 5, 1, 9, 'loved it'); rv.run('r5', 'movie', 3, 0, 7, '   ');
+  const { items } = await new LibraryService(db).list('u1');
+  const by = Object.fromEntries((items as any[]).map((i) => [i.id, i]));
+  assert.equal(by.a.rating, 6); assert.equal(by.a.more_ratings, 1); assert.equal(by.a.has_review, 0);
+  assert.equal(by.b.rating, null); assert.equal(by.b.more_ratings, 0);
+  assert.equal(by.c.rating, 7); assert.equal(by.c.has_review, 0);
+  assert.equal(by.d.rating, null);
+  assert.equal(by.e.rating, 9); assert.equal(by.e.more_ratings, 0); assert.equal(by.e.has_review, 1);
+});

@@ -33,3 +33,19 @@ test('real-scale split: 330 Want movies + 43 Want series + 899 watched movies + 
  const count = (t) => items.filter(i => itemInTab(i,t)).length;
  assert.equal(count('want'),373); assert.equal(count('watched'),899); assert.equal(count('series'),132);
 });
+const sp = {};
+vm.runInNewContext(ts.transpileModule(fs.readFileSync('src/components/Library/seriesProgress.ts', 'utf8'), {compilerOptions:{module:ts.ModuleKind.CommonJS}}).outputText, {exports:sp});
+test('series progress and ended tick are source grounded', () => {
+ const mk = (status, w, t) => ({media_type:'tv', status, episodes_watched:w, total_episodes:t});
+ assert.equal(sp.seriesProgress(mk('want',0,10)), null);
+ assert.equal(sp.seriesProgress(mk('watching',3,0)), null);
+ assert.equal(sp.seriesProgress({media_type:'movie',status:'watched',episodes_watched:0,total_episodes:0}), null);
+ const part = sp.seriesProgress(mk('watching',3,10)); assert.equal(part.left, 7);
+ const full = sp.seriesProgress(mk('watched',10,10)); assert.equal(full.left, 0);
+ assert.equal(sp.isEndedComplete(full, {status:'Ended', number_of_episodes:10}), true);
+ assert.equal(sp.isEndedComplete(full, {status:'Canceled', number_of_episodes:10}), true);
+ assert.equal(sp.isEndedComplete(full, {status:'Returning Series', number_of_episodes:10}), false);
+ assert.equal(sp.isEndedComplete(full, undefined), false);
+ assert.equal(sp.isEndedComplete(full, {status:'Ended', number_of_episodes:12}), false);
+ assert.equal(sp.isEndedComplete(part, {status:'Ended', number_of_episodes:10}), false);
+});

@@ -27,6 +27,22 @@ export interface LibraryItemInput {
 /** Whole-library read: the app filters tabs client-side, so a cap below the library size silently drops items. */
 export const LIBRARY_LIST_MAX = 10000;
 
+/**
+ * Library list rows. A series has no title-level rating (each season is rated), so its card shows the
+ * rating of the highest-numbered rated season; more_ratings flags that other seasons are rated too.
+ * has_review is true only when a non-empty written review exists (title, or any season for a series).
+ * Everything is derived at read time and never stored; no rating stays null.
+ */
+const R_JOIN = `r.user_id = library_items.user_id AND r.media_type = library_items.media_type AND r.tmdb_id = library_items.tmdb_id`;
+const LIST_ITEM = `SELECT id, media_type, tmdb_id, title, poster_path, backdrop_path, release_date, status,
+       COALESCE(rating, CASE WHEN media_type = 'tv' THEN (
+         SELECT r.rating FROM reviews r WHERE ${R_JOIN} AND r.season_number > 0 AND r.rating IS NOT NULL
+         ORDER BY r.season_number DESC LIMIT 1) END) AS rating,
+       CASE WHEN media_type = 'tv' AND (SELECT COUNT(*) FROM reviews r WHERE ${R_JOIN} AND r.season_number > 0 AND r.rating IS NOT NULL) > 1
+         THEN 1 ELSE 0 END AS more_ratings,
+       CASE WHEN EXISTS (SELECT 1 FROM reviews r WHERE ${R_JOIN} AND TRIM(r.body) <> '') THEN 1 ELSE 0 END AS has_review,
+       episodes_watched, total_episodes, added_at, updated_at FROM library_items`;
+
 const SELECT_ITEM = `SELECT id, media_type, tmdb_id, title, poster_path, backdrop_path, release_date,
        status, rating, episodes_watched, total_episodes, added_at, updated_at FROM library_items`;
 
@@ -46,7 +62,7 @@ export class LibraryService {
       params.push(requireMediaType(mediaType));
     }
     const items = await this.db.all(
-      `${SELECT_ITEM} WHERE ${clauses.join(' AND ')} ORDER BY updated_at DESC LIMIT ${LIBRARY_LIST_MAX}`,
+      `${LIST_ITEM} WHERE ${clauses.join(' AND ')} ORDER BY updated_at DESC LIMIT ${LIBRARY_LIST_MAX}`,
       params,
     );
     return { items };

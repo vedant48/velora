@@ -191,13 +191,13 @@ export function useSimilarMoviesQuery(id: number) {
   });
 }
 
-export function useTVDetailsQuery(id: number) {
+export function useTVDetailsQuery(id: number, enabled = true) {
   return useQuery({
     queryKey: ['tv_details', id],
     queryFn: ({ signal }) => getTVDetails(id, signal),
     staleTime: STALE_TIME,
     gcTime: GC_TIME,
-    enabled: Boolean(id),
+    enabled: Boolean(id) && enabled,
   });
 }
 

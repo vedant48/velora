@@ -1,8 +1,8 @@
-## Library lists and counts fixed
+## Ratings, reviews and series progress on library cards
 
-- Fixes the empty Want list on large libraries: the app now receives your whole library instead of only the newest 1,000 titles.
-- Want lists every title you want, movies and series. Watched lists only watched movies. Series lists only series you are watching or have watched.
-- The Want, Watched and Series counts at the top follow the same rules.
-- Includes the Must import speed fixes and the TMDB score on the title screen from 1.5.2.
+- Your own rating now shows on every poster in your library (amber star). A small review icon appears next to it only when you wrote a review.
+- Series show the rating of your latest rated season, with ".." when more seasons are rated.
+- Series posters show a progress tracker at the top left: how many episodes are left. Ended series you finished show a tick instead.
+- The TMDB score on the title screen uses a different icon, so it is never confused with your rating.
 
-No change to your account, library or signing key; update in place, no uninstall needed.
+No change to your account or library; update in place.
