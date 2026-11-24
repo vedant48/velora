@@ -1,0 +1,35 @@
+appId: com.vedant.velora
+---
+- launchApp
+- tapOn: 'Log in / Sign up'
+- tapOn: Username
+- inputText: e2e_alice
+- tapOn: Password
+- inputText: e2e-alice-pass-1
+- hideKeyboard
+- tapOn:
+    text: 'Log in'
+    below: Password
+- extendedWaitUntil:
+    visible: E2E Alice
+    timeout: 30000
+# Real-scale library (1404 items): Want must list items; header 373 / 899 / 132.
+- assertVisible: 373
+- assertVisible: 899
+- assertVisible: 132
+- takeScreenshot: 1-want-tab-373
+- assertVisible: 'movie want 1'
+- tapOn:
+    point: 29%, 40%
+- extendedWaitUntil:
+    visible: 'movie watched 1'
+    timeout: 15000
+- takeScreenshot: 2-watched-movies-only
+- assertNotVisible: 'tv watched 1'
+- tapOn:
+    point: 46%, 40%
+- extendedWaitUntil:
+    visible: 'tv watched 1'
+    timeout: 15000
+- takeScreenshot: 3-series-watching-and-watched
+- assertNotVisible: 'tv want 1'
