@@ -72,6 +72,10 @@ export const DetailsScreen: React.FC = () => {
     (details as any)?.first_air_date ||
     initialItem.release_date;
 
+  // Items opened from the library carry no rating, so the loaded TMDB details are the source. This is TMDB's
+  // community score, not IMDb's: Velora has no IMDb data source.
+  const tmdbRating = Number((details as any)?.vote_average ?? initialItem.vote_average ?? 0) || 0;
+
   const totalEpisodes = isTV ? Number((details as any)?.number_of_episodes ?? 0) : 0;
 
   const lib = useLibraryItem({
@@ -377,11 +381,11 @@ export const DetailsScreen: React.FC = () => {
 
           {/* Stats row: rating + platform counts */}
           <View style={styles.statsRow}>
-            {initialItem.vote_average > 0 && (
+            {tmdbRating > 0 && (
               <View style={styles.statCell}>
                 <Ionicons name="star" size={15} color={colors.accentAmber} />
-                <Text style={styles.statValue}>{initialItem.vote_average.toFixed(1)}</Text>
-                <Text style={styles.statLabel}>Rating</Text>
+                <Text style={styles.statValue}>{tmdbRating.toFixed(1)}</Text>
+                <Text style={styles.statLabel}>TMDB</Text>
               </View>
             )}
             <View style={styles.statCell}>

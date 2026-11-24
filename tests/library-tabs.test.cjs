@@ -9,3 +9,10 @@ test('vertical refresh, short drags and cancelled intent do not change tabs', ()
  for (const [x,y,v] of [[20,120,900],[15,0,900],[45,0,100],[90,100,900]]) assert.equal(tabAfterSwipe('want',x,y,v),'want');
  assert.equal(tabAfterSwipe('want',-30,2,-900),'watched');
 });
+test('Want series stay in Want; Series holds only tracked (non-Want) series', () => {
+ const {itemInTab} = exportsObject;
+ const tv = (status) => ({media_type:'tv', status}), movie = (status) => ({media_type:'movie', status});
+ assert.equal(itemInTab(tv('want'),'series'), false); assert.equal(itemInTab(tv('want'),'want'), true);
+ assert.equal(itemInTab(tv('watching'),'series'), true); assert.equal(itemInTab(tv('watched'),'series'), true);
+ assert.equal(itemInTab(movie('watched'),'series'), false); assert.equal(itemInTab(movie('want'),'want'), true);
+});

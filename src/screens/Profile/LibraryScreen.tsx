@@ -6,7 +6,7 @@ import { FlashList } from '@shopify/flash-list';
 import React, { memo, useCallback, useMemo, useRef, useState } from 'react';
 import { Alert, Pressable, RefreshControl, Share, StyleSheet, Text, View } from 'react-native';
 import { ContentPager } from '../../experience/ContentPager';
-import { LibraryTab } from './libraryTabs';
+import { itemInTab, LibraryTab } from './libraryTabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LibraryItem, Review, UserStats, veloraApi } from '../../api/velora';
 import { AppButton } from '../../components/common/AppButton';
@@ -129,7 +129,7 @@ export const LibraryScreen: React.FC = () => {
     const now = new Date();
     const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
     const forTab = (pageTab: TabKey) => {
-    const scoped = items.filter(i => pageTab === 'series' ? i.media_type === 'tv' : i.status === pageTab);
+    const scoped = items.filter(i => itemInTab(i, pageTab));
     const list = scoped.filter(i => !(hideMovies && i.media_type === 'movie') && !(hideSeries && i.media_type === 'tv') && !(hideUnreleased && i.release_date && i.release_date > today));
     if (sort === 'release') list.sort((a, b) => (b.release_date ?? '').localeCompare(a.release_date ?? ''));
     else if (sort === 'title') list.sort((a, b) => a.title.localeCompare(b.title));
@@ -194,7 +194,7 @@ export const LibraryScreen: React.FC = () => {
 
   const insights = useMemo(() => {
     const watchedMovies = allItems.filter((i) => i.media_type === 'movie' && i.status === 'watched');
-    const series = allItems.filter((i) => i.media_type === 'tv');
+    const series = allItems.filter((i) => itemInTab(i, 'series'));
     const episodes = series.reduce((sum, i) => sum + i.episodes_watched, 0);
     const rated = myReviews.filter((r) => r.rating != null);
     const avg = rated.length

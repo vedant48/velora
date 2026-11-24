@@ -8,3 +8,10 @@ export function tabAfterSwipe(current: LibraryTab, dx: number, dy: number, veloc
   const index = LIBRARY_TAB_KEYS.indexOf(current);
   return LIBRARY_TAB_KEYS[Math.max(0, Math.min(LIBRARY_TAB_KEYS.length - 1, index + (dx < 0 ? 1 : -1)))];
 }
+
+/** Which tab a library item belongs to. A series the user only wants stays in Want, not in Series. */
+export function itemInTab(item: { media_type: string; status: string }, tab: LibraryTab): boolean {
+  if (tab === 'series') return item.media_type === 'tv' && item.status !== 'want';
+  if (tab === 'insights') return false;
+  return item.status === tab;
+}
