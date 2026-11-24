@@ -15,9 +15,9 @@ export function seriesProgress(item: Pick<LibraryItem, 'media_type' | 'status' |
   return { watched, total, left: total - watched, fraction: watched / total };
 }
 
-/** TMDB series status values that mean no more episodes are coming. */
+/** TMDB status that means the series ended (the user's rule: ended and all watched). Canceled stays neutral. */
 export function isEndedStatus(status: string | undefined | null): boolean {
-  return status === 'Ended' || status === 'Canceled';
+  return status === 'Ended';
 }
 
 /**

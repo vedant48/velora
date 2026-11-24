@@ -43,9 +43,9 @@ test('series progress and ended tick are source grounded', () => {
  const part = sp.seriesProgress(mk('watching',3,10)); assert.equal(part.left, 7);
  const full = sp.seriesProgress(mk('watched',10,10)); assert.equal(full.left, 0);
  assert.equal(sp.isEndedComplete(full, {status:'Ended', number_of_episodes:10}), true);
- assert.equal(sp.isEndedComplete(full, {status:'Canceled', number_of_episodes:10}), true);
  assert.equal(sp.isEndedComplete(full, {status:'Returning Series', number_of_episodes:10}), false);
  assert.equal(sp.isEndedComplete(full, undefined), false);
  assert.equal(sp.isEndedComplete(full, {status:'Ended', number_of_episodes:12}), false);
  assert.equal(sp.isEndedComplete(part, {status:'Ended', number_of_episodes:10}), false);
 });
+test('canceled stays neutral', () => { assert.equal(sp.isEndedComplete(sp.seriesProgress({media_type:'tv',status:'watched',episodes_watched:10,total_episodes:10}), {status:'Canceled', number_of_episodes:10}), false); });
