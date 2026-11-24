@@ -24,6 +24,9 @@ export interface LibraryItemInput {
   totalEpisodes?: number | null;
 }
 
+/** Whole-library read: the app filters tabs client-side, so a cap below the library size silently drops items. */
+export const LIBRARY_LIST_MAX = 10000;
+
 const SELECT_ITEM = `SELECT id, media_type, tmdb_id, title, poster_path, backdrop_path, release_date,
        status, rating, episodes_watched, total_episodes, added_at, updated_at FROM library_items`;
 
@@ -43,7 +46,7 @@ export class LibraryService {
       params.push(requireMediaType(mediaType));
     }
     const items = await this.db.all(
-      `${SELECT_ITEM} WHERE ${clauses.join(' AND ')} ORDER BY updated_at DESC LIMIT 1000`,
+      `${SELECT_ITEM} WHERE ${clauses.join(' AND ')} ORDER BY updated_at DESC LIMIT ${LIBRARY_LIST_MAX}`,
       params,
     );
     return { items };

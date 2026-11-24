@@ -25,10 +25,11 @@ export class UsersService {
     );
     let watched = 0, want = 0, watching = 0, series = 0;
     for (const c of counts) {
-      if (c.status === 'watched') watched += c.n;
+      // Watched counts movies only; watched series live under Series.
+      if (c.status === 'watched' && c.media_type === 'movie') watched += c.n;
       if (c.status === 'want') want += c.n;
       if (c.status === 'watching') watching += c.n;
-      if (c.media_type === 'tv' && c.status !== 'want') series += c.n;
+      if (c.media_type === 'tv' && (c.status === 'watching' || c.status === 'watched')) series += c.n;
     }
     const rev = await this.db.first<{ n: number }>('SELECT COUNT(*) AS n FROM reviews WHERE user_id = ?', [userId]);
     const f1 = await this.db.first<{ n: number }>('SELECT COUNT(*) AS n FROM follows WHERE followee_id = ?', [userId]);
@@ -36,8 +37,8 @@ export class UsersService {
     // Global rank by watched count (1 = most watched titles).
     const rankRow = await this.db.first<{ r: number }>(
       `SELECT 1 + COUNT(*) AS r FROM (
-         SELECT user_id, COUNT(*) AS c FROM library_items WHERE status = 'watched' GROUP BY user_id
-       ) WHERE c > (SELECT COUNT(*) FROM library_items WHERE status = 'watched' AND user_id = ?)`,
+         SELECT user_id, COUNT(*) AS c FROM library_items WHERE status = 'watched' AND media_type = 'movie' GROUP BY user_id
+       ) WHERE c > (SELECT COUNT(*) FROM library_items WHERE status = 'watched' AND media_type = 'movie' AND user_id = ?)`,
       [userId],
     );
     return {

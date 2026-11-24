@@ -16,3 +16,20 @@ test('Want series stay in Want; Series holds only tracked (non-Want) series', ()
  assert.equal(itemInTab(tv('watching'),'series'), true); assert.equal(itemInTab(tv('watched'),'series'), true);
  assert.equal(itemInTab(movie('watched'),'series'), false); assert.equal(itemInTab(movie('want'),'want'), true);
 });
+
+test('owner tab rules: Want both media, Watched movies only, Series watching/watched series only', () => {
+ const {itemInTab} = exportsObject;
+ const it = (media_type, status) => ({media_type, status});
+ const tabs = (i) => ['want','watched','series'].filter(t => itemInTab(i,t));
+ assert.deepEqual(tabs(it('movie','want')), ['want']); assert.deepEqual(tabs(it('tv','want')), ['want']);
+ assert.deepEqual(tabs(it('movie','watched')), ['watched']); assert.deepEqual(tabs(it('tv','watched')), ['series']);
+ assert.deepEqual(tabs(it('tv','watching')), ['series']); assert.deepEqual(tabs(it('movie','watching')), []);
+ assert.equal(itemInTab(it('tv','watching'),'insights'), false);
+});
+test('real-scale split: 330 Want movies + 43 Want series + 899 watched movies + 52 watched series + 80 watching series', () => {
+ const {itemInTab} = exportsObject;
+ const items = [];
+ for (const [m,s,n] of [['movie','want',330],['tv','want',43],['movie','watched',899],['tv','watched',52],['tv','watching',80]]) for (let i=0;i<n;i++) items.push({media_type:m,status:s});
+ const count = (t) => items.filter(i => itemInTab(i,t)).length;
+ assert.equal(count('want'),373); assert.equal(count('watched'),899); assert.equal(count('series'),132);
+});
