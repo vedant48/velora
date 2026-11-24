@@ -1,0 +1,122 @@
++ set -uo pipefail
++ ls -la candidate .ci
+.ci:
+total 16
+drwxr-xr-x  2 runner runner 4096 Nov 24 16:00 .
+drwxr-xr-x 16 runner runner 4096 Nov 24 16:02 ..
+-rw-r--r--  1 runner runner 1875 Nov 24 16:00 must-synth.json
+-rw-r--r--  1 runner runner   29 Nov 24 16:00 trigger-native
+
+candidate:
+total 25932
+drwxr-xr-x  2 runner runner     4096 Nov 24 16:00 .
+drwxr-xr-x 16 runner runner     4096 Nov 24 16:02 ..
+-rw-r--r--  1 runner runner 26542538 Nov 24 16:00 must-test.apk
++ adb devices
+List of devices attached
+emulator-5554	device
+
++ adb reverse tcp:8787 tcp:8787
+8787
++ adb install -r candidate/must-test.apk
+Performing Streamed Install
+Success
++ adb shell wm size 720x1280
++ adb shell wm density 320
++ python3 scripts/emulator-ready.py
+Device has no launcher ANR dialog
++ adb push .ci/must-synth.json /sdcard/Download/must-synth.json
+.ci/must-synth.json: 1 file pushed, 0 skipped. 23.3 MB/s (1875 bytes in 0.000s)
++ adb shell am broadcast -a android.intent.action.MEDIA_SCANNER_SCAN_FILE -d file:///sdcard/Download/must-synth.json
+Broadcasting: Intent { act=android.intent.action.MEDIA_SCANNER_SCAN_FILE dat=file:///... flg=0x400000 }
+Broadcast completed: result=0
++ rec=3391
++ adb shell screenrecord --time-limit 170 /sdcard/must.mp4
++ set +e
++ maestro test --format junit --output must-evidence/must-import.xml --test-output-dir must-evidence/maestro .maestro/must-import.yaml
+Anonymous analytics enabled. To opt out, set MAESTRO_CLI_NO_ANALYTICS environment variable to any value before running Maestro.
+
+
+Waiting for flows to complete...
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/home/runner/.maestro/lib/protobuf-java-3.21.9.jar)
+WARNING: Please consider reporting this to the maintainers of class com.google.protobuf.UnsafeUtil$MemoryAccessor
+WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release
+[Passed] must-import (1m 21s)
+
+1/1 Flow Passed in 1m 21s
+
++ status=0
++ adb shell pkill -INT screenrecord
++ wait 3391
++ adb pull /sdcard/must.mp4 must-evidence/must.mp4
+/sdcard/must.mp4: 1 file pulled, 0 skipped. 50.8 MB/s (5453674 bytes in 0.102s)
++ adb logcat -d -t 800
++ '[' 0 = 0 ']'
++ node server/scripts/../../scripts/e2e-must-verify.mjs
++ status=0
++ cat must-evidence/verify.txt
+episodes {"watched":[{"season":1,"episode":1},{"season":1,"episode":2},{"season":1,"episode":3}]}
+{
+ "lib": [
+  [
+   "The Matrix",
+   "watched",
+   10,
+   0
+  ],
+  [
+   "Chernobyl",
+   "watching",
+   null,
+   3
+  ],
+  [
+   "The Bear",
+   "want",
+   null,
+   0
+  ],
+  [
+   "Pulp Fiction",
+   "want",
+   null,
+   0
+  ],
+  [
+   "Fight Club",
+   "want",
+   null,
+   0
+  ],
+  [
+   "Forrest Gump",
+   "want",
+   null,
+   0
+  ],
+  [
+   "Inception",
+   "watched",
+   null,
+   0
+  ],
+  [
+   "Breaking Bad",
+   "watching",
+   null,
+   0
+  ]
+ ],
+ "out": {
+  "inception_not_overwritten_status_watched": true,
+  "inception_rating_not_overwritten": true,
+  "matrix_created_watched_rating10": true,
+  "chernobyl_watching_3_eps": true,
+  "bear_want_no_episodes": true,
+  "matrix_added_at_is_source_modified_fallback": true,
+  "matrix_review_body": true,
+  "inception_no_review_added": true
+ }
+}
++ exit 0
