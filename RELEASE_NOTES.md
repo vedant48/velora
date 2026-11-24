@@ -1,12 +1,9 @@
-## Import from Must (file import)
+## Faster, safer Must import
 
-- Settings > Account > Import from Must. Choose your Must export files (JSON); Velora does not connect to or fetch anything from Must.
-- Titles are matched to TMDB by poster, then title and year. Anything unsure is shown for you to pick or skip. Nothing ambiguous is imported on its own.
-- Episode progress is only imported when a season's episode count and air dates match TMDB; otherwise it is left out and listed.
-- Imports Want, Watched movies and series with ratings, reviews, season ratings and per-episode progress where the file has them. Want series stay in Want.
-- Existing Velora titles, ratings and reviews are never overwritten. Re-running only adds missing episodes, season ratings and reviews.
-- Must does not store original add or watch dates. New titles use Must's last-modified date as their added date (recorded as a fallback, not the original), or the import date if it is missing.
-- At the end you get a list of what was added, kept, failed, not matched, and every data gap (for example series without episode detail in the file, or seasons whose episode counts differ from TMDB).
+- Fixes the Must import failing with "Fetch request has been canceled". The import now waits up to 90 seconds for a batch instead of 15.
+- The "Preparing" step checks TMDB seasons six at a time instead of one by one.
+- The server (already updated) saves each title in one transaction with bulk writes, so a title is saved fully or not at all.
+- Safe to run again after a failed import: titles already in Velora are left unchanged (status, rating, reviews), and missing episodes, season ratings and reviews from Must are added.
+- Episode gaps that cannot be matched to TMDB are still listed, not imported.
 
-Requires the matching backend update (new import endpoint and table), already applied before this release. No change to your account, library, or signing key; no uninstall needed.
-
+No change to your account, library, or signing key; update in place, no uninstall needed.
