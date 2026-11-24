@@ -1,0 +1,127 @@
++ set -uo pipefail
++ ls -la candidate .ci
+.ci:
+total 16
+drwxr-xr-x  2 runner runner 4096 Nov 24 15:38 .
+drwxr-xr-x 16 runner runner 4096 Nov 24 15:40 ..
+-rw-r--r--  1 runner runner 1875 Nov 24 15:38 must-synth.json
+-rw-r--r--  1 runner runner   29 Nov 24 15:38 trigger-native
+
+candidate:
+total 25932
+drwxr-xr-x  2 runner runner     4096 Nov 24 15:38 .
+drwxr-xr-x 16 runner runner     4096 Nov 24 15:40 ..
+-rw-r--r--  1 runner runner 26542434 Nov 24 15:38 must-test.apk
++ adb devices
+List of devices attached
+emulator-5554	device
+
++ adb reverse tcp:8787 tcp:8787
+8787
++ adb install -r candidate/must-test.apk
+Performing Streamed Install
+Success
++ adb shell wm size 720x1280
++ adb shell wm density 320
++ python3 scripts/emulator-ready.py
+Device has no launcher ANR dialog
++ adb push .ci/must-synth.json /sdcard/Download/must-synth.json
+.ci/must-synth.json: 1 file pushed, 0 skipped. 13.7 MB/s (1875 bytes in 0.000s)
++ adb shell am broadcast -a android.intent.action.MEDIA_SCANNER_SCAN_FILE -d file:///sdcard/Download/must-synth.json
+Broadcasting: Intent { act=android.intent.action.MEDIA_SCANNER_SCAN_FILE dat=file:///... flg=0x400000 }
+Broadcast completed: result=0
++ rec=3489
++ set +e
++ maestro test --format junit --output must-evidence/must-import.xml --test-output-dir must-evidence/maestro .maestro/must-import.yaml
++ adb shell screenrecord --time-limit 170 /sdcard/must.mp4
+Anonymous analytics enabled. To opt out, set MAESTRO_CLI_NO_ANALYTICS environment variable to any value before running Maestro.
+
+
+Waiting for flows to complete...
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/home/runner/.maestro/lib/protobuf-java-3.21.9.jar)
+WARNING: Please consider reporting this to the maintainers of class com.google.protobuf.UnsafeUtil$MemoryAccessor
+WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release
+[Passed] must-import (1m 18s)
+
+1/1 Flow Passed in 1m 18s
+
++ status=0
++ adb shell pkill -INT screenrecord
++ wait 3489
++ adb pull /sdcard/must.mp4 must-evidence/must.mp4
+/sdcard/must.mp4: 1 file pulled, 0 skipped. 91.5 MB/s (5633347 bytes in 0.059s)
++ adb logcat -d -t 800
++ '[' 0 = 0 ']'
++ node server/scripts/../../scripts/e2e-must-verify.mjs
++ status=1
++ cat must-evidence/verify.txt
+episodes {"watched":[]}
+{
+ "lib": [
+  [
+   "The Matrix",
+   "watched",
+   10,
+   0
+  ],
+  [
+   "Chernobyl",
+   "watching",
+   null,
+   0
+  ],
+  [
+   "The Bear",
+   "want",
+   null,
+   0
+  ],
+  [
+   "Pulp Fiction",
+   "want",
+   null,
+   0
+  ],
+  [
+   "Fight Club",
+   "want",
+   null,
+   0
+  ],
+  [
+   "Forrest Gump",
+   "want",
+   null,
+   0
+  ],
+  [
+   "Inception",
+   "watched",
+   null,
+   0
+  ],
+  [
+   "Breaking Bad",
+   "watching",
+   null,
+   0
+  ]
+ ],
+ "out": {
+  "inception_not_overwritten_status_watched": true,
+  "inception_rating_not_overwritten": true,
+  "matrix_created_watched_rating10": true,
+  "chernobyl_watching_3_eps": false,
+  "bear_want_no_episodes": true,
+  "matrix_added_at_is_not_source_date": false,
+  "matrix_review_body": true,
+  "inception_no_review_added": false
+ }
+}
+FAILED [
+  'chernobyl_watching_3_eps {"id":"474733d3-eb68-439c-8f6d-485bec85faeb","media_type":"tv","tmdb_id":87108,"title":"Chernobyl","poster_path":"/hlLXt2tOPT6RRnjiUmoxyG1LTFi.jpg","backdrop_path":"/900tHlUYUkp7Ol04XFSoAaEIXcT.jpg","release_date":"2019-05-06","status":"watching","rating":null,"episodes_watched":0,"total_episodes":5,"added_at":"2025-01-03 00:00:00","updated_at":"2026-11-24 15:42:36"}',
+  'matrix_added_at_is_not_source_date {"id":"c3a19565-984b-4d47-ac02-6a8091a43b70","media_type":"movie","tmdb_id":603,"title":"The Matrix","poster_path":"/dXNAPwY7VrqMAo51EKhhCJfaGb5.jpg","backdrop_path":"/tlm8UkiQsitc8rSuIAscQDCnP8d.jpg","release_date":"1999-03-31","status":"watched","rating":10,"episodes_watched":0,"total_episodes":0,"added_at":"2025-01-02 00:00:00","updated_at":"2026-11-24 15:42:36"}',
+  'inception_no_review_added [{"id":"b8cf8921-4cbb-45c7-956b-a8954169a300","user_id":"65aa10d9-9922-49aa-8996-479c4a43da0f","media_type":"movie","tmdb_id":27205,"season_number":0,"rating":10,"body":"Synthetic local motion check","created_at":"2026-11-24 15:39:18","updated_at":"2026-11-24 15:39:18","username":"e2e_alice","display_name":"E2E Alice"}]'
+]
++ exit 1
