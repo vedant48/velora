@@ -1,0 +1,106 @@
+20:25:16.976 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Define variables RUNNING
+20:25:16.981 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Define variables COMPLETED
+20:25:16.983 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Apply configuration RUNNING
+20:25:16.983 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Apply configuration COMPLETED
+20:25:16.984 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Launch app "com.vedant.velora" RUNNING
+20:25:17.764 [DEBUG] maestro.Maestro.setPermissionInternal: Failed to set permission com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE for app com.vedant.velora: shell command failed (exit -1): 
+Exception occurred while executing 'grant':
+java.lang.IllegalArgumentException: Unknown permission com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE
+	at com.android.server.permission.access.permission.PermissionService.setRuntimePermissionGranted(PermissionService.kt:911)
+	at com.android.server.permission.access.permission.PermissionService.access$setRuntimePermissionGranted(PermissionService.kt:108)
+	at com.android.server.permission.access.permission.PermissionService.setRuntimePermissionGranted(PermissionService.kt:809)
+	at com.android.server.permission.access.permission.PermissionService.setRuntimePermissionGranted$default(PermissionService.kt:714)
+	at com.android.server.permission.access.permission.PermissionService.grantRuntimePermission(PermissionService.kt:676)
+	at com.android.server.pm.permission.PermissionManagerService.grantRuntimePermission(PermissionManagerService.java:585)
+	at android.permission.PermissionManager.grantRuntimePermissionInternal(PermissionManager.java:679)
+	at android.permission.PermissionManager.grantRuntimePermission(PermissionManager.java:642)
+	at com.android.server.pm.PackageManagerShellCommand.runGrantRevokePermission(PackageManagerShellCommand.java:2690)
+	at com.android.server.pm.PackageManagerShellCommand.onCommand(PackageManagerShellCommand.java:316)
+	at com.android.modules.utils.BasicShellCommandHandler.exec(BasicShellCommandHandler.java:97)
+	at android.os.ShellCommand.exec(ShellCommand.java:38)
+	at com.android.server.pm.PackageManagerService$IPackageManagerImpl.onShellCommand(PackageManagerService.java:6561)
+	at android.os.Binder.shellCommand(Binder.java:1230)
+	at android.os.Binder.onTransact(Binder.java:1043)
+	at android.content.pm.IPackageManager$Stub.onTransact(IPackageManager.java:4620)
+	at com.android.server.pm.PackageManagerService$IPackageManagerImpl.onTransact(PackageManagerService.java:6545)
+	at android.os.Binder.execTransactInternal(Binder.java:1505)
+	at android.os.Binder.execTransact(Binder.java:1444)
+
+20:25:17.766 [ INFO] maestro.Maestro.launchApp$lambda$6: Launching app com.vedant.velora
+20:25:17.767 [ INFO] maestro.Maestro.launchApp$lambda$6: Stopping com.vedant.velora app during launch
+20:25:18.041 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Launch app "com.vedant.velora" COMPLETED
+20:25:18.042 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "Log in / Sign up" RUNNING
+20:25:21.898 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=Log in / Sign up, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[262,812][459,850], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.TextView, important-for-accessibility=true, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=262, y=812, width=197, height=38))
+20:25:23.439 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+20:25:23.443 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (360, 831) using hierarchy based logic for wait
+20:25:24.686 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+20:25:24.686 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "Log in / Sign up" COMPLETED
+20:25:24.687 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "Username" RUNNING
+20:25:24.752 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=, hintText=Username, ignoreBoundsFiltering=false, resource-id=, clickable=true, bounds=[48,498][672,588], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.EditText, important-for-accessibility=true, error=}, children=[], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=48, y=498, width=624, height=90))
+20:25:26.074 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+20:25:26.076 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (360, 543) using hierarchy based logic for wait
+20:25:27.105 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+20:25:27.106 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "Username" COMPLETED
+20:25:27.106 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Input text e2e_alice RUNNING
+20:25:27.107 [ INFO] maestro.Maestro.inputText: Inputting text: e2e_alice
+20:25:30.669 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Input text e2e_alice COMPLETED
+20:25:30.670 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "Password" RUNNING
+20:25:30.815 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=, hintText=Password, ignoreBoundsFiltering=false, resource-id=, clickable=true, bounds=[48,616][672,706], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.EditText, important-for-accessibility=true, error=}, children=[], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=48, y=616, width=624, height=90))
+20:25:32.118 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+20:25:32.119 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (360, 661) using hierarchy based logic for wait
+20:25:33.689 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+20:25:33.690 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "Password" COMPLETED
+20:25:33.690 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Input text e2e-alice-pass-1 RUNNING
+20:25:33.690 [ INFO] maestro.Maestro.inputText: Inputting text: e2e-alice-pass-1
+20:25:37.042 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Input text e2e-alice-pass-1 COMPLETED
+20:25:37.042 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Hide Keyboard RUNNING
+20:25:37.043 [ INFO] maestro.Maestro.hideKeyboard$lambda$13: Hiding Keyboard
+20:25:38.251 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Hide Keyboard COMPLETED
+20:25:38.251 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "Log in", Below "Password" RUNNING
+20:25:38.331 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=Log in, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[321,759][399,797], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.TextView, important-for-accessibility=true, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=321, y=759, width=78, height=38))
+20:25:39.547 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+20:25:39.548 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (360, 778) using hierarchy based logic for wait
+20:25:42.374 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+20:25:42.375 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "Log in", Below "Password" COMPLETED
+20:25:42.375 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "E2E Alice" is visible RUNNING
+20:25:42.884 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "E2E Alice" is visible COMPLETED
+20:25:42.885 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "373" is visible RUNNING
+20:25:42.981 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "373" is visible COMPLETED
+20:25:42.982 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "899" is visible RUNNING
+20:25:43.105 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "899" is visible COMPLETED
+20:25:43.106 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "132" is visible RUNNING
+20:25:43.235 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "132" is visible COMPLETED
+20:25:43.236 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Take screenshot 1-want-tab-373 RUNNING
+20:25:43.237 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+20:25:43.239 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+20:25:43.603 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Take screenshot 1-want-tab-373 COMPLETED
+20:25:43.603 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on point (29%, 40%) RUNNING
+20:25:43.647 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (208, 512) using hierarchy based logic for wait
+20:25:45.517 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+20:25:45.517 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on point (29%, 40%) COMPLETED
+20:25:45.518 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Wait for animation to end within 6000 ms RUNNING
+20:25:45.519 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$54: Waiting for animation to end with timeout 6000
+20:25:45.520 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+20:25:45.520 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+20:25:46.341 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+20:25:46.341 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+20:25:47.014 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Wait for animation to end within 6000 ms COMPLETED
+20:25:47.015 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Take screenshot 2-watched-movies-only RUNNING
+20:25:47.016 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+20:25:47.016 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+20:25:47.171 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Take screenshot 2-watched-movies-only COMPLETED
+20:25:47.171 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on point (46%, 40%) RUNNING
+20:25:47.215 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (331, 512) using hierarchy based logic for wait
+20:25:48.829 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+20:25:48.829 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on point (46%, 40%) COMPLETED
+20:25:48.829 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Wait for animation to end within 6000 ms RUNNING
+20:25:48.830 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$54: Waiting for animation to end with timeout 6000
+20:25:48.830 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+20:25:48.830 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+20:25:48.976 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+20:25:48.976 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+20:25:49.401 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Wait for animation to end within 6000 ms COMPLETED
+20:25:49.404 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Take screenshot 3-series-watching-and-watched RUNNING
+20:25:49.405 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+20:25:49.407 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+20:25:49.564 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Take screenshot 3-series-watching-and-watched COMPLETED
