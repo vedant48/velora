@@ -38,10 +38,10 @@ jobs:
           git config user.email ci@velora.local
           EV=$(mktemp -d)
           git worktree add --detach "$EV"
-          git -C "$EV" checkout --orphan ci-evidence/uptodown-146-six
+          git -C "$EV" checkout --orphan ci-evidence/uptodown-146-final
           git -C "$EV" rm -rf .
           cp -r store-captures/. "$EV/"
           printf 'run_id=%s\nsource=%s\napk_sha256=d651705e132042312cb3fce554450f297fb781782bcca3a2492152ac1ef376a5\n' '${{ github.run_id }}' '${{ github.sha }}' > "$EV/META.txt"
           git -C "$EV" add -A
           git -C "$EV" commit -m 'test: capture released app for store review'
-          git -C "$EV" push origin HEAD:ci-evidence/uptodown-146-six
+          git -C "$EV" push origin HEAD:ci-evidence/uptodown-146-final
