@@ -1,0 +1,137 @@
++ set -uo pipefail
++ ls -la candidate .ci
+.ci:
+total 16
+drwxr-xr-x  2 runner runner 4096 Nov 24 15:37 .
+drwxr-xr-x 16 runner runner 4096 Nov 24 15:38 ..
+-rw-r--r--  1 runner runner 1875 Nov 24 15:37 must-synth.json
+-rw-r--r--  1 runner runner   29 Nov 24 15:37 trigger-native
+
+candidate:
+total 25932
+drwxr-xr-x  2 runner runner     4096 Nov 24 15:37 .
+drwxr-xr-x 16 runner runner     4096 Nov 24 15:38 ..
+-rw-r--r--  1 runner runner 26542434 Nov 24 15:37 must-test.apk
++ adb devices
+List of devices attached
+emulator-5554	device
+
++ adb reverse tcp:8787 tcp:8787
+8787
++ adb install -r candidate/must-test.apk
+Performing Streamed Install
+Success
++ adb shell wm size 720x1280
++ adb shell wm density 320
++ python3 scripts/emulator-ready.py
+Traceback (most recent call last):
+  File "/home/runner/work/velora/velora/scripts/emulator-ready.py", line 8, in <module>
+    xml=adb('shell','cat','/sdcard/ready.xml').decode()
+        ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/velora/velora/scripts/emulator-ready.py", line 5, in adb
+    return subprocess.run(['adb',*args],capture_output=True,check=True).stdout
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['adb', 'shell', 'cat', '/sdcard/ready.xml']' returned non-zero exit status 1.
++ true
++ adb push .ci/must-synth.json /sdcard/Download/must-synth.json
+.ci/must-synth.json: 1 file pushed, 0 skipped. 27.7 MB/s (1875 bytes in 0.000s)
++ adb shell am broadcast -a android.intent.action.MEDIA_SCANNER_SCAN_FILE -d file:///sdcard/Download/must-synth.json
+Broadcasting: Intent { act=android.intent.action.MEDIA_SCANNER_SCAN_FILE dat=file:///... flg=0x400000 }
+Broadcast completed: result=0
++ rec=3409
++ set +e
++ maestro test --format junit --output must-evidence/must-import.xml --test-output-dir must-evidence/maestro .maestro/must-import.yaml
++ adb shell screenrecord --time-limit 170 /sdcard/must.mp4
+Anonymous analytics enabled. To opt out, set MAESTRO_CLI_NO_ANALYTICS environment variable to any value before running Maestro.
+
+
+Waiting for flows to complete...
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/home/runner/.maestro/lib/protobuf-java-3.21.9.jar)
+WARNING: Please consider reporting this to the maintainers of class com.google.protobuf.UnsafeUtil$MemoryAccessor
+WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release
+[Passed] must-import (1m 22s)
+
+1/1 Flow Passed in 1m 22s
+
++ status=0
++ adb shell pkill -INT screenrecord
++ wait 3409
++ adb pull /sdcard/must.mp4 must-evidence/must.mp4
+/sdcard/must.mp4: 1 file pulled, 0 skipped. 84.9 MB/s (6258528 bytes in 0.070s)
++ adb logcat -d -t 800
++ '[' 0 = 0 ']'
++ node server/scripts/../../scripts/e2e-must-verify.mjs
++ status=1
++ cat must-evidence/verify.txt
+episodes {"watched":[]}
+{
+ "lib": [
+  [
+   "The Matrix",
+   "watched",
+   10,
+   0
+  ],
+  [
+   "Chernobyl",
+   "watching",
+   null,
+   0
+  ],
+  [
+   "The Bear",
+   "want",
+   null,
+   0
+  ],
+  [
+   "Pulp Fiction",
+   "want",
+   null,
+   0
+  ],
+  [
+   "Fight Club",
+   "want",
+   null,
+   0
+  ],
+  [
+   "Forrest Gump",
+   "want",
+   null,
+   0
+  ],
+  [
+   "Inception",
+   "watched",
+   null,
+   0
+  ],
+  [
+   "Breaking Bad",
+   "watching",
+   null,
+   0
+  ]
+ ],
+ "out": {
+  "inception_not_overwritten_status_watched": true,
+  "inception_rating_not_overwritten": true,
+  "matrix_created_watched_rating10": true,
+  "chernobyl_watching_3_eps": false,
+  "bear_want_no_episodes": true,
+  "matrix_added_at_is_not_source_date": true,
+  "matrix_review_body": true,
+  "inception_no_review_added": false
+ }
+}
+FAILED [
+  'chernobyl_watching_3_eps {"id":"c1a4c488-4b88-40df-a733-c6aecab6f6d7","media_type":"tv","tmdb_id":87108,"title":"Chernobyl","poster_path":"/hlLXt2tOPT6RRnjiUmoxyG1LTFi.jpg","backdrop_path":"/900tHlUYUkp7Ol04XFSoAaEIXcT.jpg","release_date":"2019-05-06","status":"watching","rating":null,"episodes_watched":0,"total_episodes":5,"added_at":"2026-11-24 15:40:45","updated_at":"2026-11-24 15:40:45"}',
+  'inception_no_review_added [{"id":"afd82564-fca2-475d-99b7-907c7e288bd7","user_id":"de650b16-aa44-4f48-bdbe-b66750f64a76","media_type":"movie","tmdb_id":27205,"season_number":0,"rating":10,"body":"Synthetic local motion check","created_at":"2026-11-24 15:37:32","updated_at":"2026-11-24 15:37:32","username":"e2e_alice","display_name":"E2E Alice"}]'
+]
++ exit 1
