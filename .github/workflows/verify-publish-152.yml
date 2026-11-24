@@ -1,4 +1,4 @@
-name: Verify exact v1.5.2 candidate, then publish same bytes
+name: Verify exact v1.5.2 candidate, (verification only; publishing is a separate gated workflow)
 on:
   push:
     branches: [test/verify-release-152]
@@ -75,16 +75,3 @@ jobs:
           printf 'run_id=%s\n' "${{ github.run_id }}" > "$EV/META.txt"
           git -C "$EV" add -A; git -C "$EV" commit -m "verify152 evidence"
           git -C "$EV" push origin HEAD:ci-evidence/verify152-${{ github.run_id }}
-  publish:
-    needs: verify
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Publish the verified draft as Latest (same bytes)
-        env: { GH_TOKEN: '${{ secrets.GITHUB_TOKEN }}' }
-        run: |
-          set -e
-          gh release edit v1.5.2 --draft=false --latest
-          # The superseded v1.5.1 build was never published: remove its draft and tag.
-          gh release delete v1.5.1 --yes --cleanup-tag || true
-          gh release view v1.5.2 --json isDraft,tagName,assets | tee published.json
