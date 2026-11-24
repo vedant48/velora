@@ -19,3 +19,16 @@ export function itemInTab(item: { media_type: string; status: string }, tab: Lib
   if (tab === 'series') return item.media_type === 'tv' && (item.status === 'watching' || item.status === 'watched');
   return false;
 }
+
+/**
+ * Series tab order (owner rule, 25 Nov: "ended and watched ko series ke list me sbse niche daal do"):
+ * series that TMDB says ended AND that are fully watched sink to the bottom; everything else keeps
+ * the chosen order above them. Stable within each group. Unknown/failed TMDB status keeps a series
+ * in the upper group, so nothing sinks on a guess. Same rule as the card's completion tick.
+ */
+export function endedCompleteLast<T>(list: readonly T[], isEndedCompleteItem: (item: T) => boolean): T[] {
+  const active: T[] = [];
+  const done: T[] = [];
+  for (const item of list) (isEndedCompleteItem(item) ? done : active).push(item);
+  return active.concat(done);
+}

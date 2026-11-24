@@ -1,8 +1,9 @@
-## Ratings, reviews and series progress on library cards
+## Series order, pinned tabs, cleaner header
 
-- Your own rating now shows on every poster in your library (amber star). A small review icon appears next to it only when you wrote a review.
-- Series show the rating of your latest rated season, with ".." when more seasons are rated.
-- Series posters show your tracked progress at the top left (watched/total episodes saved in Velora). Ended series you finished show a tick instead.
-- The TMDB score on the title screen uses a different icon, so it is never confused with your rating.
+- Series list: series that ended and that you have fully watched now sit at the bottom, so what you are still watching stays on top.
+- Scrolling your library now hides your profile details; only the Want/Watched/Series/Insights tabs and the filter icon stay pinned at the top.
+- Top bar: the VELORA text is gone. App icon on the left, settings and the three-dot menu on the right.
+- Tap your profile photo to see it large; tap anywhere to close.
+- Title page: Watch online is now one compact row with provider logos; tap it for the full provider list (subscription marked). Cast & Crew is one section with directors first.
 
 No change to your account or library; update in place.

@@ -49,3 +49,18 @@ test('series progress and ended tick are source grounded', () => {
  assert.equal(sp.isEndedComplete(part, {status:'Ended', number_of_episodes:10}), false);
 });
 test('canceled stays neutral', () => { assert.equal(sp.isEndedComplete(sp.seriesProgress({media_type:'tv',status:'watched',episodes_watched:10,total_episodes:10}), {status:'Canceled', number_of_episodes:10}), false); });
+
+test('Series tab: ended+fully-watched series sink to the bottom, order stable within groups', () => {
+ const {endedCompleteLast} = exportsObject;
+ const item = (id) => ({tmdb_id: id});
+ const ended = new Set([2, 5]);
+ const out = endedCompleteLast([1,2,3,4,5].map(item), (i) => ended.has(i.tmdb_id));
+ assert.deepEqual(Array.from(out.map(i => i.tmdb_id)), [1,3,4,2,5]);
+});
+test('Series tab sort: nothing sinks while TMDB status is unknown, and all-ended keeps order', () => {
+ const {endedCompleteLast} = exportsObject;
+ const item = (id) => ({tmdb_id: id});
+ assert.deepEqual(Array.from(endedCompleteLast([1,2,3].map(item), () => false).map(i => i.tmdb_id)), [1,2,3]);
+ assert.deepEqual(Array.from(endedCompleteLast([1,2,3].map(item), () => true).map(i => i.tmdb_id)), [1,2,3]);
+ assert.deepEqual(Array.from(endedCompleteLast([], () => true)), []);
+});

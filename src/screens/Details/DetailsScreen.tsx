@@ -224,27 +224,19 @@ export const DetailsScreen: React.FC = () => {
     return (credits?.cast || []).slice(0, 15);
   }, [credits]);
 
-  const keyCrew = useMemo(() => {
+  // Owner rule (25 Nov): cast and crew are one merged section; from the crew only directors
+  // stay, shown before the cast.
+  const directors = useMemo(() => {
     if (!credits?.crew) return [];
-    const TARGET_ROLES = [
-      'Director',
-      'Writer',
-      'Screenplay',
-      'Producer',
-      'Executive Producer',
-      'Director of Photography',
-      'Original Music Composer',
-      'Creator',
-    ];
     const seen = new Set<number>();
     const filtered: typeof credits.crew = [];
     for (const c of credits.crew) {
-      if (TARGET_ROLES.includes(c.job) && !seen.has(c.id)) {
+      if (c.job === 'Director' && !seen.has(c.id)) {
         seen.add(c.id);
         filtered.push(c);
       }
     }
-    return filtered.slice(0, 12);
+    return filtered.slice(0, 10);
   }, [credits]);
 
   const airRange = useMemo(() => {
@@ -470,15 +462,49 @@ export const DetailsScreen: React.FC = () => {
             </View>
           )}
 
-          {/* Cast Carousel */}
-          {cast.length > 0 && (
+          {/* Merged Cast & Crew (owner rule, 25 Nov): directors first, then cast */}
+          {(directors.length > 0 || cast.length > 0) && (
             <View style={styles.castSection}>
-              <Text style={styles.sectionHeading}>Top Cast</Text>
+              <Text style={styles.sectionHeading}>Cast & Crew</Text>
               <ScrollView
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={styles.castScroll}
               >
+                {directors.map((member) => {
+                  const profileUrl = getImageUrl(member.profile_path, 'profile');
+                  return (
+                    <Pressable
+                      key={`crew-${member.id}-${member.job}`}
+                      onPress={() => handlePersonPress(member.id)}
+                      style={styles.castCard}
+                      hitSlop={4}
+                    >
+                      <View style={styles.actorAvatar}>
+                        {profileUrl ? (
+                          <Image
+                            source={{ uri: profileUrl }}
+                            style={StyleSheet.absoluteFill}
+                            contentFit="cover"
+                            transition={IMAGE_CONFIG.transition}
+                            cachePolicy={IMAGE_CONFIG.cachePolicy}
+                            placeholder={IMAGE_CONFIG.placeholder}
+                          />
+                        ) : (
+                          <View style={styles.avatarPlaceholder}>
+                            <Ionicons name="person" size={26} color={colors.textMuted} />
+                          </View>
+                        )}
+                      </View>
+                      <Text style={styles.actorName} numberOfLines={1}>
+                        {member.name}
+                      </Text>
+                      <Text style={styles.characterName} numberOfLines={1}>
+                        {member.job}
+                      </Text>
+                    </Pressable>
+                  );
+                })}
                 {cast.map((actor) => {
                   const profileUrl = getImageUrl(actor.profile_path, 'profile');
                   return (
@@ -509,53 +535,6 @@ export const DetailsScreen: React.FC = () => {
                       </Text>
                       <Text style={styles.characterName} numberOfLines={1}>
                         {actor.character}
-                      </Text>
-                    </Pressable>
-                  );
-                })}
-              </ScrollView>
-            </View>
-          )}
-
-          {/* Key Crew Carousel */}
-          {keyCrew.length > 0 && (
-            <View style={styles.castSection}>
-              <Text style={styles.sectionHeading}>Key Crew</Text>
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.castScroll}
-              >
-                {keyCrew.map((member) => {
-                  const profileUrl = getImageUrl(member.profile_path, 'profile');
-                  return (
-                    <Pressable
-                      key={`crew-${member.id}-${member.job}`}
-                      onPress={() => handlePersonPress(member.id)}
-                      style={styles.castCard}
-                      hitSlop={4}
-                    >
-                      <View style={styles.actorAvatar}>
-                        {profileUrl ? (
-                          <Image
-                            source={{ uri: profileUrl }}
-                            style={StyleSheet.absoluteFill}
-                            contentFit="cover"
-                            transition={IMAGE_CONFIG.transition}
-                            cachePolicy={IMAGE_CONFIG.cachePolicy}
-                            placeholder={IMAGE_CONFIG.placeholder}
-                          />
-                        ) : (
-                          <View style={styles.avatarPlaceholder}>
-                            <Ionicons name="person" size={26} color={colors.textMuted} />
-                          </View>
-                        )}
-                      </View>
-                      <Text style={styles.actorName} numberOfLines={1}>
-                        {member.name}
-                      </Text>
-                      <Text style={styles.characterName} numberOfLines={1}>
-                        {member.job}
                       </Text>
                     </Pressable>
                   );

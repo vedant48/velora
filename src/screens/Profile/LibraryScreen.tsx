@@ -4,9 +4,9 @@ import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { FlashList } from '@shopify/flash-list';
 import React, { memo, useCallback, useMemo, useRef, useState } from 'react';
-import { Alert, Pressable, RefreshControl, Share, StyleSheet, Text, View } from 'react-native';
+import { Alert, Image, Modal, Pressable, RefreshControl, Share, StyleSheet, Text, View } from 'react-native';
 import { ContentPager } from '../../experience/ContentPager';
-import { itemInTab, LibraryTab } from './libraryTabs';
+import { endedCompleteLast, itemInTab, LibraryTab } from './libraryTabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LibraryItem, Review, UserStats, veloraApi } from '../../api/velora';
 import { AppButton } from '../../components/common/AppButton';
@@ -15,6 +15,10 @@ import { Avatar } from '../../components/Avatar';
 import { ActionSheet } from '../../components/Library/ActionSheet';
 import { LibraryCard } from '../../components/Library/LibraryCard';
 import { LibraryQuickAction } from '../../components/Library/LibraryQuickAction';
+import { isEndedComplete, seriesProgress } from '../../components/Library/seriesProgress';
+import { useQueries } from '@tanstack/react-query';
+import { getTVDetails } from '../../api/tv';
+import { GC_TIME, STALE_TIME } from '../../api/queries';
 import { checkForUpdate, downloadAndInstall } from '../../services/updates';
 import { useAuth } from '../../state/AuthContext';
 import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
@@ -39,6 +43,7 @@ export const LibraryScreen: React.FC = () => {
   const [appliedSort, setAppliedSort] = useState<SortKey>('recent');
   const [menuVisible, setMenuVisible] = useState(false);
   const [quickItem, setQuickItem] = useState<LibraryItem | null>(null);
+  const [photoViewerVisible, setPhotoViewerVisible] = useState(false);
   const [hideMovies, setHideMovies] = useState(false);
   const [hideSeries, setHideSeries] = useState(false);
   const [hideUnreleased, setHideUnreleased] = useState(false);
@@ -123,6 +128,32 @@ export const LibraryScreen: React.FC = () => {
     return () => { active = false; };
   }, [user?.username, apiReady, refreshKey]));
 
+  // Ended+fully-watched series sink to the bottom of the Series tab (owner rule, 25 Nov).
+  // Only a series with every saved episode watched needs TMDB's status, same as the card tick;
+  // the query key matches LibraryCard's, so card fetches warm this cache and vice versa.
+  const endedCandidates = useMemo(
+    () => items.filter(i => {
+      const prog = seriesProgress(i);
+      return itemInTab(i, 'series') && prog !== null && prog.left === 0;
+    }),
+    [items],
+  );
+  const endedDetailResults = useQueries({
+    queries: endedCandidates.map(i => ({
+      queryKey: ['tv_details', i.tmdb_id],
+      queryFn: ({ signal }: { signal: AbortSignal }) => getTVDetails(i.tmdb_id, signal),
+      staleTime: STALE_TIME,
+      gcTime: GC_TIME,
+    })),
+  });
+  const endedCompleteIds = useMemo(() => {
+    const ids = new Set<number>();
+    endedCandidates.forEach((item, index) => {
+      if (isEndedComplete(seriesProgress(item), endedDetailResults[index]?.data)) ids.add(item.tmdb_id);
+    });
+    return ids;
+  }, [endedCandidates, endedDetailResults]);
+
   const itemsByTab = useMemo(() => {
     const { hideMovies, hideSeries, hideUnreleased } = appliedFilters;
     const sort = appliedSort;
@@ -136,9 +167,10 @@ export const LibraryScreen: React.FC = () => {
     else if (sort === 'rating')
       list.sort((a, b) => (b.rating ?? -1) - (a.rating ?? -1));
     else list.sort((a, b) => b.added_at.localeCompare(a.added_at));
+    if (pageTab === 'series') return endedCompleteLast(list, i => endedCompleteIds.has(i.tmdb_id));
     return list; };
     return { want: forTab('want'), watched: forTab('watched'), series: forTab('series'), insights: [] };
-  }, [items, appliedSort, appliedFilters]);
+  }, [items, appliedSort, appliedFilters, endedCompleteIds]);
 
   const openItem = useCallback(
     (item: LibraryItem) => {
@@ -205,7 +237,10 @@ export const LibraryScreen: React.FC = () => {
     return { watchedMovies: watchedMovies.length, series: series.length, episodes, avg, dist, maxDist, ratedCount: rated.length };
   }, [allItems, myReviews]);
 
-  const header = useMemo(
+  // Owner rule (25 Nov, with Must reference video): profile details scroll away with the grid;
+  // only the Want/Watched/Series/Insights tabs and the filter icon stay pinned at the top.
+  // So the identity/stats block lives in each page's list header and the tab row stays fixed.
+  const profileHeader = useMemo(
     () => (
       <View style={styles.header}>
         {/* Name left, avatar right */}
@@ -215,7 +250,9 @@ export const LibraryScreen: React.FC = () => {
 
             {!!user?.bio && <Text style={styles.bio} numberOfLines={2}>{user.bio}</Text>}
           </View>
-          <Avatar user={user} size={60} />
+          <Pressable accessibilityLabel="View profile photo" accessibilityRole="imagebutton" onPress={() => setPhotoViewerVisible(true)}>
+            <Avatar user={user} size={60} />
+          </Pressable>
         </View>
 
         {/* Stats row */}
@@ -225,7 +262,14 @@ export const LibraryScreen: React.FC = () => {
           <Stat label="Watched" value={stats?.watched} />
           <Stat label="Series" value={stats?.series} />
         </View>
+      </View>
+    ),
+    [user, stats, colors, styles],
+  );
 
+  const tabsHeader = useMemo(
+    () => (
+      <View style={styles.header}>
         {/* Tabs + filter */}
         <View style={styles.tabsRow}>
           <View style={styles.tabsGroup}>
@@ -246,7 +290,7 @@ export const LibraryScreen: React.FC = () => {
         </View>
       </View>
     ),
-    [user, stats, tab, shareProfile, logout, handleUpdateCheck, updateProgress, navigation, selectTab, appliedFilters, appliedSort, sortSheetVisible, colors, styles],
+    [tab, selectTab, appliedFilters, appliedSort, sortSheetVisible, colors, styles],
   );
 
   if (!apiReady || !user) {
@@ -268,12 +312,15 @@ export const LibraryScreen: React.FC = () => {
 
   return (
     <View style={[styles.root, { paddingTop: insets.top }]}>
+      {/* Owner rule (25 Nov): no VELORA text; app icon only on the left, settings + overflow on the right. */}
       <View style={styles.topRow}>
-        <Pressable onPress={() => navigation.navigate('Account')} style={styles.topButton} accessibilityLabel="Settings"><Ionicons name="settings-sharp" size={16} color={colors.textTertiary} /></Pressable>
-        <Text style={styles.brand}>VELORA</Text>
-        <Pressable onPress={() => setMenuVisible(true)} style={styles.topButton} accessibilityLabel="More profile actions"><Ionicons name="ellipsis-vertical" size={18} color={colors.textTertiary} /></Pressable>
+        <Image source={require('../../assets/icon.png')} style={styles.brandIcon} accessibilityLabel="Velora" />
+        <View style={styles.topActions}>
+          <Pressable onPress={() => navigation.navigate('Account')} style={styles.topButton} accessibilityLabel="Settings"><Ionicons name="settings-sharp" size={16} color={colors.textTertiary} /></Pressable>
+          <Pressable onPress={() => setMenuVisible(true)} style={styles.topButton} accessibilityLabel="More profile actions"><Ionicons name="ellipsis-vertical" size={18} color={colors.textTertiary} /></Pressable>
+        </View>
       </View>
-      <View style={{ paddingHorizontal: 20, paddingTop: 14 }}>{header}</View>
+      <View style={{ paddingHorizontal: 20, paddingTop: 14 }}>{tabsHeader}</View>
       <Expandable open={sortSheetVisible && tab !== 'insights'}>
             <View style={styles.filters}>
               <View style={styles.filterChips}>
@@ -300,7 +347,7 @@ export const LibraryScreen: React.FC = () => {
               drawDistance={280}
               scrollEnabled={!sortSheetVisible}
               refreshControl={<RefreshControl refreshing={refreshing && tab === pageTab} onRefresh={refreshProfile} colors={['#000000']} tintColor="#000000" progressBackgroundColor="#FFFFFF" />}
-              ListHeaderComponent={<>            {pageTab === 'insights' && insights && (
+              ListHeaderComponent={<>{profileHeader}            {pageTab === 'insights' && insights && (
               <View style={styles.insights}>
                 <View style={styles.insightRow}>
                   <InsightCell label="Movies watched" value={insights.watchedMovies} />
@@ -347,6 +394,13 @@ export const LibraryScreen: React.FC = () => {
       ]} />
       {quickItem && <LibraryQuickAction item={quickItem} onClose={() => setQuickItem(null)} onChanged={() => setRefreshKey(k => k + 1)} />}
 
+      {/* Enlarged profile photo (owner rule, 25 Nov: tap the avatar, it opens big). Tap anywhere to close. */}
+      <Modal visible={photoViewerVisible} transparent animationType="fade" onRequestClose={() => setPhotoViewerVisible(false)}>
+        <Pressable accessibilityLabel="Close profile photo" style={styles.photoViewerBackdrop} onPress={() => setPhotoViewerVisible(false)}>
+          <Avatar user={user} size={300} />
+        </Pressable>
+      </Modal>
+
     </View>
   );
 };
@@ -378,6 +432,9 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   topRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 10 },
   topButton: { width: 34, height: 34, alignItems: 'center', justifyContent: 'center' },
   brand: { fontSize: 9, letterSpacing: 2, color: colors.primary, fontWeight: '700' },
+  brandIcon: { width: 28, height: 28, borderRadius: 6, marginLeft: 6 },
+  topActions: { flexDirection: 'row', alignItems: 'center' },
+  photoViewerBackdrop: { flex: 1, backgroundColor: 'rgba(0,0,0,0.92)', alignItems: 'center', justifyContent: 'center' },
   filters: { padding: 12, gap: 10 },
   filterChips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   filterChip: { paddingHorizontal: 12, paddingVertical: 8, borderRadius: 20, backgroundColor: colors.surface },

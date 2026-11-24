@@ -32,8 +32,8 @@ import {
 } from './person';
 import { MediaItem, Episode } from './types';
 
-const STALE_TIME = 10 * 60 * 1000; // 10 minutes cache freshness
-const GC_TIME = 60 * 60 * 1000; // 1 hour garbage collection
+export const STALE_TIME = 10 * 60 * 1000; // 10 minutes cache freshness
+export const GC_TIME = 60 * 60 * 1000; // 1 hour garbage collection
 
 // Helper to normalize Movie or TV array to MediaItem[]
 function normalizeMedia(items: any[], type?: 'movie' | 'tv'): MediaItem[] {
