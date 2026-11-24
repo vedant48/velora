@@ -33,8 +33,8 @@ try:
  tap('Watched');time.sleep(4);shot('watched')
  tap('Series');time.sleep(4);shot('series')
  tap('Breaking Bad','android.widget.Button');time.sleep(12)
- scrollto('All episodes');adb('shell','input','swipe','360','1100','360','330','650');time.sleep(3);shot('episode-before')
- n=scrollto('Pilot');b=list(map(int,re.findall(r'\d+',n.get('bounds',''))));y=(b[1]+b[3])//2
+ scrollto('All episodes');adb('shell','input','swipe','360','1100','360','550','650');time.sleep(3);shot('episode-before')
+ n=find('Pilot');assert n is not None, 'Pilot row absent after bounded scroll';b=list(map(int,re.findall(r'\d+',n.get('bounds',''))));y=(b[1]+b[3])//2
  assert 200<y<1050, f'Episode not fully on screen: {y}';adb('shell','input','swipe','85',str(y),'650',str(y),'700');time.sleep(5);shot('episode-after')
  adb('shell','input','keyevent','4');time.sleep(3)
  tap('Search');time.sleep(2)
