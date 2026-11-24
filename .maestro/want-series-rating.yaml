@@ -31,15 +31,11 @@ appId: com.vedant.velora
 - assertVisible: Breaking Bad
 - assertNotVisible: The Last Kingdom
 - takeScreenshot: 3-series-tab-no-want-series
-- swipe:
-    start: 20%, 65%
-    end: 85%, 65%
-    duration: 1200
-- swipe:
-    start: 20%, 65%
-    end: 85%, 65%
-    duration: 1200
-- assertVisible: The Last Kingdom
+- tapOn: Want
+- scrollUntilVisible:
+    element: The Last Kingdom
+    direction: DOWN
+    timeout: 20000
 - tapOn: The Last Kingdom
 # Title opened from the library: TMDB score comes from the loaded details.
 - extendedWaitUntil:
