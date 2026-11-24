@@ -6,6 +6,8 @@ appId: com.vedant.velora
 - tapOn: 'Log in / Sign up'
 - tapOn: Username
 - inputText: e2e_alice
+- hideKeyboard
+- assertVisible: e2e_alice
 - tapOn: Password
 - inputText: e2e-alice-pass-1
 - hideKeyboard
