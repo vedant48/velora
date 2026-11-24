@@ -1,0 +1,55 @@
+appId: com.vedant.velora
+---
+- launchApp
+- tapOn: 'Log in / Sign up'
+- tapOn: Username
+- inputText: e2e_alice
+- tapOn: Password
+- inputText: e2e-alice-pass-1
+- hideKeyboard
+- tapOn:
+    text: 'Log in'
+    below: Password
+- extendedWaitUntil:
+    visible: E2E Alice
+    timeout: 30000
+# Header: no VELORA text, app icon left, settings + overflow right
+- assertNotVisible: VELORA
+- assertVisible: Settings
+- assertVisible: More profile actions
+- takeScreenshot: 1-header-icon-tabs
+# Profile photo opens enlarged, tap closes
+- tapOn: View profile photo
+- extendedWaitUntil:
+    visible: Close profile photo
+    timeout: 5000
+- takeScreenshot: 2-photo-viewer
+- tapOn: Close profile photo
+# Pinned tabs: profile details scroll away, tab row stays
+- takeScreenshot: 3-scroll-before
+- swipe:
+    direction: UP
+    duration: 700
+- swipe:
+    direction: UP
+    duration: 700
+- assertNotVisible: E2E Alice
+- assertVisible:
+    id: library-tab-series
+- takeScreenshot: 4-scroll-tabs-pinned
+# Series sort: ended+fully-watched sink to the bottom
+- tapOn:
+    id: library-tab-series
+- extendedWaitUntil:
+    visible: Prison Break
+    timeout: 90000
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: 5-series-top
+- swipe:
+    direction: UP
+    duration: 700
+- extendedWaitUntil:
+    visible: 'Ended, all episodes watched'
+    timeout: 60000
+- takeScreenshot: 6-series-bottom-ended-last
