@@ -12,10 +12,10 @@ const tmdb = async (path) => {
   if (!r.ok) throw Error(`tmdb ${path}: ${r.status}`);
   return r.json();
 };
-// Watched tab: 12 real trending movies so the tab scrolls for the pinned-tabs proof.
+// Want tab (the landing tab): 12 real trending movies so the tab scrolls for the pinned-tabs proof.
 const trending = await tmdb('/trending/movie/day');
 for (const m of trending.results.slice(0, 12)) {
-  await lib('movie', m.id, m.title, m.poster_path, 'watched');
+  await lib('movie', m.id, m.title, m.poster_path, 'want');
   await new Promise((r) => setTimeout(r, 120));
 }
 // Series tab: active series first, ended+fully-watched LAST (most recent added_at, so they
