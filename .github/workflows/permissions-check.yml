@@ -77,10 +77,10 @@ jobs:
           git config user.email ci@velora.local
           EV=$(mktemp -d)
           git worktree add --detach "$EV"
-          git -C "$EV" checkout --orphan ci-evidence/permissions-api31-final-${{ matrix.api }}
+          git -C "$EV" checkout --orphan ci-evidence/permissions-api31-picker-${{ matrix.api }}
           git -C "$EV" rm -rf .
           cp -r permission-evidence/. "$EV/" || true
           printf 'run_id=%s\nsha=%s\napi=%s\n' '${{ github.run_id }}' '${{ github.sha }}' '${{ matrix.api }}' > "$EV/META.txt"
           git -C "$EV" add -A
           git -C "$EV" commit -m 'test: native permission evidence'
-          git -C "$EV" push origin HEAD:ci-evidence/permissions-api31-final-${{ matrix.api }}
+          git -C "$EV" push origin HEAD:ci-evidence/permissions-api31-picker-${{ matrix.api }}

@@ -27,7 +27,7 @@ appId: com.vedant.velora
       - tapOn: Allow
 - takeScreenshot: photo-picker
 - tapOn:
-    id: '.*icon_thumbnail'
+    point: 20%, 38%
 - takeScreenshot: photo-crop
 - tapOn: '(?i)crop|done'
 - extendedWaitUntil:
