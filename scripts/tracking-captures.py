@@ -7,7 +7,7 @@ def xml():
 def hit(n):
  b=list(map(int,re.findall(r'\d+',n.get('bounds',''))));adb('shell','input','tap',str((b[0]+b[2])//2),str((b[1]+b[3])//2))
 def find(label,cls=None):
- return next((n for n in xml().iter('node') if label in (n.get('content-desc'),n.get('text')) and (not cls or n.get('class')==cls)),None)
+ nodes=list(xml().iter('node'));matches=[n for n in nodes if n.get('content-desc')==label and (not cls or n.get('class')==cls)]+[n for n in nodes if n.get('text')==label and (not cls or n.get('class')==cls)];return matches[0] if matches else None
 def tap(label,cls=None):
  for _ in range(10):
   n=find(label,cls)
