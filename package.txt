@@ -1,0 +1,249 @@
+Activity Resolver Table:
+  Non-Data Actions:
+      android.intent.action.MAIN:
+        6169878 com.vedant.velora/.MainActivity filter ee3ab51
+          Action: "android.intent.action.MAIN"
+          Category: "android.intent.category.LAUNCHER"
+
+Receiver Resolver Table:
+  Non-Data Actions:
+      androidx.profileinstaller.action.SAVE_PROFILE:
+        6c8cfb6 com.vedant.velora/androidx.profileinstaller.ProfileInstallReceiver filter 766ab8d
+          Action: "androidx.profileinstaller.action.SAVE_PROFILE"
+      androidx.profileinstaller.action.INSTALL_PROFILE:
+        6c8cfb6 com.vedant.velora/androidx.profileinstaller.ProfileInstallReceiver filter f8e14b7
+          Action: "androidx.profileinstaller.action.INSTALL_PROFILE"
+      androidx.profileinstaller.action.SKIP_FILE:
+        6c8cfb6 com.vedant.velora/androidx.profileinstaller.ProfileInstallReceiver filter 658c424
+          Action: "androidx.profileinstaller.action.SKIP_FILE"
+      androidx.profileinstaller.action.BENCHMARK_OPERATION:
+        6c8cfb6 com.vedant.velora/androidx.profileinstaller.ProfileInstallReceiver filter b0a3142
+          Action: "androidx.profileinstaller.action.BENCHMARK_OPERATION"
+
+Service Resolver Table:
+  Non-Data Actions:
+      com.google.android.gms.metadata.MODULE_DEPENDENCIES:
+        9654553 com.vedant.velora/com.google.android.gms.metadata.ModuleDependencies filter c6ffe90
+          Action: "com.google.android.gms.metadata.MODULE_DEPENDENCIES"
+
+Domain verification status:
+
+Permissions:
+  Permission [com.vedant.velora.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION] (33db76e):
+    sourcePackage=com.vedant.velora
+    uid=10145 gids=[] type=0 prot=signature
+    perm=PermissionInfo{c3ece0f com.vedant.velora.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION}
+
+Registered ContentProviders:
+  com.vedant.velora/expo.modules.filesystem.FileSystemFileProvider:
+    Provider{8207e9c com.vedant.velora/expo.modules.filesystem.FileSystemFileProvider}
+  com.vedant.velora/expo.modules.imagepicker.fileprovider.ImagePickerFileProvider:
+    Provider{511a0a5 com.vedant.velora/expo.modules.imagepicker.fileprovider.ImagePickerFileProvider}
+  com.vedant.velora/com.canhub.cropper.CropFileProvider:
+    Provider{c11dc7a com.vedant.velora/com.canhub.cropper.CropFileProvider}
+  com.vedant.velora/androidx.startup.InitializationProvider:
+    Provider{5243c2b com.vedant.velora/androidx.startup.InitializationProvider}
+  com.vedant.velora/expo.modules.sharing.SharingFileProvider:
+    Provider{f04e888 com.vedant.velora/expo.modules.sharing.SharingFileProvider}
+
+ContentProvider Authorities:
+  [com.vedant.velora.cropper.fileprovider]:
+    Provider{c11dc7a com.vedant.velora/com.canhub.cropper.CropFileProvider}
+      applicationInfo=ApplicationInfo{520a221 com.vedant.velora}
+  [com.vedant.velora.androidx-startup]:
+    Provider{5243c2b com.vedant.velora/androidx.startup.InitializationProvider}
+      applicationInfo=ApplicationInfo{6d14646 com.vedant.velora}
+  [com.vedant.velora.SharingFileProvider]:
+    Provider{f04e888 com.vedant.velora/expo.modules.sharing.SharingFileProvider}
+      applicationInfo=ApplicationInfo{aa87007 com.vedant.velora}
+  [com.vedant.velora.ImagePickerFileProvider]:
+    Provider{511a0a5 com.vedant.velora/expo.modules.imagepicker.fileprovider.ImagePickerFileProvider}
+      applicationInfo=ApplicationInfo{8440534 com.vedant.velora}
+  [com.vedant.velora.FileSystemFileProvider]:
+    Provider{8207e9c com.vedant.velora/expo.modules.filesystem.FileSystemFileProvider}
+      applicationInfo=ApplicationInfo{8c43f5d com.vedant.velora}
+
+Key Set Manager:
+  [com.vedant.velora]
+      Signing KeySets: 36
+
+Packages:
+  Package [com.vedant.velora] (5cb80d2):
+    userId=10145
+    pkg=Package{d5205a3 com.vedant.velora}
+    codePath=/data/app/~~RTVtsEve_Y5WLG08-6YwoQ==/com.vedant.velora-Qyo3AUo5EGVqr5p3VDSG_A==
+    resourcePath=/data/app/~~RTVtsEve_Y5WLG08-6YwoQ==/com.vedant.velora-Qyo3AUo5EGVqr5p3VDSG_A==
+    legacyNativeLibraryDir=/data/app/~~RTVtsEve_Y5WLG08-6YwoQ==/com.vedant.velora-Qyo3AUo5EGVqr5p3VDSG_A==/lib
+    extractNativeLibs=true
+    primaryCpuAbi=x86_64
+    secondaryCpuAbi=null
+    cpuAbiOverride=null
+    versionCode=10406 minSdk=24 targetSdk=36
+    minExtensionVersions=[]
+    versionName=1.4.6
+    usesNonSdkApi=false
+    splits=[base]
+    apkSigningVersion=2
+    applicationInfo=PackageImpl{d5205a3 com.vedant.velora}
+    flags=[ HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    queriesPackages=[]
+    queriesIntents=[Intent { act=android.intent.action.VIEW cat=[android.intent.category.BROWSABLE] dat=https:///... }, Intent { act=android.intent.action.OPEN_DOCUMENT_TREE }, Intent { act=android.intent.action.SEND dat=content://*/* typ=*/* }, Intent { act=android.media.action.IMAGE_CAPTURE }, Intent { act=android.media.action.ACTION_VIDEO_CAPTURE }, Intent { act=android.intent.action.GET_CONTENT cat=[android.intent.category.OPENABLE] dat=content://*/* typ=*/* }]
+    dataDir=/data/user/0/com.vedant.velora
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    usesOptionalLibraries:
+      androidx.window.extensions
+      androidx.window.sidecar
+    usesLibraryFiles:
+      /system_ext/framework/androidx.window.sidecar.jar
+    timeStamp=2026-11-24 09:43:48
+    firstInstallTime=2026-11-24 09:43:58
+    lastUpdateTime=2026-11-24 09:43:58
+    signatures=PackageSignatures{8b640a0 version:2, signatures:[f1a81ea8], past signatures:[]}
+    installPermissionsFixed=true
+    pkgFlags=[ HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]
+    declared permissions:
+      com.vedant.velora.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: prot=signature, INSTALLED
+    requested permissions:
+      android.permission.INTERNET
+      android.permission.READ_EXTERNAL_STORAGE
+      android.permission.REQUEST_INSTALL_PACKAGES
+      android.permission.VIBRATE
+      android.permission.WRITE_EXTERNAL_STORAGE
+      android.permission.ACCESS_NETWORK_STATE
+      android.permission.USE_BIOMETRIC
+      android.permission.USE_FINGERPRINT
+      com.vedant.velora.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+      com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE
+    install permissions:
+      android.permission.INTERNET: granted=true
+      android.permission.ACCESS_NETWORK_STATE: granted=true
+      android.permission.USE_FINGERPRINT: granted=true
+      com.vedant.velora.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: granted=true
+      android.permission.VIBRATE: granted=true
+      android.permission.USE_BIOMETRIC: granted=true
+    User 0: ceDataInode=131279 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false
+      gids=[3003]
+      runtime permissions:
+        android.permission.READ_EXTERNAL_STORAGE: granted=true, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED|RESTRICTION_INSTALLER_EXEMPT]
+        android.permission.WRITE_EXTERNAL_STORAGE: granted=true, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED|RESTRICTION_INSTALLER_EXEMPT]
+
+Queries:
+  system apps queryable: false
+  queries via package name:
+  queries via intent:
+    com.google.android.settings.intelligence:
+      com.vedant.velora
+    com.vedant.velora:
+      com.google.android.documentsui
+      com.android.bips
+      com.google.android.setupwizard
+      com.google.android.apps.messaging
+      com.google.android.googlequicksearchbox
+      com.google.android.apps.docs
+      com.google.android.apps.maps
+      com.google.android.gm
+      com.google.android.apps.photos
+      com.android.camera2
+      com.android.chrome
+      com.google.android.youtube
+  queryable via interaction:
+    User 0:
+      [com.android.keychain,android,com.android.inputdevices,com.android.server.telecom,com.android.wallpaperbackup,com.android.localtransport,com.android.settings,com.android.providers.settings,com.android.emulator.multidisplay,com.android.dynsystem,com.android.location.fused]:
+        com.vedant.velora
+      com.google.android.documentsui:
+        com.vedant.velora
+      [com.google.android.gms,com.google.android.gsf]:
+        com.vedant.velora
+      com.google.android.webview:
+        com.vedant.velora
+      com.google.android.inputmethod.latin:
+        com.vedant.velora
+      com.google.android.permissioncontroller:
+        com.vedant.velora
+      com.google.android.providers.media.module:
+        com.vedant.velora
+      com.vedant.velora:
+        com.google.android.webview
+        com.google.android.providers.media.module
+  queryable via uses-library:
+
+Package Changes:
+  Sequence number=464
+  User 0:
+    seq=0, package=com.google.android.permissioncontroller
+    seq=2, package=com.android.systemui
+    seq=15, package=com.android.bluetooth
+    seq=16, package=com.android.stk
+    seq=19, package=com.google.android.inputmethod.latin
+    seq=20, package=com.google.android.sdksetup
+    seq=30, package=com.google.android.cellbroadcastreceiver
+    seq=31, package=com.vedant.velora
+    seq=37, package=com.android.carrierdefaultapp
+    seq=41, package=com.google.android.apps.youtube.music
+    seq=71, package=com.google.android.partnersetup
+    seq=286, package=com.android.settings
+    seq=303, package=com.google.android.syncadapters.contacts
+    seq=305, package=com.android.traceur
+    seq=327, package=com.google.android.settings.intelligence
+    seq=330, package=com.google.android.gsf
+    seq=365, package=com.google.android.calendar
+    seq=366, package=com.android.camera2
+    seq=373, package=com.android.nfc
+    seq=398, package=com.google.android.apps.photos
+    seq=401, package=com.google.android.apps.wellbeing
+    seq=416, package=com.google.android.googlequicksearchbox
+    seq=422, package=com.android.vending
+    seq=423, package=com.google.android.youtube
+    seq=424, package=com.google.android.projection.gearhead
+    seq=425, package=com.google.android.setupwizard
+    seq=429, package=com.google.android.apps.maps
+    seq=437, package=com.google.android.apps.docs
+    seq=440, package=com.google.android.gm
+    seq=458, package=com.google.android.apps.messaging
+    seq=461, package=com.google.android.gms
+    seq=462, package=dev.mobile.maestro
+    seq=463, package=dev.mobile.maestro.test
+
+
+Dexopt state:
+  [com.vedant.velora]
+    path: /data/app/~~RTVtsEve_Y5WLG08-6YwoQ==/com.vedant.velora-Qyo3AUo5EGVqr5p3VDSG_A==/base.apk
+      x86_64: [status=verify] [reason=install]
+
+
+Compiler stats:
+  [com.vedant.velora]
+     base.apk - 3577
+
+APEX session state:
+
+Active APEX packages:
+
+
+Inactive APEX packages:
+
+
+Factory APEX packages:
+
+
+Snapshot statistics
+   Unrecorded-hits: 1198  Cork-level: 0
+   Summary stats               TotBlds     TotUsed     TotCork     BigBlds    ShortLvd     TotTime     MaxTime
+          0:09         now          15       45948           0           0           5           4           2
+          1:09        0:09         142      172266           0           0          43          19           1
+          2:09        1:09         855      179672           0           3         300         161          17
+          2:09         now        1012      397886           0           3         348         185          17
+
+   Build times                  <= 1ms      <= 2ms      <= 5ms     <= 10ms     <= 20ms     <= 50ms    <= 100ms     > 100ms
+          0:09         now          14           1           0           0           0           0           0           0
+          1:09        0:09         142           0           0           0           0           0           0           0
+          2:09        1:09         843           3           3           4           2           0           0           0
+          2:09         now         999           4           3           4           2           0           0           0
+
+   Use counters                   <= 1        <= 2        <= 5       <= 10       <= 20       <= 50      <= 100       > 100
+          0:09         now           5           0           0           1           0           1           0           8
+          1:09        0:09          13          22           8           9          12          11           8          59
+          2:09        1:09          51         186          62         229          64          80          43         139
+          2:09         now          69         208          70         239          76          92          51         206
