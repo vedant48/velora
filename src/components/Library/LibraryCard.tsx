@@ -40,9 +40,9 @@ export const LibraryCard = memo(function LibraryCard({ item, onPress, onLongPres
           </View>
         )}
         {prog && !ended && (
-          <View style={styles.progressBadge} accessible accessibilityLabel={`${prog.watched} of ${prog.total} episodes watched, ${prog.left} left`}>
+          <View style={styles.progressBadge} accessible accessibilityLabel={`${prog.watched} of ${prog.total} episodes tracked as watched`}>
             <View style={styles.pie}><View style={[styles.pieFill, { height: `${Math.round(prog.fraction * 100)}%` }]} /></View>
-            {prog.left > 0 ? <Text style={styles.progressText}>{prog.left}</Text> : null}
+            <Text style={styles.progressText}>{prog.watched}/{prog.total}</Text>
           </View>
         )}
         {item.rating !== null && (
