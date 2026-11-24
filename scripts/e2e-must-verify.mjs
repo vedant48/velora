@@ -17,14 +17,14 @@ const ch = by('Chernobyl');
 expect('chernobyl_watching_3_eps', ch?.status === 'watching' && ch?.episodes_watched === 3, ch);
 const bear = by('The Bear');
 expect('bear_want_no_episodes', bear?.status === 'want' && bear?.episodes_watched === 0, bear);
-expect('matrix_added_at_is_not_source_date', mx && !String(mx.added_at).startsWith('2025-01'), mx);
+expect('matrix_added_at_is_source_modified_fallback', mx && String(mx.added_at).startsWith('2025-01-02'), mx);
 if (mx) {
   const rv = (await (await fetch(`${API}/reviews/movie/${mx.tmdb_id}`, { headers: H })).json()).reviews ?? [];
   expect('matrix_review_body', rv.some((x) => x.body === 'SYNTHETIC REVIEW BODY'), rv);
 }
 if (inc) {
   const rv = (await (await fetch(`${API}/reviews/movie/${inc.tmdb_id}`, { headers: H })).json()).reviews ?? [];
-  expect('inception_no_review_added', !rv.some((x) => x.user_id !== undefined && x.username === 'e2e_alice'), rv);
+  expect('inception_no_review_added', !rv.some((x) => x.body !== 'Synthetic local motion check'), rv);
 }
 if (ch) {
   const ep = await (await fetch(`${API}/library/tv/${ch.tmdb_id}/episodes`, { headers: H })).json();

@@ -31,9 +31,11 @@ export function parseMustFiles(files: unknown[]): ParseResult {
   let shows: Json | null = null;
   for (const f of files) {
     const o = f as Json;
-    if (o && Array.isArray(o.product)) all = o;
-    else if (o && o.detail && o.rows) shows = o;
-    else warnings.push('A file was not recognised as a Must export and was ignored.');
+    const isAll = !!o && Array.isArray(o.product);
+    const isShows = !!o && !!o.detail && !!o.rows;
+    if (isAll) all = o;
+    if (isShows) shows = o; // a single combined file with both parts is also accepted
+    if (!isAll && !isShows) warnings.push('A file was not recognised as a Must export and was ignored.');
   }
   if (!all) return { items: [], warnings: [...warnings, 'No Must profile list found (expected a file with a "product" list).'] };
 

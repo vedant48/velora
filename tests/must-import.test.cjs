@@ -127,3 +127,15 @@ test('real export totals (local only)', { skip: !real }, () => {
   console.log('watched episodes parsed:', eps, 'shows with detail:', r.items.filter((i) => i.seasons).length);
   assert.equal(eps, 553);
 });
+
+test('a single combined file with profile list and series detail is accepted', () => {
+  const combined = {
+    product: [{ user_product_info: { product_id: 5, status: 'watching', rate: null, modified_at: '2025-01-03T00:00:00Z' }, product: { id: 5, type: 'show', title: 'S', release_date: '2019-05-06' } }],
+    review: [],
+    detail: { 5: { show: { seasons: [{ season_id: 9, number: 1, episodes: [11, 12] }] } } },
+    rows: { 9: { p: { user_product_info: { rate: 8, status: 'watching' }, product: { type: 'season' } } }, 11: { p: { user_product_info: { status: 'watched' }, product: { type: 'episode' } } }, 12: { p: { user_product_info: { status: 'watching' }, product: { type: 'episode' } } } },
+  };
+  const r = parseMustFiles([combined]);
+  assert.equal(r.items.length, 1);
+  assert.equal(r.items[0].seasons.length, 1);
+});
