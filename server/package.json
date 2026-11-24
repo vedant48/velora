@@ -11,7 +11,7 @@
     "db:create": "wrangler d1 create velora-db",
     "db:migrate:local": "wrangler d1 migrations apply velora-db --local",
     "db:migrate": "wrangler d1 migrations apply velora-db --remote",
-    "test": "esbuild test/avatars.test.ts --bundle --platform=node --format=cjs --external:node:* --outfile=test/.build/avatars.test.cjs && node --experimental-sqlite --test test/.build/avatars.test.cjs"
+    "test": "esbuild test/avatars.test.ts --bundle --platform=node --format=cjs --external:node:* --outfile=test/.build/avatars.test.cjs && node --experimental-sqlite --test test/.build/avatars.test.cjs && esbuild test/must-import.test.ts --bundle --platform=node --format=cjs --external:node:* --outfile=test/.build/must-import.test.cjs && node --experimental-sqlite --test test/.build/must-import.test.cjs"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.0",

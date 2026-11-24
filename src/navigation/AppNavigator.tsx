@@ -6,6 +6,7 @@ import { AuthScreen } from '../screens/Auth/AuthScreen';
 import { CollectionScreen } from '../screens/Collection/CollectionScreen';
 import { DetailsScreen } from '../screens/Details/DetailsScreen';
 import { GenreScreen } from '../screens/Genre/GenreScreen';
+import { ImportMustScreen } from '../screens/Import/ImportMustScreen';
 import { AccountScreen } from '../screens/Profile/AccountScreen';
 import { ActivityScreen } from '../screens/Profile/ActivityScreen';
 import { UserProfileScreen } from '../screens/Profile/UserProfileScreen';
@@ -58,6 +59,7 @@ export const AppNavigator: React.FC = () => {
       <Stack.Screen name="TVCollection" component={TVCollectionScreen} />
       <Stack.Screen name="UserProfile" component={UserProfileScreen} />
       <Stack.Screen name="Account" component={AccountScreen} />
+      <Stack.Screen name="ImportMust" component={ImportMustScreen} />
       <Stack.Screen
         name="Activity"
         component={ActivityScreen}

@@ -258,6 +258,11 @@ export const AccountScreen: React.FC = () => {
         <Text style={styles.rowButtonText}>{busy === 'simkl' ? 'Preparing...' : 'Export library (SIMKL CSV)'}</Text>
       </Pressable>
 
+      <Pressable onPress={() => navigation.navigate('ImportMust')} style={styles.rowButton} disabled={busy !== null}>
+        <Ionicons name="cloud-upload-outline" size={17} color={colors.textPrimary} />
+        <Text style={styles.rowButtonText}>Import from Must</Text>
+      </Pressable>
+
       <Text style={styles.section}>About & Credits</Text>
       <View style={{ padding: 16, borderRadius: 8, backgroundColor: colors.surface, gap: 12 }}>
         <Text style={{ fontSize: 18, fontWeight: '700', color: colors.textPrimary }}>Velora</Text>

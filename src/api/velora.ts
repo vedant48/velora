@@ -255,6 +255,10 @@ export const veloraApi = {
   importLibrary: (format: 'velora' | 'simkl', data: unknown) =>
     call<{ imported: number; unresolved?: unknown[] }>('/library/import', { method: 'POST', body: { format, data } }),
 
+  importMust: (items: unknown[]) =>
+    call<{ results: { mustId: string; outcome: 'created' | 'existing_kept' | 'failed'; episodesAdded: number; error?: string }[] }>(
+      '/library/import/must', { method: 'POST', body: { items } }),
+
   putReview: (mediaType: MediaType, tmdbId: number, body: { body?: string; rating?: number | null; seasonNumber?: number }) =>
     call<Review>(`/reviews/${mediaType}/${tmdbId}`, { method: 'PUT', body }),
   getReviews: (mediaType: MediaType, tmdbId: number, season?: number) =>
