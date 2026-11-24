@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -uo pipefail
 mkdir -p proof
+{ bash scripts/e2e-backend.sh && (cd server && node scripts/e2e-ui-library.mjs && node scripts/e2e-seed-152.mjs); } > proof/backend-setup.log 2>&1 || { echo SETUP_FAILED >> proof/backend-setup.log; tail -40 /tmp/wrangler-dev.log > proof/wrangler-tail.log 2>&1; exit 1; }
+cp /tmp/wrangler-dev.log proof/wrangler-dev.log 2>/dev/null || true
 adb reverse tcp:8787 tcp:8787
 adb install candidate/app-release.apk
 adb shell wm size 720x1280

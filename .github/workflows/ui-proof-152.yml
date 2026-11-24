@@ -35,10 +35,6 @@ jobs:
         run: |
           mkdir candidate && cp android/app/build/outputs/apk/release/app-release.apk candidate/app-release.apk
           grep -c "127.0.0.1:8787" -r android/app/build/generated 2>/dev/null | head -1 || true
-      - name: Start local backend and seed synthetic data
-        run: |
-          bash scripts/e2e-backend.sh
-          (cd server && node scripts/e2e-ui-library.mjs && node scripts/e2e-seed-152.mjs)
       - name: Install Maestro
         run: curl -Ls "https://get.maestro.mobile.dev" | bash
       - name: Enable emulator acceleration
