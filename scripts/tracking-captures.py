@@ -27,9 +27,9 @@ tap('Log in / Sign up');time.sleep(3)
 # Exact EditText role prevents matching decorative labels.
 for label,value in [('Username','e2e_alice'),('Password','e2e-alice-pass-1')]:
  fields=[n for n in xml().iter('node') if n.get('class')=='android.widget.EditText'];target=fields[0 if label=='Username' else 1];hit(target);adb('shell','input','text',value);adb('shell','input','keyevent','4');time.sleep(1)
-tap('Log in','android.widget.TextView');time.sleep(10)
+nodes=[n for n in xml().iter('node') if n.get('text')=='Log in'];assert nodes;hit(nodes[-1]);time.sleep(10)
 try:
- tap('Demo library');shot('want')
+ tap('Demo library');time.sleep(3);shot('want')
  tap('Watched');time.sleep(4);shot('watched')
  tap('Series');time.sleep(4);shot('series')
  tap('Breaking Bad','android.widget.Button');time.sleep(12)
