@@ -18,7 +18,7 @@ jobs:
           read UI VERIFY < .ci/publish157
           test "$(gh run view "$UI" --json conclusion -q .conclusion)" = success
           test "$(gh run view "$VERIFY" --json conclusion -q .conclusion)" = success
-          test "$(gh run view 45490858374 --json conclusion -q .conclusion)" = success
+          test "$(gh run view 45493634300 --json conclusion -q .conclusion)" = success
           gh release view v1.5.7 --json isDraft -q .isDraft | grep -q true
       - name: Publish the verified draft as Latest (same bytes); no other release is touched
         env: { GH_TOKEN: '${{ secrets.GITHUB_TOKEN }}' }
