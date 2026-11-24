@@ -1,0 +1,436 @@
+--------- beginning of main
+11-24 23:15:28.696  1570  1570 W com.google.android.googlequicksearchbox:search: type=1400 audit(0.0:26): avc:  denied  { read } for  comm=424720546872656164202333 name="/" dev="vdd1" ino=2 scontext=u:r:priv_app:s0:c512,c768 tcontext=u:object_r:metadata_file:s0 tclass=dir permissive=0 app=com.google.android.googlequicksearchbox
+11-24 23:15:28.688  1191  1191 D BoundBrokerSvc: onBind: Intent { act=android.intent.action.RESOLVE_INSTANT_APP_PACKAGE cmp=com.google.android.gms/.chimera.PersistentBoundBrokerService }
+11-24 23:15:28.688  1191  1191 D BoundBrokerSvc: Loading bound service for intent: Intent { act=android.intent.action.RESOLVE_INSTANT_APP_PACKAGE cmp=com.google.android.gms/.chimera.PersistentBoundBrokerService }
+11-24 23:15:28.695  1570  1570 W earchbox:search: Long monitor contention with owner BG Thread #3 (1871) at boolean android.os.MessageQueue.enqueueMessage(android.os.Message, long)(MessageQueue.java:695) waiters=0 in android.os.Message android.os.MessageQueue.next() for 582ms
+11-24 23:15:28.696  1570  1576 W earchbox:search: Long monitor contention with owner BG Thread #2 (1870) at int android.content.res.AssetManager.getResourceIdentifier(java.lang.String, java.lang.String, java.lang.String)(AssetManager.java:879) waiters=1 in void android.content.res.AssetManager$AssetInputStream.close() for 663ms
+11-24 23:15:28.700  1570  1871 W A       : No system LP found. Offline SODA ASR is unavailable and SODA init may fail.
+11-24 23:15:28.701  1570  1871 I A       : (REDACTED) Resolved SODA resource dir for %s: %s
+11-24 23:15:28.706   551  1789 D ConnectivityService: requestNetwork for uid/pid:10144/1570 activeRequest: null callbackRequest: 76 [NetworkRequest [ REQUEST id=77, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10144 RequestorUid: 10144 RequestorPkg: com.google.android.googlequicksearchbox UnderlyingNetworks: Null] ]] callback flags: 0 order: 2147483647 isUidTracked: false
+11-24 23:15:28.707   551   821 D ConnectivityService: NetReassign [77 : null → 100] [c 0] [a 0] [i 0]
+11-24 23:15:28.708   551   821 D ConnectivityService: NetReassign [no changes] [c 0] [a 0] [i 1]
+11-24 23:15:28.708   551   814 D OemPaidWifiNetworkFactory: got request NetworkRequest [ REQUEST id=77, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10144 RequestorUid: 10144 RequestorPkg: com.google.android.googlequicksearchbox UnderlyingNetworks: Null] ]
+11-24 23:15:28.708   551   814 D MultiInternetWifiNetworkFactory: got request NetworkRequest [ REQUEST id=77, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10144 RequestorUid: 10144 RequestorPkg: com.google.android.googlequicksearchbox UnderlyingNetworks: Null] ]
+11-24 23:15:28.708   551   814 D WifiNetworkFactory: got request NetworkRequest [ REQUEST id=77, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10144 RequestorUid: 10144 RequestorPkg: com.google.android.googlequicksearchbox UnderlyingNetworks: Null] ]
+11-24 23:15:28.708   551   814 D UntrustedWifiNetworkFactory: got request NetworkRequest [ REQUEST id=77, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10144 RequestorUid: 10144 RequestorPkg: com.google.android.googlequicksearchbox UnderlyingNetworks: Null] ]
+--------- beginning of system
+11-24 23:15:28.722   551   551 D PackageManager: Connected to instant app resolver
+11-24 23:15:28.733  1152  1745 D EGL_emulation: app_time_stats: avg=65.58ms min=23.01ms max=439.04ms count=16
+11-24 23:15:28.735  1570  2209 W SearchServiceCore: Abort, client detached.
+11-24 23:15:28.735  1570  2209 W SearchServiceCore: Abort, client detached.
+11-24 23:15:28.738  1570  1869 W earchbox:search: Long monitor contention with owner BG Thread #3 (1871) at boolean android.os.MessageQueue.enqueueMessage(android.os.Message, long)(MessageQueue.java:695) waiters=1 in boolean android.os.MessageQueue.enqueueMessage(android.os.Message, long) for 611ms
+11-24 23:15:28.748  1152  1208 W PackageManager: Failure retrieving resources for com.android.systemui: Drawable com.android.systemui:drawable/ic_bubbles_shortcut_widget with resource ID #0x7f080709
+11-24 23:15:28.755  1152  1208 W PackageManager: Failure retrieving resources for com.android.systemui: Drawable com.android.systemui:drawable/android15_patch_adaptive with resource ID #0x7f080609
+11-24 23:15:28.776  1570  1818 W earchbox:search: Long monitor contention with owner BG Thread #2 (1870) at int android.content.res.AssetManager.getResourceIdentifier(java.lang.String, java.lang.String, java.lang.String)(AssetManager.java:879) waiters=0 in void android.content.res.AssetManager$AssetInputStream.close() for 819ms
+11-24 23:15:28.786  1191  1198 W .gms.persistent: Missing inline cache for void aldi.c(android.content.Context, fkgb)
+11-24 23:15:28.786  1191  1198 W .gms.persistent: Missing inline cache for void aldi.c(android.content.Context, fkgb)
+11-24 23:15:28.786  1191  1198 W .gms.persistent: Missing inline cache for void aldi.c(android.content.Context, fkgb)
+11-24 23:15:28.786  1191  1198 W .gms.persistent: Missing inline cache for void aldi.c(android.content.Context, fkgb)
+11-24 23:15:28.941  1448  1749 I SP.AiAi : <==== Finishing job {W:b:u:l, bg}, 3199 ms. elapsed since start
+11-24 23:15:28.941  1448  1749 I SP.AiAi : Download stopped: manifests:captions_i18n_v0_background-20210623, succeeded, size: 3481
+11-24 23:15:28.941  1191  1198 W .gms.persistent: Missing inline cache for void aldi.c(android.content.Context, fkgb)
+11-24 23:15:28.941  1191  1198 W .gms.persistent: Missing inline cache for void aldi.c(android.content.Context, fkgb)
+11-24 23:15:28.941  1191  1198 W .gms.persistent: Missing inline cache for void aldi.c(android.content.Context, fkgb)
+11-24 23:15:28.941  1191  1198 W .gms.persistent: Missing inline cache for void aldi.c(android.content.Context, fkgb)
+11-24 23:15:28.955   551   849 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_CHANGED on user 0
+11-24 23:15:28.956   551   849 I AppWidgetServiceImpl: deleteWidgetsLocked() provider=Provider{ProviderId{user:0, app:10144, cmp:ComponentInfo{com.google.android.googlequicksearchbox/com.google.android.apps.gsa.staticplugins.opa.widget.impl.OpaWidgetProvider}}} userId=-1
+11-24 23:15:28.956   551   849 I AppWidgetServiceImpl: cancelBroadcastsLocked() for Provider{ProviderId{user:0, app:10144, cmp:ComponentInfo{com.google.android.googlequicksearchbox/com.google.android.apps.gsa.staticplugins.opa.widget.impl.OpaWidgetProvider}}}
+11-24 23:15:28.956   551   849 D AppWidgetServiceImpl: Trying to notify widget providers changed
+11-24 23:15:28.958  1191  1198 W .gms.persistent: Missing inline cache for fkeq aldi.b(android.content.Context, byte[], int[], java.lang.String[], int[], byte[][], com.google.android.gms.phenotype.ExperimentTokens[], boolean, java.lang.String[], java.lang.String, boolean, java.lang.String, double, czub, alcy)
+11-24 23:15:28.958  1191  1198 W .gms.persistent: Missing inline cache for fkeq aldi.b(android.content.Context, byte[], int[], java.lang.String[], int[], byte[][], com.google.android.gms.phenotype.ExperimentTokens[], boolean, java.lang.String[], java.lang.String, boolean, java.lang.String, double, czub, alcy)
+11-24 23:15:28.958  1191  1198 W .gms.persistent: Missing inline cache for fkeq aldi.b(android.content.Context, byte[], int[], java.lang.String[], int[], byte[][], com.google.android.gms.phenotype.ExperimentTokens[], boolean, java.lang.String[], java.lang.String, boolean, java.lang.String, double, czub, alcy)
+11-24 23:15:28.959  1191  1198 W .gms.persistent: Missing inline cache for fkeq aldi.b(android.content.Context, byte[], int[], java.lang.String[], int[], byte[][], com.google.android.gms.phenotype.ExperimentTokens[], boolean, java.lang.String[], java.lang.String, boolean, java.lang.String, double, czub, alcy)
+11-24 23:15:28.959  1191  1198 W .gms.persistent: Missing inline cache for fkeq aldi.b(android.content.Context, byte[], int[], java.lang.String[], int[], byte[][], com.google.android.gms.phenotype.ExperimentTokens[], boolean, java.lang.String[], java.lang.String, boolean, java.lang.String, double, czub, alcy)
+11-24 23:15:28.959  1191  1198 W .gms.persistent: Missing inline cache for fkeq aldi.b(android.content.Context, byte[], int[], java.lang.String[], int[], byte[][], com.google.android.gms.phenotype.ExperimentTokens[], boolean, java.lang.String[], java.lang.String, boolean, java.lang.String, double, czub, alcy)
+11-24 23:15:28.978   551   849 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_CHANGED on user 0
+11-24 23:15:28.993   551  1797 I AppWidgetServiceImpl: getInstalledProvidersForProfiles() 0
+11-24 23:15:29.011   551   849 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_CHANGED on user 0
+11-24 23:15:29.040   551   583 V GrammaticalInflectionUtils: AttributionSource: AttributionSource { uid = 10157, packageName = null, attributionTag = null, token = android.os.Binder@6db903b, deviceId = 0, next = null } does not have READ_SYSTEM_GRAMMATICAL_GENDER permission.
+11-24 23:15:29.070  1191  1369 W ctxmgr  : [WorkManager] Long workInfo: pkg=com.google.android.apps.wellbeing, lbl=queryFences, start=2026-11-24 23:15:27.912+0000, stop=2026-11-24 23:15:29.070+0000, durtn=1158ms [CONTEXT service_id=47 ]
+11-24 23:15:29.071  1191  2570 W .gms.persistent: Long monitor contention with owner netscheduler-queue-handler (2532) at int dbyt.l(dbyf, bcsk)(:com.google.android.gms@242335041@24.23.35 (190800-646585959):826) waiters=0 in int dbyt.r(dbus) for 585ms
+11-24 23:15:29.082   551  1808 I AppWidgetServiceImpl: getAppWidgetIds() 0
+11-24 23:15:29.082   551   814 D WifiService: Remove settings for package:com.google.android.gms.supervision
+11-24 23:15:29.082   551   814 D WifiConfigManager: Remove all networks for app ApplicationInfo{180483c com.google.android.gms.supervision}
+11-24 23:15:29.083   551   814 I PasspointManager: No app ops listener found for com.google.android.gms.supervision
+11-24 23:15:29.083   551   863 D ShortcutService: received package broadcast intent: Intent { act=android.intent.action.PACKAGE_CHANGED dat=package: flg=0x45000010 (has extras) }
+11-24 23:15:29.083   551   863 D ShortcutService: changing package: com.google.android.googlequicksearchbox userId0
+11-24 23:15:29.083   551   863 D ShortcutService: handlePackageChanged: com.google.android.googlequicksearchbox user=0
+11-24 23:15:29.083   551   863 D ShortcutService: rescanPackageIfNeeded 0@com.google.android.googlequicksearchbox, forceRescan=true , isNewApp=false
+11-24 23:15:29.091  1570  1869 I A       : (REDACTED) GMSCore Auth returned %d accounts.
+11-24 23:15:29.091  1570  1869 I A       : (REDACTED) GoogleOwnersProvider returned %d accounts.
+11-24 23:15:29.091   551   583 W ActivityManager: Slow operation: 52ms so far, now at startProcess: done creating new process record
+11-24 23:15:29.091   551   583 W ActivityManager: Slow operation: 52ms so far, now at startProcess: stepping in to startProcess
+11-24 23:15:29.099  1357  1868 W gle.android.gms: Long monitor contention with owner GoogleApiHandler (1603) at etyz angp.h(java.util.concurrent.Callable, long, java.util.concurrent.TimeUnit)(:com.google.android.gms@242335041@24.23.35 (190800-646585959):35) waiters=0 in void ango.run() for 624ms
+11-24 23:15:29.099  1357  1357 I NearbySharing: SharingTileService created. [CONTEXT service_id=194 ]
+11-24 23:15:29.100   551   656 I RoleService: Granting default roles...
+11-24 23:15:29.101  1448  2140 I AiAiEcho: Settings changed for uri: content://settings/secure/qs_auto_tiles
+11-24 23:15:29.102  1448  1723 I AiAiEcho: Predicting[0]:  [CONTEXT sampling_count=5 ]
+11-24 23:15:29.102  1448  1723 I AiAiEcho: EchoTargets: 
+11-24 23:15:29.102  1448  1723 I AiAiEcho: Filtered by AiAi flag check: 
+11-24 23:15:29.102  1448  1723 I AiAiEcho: [CONTEXT ratelimit_period="10 SECONDS" ]
+11-24 23:15:29.102  1448  1723 I AiAiEcho: Ranked targets strategy: SORT, count: 0, ranking metadata:  [CONTEXT ratelimit_period="10 SECONDS" ]
+11-24 23:15:29.102  1448  1723 I AiAiEcho: #remoteViewsTwiddler: feature disabled.
+11-24 23:15:29.103  1448  1723 I AiAiEcho: Predicting[0]:  [CONTEXT sampling_count=5 ]
+11-24 23:15:29.103  1448  1723 I AiAiEcho: EchoTargets: 
+11-24 23:15:29.103  1448  1723 I AiAiEcho: Filtered by AiAi flag check: 
+11-24 23:15:29.103  1448  1723 I AiAiEcho: [CONTEXT ratelimit_period="10 SECONDS" ]
+11-24 23:15:29.103  1448  1723 I AiAiEcho: Ranked targets strategy: SORT, count: 0, ranking metadata:  [CONTEXT ratelimit_period="10 SECONDS" ]
+11-24 23:15:29.103  1448  1723 I AiAiEcho: #remoteViewsTwiddler: feature disabled.
+11-24 23:15:29.110  1448  1723 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface lockscreen with targets# 0 (types=[])
+11-24 23:15:29.110  1448  1723 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface home with targets# 0 (types=[])
+11-24 23:15:29.110  1357  2553 I NearbySharing: Create pesudo logger. [CONTEXT service_id=194 ]
+11-24 23:15:29.112  1570  2567 E MicroModelsUtil: (REDACTED) Hotword file group is null with group name: %s, locale: %s
+11-24 23:15:29.112  1570  2567 D MDDTikTokTaskScheduler: Scheduling periodic tasks for MDD lib MDD.CHARGING.PERIODIC.TASK 21600
+11-24 23:15:29.113  1570  2567 D MDDTikTokTaskScheduler: Scheduling periodic tasks for MDD lib MDD.MAINTENANCE.PERIODIC.GCM.TASK 86400
+11-24 23:15:29.113  1570  2567 D MDDTikTokTaskScheduler: Scheduling periodic tasks for MDD lib MDD.CELLULAR.CHARGING.PERIODIC.TASK 21600
+11-24 23:15:29.113  1570  2567 D MDDTikTokTaskScheduler: Scheduling periodic tasks for MDD lib MDD.WIFI.CHARGING.PERIODIC.TASK 21600
+11-24 23:15:29.113  1191  2011 W .gms.persistent: Long monitor contention with owner lowpool[3] (1880) at void angp.execute(java.lang.Runnable)(:com.google.android.gms@242335041@24.23.35 (190800-646585959):12) waiters=0 in void angp.execute(java.lang.Runnable) for 581ms
+11-24 23:15:29.126   551   583 W ActivityManager: Slow operation: 87ms so far, now at startProcess: done starting proc!
+11-24 23:15:29.140  1191  1511 I AlarmManager: setExactAndAllowWhileIdle [name: GCM_CONN_ALARM type: 2 triggerAtMillis: 51588]
+11-24 23:15:29.141  1191  1447 I GmsCoreXrpcWrapper: Returning a channel provider with trafficStatsTag=67118596 trafficStatsUid=10143
+11-24 23:15:29.142   551   584 W ActivityManager: Slow operation: 51ms so far, now at startProcess: asking zygote to start proc
+11-24 23:15:29.143  1357  1651 W DataCollectionRegistryC: missing CollectionDefinition for digitalassetlinks.googleapis.com/google.digitalassetlinks.v1.AssetLinks/Check
+11-24 23:15:29.143  1191  1191 I NearbySharing: ReceiveSurfaceService started [CONTEXT service_id=194 ]
+11-24 23:15:29.144  1191  1191 I NearbySharing: SendSurfaceService started [CONTEXT service_id=194 ]
+11-24 23:15:29.150   551   863 E system_server: No package ID 7f found for resource ID 0x7f080bdc.
+11-24 23:15:29.150   551   863 E system_server: No package ID 7f found for resource ID 0x7f152158.
+11-24 23:15:29.150   551   863 E system_server: No package ID 7f found for resource ID 0x7f080bed.
+11-24 23:15:29.150   551   863 E system_server: No package ID 7f found for resource ID 0x7f152159.
+11-24 23:15:29.150   551   863 D ShortcutService: Package com.google.android.googlequicksearchbox has 2 manifest shortcut(s), and 0 share target(s)
+11-24 23:15:29.150   551   863 D ShortcutService: Package com.google.android.googlequicksearchbox updated, version 301351415 -> 301351415
+11-24 23:15:29.152  1191  1191 I NearbyDiscovery: DiscoveryService onStartCommand action: com.google.android.gms.nearby.discovery:ACTION_PERMISSION_CHANGE [CONTEXT service_id=265 ]
+11-24 23:15:29.156   358   358 D Zygote  : Forked child process 2662
+11-24 23:15:29.157   911   920 I PermissionControllerServiceImpl: Updating user sensitive for uid 10181
+11-24 23:15:29.158   911   943 I PermissionControllerServiceImpl: Updating user sensitive for uid 1002
+11-24 23:15:29.158   911   943 I PermissionControllerServiceImpl: Updating user sensitive for uid 10192
+11-24 23:15:29.159   911   943 I PermissionControllerServiceImpl: Updating user sensitive for uid 10166
+11-24 23:15:29.162  2662  2662 I android.camera2: Using CollectorTypeCMC GC.
+11-24 23:15:29.162  2662  2662 W android.camera2: Unexpected CPU variant for x86: x86_64.
+11-24 23:15:29.162  2662  2662 W android.camera2: Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, goldmont-without-sha-xsaves, tremont, kabylake, default
+11-24 23:15:29.163  2662  2662 E android.camera2: Not starting debugger since process cannot load the jdwp agent.
+11-24 23:15:29.164  2662  2662 D nativeloader: Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok
+11-24 23:15:29.164   911   943 I PermissionControllerServiceImpl: Updating user sensitive for uid 1000
+11-24 23:15:29.165   911   943 I PermissionControllerServiceImpl: Updating user sensitive for uid 10144
+11-24 23:15:29.165   911   943 I PermissionControllerServiceImpl: Updating user sensitive for uid 10190
+11-24 23:15:29.165   911   943 I PermissionControllerServiceImpl: Updating user sensitive for uid 1001
+11-24 23:15:29.165   911   943 I PermissionControllerServiceImpl: Updating user sensitive for uid 10136
+11-24 23:15:29.166   911   943 I PermissionControllerServiceImpl: Updating user sensitive for uid 10142
+11-24 23:15:29.166   911   943 I PermissionControllerServiceImpl: Updating user sensitive for uid 10143
+11-24 23:15:29.166   911   943 I PermissionControllerServiceImpl: Updating user sensitive for uid 10165
+11-24 23:15:29.166   911   943 I PermissionControllerServiceImpl: Updating user sensitive for uid 10171
+11-24 23:15:29.166   911   943 I PermissionControllerServiceImpl: Updating user sensitive for uid 10131
+11-24 23:15:29.167  1570  1871 E A       : mobstoreUri is null!
+11-24 23:15:29.169  1191  2572 I Nearby  : is blocked device type false, isAuto=false, isIot=false, isLatchsky=false, isChinaWearable=false, isTv=false, isWearable=false (supportWearOs=false), isChromeOsDevice=false (supportChromeOs=false) [CONTEXT service_id=49 ]
+11-24 23:15:29.175  1068  1072 W m.android.phone: Missing inline cache for void android.net.LinkProperties.writeToParcel(android.os.Parcel, int)
+11-24 23:15:29.177  1191  1369 E WakeLock: GCM_HB_ALARM release without a matched acquire!
+11-24 23:15:29.177  1191  1369 W WakeLock: GCM_HB_ALARM counter does not exist
+11-24 23:15:29.177   551   821 D ConnectivityService: reportNetworkConnectivity(100, false) by 10143
+11-24 23:15:29.177   551  1028 W ParceledListSlice: Element #25 is 19828 bytes.
+11-24 23:15:29.177   551  1028 W ParceledListSlice: Element #26 is 19864 bytes.
+11-24 23:15:29.178   551   849 W system_server: Long monitor contention with owner binder:551_12 (1797) at android.content.pm.ParceledListSlice com.android.server.appwidget.AppWidgetServiceImpl.getInstalledProvidersForProfile(int, int, java.lang.String)(AppWidgetServiceImpl.java:1992) waiters=0 in void com.android.server.appwidget.AppWidgetServiceImpl.onPackageBroadcastReceived(android.content.Intent, int) for 167ms
+11-24 23:15:29.178   551   849 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_CHANGED on user 0
+11-24 23:15:29.178   551   849 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_CHANGED on user 0
+11-24 23:15:29.178   551   849 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_CHANGED on user 0
+11-24 23:15:29.178   551   849 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_CHANGED on user 0
+11-24 23:15:29.178   551   849 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_CHANGED on user 0
+11-24 23:15:29.178   551   849 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_CHANGED on user 0
+11-24 23:15:29.179   551   849 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_CHANGED on user 0
+11-24 23:15:29.179   551   849 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_CHANGED on user 0
+11-24 23:15:29.179   551   849 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_CHANGED on user 0
+11-24 23:15:29.179   551   849 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_CHANGED on user 0
+11-24 23:15:29.179  1005  2346 D NetworkMonitor/100: Forcing reevaluation for UID 10143. Dns signal count: 0
+11-24 23:15:29.179   551   849 D AppWidgetServiceImpl: Trying to notify widget providers changed
+11-24 23:15:29.179   551  1028 W ParceledListSlice: Element #27 is 19708 bytes.
+11-24 23:15:29.179   551  1028 W ParceledListSlice: Element #28 is 19616 bytes.
+11-24 23:15:29.179   551  1028 W ParceledListSlice: Element #29 is 19728 bytes.
+11-24 23:15:29.180  1152  1208 W PackageManager: Failure retrieving text 0x7f130786 in package com.android.systemui
+11-24 23:15:29.180  1152  1208 W PackageManager: android.content.res.Resources$NotFoundException: String resource ID #0x7f130786
+11-24 23:15:29.180  1152  1208 W PackageManager: 	at android.content.res.Resources.getText(Resources.java:466)
+11-24 23:15:29.180  1152  1208 W PackageManager: 	at android.app.ApplicationPackageManager.getText(ApplicationPackageManager.java:2405)
+11-24 23:15:29.180  1152  1208 W PackageManager: 	at android.appwidget.AppWidgetProviderInfo.loadDescription(AppWidgetProviderInfo.java:484)
+11-24 23:15:29.180  1152  1208 W PackageManager: 	at com.android.launcher3.model.WidgetItem.<init>(go/retraceme 31f9979659277bb965985aff1272c33e3c3c9e755b77166d20a2465454178f2c:4)
+11-24 23:15:29.180  1152  1208 W PackageManager: 	at com.android.launcher3.model.WidgetsModel.update(go/retraceme 31f9979659277bb965985aff1272c33e3c3c9e755b77166d20a2465454178f2c:72)
+11-24 23:15:29.180  1152  1208 W PackageManager: 	at com.android.launcher3.p0.execute(go/retraceme 31f9979659277bb965985aff1272c33e3c3c9e755b77166d20a2465454178f2c:16)
+11-24 23:15:29.180  1152  1208 W PackageManager: 	at com.android.launcher3.LauncherModel.a(go/retraceme 31f9979659277bb965985aff1272c33e3c3c9e755b77166d20a2465454178f2c:27)
+11-24 23:15:29.180  1152  1208 W PackageManager: 	at com.android.launcher3.t0.run(go/retraceme 31f9979659277bb965985aff1272c33e3c3c9e755b77166d20a2465454178f2c:12)
+11-24 23:15:29.180  1152  1208 W PackageManager: 	at android.os.Handler.handleCallback(Handler.java:959)
+11-24 23:15:29.180  1152  1208 W PackageManager: 	at android.os.Handler.dispatchMessage(Handler.java:100)
+11-24 23:15:29.180  1152  1208 W PackageManager: 	at android.os.Looper.loopOnce(Looper.java:232)
+11-24 23:15:29.180  1152  1208 W PackageManager: 	at android.os.Looper.loop(Looper.java:317)
+11-24 23:15:29.180  1152  1208 W PackageManager: 	at android.os.HandlerThread.run(HandlerThread.java:85)
+11-24 23:15:29.180   551  1542 I AppWidgetServiceImpl: getWidgetPreview() 0
+11-24 23:15:29.180   551  1797 I AppWidgetServiceImpl: getWidgetPreview() 0
+11-24 23:15:29.182   355   404 I netd    : tetherGetStats() -> {[]} <3.58ms>
+11-24 23:15:29.186   551  1808 I AppWidgetServiceImpl: getAppWidgetIds() 0
+11-24 23:15:29.186   899   899 W PageIndicator: Total number of pages invalid: 0. Assuming 1 page.
+11-24 23:15:29.189  1191  2572 I AlarmManager: set [name: SystemMemoryCache type: 2 triggerAtMillis: 315360042735 windowMillis: -1 intervalMillis: 0]
+11-24 23:15:29.190   355  2674 I resolv  : GetAddrInfoHandler::run: {100 786532 100 983140 10143 0}
+11-24 23:15:29.191   355  2676 I resolv  : res_nmkquery: (QUERY, IN, A)
+11-24 23:15:29.192   551  1025 W Role    : Default holder doesn't have required signing certificate: com.google.android.retaildemo:6547c73dee150c103980bfdffe55cc9a011d785dd694a5f99afd8205bcaf1f80
+11-24 23:15:29.192   551  1025 E RoleControllerServiceImpl: Default/fallback role holder package doesn't qualify for the role, package: com.google.android.gms.supervision, role: android.app.role.SYSTEM_SUPERVISION
+11-24 23:15:29.193   551  1025 W Role    : Default holder doesn't have required signing certificate: com.google.android.apps.work.clouddpc:23962F4B43B9857638EA66F4D419518EAE282491ACDA4B94707BD59003C45E58
+11-24 23:15:29.194   355  2675 I resolv  : res_nmkquery: (QUERY, IN, AAAA)
+11-24 23:15:29.195  1005  2677 D TrafficStats: tagSocket(6) with statsTag=0xffffff81, statsUid=-1
+11-24 23:15:29.207  1570  1870 D nativeloader: Load /product/priv-app/Velvet/Velvet.apk!/lib/x86_64/libcronet.127.0.6493.0.so using ns product-clns-7 from class loader (caller=/product/priv-app/Velvet/Velvet.apk!classes11.dex): ok
+11-24 23:15:29.209   551   551 V NotificationManagerService$NotificationListeners: enabling notification listener for 0: ComponentInfo{com.google.android.apps.nexuslauncher/com.android.launcher3.notification.NotificationListener}
+11-24 23:15:29.209   551   551 V NotificationManagerService$NotificationListeners: Not registering ComponentInfo{com.google.android.apps.nexuslauncher/com.android.launcher3.notification.NotificationListener} is already bound
+11-24 23:15:29.209   551   551 V NotificationManagerService$NotificationListeners: enabling notification listener for 0: ComponentInfo{com.google.android.as/com.google.android.apps.miphone.aiai.common.notification.service.AiAiNotificationListenerService}
+11-24 23:15:29.209   551   551 V NotificationManagerService$NotificationListeners: Not registering ComponentInfo{com.google.android.as/com.google.android.apps.miphone.aiai.common.notification.service.AiAiNotificationListenerService} is already bound
+11-24 23:15:29.209   551   551 V NotificationManagerService$NotificationAssistants: enabling notification assistant for 0: ComponentInfo{com.google.android.as/com.google.android.apps.miphone.aiai.common.notification.service.AiAiNotificationAssistantService}
+11-24 23:15:29.209   551   551 V NotificationManagerService$NotificationAssistants: Not registering ComponentInfo{com.google.android.as/com.google.android.apps.miphone.aiai.common.notification.service.AiAiNotificationAssistantService} is already bound
+11-24 23:15:29.212   551   584 W ActivityManager: Slow operation: 120ms so far, now at startProcess: returned from zygote!
+11-24 23:15:29.212   551   584 W ActivityManager: Slow operation: 120ms so far, now at startProcess: done updating battery stats
+11-24 23:15:29.212   551   584 W ActivityManager: Slow operation: 120ms so far, now at startProcess: building log message
+11-24 23:15:29.212   551   584 I ActivityManager: Start proc 2662:com.android.camera2/u0a157 for broadcast {com.android.camera2/com.android.camera.SetActivitiesCameraReceiver}
+11-24 23:15:29.212   551   584 W ActivityManager: Slow operation: 120ms so far, now at startProcess: starting to update pids map
+11-24 23:15:29.212  1191  1191 D BoundBrokerSvc: onBind: Intent { act=com.google.android.gms.auth.proximity.devicesyncservice.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.PersistentBoundBrokerService }
+11-24 23:15:29.212  1191  1191 D BoundBrokerSvc: Loading bound service for intent: Intent { act=com.google.android.gms.auth.proximity.devicesyncservice.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.PersistentBoundBrokerService }
+11-24 23:15:29.214   911  1143 I PermissionControllerServiceImpl: Updating user sensitive for uid 1000
+11-24 23:15:29.214   911  1143 I PermissionControllerServiceImpl: Updating user sensitive for uid 10203
+11-24 23:15:29.214   911  1143 I PermissionControllerServiceImpl: Updating user sensitive for uid 10152
+11-24 23:15:29.214   911  1143 I PermissionControllerServiceImpl: Updating user sensitive for uid 10141
+11-24 23:15:29.214   355  2675 I resolv  : res_nsend: used send_dg 264 terrno: 0
+11-24 23:15:29.214   355  2675 I resolv  : doQuery: rcode=0, ancount=8, return value=264
+11-24 23:15:29.214   551   584 W ActivityManager: Slow operation: 123ms so far, now at startProcess: done updating pids map
+11-24 23:15:29.215  1005  2678 D TrafficStats: tagSocket(129) with statsTag=0xffffff81, statsUid=-1
+11-24 23:15:29.216   551   863 D ShortcutService: Package com.google.android.googlequicksearchbox: publishing manifest shortcuts
+11-24 23:15:29.226  1005  2678 D TrafficStats: tagSocket(129) with statsTag=0xffffff81, statsUid=-1
+11-24 23:15:29.226  1005  2677 D TrafficStats: tagSocket(128) with statsTag=0xffffff81, statsUid=-1
+11-24 23:15:29.227   355  2679 I resolv  : ResNSendHandler::run: 0 / {100 983140 100 983140 1073 1}
+11-24 23:15:29.227   355  2679 I resolv  : resolv_cache_lookup: FOUND IN CACHE entry=0x7f5dc561be10
+11-24 23:15:29.227   355  2680 I resolv  : ResNSendHandler::run: 0 / {100 983140 100 983140 1073 1}
+11-24 23:15:29.227   355  2680 I resolv  : resolv_cache_lookup: FOUND IN CACHE entry=0x7f5d65622950
+11-24 23:15:29.234   355  2681 I resolv  : ResNSendHandler::run: 0 / {100 983140 100 983140 1073 1}
+11-24 23:15:29.234   355  2681 I resolv  : resolv_cache_lookup: FOUND IN CACHE entry=0x7f5dc561d3f0
+11-24 23:15:29.235   355  2682 I resolv  : ResNSendHandler::run: 0 / {100 983140 100 983140 1073 1}
+11-24 23:15:29.235   355  2682 I resolv  : resolv_cache_lookup: FOUND IN CACHE entry=0x7f5da561fe30
+11-24 23:15:29.238   355  2676 I resolv  : res_nsend: used send_dg 168 terrno: 0
+11-24 23:15:29.238   355  2676 I resolv  : doQuery: rcode=0, ancount=8, return value=168
+11-24 23:15:29.240   551  1542 W JobScheduler: Job didn't exist in JobStore: e5a8748 #u0a144/-237 com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService
+11-24 23:15:29.244  1005  1005 D TrafficStats: tagSocket(6) with statsTag=0xffffffff, statsUid=-1
+11-24 23:15:29.244  1005  1005 D TrafficStats: tagSocket(6) with statsTag=0xffffffff, statsUid=-1
+11-24 23:15:29.251  1357  1357 D Backup  : [D2dTransport] Moved from state 0 to 0
+11-24 23:15:29.256  1005  1005 D TrafficStats: tagSocket(6) with statsTag=0xffffffff, statsUid=-1
+11-24 23:15:29.260  1191  1698 I ebvk$a  : Unable to retrieve flag snapshot for com.google.android.gms.tron.metrics, using defaults.
+11-24 23:15:29.272   551   863 D ShortcutService: received package broadcast intent: Intent { act=android.intent.action.PACKAGE_CHANGED dat=package: flg=0x45000010 (has extras) }
+11-24 23:15:29.274   551   863 D ShortcutService: changing package: com.google.android.providers.media.module userId0
+11-24 23:15:29.274   551   863 D ShortcutService: handlePackageChanged: com.google.android.providers.media.module user=0
+11-24 23:15:29.277  1005  1005 D TrafficStats: tagSocket(6) with statsTag=0xffffffff, statsUid=-1
+11-24 23:15:29.278   551   863 D ShortcutService: rescanPackageIfNeeded 0@com.google.android.providers.media.module, forceRescan=true , isNewApp=true
+11-24 23:15:29.278   551   863 D ShortcutService: Package com.google.android.providers.media.module has 0 manifest shortcut(s), and 0 share target(s)
+11-24 23:15:29.278   551   863 D ShortcutService: received package broadcast intent: Intent { act=android.intent.action.PACKAGE_CHANGED dat=package: flg=0x45000010 (has extras) }
+11-24 23:15:29.278   551   863 D ShortcutService: changing package: com.android.stk userId0
+11-24 23:15:29.278   551   863 D ShortcutService: handlePackageChanged: com.android.stk user=0
+11-24 23:15:29.278   551   863 D ShortcutService: rescanPackageIfNeeded 0@com.android.stk, forceRescan=true , isNewApp=true
+11-24 23:15:29.278   551   863 D ShortcutService: Package com.android.stk has 0 manifest shortcut(s), and 0 share target(s)
+11-24 23:15:29.278   551   863 D ShortcutService: received package broadcast intent: Intent { act=android.intent.action.PACKAGE_CHANGED dat=package: flg=0x45000010 (has extras) }
+11-24 23:15:29.278   551   863 D ShortcutService: changing package: com.google.android.as userId0
+11-24 23:15:29.278   551   863 D ShortcutService: handlePackageChanged: com.google.android.as user=0
+11-24 23:15:29.278   551   863 D ShortcutService: rescanPackageIfNeeded 0@com.google.android.as, forceRescan=true , isNewApp=true
+11-24 23:15:29.278   551   863 D ShortcutService: Package com.google.android.as has 0 manifest shortcut(s), and 0 share target(s)
+11-24 23:15:29.278   551   863 D ShortcutService: received package broadcast intent: Intent { act=android.intent.action.PACKAGE_CHANGED dat=package: flg=0x45000010 (has extras) }
+11-24 23:15:29.285  1005  1005 D TrafficStats: tagSocket(6) with statsTag=0xffffffff, statsUid=-1
+11-24 23:15:29.285  1005  1005 D TrafficStats: tagSocket(6) with statsTag=0xffffffff, statsUid=-1
+11-24 23:15:29.285  1005  1005 D TrafficStats: tagSocket(6) with statsTag=0xffffffff, statsUid=-1
+11-24 23:15:29.285  1005  1005 D TrafficStats: tagSocket(6) with statsTag=0xffffffff, statsUid=-1
+11-24 23:15:29.285  1005  1005 D TrafficStats: tagSocket(6) with statsTag=0xffffffff, statsUid=-1
+11-24 23:15:29.285  1005  1005 D TrafficStats: tagSocket(6) with statsTag=0xffffffff, statsUid=-1
+11-24 23:15:29.286  1005  1005 D TrafficStats: tagSocket(6) with statsTag=0xffffffff, statsUid=-1
+11-24 23:15:29.286  1005  1005 D TrafficStats: tagSocket(6) with statsTag=0xffffffff, statsUid=-1
+11-24 23:15:29.286  1005  1005 D TrafficStats: tagSocket(6) with statsTag=0xffffffff, statsUid=-1
+11-24 23:15:29.286  1005  1005 D TrafficStats: tagSocket(6) with statsTag=0xffffffff, statsUid=-1
+11-24 23:15:29.286  1005  1005 D TrafficStats: tagSocket(6) with statsTag=0xffffffff, statsUid=-1
+11-24 23:15:29.287  1005  1005 D TrafficStats: tagSocket(6) with statsTag=0xffffffff, statsUid=-1
+11-24 23:15:29.287  1005  2677 D NetworkMonitor/100: PROBE_DNS www.google.com 91ms OK 142.251.151.119,142.251.152.119,142.251.155.119,142.251.150.119,142.251.154.119,142.251.156.119,142.251.153.119,142.251.157.119,2001:4860:4827:7700::,2001:4860:4828:7700::,2001:4860:482a:7700::,2001:4860:482d:7700::,2001:4860:4829:7700::,2001:4860:482c:7700::,2001:4860:482b:7700::,2001:4860:4826:7700::
+11-24 23:15:29.294  1005  1005 D TrafficStats: tagSocket(6) with statsTag=0xffffffff, statsUid=-1
+11-24 23:15:29.294  1005  1005 D TrafficStats: tagSocket(6) with statsTag=0xffffffff, statsUid=-1
+11-24 23:15:29.295   355  2684 I resolv  : GetAddrInfoHandler::run: {100 983140 100 983140 1073 1}
+11-24 23:15:29.295   355  2686 I resolv  : res_nmkquery: (QUERY, IN, A)
+11-24 23:15:29.295   355  2686 I resolv  : resolv_cache_lookup: FOUND IN CACHE entry=0x7f5da561fe30
+11-24 23:15:29.295   355  2686 I resolv  : doQuery: rcode=0, ancount=8, return value=160
+11-24 23:15:29.295  1005  2678 D NetworkMonitor/100: PROBE_DNS connectivitycheck.gstatic.com 80ms OK 142.251.150.120,2001:4860:4826:7800::
+11-24 23:15:29.295   355  2685 I resolv  : res_nmkquery: (QUERY, IN, AAAA)
+11-24 23:15:29.295   355  2685 I resolv  : resolv_cache_lookup: FOUND IN CACHE entry=0x7f5d65622950
+11-24 23:15:29.295   355  2685 I resolv  : doQuery: rcode=0, ancount=8, return value=256
+11-24 23:15:29.296  1005  2677 D TrafficStats: tagSocket(6) with statsTag=0xffffff81, statsUid=-1
+11-24 23:15:29.303  1191  2498 I Nearby  : is blocked device type false, isAuto=false, isIot=false, isLatchsky=false, isChinaWearable=false, isTv=false, isWearable=false (supportWearOs=false), isChromeOsDevice=false (supportChromeOs=false) [CONTEXT service_id=49 ]
+11-24 23:15:29.304  1191  2498 I NearbyDiscovery: DiscoveryController, showNotification, itemSize=0 [CONTEXT service_id=265 ]
+11-24 23:15:29.304  1191  2498 I NearbyDiscovery: Show notifications: 0 total, no changes since last shown, no-op. [CONTEXT service_id=265 ]
+11-24 23:15:29.305  2662  2662 D ApplicationLoaders: Returning zygote-cached class loader: /system/framework/org.apache.http.legacy.jar
+11-24 23:15:29.314   551   863 D ShortcutService: changing package: com.google.android.apps.wellbeing userId0
+11-24 23:15:29.314   551   863 D ShortcutService: handlePackageChanged: com.google.android.apps.wellbeing user=0
+11-24 23:15:29.314   551   863 D ShortcutService: rescanPackageIfNeeded 0@com.google.android.apps.wellbeing, forceRescan=true , isNewApp=true
+11-24 23:15:29.314   551   863 D ShortcutService: Package com.google.android.apps.wellbeing has 0 manifest shortcut(s), and 0 share target(s)
+11-24 23:15:29.315   355  2687 I resolv  : GetAddrInfoHandler::run: {100 983140 100 983140 1073 1}
+11-24 23:15:29.315   355  2689 I resolv  : res_nmkquery: (QUERY, IN, A)
+11-24 23:15:29.315   355  2689 I resolv  : resolv_cache_lookup: FOUND IN CACHE entry=0x7f5dc561d3f0
+11-24 23:15:29.315   355  2689 I resolv  : doQuery: rcode=0, ancount=1, return value=63
+11-24 23:15:29.315   355  2688 I resolv  : res_nmkquery: (QUERY, IN, AAAA)
+11-24 23:15:29.315   355  2688 I resolv  : resolv_cache_lookup: FOUND IN CACHE entry=0x7f5dc561be10
+11-24 23:15:29.315   355  2688 I resolv  : doQuery: rcode=0, ancount=1, return value=75
+11-24 23:15:29.338  1005  1017 W rkstack.process: Missing inline cache for int android.net.connectivity.android.net.util.DnsUtils.findScope(java.net.InetAddress)
+11-24 23:15:29.350  1152  1152 D SsBaseTemplateCard: No text view can be set up
+11-24 23:15:29.350  1152  1152 D SsBaseTemplateCard: Passed-in item info is null
+11-24 23:15:29.350  1152  1152 D SsBaseTemplateCard: Passed-in item info is null
+11-24 23:15:29.350  1152  1152 D SsBaseTemplateCard: Passed-in item info is null
+11-24 23:15:29.350  1152  1152 I SsBaseTemplateCard: Secondary card pane is null
+11-24 23:15:29.354  2662  2662 D nativeloader: InitLlndkLibrariesProduct: libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libRS.so:libandroid_net.so:libapexsupport.so:libbinder_ndk.so:libc.so:libcgrouprc.so:libclang_rt.asan-x86_64-android.so:libcom.android.tethering.connectivity_native.so:libdl.so:libft2.so:liblog.so:libm.so:libmediandk.so:libnativewindow.so:libneuralnetworks.so:libselinux.so:libsync.so:libvendorsupport.so:libvndksupport.so:libvulkan.so
+11-24 23:15:29.354  2662  2662 D nativeloader: Configuring product-clns-7 for unbundled product apk /product/app/Camera2/Camera2.apk. target_sdk_version=1000, uses_libraries=, library_path=/product/app/Camera2/lib/x86_64:/product/app/Camera2/Camera2.apk!/lib/x86_64:/product/lib64:/system/product/lib64, permitted_path=/data:/mnt/expand:/data/user/0/com.android.camera2:/product/lib64:/system/product/lib64
+11-24 23:15:29.360  2662  2662 D nativeloader: InitVndkspLibrariesProduct: VNDK is deprecated with product
+11-24 23:15:29.366  1005  2678 D TrafficStats: tagSocket(128) with statsTag=0xffffff81, statsUid=-1
+11-24 23:15:29.366  1437  1580 W FuseDaemon: Long monitor contention with owner AsyncTask #1 (2051) at boolean android.os.MessageQueue.enqueueMessage(android.os.Message, long)(MessageQueue.java:695) waiters=0 in android.os.Message android.os.MessageQueue.next() for 242ms
+11-24 23:15:29.367   551  1808 I AppWidgetServiceImpl: getInstalledProvidersForProfiles() 0
+11-24 23:15:29.368   551   863 D ShortcutService: received package broadcast intent: Intent { act=android.intent.action.PACKAGE_CHANGED dat=package: flg=0x45000010 (has extras) }
+11-24 23:15:29.368   551   863 D ShortcutService: changing package: com.google.android.gms userId0
+11-24 23:15:29.368   551   863 D ShortcutService: handlePackageChanged: com.google.android.gms user=0
+11-24 23:15:29.368   551   863 D ShortcutService: rescanPackageIfNeeded 0@com.google.android.gms, forceRescan=true , isNewApp=false
+11-24 23:15:29.368   551   863 D ShortcutService: Package com.google.android.gms has 0 manifest shortcut(s), and 1 share target(s)
+11-24 23:15:29.368   551   863 D ShortcutService: Package com.google.android.gms updated, version 242335041 -> 242335041
+11-24 23:15:29.368   551   863 D ShortcutService: Package com.google.android.gms: publishing manifest shortcuts
+11-24 23:15:29.368   551   863 D ShortcutService: received package broadcast intent: Intent { act=android.intent.action.PACKAGE_CHANGED dat=package: flg=0x45000010 (has extras) }
+11-24 23:15:29.368   551   863 D ShortcutService: changing package: com.google.android.tts userId0
+11-24 23:15:29.368   551   863 D ShortcutService: handlePackageChanged: com.google.android.tts user=0
+11-24 23:15:29.368   551   863 D ShortcutService: rescanPackageIfNeeded 0@com.google.android.tts, forceRescan=true , isNewApp=true
+11-24 23:15:29.368   551   863 D ShortcutService: Package com.google.android.tts has 0 manifest shortcut(s), and 0 share target(s)
+11-24 23:15:29.369   551   863 D ShortcutService: received package broadcast intent: Intent { act=android.intent.action.PACKAGE_CHANGED dat=package: flg=0x45000010 (has extras) }
+11-24 23:15:29.369   551   863 D ShortcutService: changing package: com.google.android.googlesdksetup userId0
+11-24 23:15:29.369   551   863 D ShortcutService: handlePackageChanged: com.google.android.googlesdksetup user=0
+11-24 23:15:29.369   551   863 D ShortcutService: rescanPackageIfNeeded 0@com.google.android.googlesdksetup, forceRescan=true , isNewApp=true
+11-24 23:15:29.369   551   863 D ShortcutService: Package com.google.android.googlesdksetup has 0 manifest shortcut(s), and 0 share target(s)
+11-24 23:15:29.369   551   863 D ShortcutService: received package broadcast intent: Intent { act=android.intent.action.PACKAGE_CHANGED dat=package: flg=0x45000010 (has extras) }
+11-24 23:15:29.369   551   863 D ShortcutService: changing package: com.google.android.partnersetup userId0
+11-24 23:15:29.369   551   863 D ShortcutService: handlePackageChanged: com.google.android.partnersetup user=0
+11-24 23:15:29.369   551   863 D ShortcutService: rescanPackageIfNeeded 0@com.google.android.partnersetup, forceRescan=true , isNewApp=true
+11-24 23:15:29.369   551   863 D ShortcutService: Package com.google.android.partnersetup has 0 manifest shortcut(s), and 0 share target(s)
+11-24 23:15:29.369   551   863 D ShortcutService: received package broadcast intent: Intent { act=android.intent.action.PACKAGE_CHANGED dat=package: flg=0x45000010 (has extras) }
+11-24 23:15:29.369   551   863 D ShortcutService: changing package: com.android.settings userId0
+11-24 23:15:29.369   551   863 D ShortcutService: handlePackageChanged: com.android.settings user=0
+11-24 23:15:29.369   551   863 D ShortcutService: rescanPackageIfNeeded 0@com.android.settings, forceRescan=true , isNewApp=false
+11-24 23:15:29.370   551  1542 W ParceledListSlice: Element #25 is 19828 bytes.
+11-24 23:15:29.370   551  1542 W ParceledListSlice: Element #26 is 19864 bytes.
+11-24 23:15:29.370   551  2048 W ParceledListSlice: Element #27 is 19708 bytes.
+11-24 23:15:29.370   551  2048 W ParceledListSlice: Element #28 is 19616 bytes.
+11-24 23:15:29.370   551  2048 W ParceledListSlice: Element #29 is 19728 bytes.
+11-24 23:15:29.374  1152  1208 W PackageManager: Failure retrieving text 0x7f130786 in package com.android.systemui
+11-24 23:15:29.374  1152  1208 W PackageManager: android.content.res.Resources$NotFoundException: String resource ID #0x7f130786
+11-24 23:15:29.374  1152  1208 W PackageManager: 	at android.content.res.Resources.getText(Resources.java:466)
+11-24 23:15:29.374  1152  1208 W PackageManager: 	at android.app.ApplicationPackageManager.getText(ApplicationPackageManager.java:2405)
+11-24 23:15:29.374  1152  1208 W PackageManager: 	at android.appwidget.AppWidgetProviderInfo.loadDescription(AppWidgetProviderInfo.java:484)
+11-24 23:15:29.374  1152  1208 W PackageManager: 	at com.android.launcher3.model.WidgetItem.<init>(go/retraceme 31f9979659277bb965985aff1272c33e3c3c9e755b77166d20a2465454178f2c:4)
+11-24 23:15:29.374  1152  1208 W PackageManager: 	at com.android.launcher3.model.WidgetsModel.update(go/retraceme 31f9979659277bb965985aff1272c33e3c3c9e755b77166d20a2465454178f2c:72)
+11-24 23:15:29.374  1152  1208 W PackageManager: 	at com.android.launcher3.p0.execute(go/retraceme 31f9979659277bb965985aff1272c33e3c3c9e755b77166d20a2465454178f2c:16)
+11-24 23:15:29.374  1152  1208 W PackageManager: 	at com.android.launcher3.LauncherModel.a(go/retraceme 31f9979659277bb965985aff1272c33e3c3c9e755b77166d20a2465454178f2c:27)
+11-24 23:15:29.374  1152  1208 W PackageManager: 	at com.android.launcher3.t0.run(go/retraceme 31f9979659277bb965985aff1272c33e3c3c9e755b77166d20a2465454178f2c:12)
+11-24 23:15:29.374  1152  1208 W PackageManager: 	at android.os.Handler.handleCallback(Handler.java:959)
+11-24 23:15:29.374  1152  1208 W PackageManager: 	at android.os.Handler.dispatchMessage(Handler.java:100)
+11-24 23:15:29.374  1152  1208 W PackageManager: 	at android.os.Looper.loopOnce(Looper.java:232)
+11-24 23:15:29.374  1152  1208 W PackageManager: 	at android.os.Looper.loop(Looper.java:317)
+11-24 23:15:29.374  1152  1208 W PackageManager: 	at android.os.HandlerThread.run(HandlerThread.java:85)
+11-24 23:15:29.374   551  2048 I AppWidgetServiceImpl: getWidgetPreview() 0
+11-24 23:15:29.376   551  2048 I AppWidgetServiceImpl: getWidgetPreview() 0
+11-24 23:15:29.379   551   551 I TransportConnection: D2dTransportService#2: Notifying [TransportManager.registerTransport()] transport = BackupTransportClient
+11-24 23:15:29.379   551   551 W Looper  : Slow dispatch took 118ms main h=android.app.ActivityThread$H c=android.app.LoadedApk$ServiceDispatcher$RunConnection@184dbbb m=0
+11-24 23:15:29.387  1068  1068 D CarrierConfigLoader: EVENT_SYSTEM_UNLOCKED phoneId: 0
+11-24 23:15:29.387  1068  1068 D CarrierConfigLoader: System unlocked
+11-24 23:15:29.394  1191  1191 D BoundBrokerSvc: onBind: Intent { act=com.google.android.gms.auth.proximity.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.PersistentBoundBrokerService }
+11-24 23:15:29.394  1191  1191 D BoundBrokerSvc: Loading bound service for intent: Intent { act=com.google.android.gms.auth.proximity.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.PersistentBoundBrokerService }
+11-24 23:15:29.398  2662  2662 V GraphicsEnvironment: Currently set values for:
+11-24 23:15:29.398  2662  2662 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
+11-24 23:15:29.398  2662  2662 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
+11-24 23:15:29.398  2662  2662 V GraphicsEnvironment: Global.Settings values are invalid: number of packages: 0, number of values: 0
+11-24 23:15:29.398  2662  2662 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+11-24 23:15:29.403  1191  1191 I ProximityAuth: [PhoneHubService] Destroying PhoneHubChimeraService.
+11-24 23:15:29.403  1191  1191 W ProximityAuth: [PhoneHubNotificationProcessor] shutdown(): context is null.
+11-24 23:15:29.403  1191  1191 I ProximityAuth: [PhoneHubService] All devices have disconnected. Performing cleanup...
+11-24 23:15:29.403  1191  1191 W ChimeraUtils: Module com.google.android.gms.auth_proximity missing resource null(0)
+11-24 23:15:29.408   899  1010 I QuickAccessWalletTile: QAW service is unavailable, recreating the wallet client.
+11-24 23:15:29.413   899   899 D ZenModeController: Added callback class com.android.systemui.qs.tiles.DndTile$3
+11-24 23:15:29.422  1068  1068 E SmsApplication: com.google.android.apps.messaging lost android:read_cell_broadcasts:  (fixing)
+11-24 23:15:29.422   551  1808 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 10135, code = READ_CELL_BROADCASTS, mode = allow, callingUid = 1001, oldMode = allow
+11-24 23:15:29.422   551  1025 I Role    : com.google.android.googlesdksetup not qualified for android.app.role.HOME due to missing RequiredComponent{mIntentFilterData=IntentFilterData{mAction='android.intent.action.MAIN', mCategories='[android.intent.category.HOME]', mDataScheme='null', mDataType='null'}, mMinTargetSdkVersion=1, mFlags='0', mPermission='null', mQueryFlags=0, mMetaData=[]}
+11-24 23:15:29.422   551  1025 I RoleControllerServiceImpl: Removing package that no longer qualifies for the role, package: com.google.android.googlesdksetup, role: android.app.role.HOME
+11-24 23:15:29.423   551  1025 I RoleControllerServiceImpl: Adding package as default/fallback role holder, package: com.google.android.apps.nexuslauncher, role: android.app.role.HOME
+11-24 23:15:29.424  2662  2662 V CAM_Profiler: [  0.000ms][ui] GUARD: CameraApp onCreate() - START
+11-24 23:15:29.424  2662  2662 V CAM_Profiler: [  0.000ms][ui] GUARD: FirstRunDetector getTimeOfFirstRun - START
+11-24 23:15:29.430  1570  1870 I cr_CronetLibraryLoader: Cronet version: 127.0.6493.0, arch: x86_64
+11-24 23:15:29.434  1068  1068 E CellBroadcastUtils: getDefaultCellBroadcastReceiverPackageName: no package found
+11-24 23:15:29.436   551  1789 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_SMS, mode = allow, callingUid = 1001, oldMode = allow
+11-24 23:15:29.437   551   551 I Telecom : PhoneAccountRegistrar: getSimCallManager: SimCallManager for subId 1 queried, returning: null: TSI.gSCMFU(a)@AJQ🔒
+11-24 23:15:29.439  1005  2677 D NetworkMonitor/100: PROBE_HTTPS https://www.google.com/generate_204 time=145ms ret=204 request={Connection=[close], User-Agent=[Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.32 Safari/537.36]} headers={null=[HTTP/1.1 204 No Content], Alt-Svc=[h3=":443"; ma=2592000,h3-29=":443"; ma=2592000], Connection=[close], Content-Length=[0], Cross-Origin-Resource-Policy=[cross-origin], Date=[Tue, 24 Nov 2026 23:15:30 GMT], X-Android-Received-Millis=[1795562129439], X-Android-Response-Source=[NETWORK 204], X-Android-Selected-Protocol=[http/1.1], X-Android-Sent-Millis=[1795562129419]}
+11-24 23:15:29.440  2662  2662 I CAM_Profiler: [ 15.053ms][ui] GUARD: FirstRunDetector getTimeOfFirstRun - [15.053ms] PreferenceManager.getDefaultSharedPreferences
+11-24 23:15:29.442   551  2048 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_SMS, mode = allow, callingUid = 1001, oldMode = allow
+11-24 23:15:29.442   551  1789 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_WAP_PUSH, mode = allow, callingUid = 1001, oldMode = allow
+11-24 23:15:29.442   551  1797 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = SEND_SMS, mode = allow, callingUid = 1001, oldMode = allow
+11-24 23:15:29.442   551  1797 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_CELL_BROADCASTS, mode = allow, callingUid = 1001, oldMode = allow
+11-24 23:15:29.447  2662  2662 V CAM_Profiler: [ 22.644ms][ui] GUARD: FirstRunDetector getTimeOfFirstRun - [ 7.591ms] preferences.getLong
+11-24 23:15:29.447  2662  2662 V CAM_Profiler: [ 22.743ms][ui] GUARD: FirstRunDetector getTimeOfFirstRun - [ 0.099ms] getSharedPreferences
+11-24 23:15:29.454   551  1025 E RoleControllerServiceImpl: Default/fallback role holder package doesn't qualify for the role, package: com.google.android.gms, role: android.app.role.WALLET
+11-24 23:15:29.455  1068  1068 D CarrierSvcBindHelper: onPackageModified: com.google.android.as
+11-24 23:15:29.456  2662  2662 V CAM_Profiler: [ 31.059ms][ui] GUARD: FirstRunDetector getTimeOfFirstRun - [ 8.316ms] preferences.edit()
+11-24 23:15:29.456  2662  2662 I CAM_Profiler: [ 31.116ms][ui] GUARD: FirstRunDetector getTimeOfFirstRun - STOP
+11-24 23:15:29.456  2662  2662 I CAM_Profiler: [ 31.374ms][ui] GUARD: CameraApp onCreate() - [31.374ms] initializeTimeOfFirstRun
+11-24 23:15:29.456  2662  2662 V CAM_Profiler: [ 31.421ms][ui] GUARD: CameraApp onCreate() - [ 0.048ms] UsageStatistics.initialize
+11-24 23:15:29.456  1005  2673 D NetworkMonitor/100: isCaptivePortal: isSuccessful()=true isPortal()=false RedirectUrl=null isPartialConnectivity()=false Time=266ms
+11-24 23:15:29.457  1068  1068 D CarrierSvcBindHelper: No carrier app for: 0
+11-24 23:15:29.458  1191  2177 I WakefulBroadcastRcvr: Processing wakeful broadcast: BootOrGmsUpdated
+11-24 23:15:29.459   551   821 D ConnectivityService: [100 WIFI] validation passed
+11-24 23:15:29.460  1005  2678 D NetworkMonitor/100: PROBE_HTTP http://connectivitycheck.gstatic.com/generate_204 time=146ms ret=204 request={Connection=[close], User-Agent=[Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.32 Safari/537.36]} headers={null=[HTTP/1.1 204 No Content], Connection=[close], Content-Length=[0], Cross-Origin-Resource-Policy=[cross-origin], Date=[Tue, 24 Nov 2026 23:15:30 GMT], X-Android-Received-Millis=[1795562129460], X-Android-Response-Source=[NETWORK 204], X-Android-Selected-Protocol=[http/1.1], X-Android-Sent-Millis=[1795562129444]}
+11-24 23:15:29.461  2662  2662 V CAM_Profiler: [ 36.700ms][ui] GUARD: CameraApp onCreate() - [ 5.279ms] clearNotifications
+11-24 23:15:29.461  2662  2662 I CAM_Profiler: [ 36.700ms][ui] GUARD: CameraApp onCreate() - STOP
+11-24 23:15:29.462   551  1465 D BackupTransportManager: [UserID:0] Transport com.google.android.gms/.backup.component.D2dTransportService registered
+11-24 23:15:29.462   551  1465 D BackupManagerService: [UserID:0] Transport com.google.android.gms/.backup.migrate.service.D2dTransport registered 13761ms after first request (delay = 3000ms)
+11-24 23:15:29.462  1068  1283 D ImsResolver: maybeAddedImsService, packageName: com.android.stk
+11-24 23:15:29.463   551   551 I Telecom : PhoneAccountRegistrar: getSimCallManager: SimCallManager for subId 1 queried, returning: null: TSI.gSCMFU(a)@AJU🔒
+11-24 23:15:29.474  2662  2662 W CAM_Log : Tag SetActivitiesCameraReceiver is 8 chars longer than limit.
+11-24 23:15:29.478  2662  2662 I CAM_SetActivitiesCamera: component state is 1
+11-24 23:15:29.478   551  1797 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
+11-24 23:15:29.478   551  1797 D PackageManager: Clear ephemeral installer activity
+11-24 23:15:29.482  1191  1612 I NearbyConnections: Runtime state initialization complete. Nearby connections setting is disabled
+11-24 23:15:29.483  1068  1068 E SmsApplication: com.google.android.apps.messaging lost android:read_cell_broadcasts:  (fixing)
+11-24 23:15:29.483   551  1808 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 10135, code = READ_CELL_BROADCASTS, mode = allow, callingUid = 1001, oldMode = allow
+11-24 23:15:29.480  1005  1005 W NetworkMonitor/: type=1400 audit(0.0:27): avc:  granted  { read } for  name="psched" dev="proc" ino=4026532021 scontext=u:r:network_stack:s0 tcontext=u:object_r:proc_net:s0 tclass=file
+11-24 23:15:29.493  1068  1068 E CellBroadcastUtils: getDefaultCellBroadcastReceiverPackageName: no package found
+11-24 23:15:29.493   551  1797 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_SMS, mode = allow, callingUid = 1001, oldMode = allow
+11-24 23:15:29.493  1191  1698 I Nearby  : Beginning attempt #1 for RestoreDeviceName... [CONTEXT service_id=49 ]
+11-24 23:15:29.496   551  1808 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_SMS, mode = allow, callingUid = 1001, oldMode = allow
+11-24 23:15:29.496   551   583 D CompatChangeReporter: Compat change id reported: 151861875; UID 1000; state: ENABLED
+11-24 23:15:29.502   551  1001 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_WAP_PUSH, mode = allow, callingUid = 1001, oldMode = allow
+11-24 23:15:29.505   551  1001 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = SEND_SMS, mode = allow, callingUid = 1001, oldMode = allow
+11-24 23:15:29.509  1005  2346 D nativeloader: Load libandroid_net_connectivity_com_android_net_module_util_jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity.jar: ok
+11-24 23:15:29.510   551  1001 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_CELL_BROADCASTS, mode = allow, callingUid = 1001, oldMode = allow
+11-24 23:15:29.515  1191  1698 I NearbyMediums: BluetoothAdapter's name was not set by Nearby Connections, ignoring call to restore default scan mode.
+11-24 23:15:29.500  1005  1005 W NetworkMonitor/: type=1400 audit(0.0:28): avc:  granted  { read open } for  path="/proc/1005/net/psched" dev="proc" ino=4026532021 scontext=u:r:network_stack:s0 tcontext=u:object_r:proc_net:s0 tclass=file
+11-24 23:15:29.529  1191  1698 I NearbyMediums: BluetoothAdapter's name was not set by Nearby Connections, ignoring call to restore device name
+11-24 23:15:29.529   358   358 D Zygote  : Forked child process 2702
+11-24 23:15:29.532  1068  1068 D CarrierSvcBindHelper: onPackageModified: com.google.android.apps.wellbeing
+11-24 23:15:29.532  1068  1283 D ImsResolver: maybeAddedImsService, packageName: com.google.android.as
+11-24 23:15:29.504  1005  1005 W NetworkMonitor/: type=1400 audit(0.0:29): avc:  granted  { getattr } for  path="/proc/1005/net/psched" dev="proc" ino=4026532021 scontext=u:r:network_stack:s0 tcontext=u:object_r:proc_net:s0 tclass=file
+11-24 23:15:29.535  2702  2702 I droid.dynsystem: Using CollectorTypeCMC GC.
+11-24 23:15:29.536  2702  2702 W droid.dynsystem: Unexpected CPU variant for x86: x86_64.
+11-24 23:15:29.536  2702  2702 W droid.dynsystem: Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, goldmont-without-sha-xsaves, tremont, kabylake, default
+11-24 23:15:29.538  2702  2702 E droid.dynsystem: Not starting debugger since process cannot load the jdwp agent.
+11-24 23:15:29.540   551   584 I ActivityManager: Start proc 2702:com.android.dynsystem/1000 for broadcast {com.android.dynsystem/com.android.dynsystem.BootCompletedReceiver}
+11-24 23:15:29.541  1068  1068 D CarrierSvcBindHelper: No carrier app for: 0
+11-24 23:15:29.543  1191  1612 I TrustedTime: Initializing single user components. [CONTEXT service_id=326 ]
+11-24 23:15:29.544  2702  2702 D nativeloader: Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok
+11-24 23:15:29.550   551  1025 I RoleControllerServiceImpl: Package is already a role holder, package: com.google.android.apps.nexuslauncher, role: android.app.role.HOME
+11-24 23:15:29.551   899  1010 W Looper  : Slow delivery took 1017ms SysUiBg h=android.os.Handler c=com.android.systemui.qrcodescanner.controller.QRCodeScannerController$$ExternalSyntheticLambda0@99fc0a m=0
+11-24 23:15:29.563  1448  1749 I SP.AiAi : Scheduling job with delay of 0s for {W:C:I:l, bg}, 5 candidates
+11-24 23:15:29.571  1068  1068 E SmsApplication: com.google.android.apps.messaging lost android:read_cell_broadcasts:  (fixing)
+11-24 23:15:29.571   551  1808 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 10135, code = READ_CELL_BROADCASTS, mode = allow, callingUid = 1001, oldMode = allow
+11-24 23:15:29.572  1191  1698 I ebvk$a  : Unable to retrieve flag snapshot for com.google.android.gms.time#com.google.android.gms, using defaults.
+11-24 23:15:29.594  1068  1068 E CellBroadcastUtils: getDefaultCellBroadcastReceiverPackageName: no package found
+11-24 23:15:29.594   551  1808 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_SMS, mode = allow, callingUid = 1001, oldMode = allow
+11-24 23:15:29.595   551  1808 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_SMS, mode = allow, callingUid = 1001, oldMode = allow
+11-24 23:15:29.595   551  1808 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_WAP_PUSH, mode = allow, callingUid = 1001, oldMode = allow
+11-24 23:15:29.595   551  1808 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = SEND_SMS, mode = allow, callingUid = 1001, oldMode = allow
+11-24 23:15:29.598   551  1808 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_CELL_BROADCASTS, mode = allow, callingUid = 1001, oldMode = allow
+11-24 23:15:29.599  1068  1068 I VvmSimStateTracker: android.intent.action.BOOT_COMPLETED
+11-24 23:15:29.606  1068  1283 D ImsResolver: maybeAddedImsService, packageName: com.google.android.apps.wellbeing
+11-24 23:15:29.612   499   499 W libgoldfish-rild: Multi-element reporting criteria are not supported with HIDL HAL
+11-24 23:15:29.619  1336  2123 W FenceManagerImpl: <DWB> Register all active fences - start 4 registration.
+11-24 23:15:29.642   899   899 D GlobalActionsDialogLite: Service changed before actions created
+11-24 23:15:29.642   899   899 D GlobalActionsDialogLite: Service changed before actions created
+11-24 23:15:29.658   551  1808 W ContextImpl: Calling a method in the system process without a qualified user: android.app.ContextImpl.sendBroadcastMultiplePermissions:1299 android.content.Context.sendBroadcastMultiplePermissions:2522 com.android.server.TelephonyRegistry.broadcastServiceStateChanged:3697 com.android.server.TelephonyRegistry.notifyServiceStateForPhoneId:1759 com.android.internal.telephony.ITelephonyRegistry$Stub.onTransact:546 
+11-24 23:15:29.667  2702  2702 D nativeloader: Configuring clns-shared-7 for other apk /system/priv-app/DynamicSystemInstallationService/DynamicSystemInstallationService.apk. target_sdk_version=35, uses_libraries=, library_path=/system/priv-app/DynamicSystemInstallationService/lib/x86_64:/system/priv-app/DynamicSystemInstallationService/DynamicSystemInstallationService.apk!/lib/x86_64:/system/lib64:/system_ext/lib64, permitted_path=/data:/mnt/expand:/data/user/0/com.android.dynsystem:/system/priv-app/DynamicSystemInstallationService:/system/lib64:/system_ext/lib64
+11-24 23:15:29.678   551  1808 W ContextImpl: Calling a method in the system process without a qualified user: android.app.ContextImpl.sendBroadcastMultiplePermissions:1332 com.android.server.TelephonyRegistry.broadcastServiceStateChanged:3702 com.android.server.TelephonyRegistry.notifyServiceStateForPhoneId:1759 com.android.internal.telephony.ITelephonyRegistry$Stub.onTransact:546 android.os.Binder.execTransactInternal:1500 
