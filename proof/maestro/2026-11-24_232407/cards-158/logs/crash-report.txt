@@ -1,0 +1,22 @@
+11-24 23:25:00.123 E/AndroidRuntime( 4325): Process: com.vedant.velora, PID: 4325
+11-24 23:25:00.123 E/AndroidRuntime( 4325): com.facebook.react.common.JavascriptException: TypeError: undefined is not a function, stack:
+11-24 23:25:00.123 E/AndroidRuntime( 4325): anonymous@1:1518321
+11-24 23:25:00.123 E/AndroidRuntime( 4325): _handleScroll@1:1315895
+11-24 23:25:00.123 E/AndroidRuntime( 4325): executeDispatch@1:559508
+11-24 23:25:00.123 E/AndroidRuntime( 4325): anonymous@1:1266396
+11-24 23:25:00.123 E/AndroidRuntime( 4325): batchedUpdatesImpl@1:650996
+11-24 23:25:00.123 E/AndroidRuntime( 4325): batchedUpdates$1@1:563717
+11-24 23:25:00.123 E/AndroidRuntime( 4325): dispatchEvent@1:564203
+11-24 23:25:00.123 E/AndroidRuntime( 4325): 
+11-24 23:25:00.123 E/AndroidRuntime( 4325): 	at com.facebook.react.modules.core.ExceptionsManagerModule.reportException(ExceptionsManagerModule.kt:52)
+11-24 23:25:00.123 E/AndroidRuntime( 4325): 	at com.facebook.jni.NativeRunnable.run(Native Method)
+11-24 23:25:00.123 E/AndroidRuntime( 4325): 	at android.os.Handler.handleCallback(Handler.java:959)
+11-24 23:25:00.123 E/AndroidRuntime( 4325): 	at android.os.Handler.dispatchMessage(Handler.java:100)
+11-24 23:25:00.123 E/AndroidRuntime( 4325): 	at com.facebook.react.bridge.queue.MessageQueueThreadHandler.dispatchMessage(MessageQueueThreadHandler.kt:21)
+11-24 23:25:00.123 E/AndroidRuntime( 4325): 	at android.os.Looper.loopOnce(Looper.java:232)
+11-24 23:25:00.123 E/AndroidRuntime( 4325): 	at android.os.Looper.loop(Looper.java:317)
+11-24 23:25:00.123 E/AndroidRuntime( 4325): 	at com.facebook.react.bridge.queue.MessageQueueThreadImpl$Companion.startNewBackgroundThread$lambda$0(MessageQueueThreadImpl.kt:152)
+11-24 23:25:00.123 E/AndroidRuntime( 4325): 	at com.facebook.react.bridge.queue.MessageQueueThreadImpl$Companion.$r8$lambda$YYXYCFexeoKtAeDpeNYkxZZlpbA(Unknown Source:0)
+11-24 23:25:00.123 E/AndroidRuntime( 4325): 	at com.facebook.react.bridge.queue.MessageQueueThreadImpl$Companion$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+11-24 23:25:00.123 E/AndroidRuntime( 4325): 	at java.lang.Thread.run(Thread.java:1012)
+
