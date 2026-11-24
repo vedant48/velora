@@ -1,0 +1,424 @@
+--------- beginning of main
+11-24 23:03:40.387 W/.apps.messaging( 3107): Missing inline cache for java.lang.Object cxvx.apply(java.lang.Object)
+11-24 23:03:40.389 D/dasx    ( 3107): Starting download: https://c.tenor.com/99ocPzxp960AAAAk/tenor.gif
+11-24 23:03:40.389 V/dasx    ( 3107): Is http uri, downloading (uri: https://c.tenor.com/99ocPzxp960AAAAk/tenor.gif)
+11-24 23:03:40.390 D/dasx    ( 3107): Starting download: https://c.tenor.com/CqsQZ7nURzQAAAAk/tenor.gif
+11-24 23:03:40.390 V/dasx    ( 3107): Is http uri, downloading (uri: https://c.tenor.com/CqsQZ7nURzQAAAAk/tenor.gif)
+11-24 23:03:40.392 W/.apps.messaging( 3107): Missing inline cache for java.lang.Object cxvx.apply(java.lang.Object)
+11-24 23:03:40.392 W/.apps.messaging( 3107): Missing inline cache for java.lang.Object cxvx.apply(java.lang.Object)
+11-24 23:03:40.532 W/PlatformConfigurator( 1174): Update for unknown DeviceConfig package com.google.android.gms.gass [CONTEXT service_id=204 ]
+11-24 23:03:40.532 W/PlatformConfigurator( 1174): daaf: No package exists for config package: com.google.android.gms.gass
+11-24 23:03:40.532 W/PlatformConfigurator( 1174): 	at com.google.android.gms.platformconfigurator.PhenotypeConfigurationUpdateListener.b(:com.google.android.gms@242335041@24.23.35 (190800-646585959):233)
+11-24 23:03:40.532 W/PlatformConfigurator( 1174): 	at com.google.android.gms.platformconfigurator.PhenotypeConfigurationUpdateListener.a(:com.google.android.gms@242335041@24.23.35 (190800-646585959):29)
+11-24 23:03:40.532 W/PlatformConfigurator( 1174): 	at com.google.android.gms.platformconfigurator.PhenotypeConfigurationUpdateListener.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):207)
+11-24 23:03:40.532 W/PlatformConfigurator( 1174): 	at com.google.android.chimera.IntentOperation.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):2)
+11-24 23:03:40.532 W/PlatformConfigurator( 1174): 	at ajom.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):8)
+11-24 23:03:40.532 W/PlatformConfigurator( 1174): 	at pkf.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):70)
+11-24 23:03:40.532 W/PlatformConfigurator( 1174): 	at pke.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):152)
+11-24 23:03:40.532 W/PlatformConfigurator( 1174): 	at emsz.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):21)
+11-24 23:03:40.532 W/PlatformConfigurator( 1174): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-24 23:03:40.532 W/PlatformConfigurator( 1174): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-24 23:03:40.532 W/PlatformConfigurator( 1174): 	at java.lang.Thread.run(Thread.java:1012)
+11-24 23:03:40.537 I/PTCommittedOperation( 1174): Receive new configuration for com.google.android.gms.gass
+11-24 23:03:40.538 W/ModuleInitIntentOp( 1535): Dropping unexpected action com.google.android.gms.phenotype.COMMITTED
+11-24 23:03:40.538 W/ModuleInitIntentOp( 1535): Dropping unexpected action com.google.android.gms.phenotype.COMMITTED
+11-24 23:03:40.539 I/SyncIntentOperation( 1535): Handling the intent: Intent { act=com.google.android.gms.phenotype.COMMITTED pkg=com.google.android.gms cmp=com.google.android.gms/.chimera.GmsIntentOperationService (has extras) }. [CONTEXT service_id=80 ]
+11-24 23:03:40.539 W/ModuleInitIntentOp( 1535): Dropping unexpected action com.google.android.gms.phenotype.COMMITTED
+11-24 23:03:40.540 I/MdiSyncModule( 1535): flag handling is skipping irrelevant intent.
+11-24 23:03:40.540 I/MlBenchmarkInstaller( 1535): Intent: com.google.android.gms.phenotype.COMMITTED [CONTEXT service_id=340 ]
+11-24 23:03:40.540 I/MlBenchmarkInstaller( 1535): COMMITTED Extra package name: com.google.android.gms.gass [CONTEXT service_id=340 ]
+11-24 23:03:40.541 W/ModuleInitIntentOp( 1535): Dropping unexpected action com.google.android.gms.phenotype.COMMITTED
+11-24 23:03:40.541 I/GmsSyncPolicyEngine( 1535): Periodic sync 1 disabled by policy, cancelled.
+11-24 23:03:40.541 I/GmsSyncPolicyEngine( 1535): Periodic sync 2 disabled by policy, cancelled.
+11-24 23:03:40.542 I/GmsSyncPolicyEngine( 1535): Periodic sync 3 disabled by policy, cancelled.
+11-24 23:03:40.543 I/LocationHistory( 1535): [IntentOperation] Handling action com.google.android.gms.phenotype.COMMITTED [CONTEXT service_id=314 ]
+11-24 23:03:40.547 W/JobService( 3107): onNetworkChanged() not implemented in androidx.work.impl.background.systemjob.SystemJobService. Must override in a subclass.
+11-24 23:03:40.547 W/JobService( 3107): onNetworkChanged() not implemented in androidx.work.impl.background.systemjob.SystemJobService. Must override in a subclass.
+11-24 23:03:40.550 I/ChimeraSrvcProxy( 1174): NullBinder for android.net.action.RECOMMEND_NETWORKS triggering remote TransactionTooLargeException due to Service without Chimera impl
+11-24 23:03:40.555 W/.gms.persistent( 1174): Large reply transaction of 1056768 bytes, interface descriptor , code 1
+11-24 23:03:40.556 I/BugleRcsEngine( 3332): handleMessage processing message:[NOTIFY_UPTIME_IGNORE_STATE_CHANGED] with [non-null]:RcsEngineImpl reference [CONTEXT log_prefix="RcsEngineImpl[DUAL_REG]:[d6873cf4-1cc3]>Handler" thread_id=67 ]
+11-24 23:03:40.558 I/BugleRcsEngine( 3332): No RCS Configuration was found in Bugle for simID: redacted-pii:sim_id[chars:20,last3:897] [CONTEXT log_prefix="ProvisioningEngineDataRetriever" thread_id=67 ]
+11-24 23:03:40.559 I/BugleRcsEngine( 3332): Connected state: [1], networkType: [WIFI] [CONTEXT thread_id=60 ]
+11-24 23:03:40.573 I/adbd    (  437): host-17: connection terminated: write failed
+11-24 23:03:40.574 I/adbd    (  437): host-17: offline
+11-24 23:03:40.574 I/adbd    (  437): destroying transport host-17
+11-24 23:03:40.574 I/adbd    (  437): BlockingConnectionAdapter(host-17): stopping
+11-24 23:03:40.574 I/adbd    (  437): host-17: read failed: Success
+11-24 23:03:40.574 I/adbd    (  437): BlockingConnectionAdapter(host-17): stopped
+11-24 23:03:40.574 I/adbd    (  437): BlockingConnectionAdapter(host-17): destructing
+11-24 23:03:40.574 I/adbd    (  437): BlockingConnectionAdapter(host-17): already stopped
+11-24 23:03:40.581 W/PlatformConfigurator( 1174): Update for unknown DeviceConfig package com.google.android.gms.home [CONTEXT service_id=204 ]
+11-24 23:03:40.581 W/PlatformConfigurator( 1174): daaf: No package exists for config package: com.google.android.gms.home
+11-24 23:03:40.581 W/PlatformConfigurator( 1174): 	at com.google.android.gms.platformconfigurator.PhenotypeConfigurationUpdateListener.b(:com.google.android.gms@242335041@24.23.35 (190800-646585959):233)
+11-24 23:03:40.581 W/PlatformConfigurator( 1174): 	at com.google.android.gms.platformconfigurator.PhenotypeConfigurationUpdateListener.a(:com.google.android.gms@242335041@24.23.35 (190800-646585959):29)
+11-24 23:03:40.581 W/PlatformConfigurator( 1174): 	at com.google.android.gms.platformconfigurator.PhenotypeConfigurationUpdateListener.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):207)
+11-24 23:03:40.581 W/PlatformConfigurator( 1174): 	at com.google.android.chimera.IntentOperation.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):2)
+11-24 23:03:40.581 W/PlatformConfigurator( 1174): 	at ajom.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):8)
+11-24 23:03:40.581 W/PlatformConfigurator( 1174): 	at pkf.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):70)
+11-24 23:03:40.581 W/PlatformConfigurator( 1174): 	at pke.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):152)
+11-24 23:03:40.581 W/PlatformConfigurator( 1174): 	at emsz.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):21)
+11-24 23:03:40.581 W/PlatformConfigurator( 1174): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-24 23:03:40.581 W/PlatformConfigurator( 1174): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-24 23:03:40.581 W/PlatformConfigurator( 1174): 	at java.lang.Thread.run(Thread.java:1012)
+11-24 23:03:40.585 I/HomeStub( 1535): HomeStub re-evaluating module downloads on phenotype flags update [CONTEXT service_id=336 ]
+--------- beginning of system
+11-24 23:03:40.597 D/ActivityManager(  552): sync unfroze 2186 com.google.android.tts for 3
+11-24 23:03:40.621 W/PlatformConfigurator( 1174): Update for unknown DeviceConfig package com.google.android.gms.plus [CONTEXT service_id=204 ]
+11-24 23:03:40.621 W/PlatformConfigurator( 1174): daaf: No package exists for config package: com.google.android.gms.plus
+11-24 23:03:40.621 W/PlatformConfigurator( 1174): 	at com.google.android.gms.platformconfigurator.PhenotypeConfigurationUpdateListener.b(:com.google.android.gms@242335041@24.23.35 (190800-646585959):233)
+11-24 23:03:40.621 W/PlatformConfigurator( 1174): 	at com.google.android.gms.platformconfigurator.PhenotypeConfigurationUpdateListener.a(:com.google.android.gms@242335041@24.23.35 (190800-646585959):29)
+11-24 23:03:40.621 W/PlatformConfigurator( 1174): 	at com.google.android.gms.platformconfigurator.PhenotypeConfigurationUpdateListener.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):207)
+11-24 23:03:40.621 W/PlatformConfigurator( 1174): 	at com.google.android.chimera.IntentOperation.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):2)
+11-24 23:03:40.621 W/PlatformConfigurator( 1174): 	at ajom.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):8)
+11-24 23:03:40.621 W/PlatformConfigurator( 1174): 	at pkf.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):70)
+11-24 23:03:40.621 W/PlatformConfigurator( 1174): 	at pke.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):152)
+11-24 23:03:40.621 W/PlatformConfigurator( 1174): 	at emsz.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):21)
+11-24 23:03:40.621 W/PlatformConfigurator( 1174): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-24 23:03:40.621 W/PlatformConfigurator( 1174): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-24 23:03:40.621 W/PlatformConfigurator( 1174): 	at java.lang.Thread.run(Thread.java:1012)
+11-24 23:03:40.621 D/EGL_emulation( 1164): app_time_stats: avg=66.95ms min=6.23ms max=1399.91ms count=30
+11-24 23:03:40.623 W/PlatformConfigurator( 1174): Update for unknown DeviceConfig package com.google.android.gms.learning [CONTEXT service_id=204 ]
+11-24 23:03:40.623 W/PlatformConfigurator( 1174): daaf: No package exists for config package: com.google.android.gms.learning
+11-24 23:03:40.623 W/PlatformConfigurator( 1174): 	at com.google.android.gms.platformconfigurator.PhenotypeConfigurationUpdateListener.b(:com.google.android.gms@242335041@24.23.35 (190800-646585959):233)
+11-24 23:03:40.623 W/PlatformConfigurator( 1174): 	at com.google.android.gms.platformconfigurator.PhenotypeConfigurationUpdateListener.a(:com.google.android.gms@242335041@24.23.35 (190800-646585959):29)
+11-24 23:03:40.623 W/PlatformConfigurator( 1174): 	at com.google.android.gms.platformconfigurator.PhenotypeConfigurationUpdateListener.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):207)
+11-24 23:03:40.623 W/PlatformConfigurator( 1174): 	at com.google.android.chimera.IntentOperation.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):2)
+11-24 23:03:40.623 W/PlatformConfigurator( 1174): 	at ajom.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):8)
+11-24 23:03:40.623 W/PlatformConfigurator( 1174): 	at pkf.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):70)
+11-24 23:03:40.623 W/PlatformConfigurator( 1174): 	at pke.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):152)
+11-24 23:03:40.623 W/PlatformConfigurator( 1174): 	at emsz.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):21)
+11-24 23:03:40.623 W/PlatformConfigurator( 1174): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-24 23:03:40.623 W/PlatformConfigurator( 1174): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-24 23:03:40.623 W/PlatformConfigurator( 1174): 	at java.lang.Thread.run(Thread.java:1012)
+11-24 23:03:40.633 W/CCTFlatFileLogStore( 1174): Excessive logging: 64 events, 114591 bytes from log source PHENOTYPE last 0s
+11-24 23:03:40.653 I/HomeStubModuleLoader( 1535): No requirement for Home module found. [CONTEXT service_id=336 ]
+11-24 23:03:40.655 E/MDD     ( 3107): DownloadProgressMonitor: Can't find file group for uri: android://com.google.android.apps.messaging/files/datadownload/shared/public/datadownloadfile_1795561397760
+11-24 23:03:40.670 W/SystemServiceRegistry( 1535): No service published for: thread_network
+11-24 23:03:40.670 I/HomeStubModuleLoader( 1535): Not downloading Thread module: Thread feature not available. [CONTEXT service_id=336 ]
+11-24 23:03:40.671 W/ModuleInitIntentOp( 1535): Dropping unexpected action com.google.android.gms.phenotype.COMMITTED
+11-24 23:03:40.671 W/ModuleInitIntentOp( 1535): Dropping unexpected action com.google.android.gms.phenotype.COMMITTED
+11-24 23:03:40.671 W/ModuleInitIntentOp( 1535): Dropping unexpected action com.google.android.gms.phenotype.COMMITTED
+11-24 23:03:40.672 I/SyncIntentOperation( 1535): Handling the intent: Intent { act=com.google.android.gms.phenotype.COMMITTED pkg=com.google.android.gms cmp=com.google.android.gms/.chimera.GmsIntentOperationService (has extras) }. [CONTEXT service_id=80 ]
+11-24 23:03:40.673 I/MdiSyncModule( 1535): flag handling is skipping irrelevant intent.
+11-24 23:03:40.674 I/GmsSyncPolicyEngine( 1535): Periodic sync 1 disabled by policy, cancelled.
+11-24 23:03:40.674 I/GmsSyncPolicyEngine( 1535): Periodic sync 2 disabled by policy, cancelled.
+11-24 23:03:40.674 I/MlBenchmarkInstaller( 1535): Intent: com.google.android.gms.phenotype.COMMITTED [CONTEXT service_id=340 ]
+11-24 23:03:40.674 I/MlBenchmarkInstaller( 1535): COMMITTED Extra package name: com.google.android.gms.auth_folsom [CONTEXT service_id=340 ]
+11-24 23:03:40.674 W/ModuleInitIntentOp( 1535): Dropping unexpected action com.google.android.gms.phenotype.COMMITTED
+11-24 23:03:40.674 I/GmsSyncPolicyEngine( 1535): Periodic sync 3 disabled by policy, cancelled.
+11-24 23:03:40.675 I/LocationHistory( 1535): [IntentOperation] Handling action com.google.android.gms.phenotype.COMMITTED [CONTEXT service_id=314 ]
+11-24 23:03:40.677 E/MDD     ( 3107): DownloadProgressMonitor: Can't find file group for uri: android://com.google.android.apps.messaging/files/datadownload/shared/public/datadownloadfile_1795561397761
+11-24 23:03:40.677 D/dasx    ( 3107): Starting download: https://c.tenor.com/agHN4oO4YH8AAAAk/tenor.gif
+11-24 23:03:40.678 V/dasx    ( 3107): Is http uri, downloading (uri: https://c.tenor.com/agHN4oO4YH8AAAAk/tenor.gif)
+11-24 23:03:40.681 D/dasx    ( 3107): Starting download: https://c.tenor.com/vTq_MrD5b1kAAAAk/tenor.gif
+11-24 23:03:40.681 V/dasx    ( 3107): Is http uri, downloading (uri: https://c.tenor.com/vTq_MrD5b1kAAAAk/tenor.gif)
+11-24 23:03:40.705 I/PhenotypeBackgroundRecv( 1348): Skipping com.google.android.apps.wellbeing.device#com.google.android.apps.wellbeing which doesn't use ProcessStable flags.
+11-24 23:03:40.713 W/PlatformConfigurator( 1174): Update for unknown DeviceConfig package com.google.android.gms.auth_folsom [CONTEXT service_id=204 ]
+11-24 23:03:40.713 W/PlatformConfigurator( 1174): daaf: No package exists for config package: com.google.android.gms.auth_folsom
+11-24 23:03:40.713 W/PlatformConfigurator( 1174): 	at com.google.android.gms.platformconfigurator.PhenotypeConfigurationUpdateListener.b(:com.google.android.gms@242335041@24.23.35 (190800-646585959):233)
+11-24 23:03:40.713 W/PlatformConfigurator( 1174): 	at com.google.android.gms.platformconfigurator.PhenotypeConfigurationUpdateListener.a(:com.google.android.gms@242335041@24.23.35 (190800-646585959):29)
+11-24 23:03:40.713 W/PlatformConfigurator( 1174): 	at com.google.android.gms.platformconfigurator.PhenotypeConfigurationUpdateListener.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):207)
+11-24 23:03:40.713 W/PlatformConfigurator( 1174): 	at com.google.android.chimera.IntentOperation.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):2)
+11-24 23:03:40.713 W/PlatformConfigurator( 1174): 	at ajom.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):8)
+11-24 23:03:40.713 W/PlatformConfigurator( 1174): 	at pkf.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):70)
+11-24 23:03:40.713 W/PlatformConfigurator( 1174): 	at pke.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):152)
+11-24 23:03:40.713 W/PlatformConfigurator( 1174): 	at emsz.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):21)
+11-24 23:03:40.713 W/PlatformConfigurator( 1174): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-24 23:03:40.713 W/PlatformConfigurator( 1174): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-24 23:03:40.713 W/PlatformConfigurator( 1174): 	at java.lang.Thread.run(Thread.java:1012)
+11-24 23:03:40.731 I/PTCommittedOperation( 1174): Receive new configuration for com.google.android.gms.auth_folsom
+11-24 23:03:40.821 E/MDD     ( 3107): DownloadProgressMonitor: Can't find file group for uri: android://com.google.android.apps.messaging/files/datadownload/shared/public/datadownloadfile_1795561397763
+11-24 23:03:40.834 I/PhenotypeBackgroundRecv( 2186): Successfully updated snapshot for com.google.android.gms.icing.mdd#com.google.android.tts
+11-24 23:03:40.840 D/dasx    ( 3107): Starting download: https://c.tenor.com/RZuBKuhsZ38AAAAk/tenor.gif
+11-24 23:03:40.840 V/dasx    ( 3107): Is http uri, downloading (uri: https://c.tenor.com/RZuBKuhsZ38AAAAk/tenor.gif)
+11-24 23:03:40.843 W/TimedProcessReaper( 1348): Scheduling killing of process to refresh configuration
+11-24 23:03:40.848 I/PhenotypeBackgroundRecv( 2186): Successfully updated snapshot for com.google.android.tts#com.google.android.tts
+11-24 23:03:40.868 E/MDD     ( 3107): DownloadProgressMonitor: Can't find file group for uri: android://com.google.android.apps.messaging/files/datadownload/shared/public/datadownloadfile_1795561397762
+11-24 23:03:40.908 I/PhenotypeBackgroundRecv( 1348): Skipping com.google.android.gms.kids#com.google.android.apps.wellbeing which doesn't use ProcessStable flags.
+11-24 23:03:40.985 E/MDD     ( 3107): DownloadProgressMonitor: Can't find file group for uri: android://com.google.android.apps.messaging/files/datadownload/shared/public/datadownloadfile_1795561397764
+11-24 23:03:40.993 D/dasx    ( 3107): Starting download: https://c.tenor.com/3Tn6HUzAc4YAAAAk/tenor.gif
+11-24 23:03:40.993 V/dasx    ( 3107): Is http uri, downloading (uri: https://c.tenor.com/3Tn6HUzAc4YAAAAk/tenor.gif)
+11-24 23:03:40.995 D/dasx    ( 3107): Starting download: https://c.tenor.com/luqCk8KoEe0AAAAk/tenor.gif
+11-24 23:03:40.995 V/dasx    ( 3107): Is http uri, downloading (uri: https://c.tenor.com/luqCk8KoEe0AAAAk/tenor.gif)
+11-24 23:03:41.004 I/PTCommittedOperation( 1174): Receive new configuration for com.google.android.gms.trustagent
+11-24 23:03:41.014 I/netd    (  356): tetherGetStats() -> {[]} <0.49ms>
+11-24 23:03:41.034 I/BistoHotwordHelper( 1403): (REDACTED) getHotwordActive::active query: %s, watch: %s, devices connected: %s
+11-24 23:03:41.047 W/ModuleInitIntentOp( 1535): Dropping unexpected action com.google.android.gms.phenotype.COMMITTED
+11-24 23:03:41.047 W/ModuleInitIntentOp( 1535): Dropping unexpected action com.google.android.gms.phenotype.COMMITTED
+11-24 23:03:41.047 W/ModuleInitIntentOp( 1535): Dropping unexpected action com.google.android.gms.phenotype.COMMITTED
+11-24 23:03:41.047 I/SyncIntentOperation( 1535): Handling the intent: Intent { act=com.google.android.gms.phenotype.COMMITTED pkg=com.google.android.gms cmp=com.google.android.gms/.chimera.GmsIntentOperationService (has extras) }. [CONTEXT service_id=80 ]
+11-24 23:03:41.048 I/MdiSyncModule( 1535): flag handling is skipping irrelevant intent.
+11-24 23:03:41.048 I/MlBenchmarkInstaller( 1535): Intent: com.google.android.gms.phenotype.COMMITTED [CONTEXT service_id=340 ]
+11-24 23:03:41.048 I/MlBenchmarkInstaller( 1535): COMMITTED Extra package name: com.google.android.gms.trustagent [CONTEXT service_id=340 ]
+11-24 23:03:41.048 I/GmsSyncPolicyEngine( 1535): Periodic sync 1 disabled by policy, cancelled.
+11-24 23:03:41.049 I/GmsSyncPolicyEngine( 1535): Periodic sync 2 disabled by policy, cancelled.
+11-24 23:03:41.049 I/GmsSyncPolicyEngine( 1535): Periodic sync 3 disabled by policy, cancelled.
+11-24 23:03:41.049 I/LocationHistory( 1535): [IntentOperation] Handling action com.google.android.gms.phenotype.COMMITTED [CONTEXT service_id=314 ]
+11-24 23:03:41.050 W/ModuleInitIntentOp( 1535): Dropping unexpected action com.google.android.gms.phenotype.COMMITTED
+11-24 23:03:41.072 I/GmscoreIpa( 1535): Starting mediastore instant index [CONTEXT service_id=255 ]
+11-24 23:03:41.106 I/adbd    (  437): host-18: write thread spawning
+11-24 23:03:41.127 I/adbd    (  437): host-18: read thread spawning
+11-24 23:03:41.128 I/adbd    (  437): host-18: already offline
+11-24 23:03:41.128 I/adbd    (  437): authentication not required
+11-24 23:03:41.134 W/PlatformConfigurator( 1174): Update for unknown DeviceConfig package com.google.android.gms.trustagent [CONTEXT service_id=204 ]
+11-24 23:03:41.134 W/PlatformConfigurator( 1174): daaf: No package exists for config package: com.google.android.gms.trustagent
+11-24 23:03:41.134 W/PlatformConfigurator( 1174): 	at com.google.android.gms.platformconfigurator.PhenotypeConfigurationUpdateListener.b(:com.google.android.gms@242335041@24.23.35 (190800-646585959):233)
+11-24 23:03:41.134 W/PlatformConfigurator( 1174): 	at com.google.android.gms.platformconfigurator.PhenotypeConfigurationUpdateListener.a(:com.google.android.gms@242335041@24.23.35 (190800-646585959):29)
+11-24 23:03:41.134 W/PlatformConfigurator( 1174): 	at com.google.android.gms.platformconfigurator.PhenotypeConfigurationUpdateListener.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):207)
+11-24 23:03:41.134 W/PlatformConfigurator( 1174): 	at com.google.android.chimera.IntentOperation.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):2)
+11-24 23:03:41.134 W/PlatformConfigurator( 1174): 	at ajom.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):8)
+11-24 23:03:41.134 W/PlatformConfigurator( 1174): 	at pkf.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):70)
+11-24 23:03:41.134 W/PlatformConfigurator( 1174): 	at pke.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):152)
+11-24 23:03:41.134 W/PlatformConfigurator( 1174): 	at emsz.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):21)
+11-24 23:03:41.134 W/PlatformConfigurator( 1174): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-24 23:03:41.134 W/PlatformConfigurator( 1174): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-24 23:03:41.134 W/PlatformConfigurator( 1174): 	at java.lang.Thread.run(Thread.java:1012)
+11-24 23:03:41.204 I/.gms.persistent( 1174): Background concurrent mark compact GC freed 24MB AllocSpace bytes, 28(5904KB) LOS objects, 50% free, 19MB/38MB, paused 4.193ms,10.220ms total 490.248ms
+11-24 23:03:41.219 E/MDD     ( 3107): DownloadProgressMonitor: Can't find file group for uri: android://com.google.android.apps.messaging/files/datadownload/shared/public/datadownloadfile_1795561397766
+11-24 23:03:41.221 E/MDD     ( 3107): DownloadProgressMonitor: Can't find file group for uri: android://com.google.android.apps.messaging/files/datadownload/shared/public/datadownloadfile_1795561397765
+11-24 23:03:41.238 W/PlatformConfigurator( 1174): Update for unknown DeviceConfig package com.google.android.gms.multidevice#com.google.android.gms [CONTEXT service_id=204 ]
+11-24 23:03:41.238 W/PlatformConfigurator( 1174): daaf: No package exists for config package: com.google.android.gms.multidevice#com.google.android.gms
+11-24 23:03:41.238 W/PlatformConfigurator( 1174): 	at com.google.android.gms.platformconfigurator.PhenotypeConfigurationUpdateListener.b(:com.google.android.gms@242335041@24.23.35 (190800-646585959):233)
+11-24 23:03:41.238 W/PlatformConfigurator( 1174): 	at com.google.android.gms.platformconfigurator.PhenotypeConfigurationUpdateListener.a(:com.google.android.gms@242335041@24.23.35 (190800-646585959):29)
+11-24 23:03:41.238 W/PlatformConfigurator( 1174): 	at com.google.android.gms.platformconfigurator.PhenotypeConfigurationUpdateListener.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):207)
+11-24 23:03:41.238 W/PlatformConfigurator( 1174): 	at com.google.android.chimera.IntentOperation.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):2)
+11-24 23:03:41.238 W/PlatformConfigurator( 1174): 	at ajom.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):8)
+11-24 23:03:41.238 W/PlatformConfigurator( 1174): 	at pkf.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):70)
+11-24 23:03:41.238 W/PlatformConfigurator( 1174): 	at pke.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):152)
+11-24 23:03:41.238 W/PlatformConfigurator( 1174): 	at emsz.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):21)
+11-24 23:03:41.238 W/PlatformConfigurator( 1174): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-24 23:03:41.238 W/PlatformConfigurator( 1174): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-24 23:03:41.238 W/PlatformConfigurator( 1174): 	at java.lang.Thread.run(Thread.java:1012)
+11-24 23:03:41.243 W/PlatformConfigurator( 1174): Update for unknown DeviceConfig package com.google.android.gms.device_performance#com.google.android.gms [CONTEXT service_id=204 ]
+11-24 23:03:41.243 W/PlatformConfigurator( 1174): daaf: No package exists for config package: com.google.android.gms.device_performance#com.google.android.gms
+11-24 23:03:41.243 W/PlatformConfigurator( 1174): 	at com.google.android.gms.platformconfigurator.PhenotypeConfigurationUpdateListener.b(:com.google.android.gms@242335041@24.23.35 (190800-646585959):233)
+11-24 23:03:41.243 W/PlatformConfigurator( 1174): 	at com.google.android.gms.platformconfigurator.PhenotypeConfigurationUpdateListener.a(:com.google.android.gms@242335041@24.23.35 (190800-646585959):29)
+11-24 23:03:41.243 W/PlatformConfigurator( 1174): 	at com.google.android.gms.platformconfigurator.PhenotypeConfigurationUpdateListener.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):207)
+11-24 23:03:41.243 W/PlatformConfigurator( 1174): 	at com.google.android.chimera.IntentOperation.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):2)
+11-24 23:03:41.243 W/PlatformConfigurator( 1174): 	at ajom.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):8)
+11-24 23:03:41.243 W/PlatformConfigurator( 1174): 	at pkf.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):70)
+11-24 23:03:41.243 W/PlatformConfigurator( 1174): 	at pke.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):152)
+11-24 23:03:41.243 W/PlatformConfigurator( 1174): 	at emsz.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):21)
+11-24 23:03:41.243 W/PlatformConfigurator( 1174): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-24 23:03:41.243 W/PlatformConfigurator( 1174): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-24 23:03:41.243 W/PlatformConfigurator( 1174): 	at java.lang.Thread.run(Thread.java:1012)
+11-24 23:03:41.264 W/PlatformConfigurator( 1174): Update for unknown DeviceConfig package com.google.android.gms.security.safebrowsing#com.google.android.gms [CONTEXT service_id=204 ]
+11-24 23:03:41.264 W/PlatformConfigurator( 1174): daaf: No package exists for config package: com.google.android.gms.security.safebrowsing#com.google.android.gms
+11-24 23:03:41.264 W/PlatformConfigurator( 1174): 	at com.google.android.gms.platformconfigurator.PhenotypeConfigurationUpdateListener.b(:com.google.android.gms@242335041@24.23.35 (190800-646585959):233)
+11-24 23:03:41.264 W/PlatformConfigurator( 1174): 	at com.google.android.gms.platformconfigurator.PhenotypeConfigurationUpdateListener.a(:com.google.android.gms@242335041@24.23.35 (190800-646585959):29)
+11-24 23:03:41.264 W/PlatformConfigurator( 1174): 	at com.google.android.gms.platformconfigurator.PhenotypeConfigurationUpdateListener.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):207)
+11-24 23:03:41.264 W/PlatformConfigurator( 1174): 	at com.google.android.chimera.IntentOperation.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):2)
+11-24 23:03:41.264 W/PlatformConfigurator( 1174): 	at ajom.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):8)
+11-24 23:03:41.264 W/PlatformConfigurator( 1174): 	at pkf.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):70)
+11-24 23:03:41.264 W/PlatformConfigurator( 1174): 	at pke.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):152)
+11-24 23:03:41.264 W/PlatformConfigurator( 1174): 	at emsz.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):21)
+11-24 23:03:41.264 W/PlatformConfigurator( 1174): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-24 23:03:41.264 W/PlatformConfigurator( 1174): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-24 23:03:41.264 W/PlatformConfigurator( 1174): 	at java.lang.Thread.run(Thread.java:1012)
+11-24 23:03:41.268 W/PlatformConfigurator( 1174): Update for unknown DeviceConfig package com.google.android.gms.trustlet_onbody [CONTEXT service_id=204 ]
+11-24 23:03:41.268 W/PlatformConfigurator( 1174): daaf: No package exists for config package: com.google.android.gms.trustlet_onbody
+11-24 23:03:41.268 W/PlatformConfigurator( 1174): 	at com.google.android.gms.platformconfigurator.PhenotypeConfigurationUpdateListener.b(:com.google.android.gms@242335041@24.23.35 (190800-646585959):233)
+11-24 23:03:41.268 W/PlatformConfigurator( 1174): 	at com.google.android.gms.platformconfigurator.PhenotypeConfigurationUpdateListener.a(:com.google.android.gms@242335041@24.23.35 (190800-646585959):29)
+11-24 23:03:41.268 W/PlatformConfigurator( 1174): 	at com.google.android.gms.platformconfigurator.PhenotypeConfigurationUpdateListener.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):207)
+11-24 23:03:41.268 W/PlatformConfigurator( 1174): 	at com.google.android.chimera.IntentOperation.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):2)
+11-24 23:03:41.268 W/PlatformConfigurator( 1174): 	at ajom.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):8)
+11-24 23:03:41.268 W/PlatformConfigurator( 1174): 	at pkf.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):70)
+11-24 23:03:41.268 W/PlatformConfigurator( 1174): 	at pke.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):152)
+11-24 23:03:41.268 W/PlatformConfigurator( 1174): 	at emsz.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):21)
+11-24 23:03:41.268 W/PlatformConfigurator( 1174): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-24 23:03:41.268 W/PlatformConfigurator( 1174): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-24 23:03:41.268 W/PlatformConfigurator( 1174): 	at java.lang.Thread.run(Thread.java:1012)
+11-24 23:03:41.274 D/dasx    ( 3107): Starting download: https://c.tenor.com/l1-dLn8nwooAAAAk/tenor.gif
+11-24 23:03:41.274 V/dasx    ( 3107): Is http uri, downloading (uri: https://c.tenor.com/l1-dLn8nwooAAAAk/tenor.gif)
+11-24 23:03:41.304 D/dasx    ( 3107): Starting download: https://c.tenor.com/STreKj-4BGcAAAAk/tenor.gif
+11-24 23:03:41.304 V/dasx    ( 3107): Is http uri, downloading (uri: https://c.tenor.com/STreKj-4BGcAAAAk/tenor.gif)
+11-24 23:03:41.317 E/MDD     ( 3107): DownloadProgressMonitor: Can't find file group for uri: android://com.google.android.apps.messaging/files/datadownload/shared/public/datadownloadfile_1795561397767
+11-24 23:03:41.349 D/dasx    ( 3107): Starting download: https://c.tenor.com/_Maixn5KBNwAAAAk/tenor.gif
+11-24 23:03:41.349 V/dasx    ( 3107): Is http uri, downloading (uri: https://c.tenor.com/_Maixn5KBNwAAAAk/tenor.gif)
+11-24 23:03:41.353 W/IPCThreadState(  552): Sending oneway calls to frozen process.
+11-24 23:03:41.407 E/MDD     ( 3107): DownloadProgressMonitor: Can't find file group for uri: android://com.google.android.apps.messaging/files/datadownload/shared/public/datadownloadfile_1795561397768
+11-24 23:03:41.414 I/PTCommittedOperation( 1174): Receive new configuration for com.google.android.gms.languageprofile
+11-24 23:03:41.416 W/ModuleInitIntentOp( 1535): Dropping unexpected action com.google.android.gms.phenotype.COMMITTED
+11-24 23:03:41.416 W/ModuleInitIntentOp( 1535): Dropping unexpected action com.google.android.gms.phenotype.COMMITTED
+11-24 23:03:41.417 E/MDD     ( 3107): DownloadProgressMonitor: Can't find file group for uri: android://com.google.android.apps.messaging/files/datadownload/shared/public/datadownloadfile_1795561397769
+11-24 23:03:41.418 D/dasx    ( 3107): Starting download: https://c.tenor.com/VD1rHu4QFj8AAAAk/tenor.gif
+11-24 23:03:41.419 I/LPGcmTaskChimeraService( 1535): Scheduling sync task. [CONTEXT service_id=167 ]
+11-24 23:03:41.420 I/GmsSyncPolicyEngine( 1535): Periodic sync 2 disabled by policy, cancelled.
+11-24 23:03:41.420 I/GmsSyncPolicyEngine( 1535): Periodic sync 6 disabled
+11-24 23:03:41.421 I/MdiSyncModule( 1535): flag handling is skipping irrelevant intent.
+11-24 23:03:41.422 I/MlBenchmarkInstaller( 1535): Intent: com.google.android.gms.phenotype.COMMITTED [CONTEXT service_id=340 ]
+11-24 23:03:41.422 I/MlBenchmarkInstaller( 1535): COMMITTED Extra package name: com.google.android.gms.languageprofile [CONTEXT service_id=340 ]
+11-24 23:03:41.423 I/SyncIntentOperation( 1535): Handling the intent: Intent { act=com.google.android.gms.phenotype.COMMITTED pkg=com.google.android.gms cmp=com.google.android.gms/.chimera.GmsIntentOperationService (has extras) }. [CONTEXT service_id=80 ]
+11-24 23:03:41.423 W/ModuleInitIntentOp( 1535): Dropping unexpected action com.google.android.gms.phenotype.COMMITTED
+11-24 23:03:41.424 I/GmsSyncPolicyEngine( 1535): Periodic sync 1 disabled by policy, cancelled.
+11-24 23:03:41.424 I/GmsSyncPolicyEngine( 1535): Periodic sync 2 disabled by policy, cancelled.
+11-24 23:03:41.424 W/ModuleInitIntentOp( 1535): Dropping unexpected action com.google.android.gms.phenotype.COMMITTED
+11-24 23:03:41.424 I/LocationHistory( 1535): [IntentOperation] Handling action com.google.android.gms.phenotype.COMMITTED [CONTEXT service_id=314 ]
+11-24 23:03:41.425 I/GmsSyncPolicyEngine( 1535): Periodic sync 3 disabled by policy, cancelled.
+11-24 23:03:41.457 W/PlatformConfigurator( 1174): Update for unknown DeviceConfig package com.google.android.gms.languageprofile [CONTEXT service_id=204 ]
+11-24 23:03:41.457 W/PlatformConfigurator( 1174): daaf: No package exists for config package: com.google.android.gms.languageprofile
+11-24 23:03:41.457 W/PlatformConfigurator( 1174): 	at com.google.android.gms.platformconfigurator.PhenotypeConfigurationUpdateListener.b(:com.google.android.gms@242335041@24.23.35 (190800-646585959):233)
+11-24 23:03:41.457 W/PlatformConfigurator( 1174): 	at com.google.android.gms.platformconfigurator.PhenotypeConfigurationUpdateListener.a(:com.google.android.gms@242335041@24.23.35 (190800-646585959):29)
+11-24 23:03:41.457 W/PlatformConfigurator( 1174): 	at com.google.android.gms.platformconfigurator.PhenotypeConfigurationUpdateListener.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):207)
+11-24 23:03:41.457 W/PlatformConfigurator( 1174): 	at com.google.android.chimera.IntentOperation.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):2)
+11-24 23:03:41.457 W/PlatformConfigurator( 1174): 	at ajom.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):8)
+11-24 23:03:41.457 W/PlatformConfigurator( 1174): 	at pkf.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):70)
+11-24 23:03:41.457 W/PlatformConfigurator( 1174): 	at pke.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):152)
+11-24 23:03:41.457 W/PlatformConfigurator( 1174): 	at emsz.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):21)
+11-24 23:03:41.457 W/PlatformConfigurator( 1174): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-24 23:03:41.457 W/PlatformConfigurator( 1174): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-24 23:03:41.457 W/PlatformConfigurator( 1174): 	at java.lang.Thread.run(Thread.java:1012)
+11-24 23:03:41.458 V/dasx    ( 3107): Is http uri, downloading (uri: https://c.tenor.com/VD1rHu4QFj8AAAAk/tenor.gif)
+11-24 23:03:41.458 D/dasx    ( 3107): Starting download: https://c.tenor.com/hzhDGN_TxvsAAAAk/tenor.gif
+11-24 23:03:41.458 V/dasx    ( 3107): Is http uri, downloading (uri: https://c.tenor.com/hzhDGN_TxvsAAAAk/tenor.gif)
+11-24 23:03:41.459 I/PTCommittedOperation( 1174): Receive new configuration for com.google.android.gms.people
+11-24 23:03:41.461 W/ModuleInitIntentOp( 1535): Dropping unexpected action com.google.android.gms.phenotype.COMMITTED
+11-24 23:03:41.461 W/ModuleInitIntentOp( 1535): Dropping unexpected action com.google.android.gms.phenotype.COMMITTED
+11-24 23:03:41.461 W/ModuleInitIntentOp( 1535): Dropping unexpected action com.google.android.gms.phenotype.COMMITTED
+11-24 23:03:41.462 I/SyncIntentOperation( 1535): Handling the intent: Intent { act=com.google.android.gms.phenotype.COMMITTED flg=0x10 pkg=com.google.android.gms cmp=com.google.android.gms/.chimera.GmsIntentOperationService (has extras) }. [CONTEXT service_id=80 ]
+11-24 23:03:41.462 I/MdiSyncModule( 1535): flag handling is skipping irrelevant intent.
+11-24 23:03:41.462 I/MlBenchmarkInstaller( 1535): Intent: com.google.android.gms.phenotype.COMMITTED [CONTEXT service_id=340 ]
+11-24 23:03:41.462 I/MlBenchmarkInstaller( 1535): COMMITTED Extra package name: com.google.android.gms.people [CONTEXT service_id=340 ]
+11-24 23:03:41.465 W/ModuleInitIntentOp( 1535): Dropping unexpected action com.google.android.gms.phenotype.COMMITTED
+11-24 23:03:41.465 I/GmsSyncPolicyEngine( 1535): Periodic sync 1 disabled by policy, cancelled.
+11-24 23:03:41.466 I/GmsSyncPolicyEngine( 1535): Periodic sync 2 disabled by policy, cancelled.
+11-24 23:03:41.466 I/LocationHistory( 1535): [IntentOperation] Handling action com.google.android.gms.phenotype.COMMITTED [CONTEXT service_id=314 ]
+11-24 23:03:41.467 W/PeoplePU( 1535): getComponentEnabledSetting failed.
+11-24 23:03:41.467 W/PeoplePU( 1535): java.lang.IllegalArgumentException: Unknown component: ComponentInfo{com.google.android.syncadapters.contacts/com.google.android.syncadapters.contacts.ContactsSyncAdapterService}
+11-24 23:03:41.467 W/PeoplePU( 1535): 	at android.os.Parcel.createExceptionOrNull(Parcel.java:3246)
+11-24 23:03:41.467 W/PeoplePU( 1535): 	at android.os.Parcel.createException(Parcel.java:3226)
+11-24 23:03:41.467 W/PeoplePU( 1535): 	at android.os.Parcel.readException(Parcel.java:3209)
+11-24 23:03:41.467 W/PeoplePU( 1535): 	at android.os.Parcel.readException(Parcel.java:3151)
+11-24 23:03:41.467 W/PeoplePU( 1535): 	at android.content.pm.IPackageManager$Stub$Proxy.getComponentEnabledSetting(IPackageManager.java:6361)
+11-24 23:03:41.467 W/PeoplePU( 1535): 	at android.app.ApplicationPackageManager.getComponentEnabledSetting(ApplicationPackageManager.java:3191)
+11-24 23:03:41.467 W/PeoplePU( 1535): 	at cywf.a(:com.google.android.gms@242335041@24.23.35 (190800-646585959):4)
+11-24 23:03:41.467 W/PeoplePU( 1535): 	at cyoi.a(:com.google.android.gms@242335041@24.23.35 (190800-646585959):34)
+11-24 23:03:41.467 W/PeoplePU( 1535): 	at com.google.android.gms.people.service.SettingsChangedBroadcastIntentOperation.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):339)
+11-24 23:03:41.467 W/PeoplePU( 1535): 	at com.google.android.chimera.IntentOperation.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):2)
+11-24 23:03:41.467 W/PeoplePU( 1535): 	at ajom.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):8)
+11-24 23:03:41.467 W/PeoplePU( 1535): 	at pkf.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):70)
+11-24 23:03:41.467 W/PeoplePU( 1535): 	at pke.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):152)
+11-24 23:03:41.467 W/PeoplePU( 1535): 	at emsz.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):21)
+11-24 23:03:41.467 W/PeoplePU( 1535): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-24 23:03:41.467 W/PeoplePU( 1535): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-24 23:03:41.467 W/PeoplePU( 1535): 	at java.lang.Thread.run(Thread.java:1012)
+11-24 23:03:41.467 W/PeoplePU( 1535): Caused by: android.os.RemoteException: Remote stack trace:
+11-24 23:03:41.467 W/PeoplePU( 1535): 	at com.android.server.pm.ComputerEngine.getComponentEnabledSettingInternal(ComputerEngine.java:5265)
+11-24 23:03:41.467 W/PeoplePU( 1535): 	at com.android.server.pm.ComputerEngine.getComponentEnabledSetting(ComputerEngine.java:5247)
+11-24 23:03:41.467 W/PeoplePU( 1535): 	at com.android.server.pm.IPackageManagerBase.getComponentEnabledSetting(IPackageManagerBase.java:385)
+11-24 23:03:41.467 W/PeoplePU( 1535): 	at android.content.pm.IPackageManager$Stub.onTransact(IPackageManager.java:3160)
+11-24 23:03:41.467 W/PeoplePU( 1535): 	at com.android.server.pm.PackageManagerService$IPackageManagerImpl.onTransact(PackageManagerService.java:6545)
+11-24 23:03:41.467 W/PeoplePU( 1535): 
+11-24 23:03:41.467 I/GmsSyncPolicyEngine( 1535): Periodic sync 3 disabled by policy, cancelled.
+11-24 23:03:41.467 I/FsaEntryPointSwitcher( 1535): setting component enabled=1 for com.google.android.gms.people.sync.focus.ContactsSyncAdapterService
+11-24 23:03:41.474 I/FsaEntryPointSwitcher( 1535): Setting component enabled succeeds.
+11-24 23:03:41.474 W/PeoplePU( 1535): getComponentEnabledSetting failed.
+11-24 23:03:41.474 W/PeoplePU( 1535): java.lang.IllegalArgumentException: Unknown component: ComponentInfo{com.google.android.syncadapters.contacts/com.google.android.syncadapters.contacts.ContactsSyncAdapterService}
+11-24 23:03:41.474 W/PeoplePU( 1535): 	at android.os.Parcel.createExceptionOrNull(Parcel.java:3246)
+11-24 23:03:41.474 W/PeoplePU( 1535): 	at android.os.Parcel.createException(Parcel.java:3226)
+11-24 23:03:41.474 W/PeoplePU( 1535): 	at android.os.Parcel.readException(Parcel.java:3209)
+11-24 23:03:41.474 W/PeoplePU( 1535): 	at android.os.Parcel.readException(Parcel.java:3151)
+11-24 23:03:41.474 W/PeoplePU( 1535): 	at android.content.pm.IPackageManager$Stub$Proxy.getComponentEnabledSetting(IPackageManager.java:6361)
+11-24 23:03:41.474 W/PeoplePU( 1535): 	at android.app.ApplicationPackageManager.getComponentEnabledSetting(ApplicationPackageManager.java:3191)
+11-24 23:03:41.474 W/PeoplePU( 1535): 	at cywf.a(:com.google.android.gms@242335041@24.23.35 (190800-646585959):4)
+11-24 23:03:41.474 W/PeoplePU( 1535): 	at cyoi.a(:com.google.android.gms@242335041@24.23.35 (190800-646585959):208)
+11-24 23:03:41.474 W/PeoplePU( 1535): 	at com.google.android.gms.people.service.SettingsChangedBroadcastIntentOperation.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):339)
+11-24 23:03:41.474 W/PeoplePU( 1535): 	at com.google.android.chimera.IntentOperation.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):2)
+11-24 23:03:41.474 W/PeoplePU( 1535): 	at ajom.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):8)
+11-24 23:03:41.474 W/PeoplePU( 1535): 	at pkf.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):70)
+11-24 23:03:41.474 W/PeoplePU( 1535): 	at pke.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):152)
+11-24 23:03:41.474 W/PeoplePU( 1535): 	at emsz.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):21)
+11-24 23:03:41.474 W/PeoplePU( 1535): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-24 23:03:41.474 W/PeoplePU( 1535): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-24 23:03:41.474 W/PeoplePU( 1535): 	at java.lang.Thread.run(Thread.java:1012)
+11-24 23:03:41.481 E/MDD     ( 3107): DownloadProgressMonitor: Can't find file group for uri: android://com.google.android.apps.messaging/files/datadownload/shared/public/datadownloadfile_1795561397771
+11-24 23:03:41.482 W/PeoplePU( 1535): getComponentEnabledSetting failed.
+11-24 23:03:41.482 W/PeoplePU( 1535): java.lang.IllegalArgumentException: Unknown component: ComponentInfo{com.google.android.syncadapters.contacts/com.google.android.syncadapters.contacts.ProxyGalProvider}
+11-24 23:03:41.482 W/PeoplePU( 1535): 	at android.os.Parcel.createExceptionOrNull(Parcel.java:3246)
+11-24 23:03:41.482 W/PeoplePU( 1535): 	at android.os.Parcel.createException(Parcel.java:3226)
+11-24 23:03:41.482 W/PeoplePU( 1535): 	at android.os.Parcel.readException(Parcel.java:3209)
+11-24 23:03:41.482 W/PeoplePU( 1535): 	at android.os.Parcel.readException(Parcel.java:3151)
+11-24 23:03:41.482 W/PeoplePU( 1535): 	at android.content.pm.IPackageManager$Stub$Proxy.getComponentEnabledSetting(IPackageManager.java:6361)
+11-24 23:03:41.482 W/PeoplePU( 1535): 	at android.app.ApplicationPackageManager.getComponentEnabledSetting(ApplicationPackageManager.java:3191)
+11-24 23:03:41.482 W/PeoplePU( 1535): 	at cywf.a(:com.google.android.gms@242335041@24.23.35 (190800-646585959):4)
+11-24 23:03:41.482 W/PeoplePU( 1535): 	at cxyx.a(:com.google.android.gms@242335041@24.23.35 (190800-646585959):11)
+11-24 23:03:41.482 W/PeoplePU( 1535): 	at com.google.android.gms.people.service.SettingsChangedBroadcastIntentOperation.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):366)
+11-24 23:03:41.482 W/PeoplePU( 1535): 	at com.google.android.chimera.IntentOperation.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):2)
+11-24 23:03:41.482 W/PeoplePU( 1535): 	at ajom.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):8)
+11-24 23:03:41.482 W/PeoplePU( 1535): 	at pkf.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):70)
+11-24 23:03:41.482 W/PeoplePU( 1535): 	at pke.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):152)
+11-24 23:03:41.482 W/PeoplePU( 1535): 	at emsz.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):21)
+11-24 23:03:41.482 W/PeoplePU( 1535): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-24 23:03:41.482 W/PeoplePU( 1535): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-24 23:03:41.482 W/PeoplePU( 1535): 	at java.lang.Thread.run(Thread.java:1012)
+11-24 23:03:41.492 D/dasx    ( 3107): Starting download: https://c.tenor.com/EcqqMuywqtYAAAAk/tenor.gif
+11-24 23:03:41.492 V/dasx    ( 3107): Is http uri, downloading (uri: https://c.tenor.com/EcqqMuywqtYAAAAk/tenor.gif)
+11-24 23:03:41.501 E/MDD     ( 3107): DownloadProgressMonitor: Can't find file group for uri: android://com.google.android.apps.messaging/files/datadownload/shared/public/datadownloadfile_1795561397772
+11-24 23:03:41.505 E/MDD     ( 3107): DownloadProgressMonitor: Can't find file group for uri: android://com.google.android.apps.messaging/files/datadownload/shared/public/datadownloadfile_1795561397770
+11-24 23:03:41.509 I/PeopleGalProvider( 1535): Gal directories started.
+11-24 23:03:41.511 I/PeopleGalProvider( 1535): Method 1 completed.
+11-24 23:03:41.511 I/PeopleGalProvider( 1535): Method 1 finished successfully.
+11-24 23:03:41.511 D/dasx    ( 3107): Starting download: https://c.tenor.com/W-Iql1HiBmMAAAAk/tenor.gif
+11-24 23:03:41.511 V/dasx    ( 3107): Is http uri, downloading (uri: https://c.tenor.com/W-Iql1HiBmMAAAAk/tenor.gif)
+11-24 23:03:41.515 I/PeopleGalProvider( 1535): Gal directories started.
+11-24 23:03:41.515 I/PeopleGalProvider( 1535): Method 1 completed.
+11-24 23:03:41.515 I/PeopleGalProvider( 1535): Method 1 finished successfully.
+11-24 23:03:41.516 W/IPCThreadState(  552): Sending oneway calls to frozen process.
+11-24 23:03:41.521 E/MDD     ( 3107): DownloadProgressMonitor: Can't find file group for uri: android://com.google.android.apps.messaging/files/datadownload/shared/public/datadownloadfile_1795561397773
+11-24 23:03:41.522 I/CpgSchemaBuilder( 1535): Creating session
+11-24 23:03:41.523 I/CpgSchemaBuilder( 1535): GroupContactOrder schema exists already.
+11-24 23:03:41.523 I/CpgSchemaBuilder( 1535): GroupContactOrder schema exists and visible to Contacts app.
+11-24 23:03:41.526 D/dasx    ( 3107): Starting download: https://c.tenor.com/MHwuNDTmeV8AAAAk/tenor.gif
+11-24 23:03:41.526 V/dasx    ( 3107): Is http uri, downloading (uri: https://c.tenor.com/MHwuNDTmeV8AAAAk/tenor.gif)
+11-24 23:03:41.527 I/Bugle   ( 3107): BroadcastReceiverAsyncWorkTracker: Acknowledging broadcast of com.google.android.apps.messaging.shared.experiments.receiver.BuglePhenotypeBroadcastReceiver@717cd0f
+11-24 23:03:41.527 I/PhenotypeBackgroundRecv( 3107): Skipping com.google.android.apps.messaging.auto#com.google.android.apps.messaging which doesn't use ProcessStable flags.
+11-24 23:03:41.532 W/ModuleInitIntentOp( 1535): Dropping unexpected action com.google.android.gms.phenotype.COMMITTED
+11-24 23:03:41.534 W/ModuleInitIntentOp( 1535): Dropping unexpected action com.google.android.gms.phenotype.COMMITTED
+11-24 23:03:41.535 W/ModuleInitIntentOp( 1535): Dropping unexpected action com.google.android.gms.phenotype.COMMITTED
+11-24 23:03:41.535 I/PhenotypeBackgroundRecv( 1501): Skipping com.google.android.apps.search.assistant.user#com.google.android.googlequicksearchbox which doesn't use ProcessStable flags.
+11-24 23:03:41.535 I/SyncIntentOperation( 1535): Handling the intent: Intent { act=com.google.android.gms.phenotype.COMMITTED pkg=com.google.android.gms cmp=com.google.android.gms/.chimera.GmsIntentOperationService (has extras) }. [CONTEXT service_id=80 ]
+11-24 23:03:41.536 I/MdiSyncModule( 1535): flag handling is skipping irrelevant intent.
+11-24 23:03:41.537 I/PTCommittedOperation( 1174): Receive new configuration for com.google.android.gms.mobile_data_plan
+11-24 23:03:41.539 I/MlBenchmarkInstaller( 1535): Intent: com.google.android.gms.phenotype.COMMITTED [CONTEXT service_id=340 ]
+11-24 23:03:41.539 I/MlBenchmarkInstaller( 1535): COMMITTED Extra package name: com.google.android.gms.mobile_data_plan [CONTEXT service_id=340 ]
+11-24 23:03:41.540 I/LocationHistory( 1535): [IntentOperation] Handling action com.google.android.gms.phenotype.COMMITTED [CONTEXT service_id=314 ]
+11-24 23:03:41.540 I/GmsSyncPolicyEngine( 1535): Periodic sync 1 disabled by policy, cancelled.
+11-24 23:03:41.542 I/GmsSyncPolicyEngine( 1535): Periodic sync 2 disabled by policy, cancelled.
+11-24 23:03:41.542 W/ModuleInitIntentOp( 1535): Dropping unexpected action com.google.android.gms.phenotype.COMMITTED
+11-24 23:03:41.543 W/PlatformConfigurator( 1174): Update for unknown DeviceConfig package com.google.android.gms.mobile_data_plan [CONTEXT service_id=204 ]
+11-24 23:03:41.543 W/PlatformConfigurator( 1174): daaf: No package exists for config package: com.google.android.gms.mobile_data_plan
+11-24 23:03:41.543 W/PlatformConfigurator( 1174): 	at com.google.android.gms.platformconfigurator.PhenotypeConfigurationUpdateListener.b(:com.google.android.gms@242335041@24.23.35 (190800-646585959):233)
+11-24 23:03:41.543 W/PlatformConfigurator( 1174): 	at com.google.android.gms.platformconfigurator.PhenotypeConfigurationUpdateListener.a(:com.google.android.gms@242335041@24.23.35 (190800-646585959):29)
+11-24 23:03:41.543 W/PlatformConfigurator( 1174): 	at com.google.android.gms.platformconfigurator.PhenotypeConfigurationUpdateListener.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):207)
+11-24 23:03:41.543 W/PlatformConfigurator( 1174): 	at com.google.android.chimera.IntentOperation.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):2)
+11-24 23:03:41.543 W/PlatformConfigurator( 1174): 	at ajom.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):8)
+11-24 23:03:41.543 W/PlatformConfigurator( 1174): 	at pkf.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):70)
+11-24 23:03:41.543 W/PlatformConfigurator( 1174): 	at pke.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):152)
+11-24 23:03:41.543 W/PlatformConfigurator( 1174): 	at emsz.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):21)
+11-24 23:03:41.543 W/PlatformConfigurator( 1174): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-24 23:03:41.543 W/PlatformConfigurator( 1174): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-24 23:03:41.543 W/PlatformConfigurator( 1174): 	at java.lang.Thread.run(Thread.java:1012)
+11-24 23:03:41.543 I/GmsSyncPolicyEngine( 1535): Periodic sync 3 disabled by policy, cancelled.
+11-24 23:03:41.545 D/dasx    ( 3107): Starting download: https://c.tenor.com/ail0OXAQNjIAAAAk/tenor.gif
+11-24 23:03:41.545 V/dasx    ( 3107): Is http uri, downloading (uri: https://c.tenor.com/ail0OXAQNjIAAAAk/tenor.gif)
+11-24 23:03:41.552 D/ActivityManager(  552): sync unfroze 3132 com.google.android.apps.safetyhub for 3
+11-24 23:03:41.554 I/PhenotypeModule( 1321): PhenotypeModule.receiveBroadcast():563 onReceive() urgent = false
+11-24 23:03:41.558 I/PhenotypeModule( 1321): PhenotypeModule.maybeFetchAndUpdate():222 maybeFetchAndUpdate: start new task to fetch
+11-24 23:03:41.567 I/PackageUpdateTaskChimer( 1174): Scheduling Phenotype config package catchup updates to be 86400 seconds from now (1795561421567) [CONTEXT service_id=51 ]
+11-24 23:03:41.570 E/MDD     ( 3107): DownloadProgressMonitor: Can't find file group for uri: android://com.google.android.apps.messaging/files/datadownload/shared/public/datadownloadfile_1795561397774
+11-24 23:03:41.576 E/MDD     ( 3107): DownloadProgressMonitor: Can't find file group for uri: android://com.google.android.apps.messaging/files/datadownload/shared/public/datadownloadfile_1795561397775
+11-24 23:03:41.579 D/dasx    ( 3107): Starting download: https://c.tenor.com/zgUM2urQsFwAAAAk/tenor.gif
+11-24 23:03:41.579 V/dasx    ( 3107): Is http uri, downloading (uri: https://c.tenor.com/zgUM2urQsFwAAAAk/tenor.gif)
+11-24 23:03:41.581 D/dasx    ( 3107): Starting download: https://c.tenor.com/KWSi_2egDKAAAAAk/tenor.gif
+11-24 23:03:41.581 V/dasx    ( 3107): Is http uri, downloading (uri: https://c.tenor.com/KWSi_2egDKAAAAAk/tenor.gif)
+11-24 23:03:41.583 W/TimedProcessReaper( 3107): Scheduling killing of process to refresh configuration
+11-24 23:03:41.584 I/HeterodyneSyncScheduler( 1174): Scheduling adaptive one off task with window [14400, 604800] in seconds [CONTEXT service_id=51 ]
+11-24 23:03:41.589 I/BuglePhenotype( 3107): onReceive for bugle package [CONTEXT package_name="com.google.android.apps.messaging#com.google.android.apps.messaging" ]
+11-24 23:03:41.589 I/Bugle   ( 3107): BroadcastReceiverAsyncWorkTracker: Acknowledging broadcast of com.google.android.apps.messaging.shared.experiments.receiver.BuglePhenotypeBroadcastReceiver@5da2bd2
+11-24 23:03:41.590 E/MDD     ( 3107): DownloadProgressMonitor: Can't find file group for uri: android://com.google.android.apps.messaging/files/datadownload/shared/public/datadownloadfile_1795561397776
+11-24 23:03:41.591 D/dasx    ( 3107): Starting download: https://c.tenor.com/XbcbbNJsF_4AAAAk/tenor.gif
+11-24 23:03:41.591 V/dasx    ( 3107): Is http uri, downloading (uri: https://c.tenor.com/XbcbbNJsF_4AAAAk/tenor.gif)
+11-24 23:03:41.592 I/PhenotypeBackgroundRecv( 3107): Skipping com.google.android.apps.messaging#com.google.android.apps.messaging which doesn't use ProcessStable flags.
+11-24 23:03:41.593 E/MDD     ( 3107): DownloadProgressMonitor: Can't find file group for uri: android://com.google.android.apps.messaging/files/datadownload/shared/public/datadownloadfile_1795561397777
+--------- beginning of kernel
+11-24 23:03:41.812 I/logd    (    0): logdr: UID=2000 GID=2000 PID=4174 n tail=0 logMask=99 pid=0 start=0ns deadline=0ns
