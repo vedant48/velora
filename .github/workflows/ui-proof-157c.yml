@@ -1,0 +1,45 @@
+name: UI proof 157c (rerun from saved test APK, no rebuild)
+on:
+  push:
+    branches: [test/ui-proof-157c]
+    paths: [.ci/ui157c]
+permissions:
+  contents: write
+  actions: read
+jobs:
+  ui:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - uses: actions/download-artifact@v4
+        with: { name: ui-test-apk, path: candidate, github-token: '${{ secrets.GITHUB_TOKEN }}', run-id: 45496396824 }
+      - name: Install Maestro
+        run: curl -Ls "https://get.maestro.mobile.dev" | bash
+      - name: Enable emulator acceleration
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules && sudo udevadm trigger --name-match=kvm
+      - uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          target: google_apis
+          arch: x86_64
+          profile: pixel_2
+          ram-size: 3072
+          disable-animations: false
+          emulator-options: -no-window -gpu swiftshader -no-snapshot -noaudio -no-boot-anim
+          script: bash scripts/ui-proof-157c.sh
+      - name: Publish evidence
+        if: always()
+        run: |
+          git config user.email ci@velora.local; git config user.name velora-ci
+          EV=$(mktemp -d); git worktree add --detach "$EV"
+          git -C "$EV" checkout --orphan ci-evidence/ui157c-${{ github.run_id }}
+          git -C "$EV" rm -rf . >/dev/null 2>&1 || true
+          cp -r proof "$EV/" 2>/dev/null || true
+          printf 'run_id=%s\n' "${{ github.run_id }}" > "$EV/META.txt"
+          git -C "$EV" add -A; git -C "$EV" commit -m "ui157c evidence"
+          git -C "$EV" push origin HEAD:ci-evidence/ui157c-${{ github.run_id }}

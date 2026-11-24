@@ -1,0 +1,47 @@
+appId: com.vedant.velora
+---
+- launchApp
+- tapOn: 'Log in / Sign up'
+- tapOn: Username
+- inputText: e2e_alice
+- tapOn: Password
+- inputText: e2e-alice-pass-1
+- hideKeyboard
+- tapOn:
+    text: 'Log in'
+    below: Password
+- extendedWaitUntil:
+    visible: E2E Alice
+    timeout: 30000
+# Movie details: merged Cast & Crew, director card first
+- tapOn: F1
+- extendedWaitUntil:
+    visible: 'Cast & Crew'
+    timeout: 60000
+- swipe:
+    direction: UP
+    duration: 500
+- assertVisible: 'Cast & Crew'
+- assertVisible: Director
+- takeScreenshot: 7-movie-cast-crew-director-first
+- back
+# Series details: Watch online compact row opens the provider sheet
+- tapOn:
+    id: library-tab-series
+- extendedWaitUntil:
+    visible: Prison Break
+    timeout: 90000
+- swipe:
+    direction: UP
+    duration: 500
+- tapOn: Breaking Bad
+- extendedWaitUntil:
+    visible: 'Watch online'
+    timeout: 60000
+- takeScreenshot: 8-watch-online-row
+- tapOn: 'Watch online: show all providers'
+- extendedWaitUntil:
+    visible: Subscription
+    timeout: 20000
+- takeScreenshot: 9-providers-sheet
+- tapOn: 'Close watch providers'
