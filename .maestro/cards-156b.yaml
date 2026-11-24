@@ -1,0 +1,41 @@
+appId: com.vedant.velora
+---
+- launchApp
+- tapOn: 'Log in / Sign up'
+- tapOn: Username
+- inputText: e2e_alice
+- tapOn: Password
+- inputText: e2e-alice-pass-1
+- hideKeyboard
+- tapOn:
+    text: 'Log in'
+    below: Password
+- extendedWaitUntil:
+    visible: E2E Alice
+    timeout: 30000
+- tapOn:
+    point: 209, 512
+- extendedWaitUntil:
+    visible: 'F1'
+    timeout: 20000
+- takeScreenshot: 1-watched-movies-rating-review
+- tapOn:
+    point: 331, 512
+- extendedWaitUntil:
+    visible: 'Breaking Bad'
+    timeout: 20000
+- extendedWaitUntil:
+    visible: 'Money Heist'
+    timeout: 20000
+- waitForAnimationToEnd:
+    timeout: 8000
+- takeScreenshot: 2-series-cards-early
+- extendedWaitUntil:
+    visible: 'Ended, all episodes watched'
+    timeout: 45000
+- takeScreenshot: 3-series-cards-after-tmdb
+- tapOn:
+    point: 27%, 38%
+- waitForAnimationToEnd:
+    timeout: 20000
+- takeScreenshot: 4-title-page-tmdb-icon
