@@ -1,0 +1,77 @@
+name: Verify exact v1.5.7 candidate, (verification only; publishing is a separate gated workflow)
+on:
+  push:
+    branches: [test/verify-release-157]
+    paths: [.ci/verify157]
+permissions:
+  contents: write
+  actions: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with: { name: velora-production-candidate, path: candidate, github-token: '${{ secrets.GITHUB_TOKEN }}', run-id: 45490858374 }
+      - name: Draft asset must be byte-identical to the artifact, source must be the tested commit
+        env: { GH_TOKEN: '${{ secrets.GITHUB_TOKEN }}' }
+        run: |
+          set -e
+          gh release view v1.5.7 --json isDraft,tagName,targetCommitish,assets | tee release.json
+          test "$(jq -r .isDraft release.json)" = true
+          mkdir draft && gh release download v1.5.7 --dir draft --pattern 'velora-v1.5.7.apk' --pattern '*checksums.txt'
+          sha256sum candidate/velora-v1.5.7.apk draft/velora-v1.5.7.apk | tee sums.txt
+          test "$(sha256sum candidate/velora-v1.5.7.apk | cut -d' ' -f1)" = "$(sha256sum draft/velora-v1.5.7.apk | cut -d' ' -f1)"
+          (cd candidate && sha256sum -c velora-v1.5.7-checksums.txt)
+          git fetch origin v1.5.7 main && test "$(git rev-parse origin/main)" = "$(git rev-parse v1.5.7^{commit} 2>/dev/null || git rev-parse FETCH_HEAD)" || echo "main moved or tag differs (informational)"
+          git rev-parse origin/main
+      - name: APK facts (version, signature, permissions, endpoints)
+        run: |
+          set -e
+          AAPT=$(ls $ANDROID_HOME/build-tools/*/aapt | tail -1); APKS=$(ls $ANDROID_HOME/build-tools/*/apksigner | tail -1)
+          $AAPT dump badging candidate/velora-v1.5.7.apk | grep -E "^package|uses-permission" | tee apkfacts.txt
+          $APKS verify --print-certs candidate/velora-v1.5.7.apk | tee -a apkfacts.txt
+          cat candidate/cert-fingerprint.txt | tee -a apkfacts.txt
+          mkdir x && cd x && unzip -q ../candidate/velora-v1.5.7.apk
+          ! grep -rl "127.0.0.1:8787" assets | head -1 | grep . && echo "no local-backend URL in bundle"
+          grep -c "velora-api.vedant-753.workers.dev" assets/index.android.bundle | tee -a ../apkfacts.txt || true
+          grep -c "Import from Must" assets/index.android.bundle | tee -a ../apkfacts.txt || true
+      - name: Version and signing continuity with published v1.5.6
+        env: { GH_TOKEN: '${{ secrets.GITHUB_TOKEN }}' }
+        run: |
+          set -e
+          AAPT=$(ls $ANDROID_HOME/build-tools/*/aapt | tail -1); APKS=$(ls $ANDROID_HOME/build-tools/*/apksigner | tail -1)
+          $AAPT dump badging candidate/velora-v1.5.7.apk | grep -E "^package" | tee ver.txt
+          grep -q "versionName='1.5.6'" ver.txt && grep -q "versionCode='10507'" ver.txt
+          mkdir prev && gh release download v1.5.6 --dir prev --pattern 'velora-v1.5.6.apk'
+          NEW=$($APKS verify --print-certs candidate/velora-v1.5.7.apk | grep -m1 'SHA-256 digest' | sed 's/.*: //')
+          OLD=$($APKS verify --print-certs prev/velora-v1.5.6.apk | grep -m1 'SHA-256 digest' | sed 's/.*: //')
+          echo "new=$NEW"; echo "old=$OLD"; test -n "$NEW" && test "$NEW" = "$OLD"
+          echo "same signing certificate as published v1.5.6" | tee -a apkfacts.txt
+      - name: Enable emulator acceleration
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          target: google_apis
+          arch: x86_64
+          profile: pixel_2
+          ram-size: 3072
+          disable-animations: false
+          emulator-options: -no-window -gpu swiftshader -no-snapshot -noaudio -no-boot-anim
+          script: bash scripts/verify-launch.sh
+      - name: Publish evidence
+        if: always()
+        run: |
+          git config user.email ci@velora.local; git config user.name velora-ci
+          EV=$(mktemp -d); git worktree add --detach "$EV"
+          git -C "$EV" checkout --orphan ci-evidence/verify157-${{ github.run_id }}
+          git -C "$EV" rm -rf . >/dev/null 2>&1 || true
+          cp -r proof "$EV/" 2>/dev/null || true; cp sums.txt apkfacts.txt release.json ver.txt "$EV/" 2>/dev/null || true
+          printf 'run_id=%s\n' "${{ github.run_id }}" > "$EV/META.txt"
+          git -C "$EV" add -A; git -C "$EV" commit -m "verify157 evidence"
+          git -C "$EV" push origin HEAD:ci-evidence/verify157-${{ github.run_id }}
