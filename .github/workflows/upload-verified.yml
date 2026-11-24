@@ -1,0 +1,29 @@
+name: Attach verified permission release artifact
+on:
+  push:
+    branches: [test/upload-verified146]
+    paths: [.ci/upload146]
+permissions:
+  contents: write
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/download-artifact@v4
+        with:
+          name: velora-permissions-production
+          path: verified
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: 45356308463
+      - name: Verify exact tested bytes and source
+        run: |
+          echo 'd651705e132042312cb3fce554450f297fb781782bcca3a2492152ac1ef376a5  verified/velora-v1.4.6.apk' | sha256sum -c -
+          test "$(git rev-parse HEAD)" = 2d72c1692295e6d70cc829e96179105c10aa93f5
+      - name: Create draft with verified files
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create v1.4.6 --target 2d72c1692295e6d70cc829e96179105c10aa93f5 --title 'Velora v1.4.6' --notes-file RELEASE_NOTES_v1.4.6.md --draft verified/velora-v1.4.6.apk verified/velora-v1.4.6-checksums.txt verified/cert-fingerprint.txt
