@@ -49,6 +49,11 @@ export class LibraryController {
     return this.library.importVelora(userId, body.data);
   }
 
+  @Post('import/must')
+  importMust(@CurrentUserId() userId: string, @Body() body: Record<string, unknown>) {
+    return this.library.importMust(userId, body);
+  }
+
   @Put(':mediaType/:tmdbId')
   upsert(
     @CurrentUserId() userId: string,

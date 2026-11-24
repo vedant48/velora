@@ -478,4 +478,98 @@ export class LibraryService {
     }
     return { imported, unresolved };
   }
+
+  /**
+   * Merge-only import of a Must profile that the app already matched to TMDB.
+   * Never overwrites: an existing title keeps its status, rating and review. Missing episode rows,
+   * season ratings and reviews are added with INSERT OR IGNORE, so re-running is safe.
+   * Original add/watch dates are unknown in Must, so rows get the import time and the source's
+   * last-modified time is kept only in import_sources.
+   */
+  async importMust(userId: string, payload: unknown) {
+    const p = payload as { items?: unknown[] };
+    if (!p || !Array.isArray(p.items) || p.items.length === 0 || p.items.length > 40) {
+      throw new BadRequestException('items must be an array of 1-40 matched titles');
+    }
+    const results: { mustId: string; outcome: 'created' | 'existing_kept' | 'failed'; episodesAdded: number; error?: string }[] = [];
+    let episodeBudget = 4000;
+    for (const raw of p.items) {
+      const i = raw as Record<string, unknown>;
+      const mustId = String(i.mustId ?? '');
+      try {
+        const mediaType = requireMediaType(i.mediaType);
+        const tmdbId = requireTmdbId(i.tmdbId);
+        if (!mustId) throw new BadRequestException('mustId is required');
+        const existing = await this.getOne(userId, mediaType, tmdbId);
+        let outcome: 'created' | 'existing_kept' = 'existing_kept';
+        let addedAt: string | null = null;
+        if (!existing) {
+          const status = requireStatus(i.status);
+          const total = optionalInt(i.totalEpisodes, 'totalEpisodes', 0, 100000) ?? 0;
+          // Must exposes no original add date. Per the user's decision, its last-modified time is used as
+          // added_at when valid (not in the future); the import_sources row flags it as a fallback date.
+          const ms = Date.parse(String(i.sourceModifiedAt ?? ''));
+          if (Number.isFinite(ms) && ms <= Date.now() && ms > Date.parse('2000-01-01')) {
+            addedAt = new Date(ms).toISOString().slice(0, 19).replace('T', ' ');
+          }
+          await this.db.run(
+            `INSERT OR IGNORE INTO library_items
+               (id, user_id, media_type, tmdb_id, title, poster_path, backdrop_path, release_date,
+                status, rating, episodes_watched, total_episodes, added_at)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, COALESCE(?, datetime('now')))`,
+            [randomId(), userId, mediaType, tmdbId, requireString(i.title, 'title', 300),
+             optionalString(i.posterPath, 'posterPath', 200), optionalString(i.backdropPath, 'backdropPath', 200),
+             optionalString(i.releaseDate, 'releaseDate', 20), status, optionalRating(i.rating), total, addedAt],
+          );
+          outcome = 'created';
+        }
+        await this.db.run(
+          `INSERT OR IGNORE INTO import_sources (id, user_id, source, source_id, media_type, tmdb_id, source_modified_at, added_at_is_fallback)
+           VALUES (?, ?, 'must', ?, ?, ?, ?, ?)`,
+          [randomId(), userId, mustId, mediaType, tmdbId, optionalString(i.sourceModifiedAt, 'sourceModifiedAt', 40), addedAt ? 1 : 0],
+        );
+        // Title review (only when the title was created now: an existing review is never replaced).
+        const review = i.review as Record<string, unknown> | null | undefined;
+        if (outcome === 'created' && review && typeof review.body === 'string' && review.body.trim()) {
+          await this.db.run(
+            `INSERT OR IGNORE INTO reviews (id, user_id, media_type, tmdb_id, season_number, rating, body)
+             VALUES (?, ?, ?, ?, 0, ?, ?)`,
+            [randomId(), userId, mediaType, tmdbId, optionalRating(i.rating), optionalString(review.body, 'review', 4000)],
+          );
+        }
+        let episodesAdded = 0;
+        if (mediaType === 'tv') {
+          for (const sraw of Array.isArray(i.seasons) ? (i.seasons as unknown[]).slice(0, 100) : []) {
+            const s = sraw as Record<string, unknown>;
+            const season = optionalInt(s.season, 'season', 0, 1000);
+            if (season === null) continue;
+            const sRating = optionalRating(s.rating);
+            const sBody = typeof s.review === 'string' ? s.review.slice(0, 4000) : '';
+            if (season >= 1 && (sRating !== null || sBody)) {
+              await this.db.run(
+                `INSERT OR IGNORE INTO reviews (id, user_id, media_type, tmdb_id, season_number, rating, body)
+                 VALUES (?, ?, 'tv', ?, ?, ?, ?)`,
+                [randomId(), userId, tmdbId, season, sRating, sBody],
+              );
+            }
+            for (const eraw of Array.isArray(s.watchedEpisodes) ? (s.watchedEpisodes as unknown[]) : []) {
+              if (episodeBudget-- <= 0) throw new BadRequestException('too many episodes in one request');
+              const ep = optionalInt(eraw, 'episode', 1, 100000);
+              if (ep === null) continue;
+              const r = await this.db.run(
+                'INSERT OR IGNORE INTO episode_progress (id, user_id, tmdb_id, season, episode) VALUES (?, ?, ?, ?, ?)',
+                [randomId(), userId, tmdbId, season, ep],
+              );
+              if ((r.meta?.changes ?? 0) > 0) episodesAdded++;
+            }
+          }
+          if (episodesAdded > 0) await this.syncEpisodeCount(userId, tmdbId);
+        }
+        results.push({ mustId, outcome, episodesAdded });
+      } catch (e) {
+        results.push({ mustId, outcome: 'failed', episodesAdded: 0, error: e instanceof Error ? e.message.slice(0, 160) : 'failed' });
+      }
+    }
+    return { results };
+  }
 }
