@@ -31,7 +31,8 @@ appId: com.vedant.velora
 - assertVisible: Breaking Bad
 - assertNotVisible: The Last Kingdom
 - takeScreenshot: 3-series-tab-no-want-series
-- tapOn: Want
+- tapOn:
+    point: 13%, 40%
 - scrollUntilVisible:
     element: The Last Kingdom
     direction: DOWN
