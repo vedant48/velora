@@ -1,7 +1,6 @@
 appId: com.vedant.velora
 ---
 - launchApp
-- tapOn: "Profile"
 - tapOn: "Log in / Sign up"
 - tapOn: "Username"
 - inputText: "e2e_alice"
@@ -15,7 +14,6 @@ appId: com.vedant.velora
     visible:
       text: "E2E Alice"
     timeout: 20000
-- tapOn: "Profile"
 - tapOn: "Settings"
 - scrollUntilVisible:
     element: "Import from Must"
