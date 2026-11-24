@@ -23,7 +23,15 @@ function makeDb() {
       const r = sqlite.prepare(sql).run(...(params as never[]));
       return { meta: { changes: Number(r.changes) } };
     },
-    async batch() { throw new Error('unused'); },
+    async batch(statements: { sql: string; params: unknown[] }[]) {
+      // Mirrors D1: one transaction, one result per statement.
+      sqlite.exec('BEGIN');
+      try {
+        const out = statements.map((s) => ({ meta: { changes: Number(sqlite.prepare(s.sql).run(...(s.params as never[])).changes) } }));
+        sqlite.exec('COMMIT');
+        return out;
+      } catch (e) { sqlite.exec('ROLLBACK'); throw e; }
+    },
   } as unknown as DatabaseService;
   return { sqlite, service };
 }
@@ -103,4 +111,34 @@ test('users are isolated and bad rows fail alone', async () => {
   assert.equal(results[1].outcome, 'failed');
   assert.equal(count('library_items'), 2);
   await assert.rejects(lib.importMust('u1', { items: [] }));
+});
+
+test('large batch uses few D1 round trips and writes every episode', async () => {
+  const m = makeDb();
+  let calls = 0;
+  const wrapped = new Proxy(m.service as any, { get: (t, k) => (typeof t[k] === 'function' ? (...a: unknown[]) => { calls++; return t[k](...a); } : t[k]) });
+  const l = new LibraryService(wrapped);
+  m.sqlite.prepare("INSERT INTO users (id, username, display_name) VALUES ('u1','a','A')").run();
+  const items = Array.from({ length: 25 }, (_, n) => show({ mustId: `s${n}`, tmdbId: 1000 + n, totalEpisodes: 120,
+    seasons: [1, 2].map((sn) => ({ season: sn, rating: null, review: null, watchedEpisodes: Array.from({ length: 60 }, (_, e) => e + 1) })) }));
+  const { results } = await l.importMust('u1', { items });
+  assert.equal(results.filter((r) => r.outcome === 'created').length, 25);
+  assert.equal(results.reduce((a, r) => a + r.episodesAdded, 0), 3000);
+  assert.equal((m.sqlite.prepare('SELECT COUNT(*) c FROM episode_progress').get() as any).c, 3000);
+  assert.equal((m.sqlite.prepare("SELECT episodes_watched w FROM library_items WHERE tmdb_id=1000").get() as any).w, 120);
+  console.log('D1 calls for 25 titles / 3000 episodes:', calls);
+  assert.ok(calls <= 25 * 5, `too many calls: ${calls}`);
+});
+
+test('a title that fails validation writes nothing and a rerun fills it fully; existing show gets missing episodes', async () => {
+  const bad = show({ seasons: [{ season: 1, rating: null, review: null, watchedEpisodes: [1, 2, 'x'] }] });
+  const r1 = await lib.importMust('u1', { items: [bad] });
+  assert.equal(r1.results[0].outcome, 'failed');
+  assert.equal(count('library_items'), 0); assert.equal(count('episode_progress'), 0);
+  await lib.upsert('u1', 'tv', 20, { title: 'Mine', status: 'watching', rating: 5 });
+  const r2 = await lib.importMust('u1', { items: [show()] });
+  assert.equal(r2.results[0].outcome, 'existing_kept'); assert.equal(r2.results[0].episodesAdded, 3);
+  const r3 = await lib.importMust('u1', { items: [show()] });
+  assert.equal(r3.results[0].episodesAdded, 0);
+  assert.equal((sqlite.prepare('SELECT title t, rating r FROM library_items WHERE tmdb_id=20').get() as any).t, 'Mine');
 });

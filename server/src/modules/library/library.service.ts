@@ -503,6 +503,9 @@ export class LibraryService {
         const existing = await this.getOne(userId, mediaType, tmdbId);
         let outcome: 'created' | 'existing_kept' = 'existing_kept';
         let addedAt: string | null = null;
+        // All writes for one title are collected and sent as ONE D1 batch (a single round trip and one
+        // transaction), instead of one awaited call per row. Validation runs before anything is written.
+        const stmts: { sql: string; params: unknown[] }[] = [];
         if (!existing) {
           const status = requireStatus(i.status);
           const total = optionalInt(i.totalEpisodes, 'totalEpisodes', 0, 100000) ?? 0;
@@ -512,32 +515,33 @@ export class LibraryService {
           if (Number.isFinite(ms) && ms <= Date.now() && ms > Date.parse('2000-01-01')) {
             addedAt = new Date(ms).toISOString().slice(0, 19).replace('T', ' ');
           }
-          await this.db.run(
-            `INSERT OR IGNORE INTO library_items
+          stmts.push({
+            sql: `INSERT OR IGNORE INTO library_items
                (id, user_id, media_type, tmdb_id, title, poster_path, backdrop_path, release_date,
                 status, rating, episodes_watched, total_episodes, added_at)
              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, COALESCE(?, datetime('now')))`,
-            [randomId(), userId, mediaType, tmdbId, requireString(i.title, 'title', 300),
-             optionalString(i.posterPath, 'posterPath', 200), optionalString(i.backdropPath, 'backdropPath', 200),
-             optionalString(i.releaseDate, 'releaseDate', 20), status, optionalRating(i.rating), total, addedAt],
-          );
+            params: [randomId(), userId, mediaType, tmdbId, requireString(i.title, 'title', 300),
+              optionalString(i.posterPath, 'posterPath', 200), optionalString(i.backdropPath, 'backdropPath', 200),
+              optionalString(i.releaseDate, 'releaseDate', 20), status, optionalRating(i.rating), total, addedAt],
+          });
           outcome = 'created';
         }
-        await this.db.run(
-          `INSERT OR IGNORE INTO import_sources (id, user_id, source, source_id, media_type, tmdb_id, source_modified_at, added_at_is_fallback)
+        stmts.push({
+          sql: `INSERT OR IGNORE INTO import_sources (id, user_id, source, source_id, media_type, tmdb_id, source_modified_at, added_at_is_fallback)
            VALUES (?, ?, 'must', ?, ?, ?, ?, ?)`,
-          [randomId(), userId, mustId, mediaType, tmdbId, optionalString(i.sourceModifiedAt, 'sourceModifiedAt', 40), addedAt ? 1 : 0],
-        );
+          params: [randomId(), userId, mustId, mediaType, tmdbId, optionalString(i.sourceModifiedAt, 'sourceModifiedAt', 40), addedAt ? 1 : 0],
+        });
         // Title review (only when the title was created now: an existing review is never replaced).
         const review = i.review as Record<string, unknown> | null | undefined;
         if (outcome === 'created' && review && typeof review.body === 'string' && review.body.trim()) {
-          await this.db.run(
-            `INSERT OR IGNORE INTO reviews (id, user_id, media_type, tmdb_id, season_number, rating, body)
+          stmts.push({
+            sql: `INSERT OR IGNORE INTO reviews (id, user_id, media_type, tmdb_id, season_number, rating, body)
              VALUES (?, ?, ?, ?, 0, ?, ?)`,
-            [randomId(), userId, mediaType, tmdbId, optionalRating(i.rating), optionalString(review.body, 'review', 4000)],
-          );
+            params: [randomId(), userId, mediaType, tmdbId, optionalRating(i.rating), optionalString(review.body, 'review', 4000)],
+          });
         }
-        let episodesAdded = 0;
+        // Indexes of the episode statements, so their row counts can be summed after the batch.
+        const episodeStmtIdx: number[] = [];
         if (mediaType === 'tv') {
           for (const sraw of Array.isArray(i.seasons) ? (i.seasons as unknown[]).slice(0, 100) : []) {
             const s = sraw as Record<string, unknown>;
@@ -546,25 +550,34 @@ export class LibraryService {
             const sRating = optionalRating(s.rating);
             const sBody = typeof s.review === 'string' ? s.review.slice(0, 4000) : '';
             if (season >= 1 && (sRating !== null || sBody)) {
-              await this.db.run(
-                `INSERT OR IGNORE INTO reviews (id, user_id, media_type, tmdb_id, season_number, rating, body)
+              stmts.push({
+                sql: `INSERT OR IGNORE INTO reviews (id, user_id, media_type, tmdb_id, season_number, rating, body)
                  VALUES (?, ?, 'tv', ?, ?, ?, ?)`,
-                [randomId(), userId, tmdbId, season, sRating, sBody],
-              );
+                params: [randomId(), userId, tmdbId, season, sRating, sBody],
+              });
             }
+            const eps: number[] = [];
             for (const eraw of Array.isArray(s.watchedEpisodes) ? (s.watchedEpisodes as unknown[]) : []) {
               if (episodeBudget-- <= 0) throw new BadRequestException('too many episodes in one request');
               const ep = optionalInt(eraw, 'episode', 1, 100000);
-              if (ep === null) continue;
-              const r = await this.db.run(
-                'INSERT OR IGNORE INTO episode_progress (id, user_id, tmdb_id, season, episode) VALUES (?, ?, ?, ?, ?)',
-                [randomId(), userId, tmdbId, season, ep],
-              );
-              if ((r.meta?.changes ?? 0) > 0) episodesAdded++;
+              if (ep !== null) eps.push(ep);
+            }
+            // One statement per season: the episode numbers travel as a single JSON parameter, so the
+            // statement stays far below D1's bound-parameter limit however many episodes a season has.
+            for (let k = 0; k < eps.length; k += 2000) {
+              episodeStmtIdx.push(stmts.length);
+              stmts.push({
+                sql: `INSERT OR IGNORE INTO episode_progress (id, user_id, tmdb_id, season, episode)
+                      SELECT lower(hex(randomblob(16))), ?, ?, ?, CAST(value AS INTEGER) FROM json_each(?)`,
+                params: [userId, tmdbId, season, JSON.stringify(eps.slice(k, k + 2000))],
+              });
             }
           }
-          if (episodesAdded > 0) await this.syncEpisodeCount(userId, tmdbId);
         }
+        const batchRes = (await this.db.batch(stmts)) as { meta?: { changes?: number } }[];
+        let episodesAdded = 0;
+        for (const idx of episodeStmtIdx) episodesAdded += Number(batchRes?.[idx]?.meta?.changes ?? 0);
+        if (mediaType === 'tv' && episodesAdded > 0) await this.syncEpisodeCount(userId, tmdbId);
         results.push({ mustId, outcome, episodesAdded });
       } catch (e) {
         results.push({ mustId, outcome: 'failed', episodesAdded: 0, error: e instanceof Error ? e.message.slice(0, 160) : 'failed' });
