@@ -33,10 +33,14 @@ appId: com.vedant.velora
 - takeScreenshot: 3-series-tab-no-want-series
 - tapOn:
     point: 13%, 40%
-- scrollUntilVisible:
-    element: The Last Kingdom
-    direction: DOWN
-    timeout: 20000
+- swipe:
+    start: 50%, 80%
+    end: 50%, 30%
+    duration: 900
+- swipe:
+    start: 50%, 80%
+    end: 50%, 30%
+    duration: 900
 - takeScreenshot: 3b-want-tab-scrolled-last-kingdom
 - tapOn: The Last Kingdom
 # Title opened from the library: TMDB score comes from the loaded details.
