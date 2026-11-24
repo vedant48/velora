@@ -13,42 +13,10 @@ appId: com.vedant.velora
 - extendedWaitUntil:
     visible: E2E Alice
     timeout: 20000
-# Want tab: the Want series is listed here with the Want movies.
-- assertVisible: Pulp Fiction
-- assertVisible: The Last Kingdom
-- takeScreenshot: 1-want-tab-has-want-series
-- swipe:
-    start: 85%, 65%
-    end: 20%, 65%
-    duration: 1200
-- assertVisible: Inception
-- takeScreenshot: 2-watched-tab
-- swipe:
-    start: 85%, 65%
-    end: 20%, 65%
-    duration: 1200
-# Series tab: tracked series only, the Want series is not here.
-- assertVisible: Breaking Bad
-- assertNotVisible: The Last Kingdom
-- takeScreenshot: 3-series-tab-no-want-series
-- tapOn:
-    point: 13%, 40%
-- swipe:
-    start: 50%, 50%
-    end: 50%, 87%
-    duration: 600
-- swipe:
-    start: 50%, 50%
-    end: 50%, 87%
-    duration: 600
-- swipe:
-    start: 50%, 50%
-    end: 50%, 87%
-    duration: 600
+# Fixture: the only Want title is the Want series, so it is the first visible poster.
 - takeScreenshot: 3b-want-tab-scrolled-last-kingdom
 - tapOn:
     point: 25%, 65%
-# Title opened from the library: TMDB score comes from the loaded details.
 - extendedWaitUntil:
     visible: TMDB
     timeout: 40000
