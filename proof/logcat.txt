@@ -1,0 +1,497 @@
+--------- beginning of main
+11-24 20:23:33.355   564   839 D ConnectivityService: NetReassign [82 : null → 100] [c 0] [a 0] [i 1]
+11-24 20:23:33.355  1385  1777 W Conscrypt: 	at com.google.android.gms.org.conscrypt.Platform.setSocketWriteTimeout(:com.google.android.gms@242335041@24.23.35 (190800-646585959):204)
+11-24 20:23:33.355  1385  1777 W Conscrypt: 	at com.google.android.gms.org.conscrypt.ConscryptFileDescriptorSocket.setSoWriteTimeout(:com.google.android.gms@242335041@24.23.35 (190800-646585959):4)
+11-24 20:23:33.355   564   832 D OemPaidWifiNetworkFactory: got request NetworkRequest [ REQUEST id=82, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10138 RequestorUid: 1000 RequestorPkg: android UnderlyingNetworks: Null] ]
+11-24 20:23:33.356   564   832 D MultiInternetWifiNetworkFactory: got request NetworkRequest [ REQUEST id=82, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10138 RequestorUid: 1000 RequestorPkg: android UnderlyingNetworks: Null] ]
+11-24 20:23:33.356   564   832 D WifiNetworkFactory: got request NetworkRequest [ REQUEST id=82, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10138 RequestorUid: 1000 RequestorPkg: android UnderlyingNetworks: Null] ]
+11-24 20:23:33.356   564   832 D UntrustedWifiNetworkFactory: got request NetworkRequest [ REQUEST id=82, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10138 RequestorUid: 1000 RequestorPkg: android UnderlyingNetworks: Null] ]
+11-24 20:23:33.366  1217  2590 I FontLog : Font PFD returned from cache for {Google Sans, wdth 100.0, wght 500, ital 0.0, bestEffort false} [CONTEXT service_id=132 ]
+11-24 20:23:33.369  1217  2590 I FontLog : Fetch {Google Sans, wdth 100.0, wght 500, ital 0.0, bestEffort false} end status Status{statusCode=SUCCESS, resolution=null} [CONTEXT service_id=132 ]
+11-24 20:23:33.375   564  1542 D WifiNl80211Manager: Scan result ready event
+11-24 20:23:33.376   564  1542 D WifiNative: Scan result ready event
+11-24 20:23:33.410  1450  1757 I TRG.Connection: (REDACTED) New message(%s, @%s) received at connection(%s).
+11-24 20:23:33.422  1333  1743 I SP      : Scheduling: download stopped, 0 started, 0 paused, 1 scheduled, 1 pending: manifests:emoticon_content_description-2022081613 * {W:b:u:l, bg}
+11-24 20:23:33.426  1450  1736 I Ma-Entry-Triggering: (REDACTED) Updated config based on request %s, currentClient %s
+11-24 20:23:33.427  1450  1736 I TRG.RoutingOracle: (REDACTED) Connection state changed: %s.
+11-24 20:23:33.434  1450  1757 I TRG.Connection: (REDACTED) Message(%s, @%s) has been successfully processed at connection(%s).
+11-24 20:23:33.443   564   832 I HalDevMgr: bestIfaceCreationProposal is null, requestIface=STA, existingIface=[name=wlan0 type=STA]
+11-24 20:23:33.460  1217  1217 D BoundBrokerSvc: onBind: Intent { act=android.intent.action.RESOLVE_INSTANT_APP_PACKAGE cmp=com.google.android.gms/.chimera.PersistentBoundBrokerService }
+11-24 20:23:33.463  1217  1217 D BoundBrokerSvc: Loading bound service for intent: Intent { act=android.intent.action.RESOLVE_INSTANT_APP_PACKAGE cmp=com.google.android.gms/.chimera.PersistentBoundBrokerService }
+--------- beginning of system
+11-24 20:23:33.464   564   564 D PackageManager: Connected to instant app resolver
+11-24 20:23:33.464  1385  1385 D BoundBrokerSvc: onUnbind: Intent { act=com.google.android.gms.findmydevice.spot.service.locationreport.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.GmsApiService }
+11-24 20:23:33.466  1333  1836 I SuperDelight: SuperDelightUnpacker$UnpackCancellableTask.execute():105 UnpackCancellableTask#execute(): fst-decompress /data/user/0/com.google.android.inputmethod.latin/files/superpacks/delight/main_en_us_2024051500_1.staged
+11-24 20:23:33.475   564  1181 W ContextImpl: Calling a method in the system process without a qualified user: android.app.ContextImpl.sendBroadcastMultiplePermissions:1299 android.content.Context.sendBroadcastMultiplePermissions:2522 com.android.server.TelephonyRegistry.broadcastServiceStateChanged:3697 com.android.server.TelephonyRegistry.notifyServiceStateForPhoneId:1759 com.android.internal.telephony.ITelephonyRegistry$Stub.onTransact:546 
+11-24 20:23:33.486   177  2527 W keystore2: system/security/keystore2/watchdog/src/lib.rs:114 - ### Keystore Watchdog report - BEGIN ###
+11-24 20:23:33.486   177  2527 W keystore2: system/security/keystore2/watchdog/src/lib.rs:123 - When extracting from a bug report, please include this header
+11-24 20:23:33.486   177  2527 W keystore2: system/security/keystore2/watchdog/src/lib.rs:124 - and all 1 records below.
+11-24 20:23:33.486   177  2527 W keystore2: system/security/keystore2/watchdog/src/lib.rs:164 - ThreadId(1) Calling get_rkpd_attestation_key() Pending: 1.501194789s Overdue 1.001196702s
+11-24 20:23:33.486   177  2527 W keystore2: system/security/keystore2/watchdog/src/lib.rs:175 - ### Keystore Watchdog report - END ###
+11-24 20:23:33.498  1217  2489 W GlsClientGrpc: Voilatile gRPC failure INVALID_ARGUMENT: Application credential header not valid. Please fix the client to pass a valid application credential header. [CONTEXT service_id=6 ]
+11-24 20:23:33.498  1217  2489 W GlsClientGrpc: gbzz: INVALID_ARGUMENT: Application credential header not valid. Please fix the client to pass a valid application credential header.
+11-24 20:23:33.498  1217  2489 W GlsClientGrpc: 	at gbzy.h(:com.google.android.gms@242335041@24.23.35 (190800-646585959):3)
+11-24 20:23:33.498  1217  2489 W GlsClientGrpc: 	at anbi.u(:com.google.android.gms@242335041@24.23.35 (190800-646585959):29)
+11-24 20:23:33.498  1217  2489 W GlsClientGrpc: 	at anbi.g(:com.google.android.gms@242335041@24.23.35 (190800-646585959):97)
+11-24 20:23:33.498  1217  2489 W GlsClientGrpc: 	at efkz.b(:com.google.android.gms@242335041@24.23.35 (190800-646585959):39)
+11-24 20:23:33.498  1217  2489 W GlsClientGrpc: 	at efkr.a(:com.google.android.gms@242335041@24.23.35 (190800-646585959):274)
+11-24 20:23:33.498  1217  2489 W GlsClientGrpc: 	at ehaz.call(:com.google.android.gms@242335041@24.23.35 (190800-646585959):1026)
+11-24 20:23:33.498  1217  2489 W GlsClientGrpc: 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+11-24 20:23:33.498  1217  2489 W GlsClientGrpc: 	at angs.c(:com.google.android.gms@242335041@24.23.35 (190800-646585959):50)
+11-24 20:23:33.498  1217  2489 W GlsClientGrpc: 	at angs.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):76)
+11-24 20:23:33.498  1217  2489 W GlsClientGrpc: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-24 20:23:33.498  1217  2489 W GlsClientGrpc: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-24 20:23:33.498  1217  2489 W GlsClientGrpc: 	at anmg.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):8)
+11-24 20:23:33.498  1217  2489 W GlsClientGrpc: 	at java.lang.Thread.run(Thread.java:1012)
+11-24 20:23:33.500   564  1181 W ContextImpl: Calling a method in the system process without a qualified user: android.app.ContextImpl.sendBroadcastMultiplePermissions:1332 com.android.server.TelephonyRegistry.broadcastServiceStateChanged:3702 com.android.server.TelephonyRegistry.notifyServiceStateForPhoneId:1759 com.android.internal.telephony.ITelephonyRegistry$Stub.onTransact:546 android.os.Binder.execTransactInternal:1500 
+11-24 20:23:33.502  2798  2798 D nativeloader: Configuring clns-shared-7 for other apk /system/priv-app/DynamicSystemInstallationService/DynamicSystemInstallationService.apk. target_sdk_version=35, uses_libraries=, library_path=/system/priv-app/DynamicSystemInstallationService/lib/x86_64:/system/priv-app/DynamicSystemInstallationService/DynamicSystemInstallationService.apk!/lib/x86_64:/system/lib64:/system_ext/lib64, permitted_path=/data:/mnt/expand:/data/user/0/com.android.dynsystem:/system/priv-app/DynamicSystemInstallationService:/system/lib64:/system_ext/lib64
+11-24 20:23:33.508   564  1181 W ContextImpl: Calling a method in the system process without a qualified user: android.app.ContextImpl.sendBroadcastMultiplePermissions:1332 com.android.server.TelephonyRegistry.broadcastServiceStateChanged:3711 com.android.server.TelephonyRegistry.notifyServiceStateForPhoneId:1759 com.android.internal.telephony.ITelephonyRegistry$Stub.onTransact:546 android.os.Binder.execTransactInternal:1500 
+11-24 20:23:33.510  1450  1736 I TRG.RoutingOracle: (REDACTED) Invocations routing has changed
+11-24 20:23:33.510  1450  1736 I TRG.RoutingOracle: %s
+11-24 20:23:33.511  1217  1217 V MediaRouter: Selecting route: RouteInfo{ name=Phone, description=null, status=null, category=RouteCategory{ name=System types=ROUTE_TYPE_LIVE_AUDIO ROUTE_TYPE_LIVE_VIDEO  groupable=false }, supportedTypes=ROUTE_TYPE_LIVE_AUDIO ROUTE_TYPE_LIVE_VIDEO , presentationDisplay=null }
+11-24 20:23:33.514   564  1181 W ContextImpl: Calling a method in the system process without a qualified user: android.app.ContextImpl.sendBroadcastMultiplePermissions:1332 com.android.server.TelephonyRegistry.broadcastServiceStateChanged:3717 com.android.server.TelephonyRegistry.notifyServiceStateForPhoneId:1759 com.android.internal.telephony.ITelephonyRegistry$Stub.onTransact:546 android.os.Binder.execTransactInternal:1500 
+11-24 20:23:33.515  2798  2798 D CompatChangeReporter: Compat change id reported: 202956589; UID 1000; state: ENABLED
+11-24 20:23:33.518   564   598 I PackageManager: Optimistic bind succeeded.
+11-24 20:23:33.531   920   920 D GlobalActionsDialogLite: Service changed before actions created
+11-24 20:23:33.531   920   920 D GlobalActionsDialogLite: Service changed before actions created
+11-24 20:23:33.531  1217  1808 I FontLog : Pulling font file for id = 3, cache size = 3 [CONTEXT service_id=132 ]
+11-24 20:23:33.542  1100  1100 D ServiceStateProvider: subId=1
+11-24 20:23:33.554  1169  1196 D PackageUpdatedTask: Package updated: mOp=UPDATE packages=[com.vedant.velora]
+11-24 20:23:33.559  2798  2798 V GraphicsEnvironment: Currently set values for:
+11-24 20:23:33.560  2798  2798 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
+11-24 20:23:33.560  2798  2798 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
+11-24 20:23:33.560  2798  2798 V GraphicsEnvironment: Global.Settings values are invalid: number of packages: 0, number of values: 0
+11-24 20:23:33.560  2798  2798 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+11-24 20:23:33.566  1217  2049 I Fitness : OnPackageChangedOperation got intent: Intent { act=android.intent.action.PACKAGE_CHANGED dat=package: flg=0x5000010 pkg=com.google.android.gms cmp=com.google.android.gms/.chimera.PersistentIntentOperationService (has extras) } [CONTEXT service_id=17 ]
+11-24 20:23:33.570  1101  1101 D BootBroadcastReceiver: refresh periodic job from action=android.intent.action.BOOT_COMPLETED
+11-24 20:23:33.570  2729  2789 V RkpdServerInterface: Network request completed successfully.
+11-24 20:23:33.572  2729  2789 I RkpdKeyPoolStats: PoolStats{keysInUse=0, idealTotalSignedKeys=12, keysToGenerate=12, keysUnassigned=0}
+11-24 20:23:33.572  2729  2789 I RkpdProvisioner: Requested number of keys for provisioning: 12
+11-24 20:23:33.573   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 148: Using TAG_CERTIFICATE_NOT_BEFORE: 0
+11-24 20:23:33.573   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 154: Using TAG_CERTIFICATE_NOT_AFTER: 0
+11-24 20:23:33.573   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 159: Got certificate date params:  NotBefore = 0, NotAfter = 0
+11-24 20:23:33.574   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 273: Setting notBefore to 0
+11-24 20:23:33.574   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 282: Setting notAfter to 0
+11-24 20:23:33.577   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 148: Using TAG_CERTIFICATE_NOT_BEFORE: 0
+11-24 20:23:33.577   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 154: Using TAG_CERTIFICATE_NOT_AFTER: 0
+11-24 20:23:33.577   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 159: Got certificate date params:  NotBefore = 0, NotAfter = 0
+11-24 20:23:33.577   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 273: Setting notBefore to 0
+11-24 20:23:33.577   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 282: Setting notAfter to 0
+11-24 20:23:33.578   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 148: Using TAG_CERTIFICATE_NOT_BEFORE: 0
+11-24 20:23:33.578   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 154: Using TAG_CERTIFICATE_NOT_AFTER: 0
+11-24 20:23:33.578   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 159: Got certificate date params:  NotBefore = 0, NotAfter = 0
+11-24 20:23:33.578   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 273: Setting notBefore to 0
+11-24 20:23:33.578   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 282: Setting notAfter to 0
+11-24 20:23:33.579   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 148: Using TAG_CERTIFICATE_NOT_BEFORE: 0
+11-24 20:23:33.580   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 154: Using TAG_CERTIFICATE_NOT_AFTER: 0
+11-24 20:23:33.581   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 159: Got certificate date params:  NotBefore = 0, NotAfter = 0
+11-24 20:23:33.581   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 273: Setting notBefore to 0
+11-24 20:23:33.581   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 282: Setting notAfter to 0
+11-24 20:23:33.582   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 148: Using TAG_CERTIFICATE_NOT_BEFORE: 0
+11-24 20:23:33.582   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 154: Using TAG_CERTIFICATE_NOT_AFTER: 0
+11-24 20:23:33.583   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 159: Got certificate date params:  NotBefore = 0, NotAfter = 0
+11-24 20:23:33.583   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 273: Setting notBefore to 0
+11-24 20:23:33.583   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 282: Setting notAfter to 0
+11-24 20:23:33.583   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 148: Using TAG_CERTIFICATE_NOT_BEFORE: 0
+11-24 20:23:33.583   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 154: Using TAG_CERTIFICATE_NOT_AFTER: 0
+11-24 20:23:33.583   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 159: Got certificate date params:  NotBefore = 0, NotAfter = 0
+11-24 20:23:33.584   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 273: Setting notBefore to 0
+11-24 20:23:33.584   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 282: Setting notAfter to 0
+11-24 20:23:33.584   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 148: Using TAG_CERTIFICATE_NOT_BEFORE: 0
+11-24 20:23:33.585   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 154: Using TAG_CERTIFICATE_NOT_AFTER: 0
+11-24 20:23:33.585   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 159: Got certificate date params:  NotBefore = 0, NotAfter = 0
+11-24 20:23:33.585   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 273: Setting notBefore to 0
+11-24 20:23:33.585   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 282: Setting notAfter to 0
+11-24 20:23:33.586  1571  2782 W chromium: [1124/202333.574792:WARNING:url_request_context_config.cc(716)] Unrecognized Cronet experimental option "enable_telemetry" with params "false
+11-24 20:23:33.586  1571  2782 W chromium: 
+11-24 20:23:33.586   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 148: Using TAG_CERTIFICATE_NOT_BEFORE: 0
+11-24 20:23:33.586   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 154: Using TAG_CERTIFICATE_NOT_AFTER: 0
+11-24 20:23:33.586   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 159: Got certificate date params:  NotBefore = 0, NotAfter = 0
+11-24 20:23:33.586   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 273: Setting notBefore to 0
+11-24 20:23:33.586   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 282: Setting notAfter to 0
+11-24 20:23:33.588  1217  2291 I NearbySharing: Bluetooth is enabled [CONTEXT service_id=194 ]
+11-24 20:23:33.588   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 148: Using TAG_CERTIFICATE_NOT_BEFORE: 0
+11-24 20:23:33.588   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 154: Using TAG_CERTIFICATE_NOT_AFTER: 0
+11-24 20:23:33.588   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 159: Got certificate date params:  NotBefore = 0, NotAfter = 0
+11-24 20:23:33.588   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 273: Setting notBefore to 0
+11-24 20:23:33.588   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 282: Setting notAfter to 0
+11-24 20:23:33.589   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 148: Using TAG_CERTIFICATE_NOT_BEFORE: 0
+11-24 20:23:33.589   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 154: Using TAG_CERTIFICATE_NOT_AFTER: 0
+11-24 20:23:33.589   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 159: Got certificate date params:  NotBefore = 0, NotAfter = 0
+11-24 20:23:33.589   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 273: Setting notBefore to 0
+11-24 20:23:33.589   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 282: Setting notAfter to 0
+11-24 20:23:33.589   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 148: Using TAG_CERTIFICATE_NOT_BEFORE: 0
+11-24 20:23:33.589   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 154: Using TAG_CERTIFICATE_NOT_AFTER: 0
+11-24 20:23:33.589   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 159: Got certificate date params:  NotBefore = 0, NotAfter = 0
+11-24 20:23:33.589   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 273: Setting notBefore to 0
+11-24 20:23:33.590   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 282: Setting notAfter to 0
+11-24 20:23:33.590   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 148: Using TAG_CERTIFICATE_NOT_BEFORE: 0
+11-24 20:23:33.590   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 154: Using TAG_CERTIFICATE_NOT_AFTER: 0
+11-24 20:23:33.590   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 159: Got certificate date params:  NotBefore = 0, NotAfter = 0
+11-24 20:23:33.590   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 273: Setting notBefore to 0
+11-24 20:23:33.590   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 282: Setting notAfter to 0
+11-24 20:23:33.593  2729  2789 I RkpdServerInterface: request_id: 75f37af5-59dc-4b84-b934-e0a98f35a09d
+11-24 20:23:33.593  2729  2789 V RkpdServerInterface: Requesting data from server. Attempt 1
+11-24 20:23:33.601  1217  2291 I NearbySharing: Stopping scanning because Nearby Sharing is disabled. [CONTEXT service_id=194 ]
+11-24 20:23:33.603  1217  2291 I NearbySharing: Stopping Fast Init advertisement because we're not scanning in the foreground. [CONTEXT service_id=194 ]
+11-24 20:23:33.615  1217  2169 I FontLog : Received query Google Sans:700, URI content://com.google.android.gms.fonts [CONTEXT service_id=132 ]
+11-24 20:23:33.619  1571  1807 W NamedFutures: (REDACTED) Timeout future task has been cancelled: %d milliseconds
+11-24 20:23:33.628  1217  2169 I FontLog : Query [Google Sans:700] resolved to {Google Sans, wdth 100.0, wght 700, ital 0.0, bestEffort false} [CONTEXT service_id=132 ]
+11-24 20:23:33.646  1101  1101 D PeriodicJobManager: schedule next alarm job at Nov 24, 2026, 21:00:00
+11-24 20:23:33.658  1571  2204 W SearchServiceCore: Abort, client detached.
+11-24 20:23:33.658  1571  2204 W SearchServiceCore: Abort, client detached.
+11-24 20:23:33.659   365   365 D Zygote  : Forked child process 2819
+11-24 20:23:33.665   564   600 I ActivityManager: Start proc 2819:com.android.dynsystem:dynsystem/1000 for service {com.android.dynsystem/com.android.dynsystem.DynamicSystemInstallationService}
+11-24 20:23:33.665  1101  1101 D BatterySettingsMigrateChecker: onReceive: Intent { act=android.intent.action.BOOT_COMPLETED flg=0x89000010 cmp=com.android.settings/.fuelgauge.BatterySettingsMigrateChecker (has extras) } owner: true
+11-24 20:23:33.665  1101  1101 D BatterySettingsMigrateChecker: invoke verifySaverConfiguration()
+11-24 20:23:33.669  1101  1101 D BatterySettingsMigrateChecker: invoke verifyOptimizationModes()
+11-24 20:23:33.688   564   599 D CompatChangeReporter: Compat change id reported: 151861875; UID 1027; state: ENABLED
+11-24 20:23:33.689   564   599 V GrammaticalInflectionUtils: AttributionSource: AttributionSource { uid = 1027, packageName = null, attributionTag = null, token = android.os.Binder@3c2629a, deviceId = 0, next = null } does not have READ_SYSTEM_GRAMMATICAL_GENDER permission.
+11-24 20:23:33.703  1571  1831 I GsaConfigFlagsSyncer: Flag sync cancelled.
+11-24 20:23:33.727   365   365 D Zygote  : Forked child process 2820
+11-24 20:23:33.729   564   600 I ActivityManager: Start proc 2820:com.android.nfc/1027 for broadcast {com.android.nfc/com.android.nfc.NfcBootCompletedReceiver}
+11-24 20:23:33.742  1571  1571 I NTF.BroadcastReceiver: (REDACTED) #onReceive:%s %d
+11-24 20:23:33.744  1100  1100 E CarrierConfigLoader: Received response for stale request.
+11-24 20:23:33.746  1100  1100 D CarrierConfigLoader: Connected to config app: com.android.carrierconfig/.DefaultCarrierConfigService
+11-24 20:23:33.747  1101  1101 E SmsApplication: com.google.android.apps.messaging lost android:read_cell_broadcasts:  (fixing)
+11-24 20:23:33.747   564  1584 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 10131, code = READ_CELL_BROADCASTS, mode = allow, callingUid = 1000, oldMode = allow
+11-24 20:23:33.770  1100  1100 I Telephony: TelecomAccountRegistry$TelecomAccountTelephonyCallback: onServiceStateChanged: newState=0, mServiceState=0
+11-24 20:23:33.771  1571  1571 I GeofenceRecovery: #onReceive GeofenceRecoveryReceiver
+11-24 20:23:33.774  1100  1100 W Telephony: registerMmTelCapabilityCallback: registration failed, no ImsService available. Exception: code: 1
+11-24 20:23:33.775  1100  1100 I Telephony: isRttCurrentlySupported -- regular acct, hasVoiceAvailability: false
+11-24 20:23:33.775  1100  1100 I Telephony:  isRttSupported: false
+11-24 20:23:33.775  1100  1100 I Telephony:  alwaysAllowWhileRoaming: false
+11-24 20:23:33.775  1100  1100 I Telephony:  isRoaming: false
+11-24 20:23:33.775  1100  1100 I Telephony:  isOnWfc: false
+11-24 20:23:33.775  1100  1100 W PhoneGlobals: Can't get phone with sub id = -1
+11-24 20:23:33.793  1100  1100 D CarrierConfigLoader: EVENT_CONNECTED_TO_DEFAULT phoneId: 0
+11-24 20:23:33.793  1100  1100 D CarrierConfigLoader: Fetch config for default app: com.android.carrierconfig, carrierId=1
+11-24 20:23:33.796  1957  1970 D DefaultCarrierConfigService: Config being fetched
+11-24 20:23:33.807  1101  1101 W SmsApplication: com.google.android.cellbroadcastreceiver does not have OP_WRITE_SMS:  (fixing)
+11-24 20:23:33.808   564  1181 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 10198, code = READ_SMS, mode = allow, callingUid = 1000, oldMode = allow
+11-24 20:23:33.808   564  1181 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 10198, code = RECEIVE_SMS, mode = allow, callingUid = 1000, oldMode = allow
+11-24 20:23:33.809   564  1554 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 10198, code = RECEIVE_WAP_PUSH, mode = allow, callingUid = 1000, oldMode = allow
+11-24 20:23:33.809   564  1593 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 10198, code = SEND_SMS, mode = allow, callingUid = 1000, oldMode = allow
+11-24 20:23:33.809   564  1539 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 10198, code = READ_CELL_BROADCASTS, mode = allow, callingUid = 1000, oldMode = allow
+11-24 20:23:33.810   564  1542 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_SMS, mode = allow, callingUid = 1000, oldMode = allow
+11-24 20:23:33.813   564  1542 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_SMS, mode = allow, callingUid = 1000, oldMode = allow
+11-24 20:23:33.814  2729  2789 V RkpdServerInterface: Network request completed successfully.
+11-24 20:23:33.818   564  1584 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_WAP_PUSH, mode = allow, callingUid = 1000, oldMode = allow
+11-24 20:23:33.823  1385  1777 I GoogleSettingsUtils: Updated ID in checkin_id_token file [CONTEXT service_id=130 ]
+11-24 20:23:33.824  1385  1777 I CheckinResponseProcess: From server: 657 gservices [full] [CONTEXT service_id=130 ]
+11-24 20:23:33.831   564  1584 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = SEND_SMS, mode = allow, callingUid = 1000, oldMode = allow
+11-24 20:23:33.832   564  1593 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_CELL_BROADCASTS, mode = allow, callingUid = 1000, oldMode = allow
+11-24 20:23:33.833   507   507 W libgoldfish-rild: Multi-element reporting criteria are not supported with HIDL HAL
+11-24 20:23:33.834  1077  1256 I HeadsetPhoneState: stopListenForPhoneState(), no listener indicates nothing is listening
+11-24 20:23:33.835  1077  1256 W HeadsetPhoneState: startListenForPhoneState, no event to listen
+11-24 20:23:33.850   564   839 D ConnectivityService: NetReassign [no changes] [c 0] [a 19] [i 0]
+11-24 20:23:33.860  2729  2789 I RkpdProvisioner: Total provisioned keys: 12
+11-24 20:23:33.862  2729  2789 I RkpdRegistrationBinder: No key assigned, looking for an available key with expiry of 2026-11-27T20:23:33.862467Z
+11-24 20:23:33.866   507   507 W libgoldfish-rild: Multi-element reporting criteria are not supported with HIDL HAL
+11-24 20:23:33.875  1442  1478 I ogle.android.as: Background concurrent mark compact GC freed 7789KB AllocSpace bytes, 3(120KB) LOS objects, 49% free, 7509KB/14MB, paused 105.076ms,154.855ms total 1.946s
+11-24 20:23:33.876  1442  1480 W ogle.android.as: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/Velvet/Velvet.apk' with 1 weak references
+11-24 20:23:33.877  1442  1480 W ogle.android.as: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~VkY2lp9BEsJ69StGDNNC7g==/com.android.chrome-fdr3FOzsqpHU5_nh5THSfA==/Chrome.apk' with 1 weak references
+11-24 20:23:33.877  1442  1480 W ogle.android.as: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~WBLSe_FHULCXkWh7G2Nygw==/com.google.android.trichromelibrary_636771938-CnnY2rg-uwO4bjpcnbD8mg==/TrichromeLibrary.apk' with 1 weak references
+11-24 20:23:33.877  1442  1480 W ogle.android.as: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/SystemUIGoogle/SystemUIGoogle.apk' with 1 weak references
+11-24 20:23:33.877  1442  1480 W ogle.android.as: ApkAssets: Deleting an ApkAssets object '/vendor/overlay/SystemUIGoogle__sdk_gphone64_x86_64__auto_generated_rro_vendor.apk' with 1 weak references
+11-24 20:23:33.877  1442  1480 W ogle.android.as: ApkAssets: Deleting an ApkAssets object '/product/overlay/SystemUIGoogle__sdk_gphone64_x86_64__auto_generated_rro_product.apk' with 1 weak references
+11-24 20:23:33.877  1442  1480 W ogle.android.as: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/Drive/Drive.apk' with 1 weak references
+11-24 20:23:33.882  1385  1941 E PhenotypeFlagCommitter: Retrieving snapshot for com.google.android.gms.playlog.uploader failed
+11-24 20:23:33.882  1385  1941 E PhenotypeFlagCommitter: java.util.concurrent.TimeoutException: Timed out waiting for Task
+11-24 20:23:33.882  1385  1941 E PhenotypeFlagCommitter: 	at dkkh.n(:com.google.android.gms@242335041@24.23.35 (190800-646585959):53)
+11-24 20:23:33.882  1385  1941 E PhenotypeFlagCommitter: 	at czsy.f(:com.google.android.gms@242335041@24.23.35 (190800-646585959):11)
+11-24 20:23:33.882  1385  1941 E PhenotypeFlagCommitter: 	at czsy.j(:com.google.android.gms@242335041@24.23.35 (190800-646585959):42)
+11-24 20:23:33.882  1385  1941 E PhenotypeFlagCommitter: 	at czsy.h(:com.google.android.gms@242335041@24.23.35 (190800-646585959):4)
+11-24 20:23:33.882  1385  1941 E PhenotypeFlagCommitter: 	at com.google.android.gms.clearcut.init.ClearcutInitChimeraIntentService.b(:com.google.android.gms@242335041@24.23.35 (190800-646585959):45)
+11-24 20:23:33.882  1385  1941 E PhenotypeFlagCommitter: 	at ajjh.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):143)
+11-24 20:23:33.882  1385  1941 E PhenotypeFlagCommitter: 	at com.google.android.chimera.IntentOperation.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):2)
+11-24 20:23:33.882  1385  1941 E PhenotypeFlagCommitter: 	at ajom.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):8)
+11-24 20:23:33.882  1385  1941 E PhenotypeFlagCommitter: 	at pkf.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):70)
+11-24 20:23:33.882  1385  1941 E PhenotypeFlagCommitter: 	at pke.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):152)
+11-24 20:23:33.882  1385  1941 E PhenotypeFlagCommitter: 	at emsz.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):21)
+11-24 20:23:33.882  1385  1941 E PhenotypeFlagCommitter: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-24 20:23:33.882  1385  1941 E PhenotypeFlagCommitter: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-24 20:23:33.882  1385  1941 E PhenotypeFlagCommitter: 	at java.lang.Thread.run(Thread.java:1012)
+11-24 20:23:33.884  1442  1480 W ogle.android.as: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/Maps/Maps.apk' with 1 weak references
+11-24 20:23:33.886  1442  1480 W ogle.android.as: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/Photos/Photos.apk' with 1 weak references
+11-24 20:23:33.888   564   583 D WifiNl80211Manager: Scan result ready event
+11-24 20:23:33.888   564   583 D WifiNative: Scan result ready event
+11-24 20:23:33.888  2729  2789 I RkpdKeyPoolStats: Sufficient keys are available, no CSR needed.
+11-24 20:23:33.888  2729  2789 I RkpdKeyPoolStats: PoolStats{keysInUse=1, idealTotalSignedKeys=13, keysToGenerate=0, keysUnassigned=11}
+11-24 20:23:33.904  1442  1480 W ogle.android.as: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/WellbeingPrebuilt/WellbeingPrebuilt.apk' with 1 weak references
+11-24 20:23:33.905  1442  1480 W ogle.android.as: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/YouTubeMusicPrebuilt/YouTubeMusicPrebuilt.apk' with 1 weak references
+11-24 20:23:33.905   564   832 I HalDevMgr: bestIfaceCreationProposal is null, requestIface=STA, existingIface=[name=wlan0 type=STA]
+11-24 20:23:33.906  1442  1480 W ogle.android.as: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/CalendarGooglePrebuilt/CalendarGooglePrebuilt.apk' with 1 weak references
+11-24 20:23:33.907  1442  1480 W ogle.android.as: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/GoogleContacts/GoogleContacts.apk' with 1 weak references
+11-24 20:23:33.907  2820  2820 I com.android.nfc: Using CollectorTypeCMC GC.
+11-24 20:23:33.907  2820  2820 W com.android.nfc: Unexpected CPU variant for x86: x86_64.
+11-24 20:23:33.907  2820  2820 W com.android.nfc: Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, goldmont-without-sha-xsaves, tremont, kabylake, default
+11-24 20:23:33.911  2819  2819 I ystem:dynsystem: Using CollectorTypeCMC GC.
+11-24 20:23:33.911  2819  2819 W ystem:dynsystem: Unexpected CPU variant for x86: x86_64.
+11-24 20:23:33.911  2819  2819 W ystem:dynsystem: Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, goldmont-without-sha-xsaves, tremont, kabylake, default
+11-24 20:23:33.912  1442  1480 W ogle.android.as: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/PrebuiltDeskClockGoogle/PrebuiltDeskClockGoogle.apk' with 1 weak references
+11-24 20:23:33.912  1442  1480 W ogle.android.as: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/SettingsIntelligenceGooglePrebuilt/SettingsIntelligenceGooglePrebuilt.apk' with 1 weak references
+11-24 20:23:33.913  1442  1480 W ogle.android.as: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/YouTube/YouTube.apk' with 1 weak references
+11-24 20:23:33.915  2729  2789 I RkpdRegistrationBinder: Key successfully assigned to client
+11-24 20:23:33.917   564   564 I RemoteProvisionSysSvc: Successfully fetched key for client 111785242
+11-24 20:23:33.918  2820  2820 E com.android.nfc: Not starting debugger since process cannot load the jdwp agent.
+11-24 20:23:33.921  2819  2819 E ystem:dynsystem: Not starting debugger since process cannot load the jdwp agent.
+11-24 20:23:33.922  1077  1256 I HeadsetPhoneState: stopListenForPhoneState(), no listener indicates nothing is listening
+11-24 20:23:33.922  1077  1256 W HeadsetPhoneState: startListenForPhoneState, no event to listen
+11-24 20:23:33.924  1101  1101 E SmsApplication: com.google.android.apps.messaging lost android:read_cell_broadcasts:  (fixing)
+11-24 20:23:33.924   564  1181 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 10131, code = READ_CELL_BROADCASTS, mode = allow, callingUid = 1000, oldMode = allow
+11-24 20:23:33.925  1217  2585 I GCoreUlr: Unbound from all signal providers.
+11-24 20:23:33.925   564  1563 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_SMS, mode = allow, callingUid = 1000, oldMode = allow
+11-24 20:23:33.925   564  1539 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_SMS, mode = allow, callingUid = 1000, oldMode = allow
+11-24 20:23:33.927   564   584 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_WAP_PUSH, mode = allow, callingUid = 1000, oldMode = allow
+11-24 20:23:33.927   564  2086 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = SEND_SMS, mode = allow, callingUid = 1000, oldMode = allow
+11-24 20:23:33.927   564   583 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_CELL_BROADCASTS, mode = allow, callingUid = 1000, oldMode = allow
+11-24 20:23:33.928  1101  1101 D BatteryOptimizeUtils: refresh com.google.android.deskclock state, allowlisted = false, mode = 0
+11-24 20:23:33.928   920  1063 D BatteryInfoBroadcast: computeChargeTimeRemaining=-1
+11-24 20:23:33.928  1217  2169 I FontLog : Font PFD returned from cache for {Google Sans, wdth 100.0, wght 700, ital 0.0, bestEffort false} [CONTEXT service_id=132 ]
+11-24 20:23:33.928  1217  2169 I FontLog : Fetch {Google Sans, wdth 100.0, wght 700, ital 0.0, bestEffort false} end status Status{statusCode=SUCCESS, resolution=null} [CONTEXT service_id=132 ]
+11-24 20:23:33.930  1101  1101 W DynamicDenylistManager: resetDenylistIfNeeded: there is no valid UIDs
+11-24 20:23:33.930  1101  1101 I DynamicDenylistManager: clearSharedPreferences()
+11-24 20:23:33.930   920  1063 D BatteryInfoBroadcast: onReceive: PNW.batteryStatusChanged, saverMode: false, remainingTime: -1, timeToFull: -1
+11-24 20:23:33.941   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 148: Using TAG_CERTIFICATE_NOT_BEFORE: 0
+11-24 20:23:33.941   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 154: Using TAG_CERTIFICATE_NOT_AFTER: 2461449600000
+11-24 20:23:33.941   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 159: Got certificate date params:  NotBefore = 0, NotAfter = 2461449600000
+11-24 20:23:33.941   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 273: Setting notBefore to 0
+11-24 20:23:33.941   181   181 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 282: Setting notAfter to 2461449600
+--------- beginning of kernel
+11-24 20:23:34.119     0     0 I servicemanager: Caller(pid=177,uid=1017,sid=u:r:keystore:s0) Found android.hardware.security.keymint.IRemotelyProvisionedComponent/default in device VINTF manifest.
+11-24 20:23:33.943  2820  2820 D nativeloader: Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok
+11-24 20:23:33.947  2819  2819 D nativeloader: Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok
+11-24 20:23:33.950   507   507 W libgoldfish-rild: Multi-element reporting criteria are not supported with HIDL HAL
+11-24 20:23:33.954  1217  2142 I FontLog : Pulling font file for id = 4, cache size = 4 [CONTEXT service_id=132 ]
+11-24 20:23:33.962  1100  1100 D CarrierConfigLoader: Save carrier config to cache. phoneId=0, xml=carrierconfig-com.android.carrierconfig-89860318640220133897-1.xml, version=1
+11-24 20:23:33.962  1385  2355 I Icing   : IndexChimeraService.getServiceInterface callingPackage=com.google.android.gms componentName=null serviceId=36
+11-24 20:23:33.964  1217  1220 W .gms.persistent: Missing inline cache for void aldi.c(android.content.Context, fkgb)
+11-24 20:23:33.966  1217  1220 W .gms.persistent: Missing inline cache for void aldi.c(android.content.Context, fkgb)
+11-24 20:23:33.966  1217  1220 W .gms.persistent: Missing inline cache for void aldi.c(android.content.Context, fkgb)
+11-24 20:23:33.966  1217  1220 W .gms.persistent: Missing inline cache for void aldi.c(android.content.Context, fkgb)
+11-24 20:23:33.966  1217  1220 W .gms.persistent: Missing inline cache for void aldi.c(android.content.Context, fkgb)
+11-24 20:23:33.966  1217  1220 W .gms.persistent: Missing inline cache for void aldi.c(android.content.Context, fkgb)
+11-24 20:23:33.966  1217  1220 W .gms.persistent: Missing inline cache for void aldi.c(android.content.Context, fkgb)
+11-24 20:23:33.966  1217  1220 W .gms.persistent: Missing inline cache for void aldi.c(android.content.Context, fkgb)
+11-24 20:23:33.967   564  2087 W JobScheduler: Job didn't exist in JobStore: 293d438 #u0a144/-237 com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService
+11-24 20:23:33.972  1217  1220 W .gms.persistent: Missing inline cache for fkeq aldi.b(android.content.Context, byte[], int[], java.lang.String[], int[], byte[][], com.google.android.gms.phenotype.ExperimentTokens[], boolean, java.lang.String[], java.lang.String, boolean, java.lang.String, double, czub, alcy)
+11-24 20:23:33.976  1571  2382 E MicroModelsUtil: (REDACTED) Hotword file group is null with group name: %s, locale: %s
+11-24 20:23:33.981  1571  1801 E A       : mobstoreUri is null!
+11-24 20:23:33.983  1217  1220 W .gms.persistent: Missing inline cache for fkeq aldi.b(android.content.Context, byte[], int[], java.lang.String[], int[], byte[][], com.google.android.gms.phenotype.ExperimentTokens[], boolean, java.lang.String[], java.lang.String, boolean, java.lang.String, double, czub, alcy)
+11-24 20:23:33.983  1217  1220 W .gms.persistent: Missing inline cache for fkeq aldi.b(android.content.Context, byte[], int[], java.lang.String[], int[], byte[][], com.google.android.gms.phenotype.ExperimentTokens[], boolean, java.lang.String[], java.lang.String, boolean, java.lang.String, double, czub, alcy)
+11-24 20:23:33.984  1217  1220 W .gms.persistent: Missing inline cache for fkeq aldi.b(android.content.Context, byte[], int[], java.lang.String[], int[], byte[][], com.google.android.gms.phenotype.ExperimentTokens[], boolean, java.lang.String[], java.lang.String, boolean, java.lang.String, double, czub, alcy)
+11-24 20:23:33.984  1217  1220 W .gms.persistent: Missing inline cache for fkeq aldi.b(android.content.Context, byte[], int[], java.lang.String[], int[], byte[][], com.google.android.gms.phenotype.ExperimentTokens[], boolean, java.lang.String[], java.lang.String, boolean, java.lang.String, double, czub, alcy)
+11-24 20:23:33.984  1217  1220 W .gms.persistent: Missing inline cache for fkeq aldi.b(android.content.Context, byte[], int[], java.lang.String[], int[], byte[][], com.google.android.gms.phenotype.ExperimentTokens[], boolean, java.lang.String[], java.lang.String, boolean, java.lang.String, double, czub, alcy)
+11-24 20:23:33.998  1217  2291 I NearbySharing: Stopping advertising because Nearby Sharing is disabled. [CONTEXT service_id=194 ]
+11-24 20:23:33.998  1217  2561 I Fitness : FitCleanupIntentOperation received Intent android.intent.action.PACKAGE_CHANGED [CONTEXT service_id=17 ]
+11-24 20:23:33.999  1217  1906 I CastDatabase: Loading the database
+11-24 20:23:34.003   364   422 I netd    : tetherGetStats() -> {[]} <0.33ms>
+11-24 20:23:34.005  2351  2362 W System  : A resource failed to call release. 
+11-24 20:23:34.009  1217  2291 I NearbySharing: Starting scanning for Fast Initiation. [CONTEXT service_id=194 ]
+11-24 20:23:34.009  1217  2291 D BluetoothAdapter: isLeEnabled(): ON
+11-24 20:23:34.011  1217  1403 I CastSocket: Adding new CastClientAuthKeyManager. [CONTEXT service_id=161 ]
+11-24 20:23:34.011   920   920 D ZenModeController: Added callback class com.android.systemui.qs.tiles.DndTile$3
+11-24 20:23:34.037   564  2086 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
+11-24 20:23:34.037   564  2086 D PackageManager: Clear ephemeral installer activity
+11-24 20:23:34.041   564  1152 W system_server: Long monitor contention with owner NetworkStats (828) at void android.net.connectivity.com.android.server.net.NetworkStatsService.performPoll(int, android.net.connectivity.com.android.server.net.NetworkStatsEventLogger$PollEvent)(NetworkStatsService.java:2590) waiters=0 in java.lang.String[] android.net.connectivity.com.android.server.net.NetworkStatsService.getAllIfacesSinceBoot(int) for 496ms
+11-24 20:23:34.041   364   422 I netd    : bandwidthSetGlobalAlert(2097152) <0.11ms>
+11-24 20:23:34.042   564   831 W system_server: Long monitor contention with owner NetworkStats (828) at void android.net.connectivity.com.android.server.net.NetworkStatsService.performPoll(int, android.net.connectivity.com.android.server.net.NetworkStatsEventLogger$PollEvent)(NetworkStatsService.java:2590) waiters=1 in void android.net.connectivity.com.android.server.net.NetworkStatsService.noteUidForeground(int, boolean) for 497ms
+11-24 20:23:34.045  2820  2820 D nativeloader: Configuring clns-shared-7 for other apk /apex/com.android.nfcservices/priv-app/NfcNciApexGoogle@AE3A.240806.043/NfcNciApexGoogle.apk. target_sdk_version=35, uses_libraries=, library_path=/apex/com.android.nfcservices/priv-app/NfcNciApexGoogle@AE3A.240806.043/lib/x86_64:/system/lib64:/system_ext/lib64, permitted_path=/data:/mnt/expand:/data/user/0/com.android.nfc:/apex/com.android.nfcservices/priv-app/NfcNciApexGoogle@AE3A.240806.043:/system/lib64:/system_ext/lib64
+11-24 20:23:34.046  2820  2820 D nativeloader: InitApexLibraries:
+11-24 20:23:34.046  2820  2820 D nativeloader:   com_android_adservices: libhpke_jni.so:libtflite_support_classifiers_native.so
+11-24 20:23:34.046  2820  2820 D nativeloader:   com_android_appsearch: libicing.so
+11-24 20:23:34.046  2820  2820 D nativeloader:   com_android_art: libartservice.so
+11-24 20:23:34.046  2820  2820 D nativeloader:   com_android_btservices: libbluetooth_jni.so
+11-24 20:23:34.046  2820  2820 D nativeloader:   com_android_conscrypt: libjavacrypto.so
+11-24 20:23:34.046  2820  2820 D nativeloader:   com_android_mediaprovider: libpdfclient.so
+11-24 20:23:34.046  2820  2820 D nativeloader:   com_android_nfcservices: libnfc_nci_jni.so
+11-24 20:23:34.046  2820  2820 D nativeloader:   com_android_ondevicepersonalization: libfcp_cpp_dep_jni.so:libfcp_hpke_jni.so
+11-24 20:23:34.046  2820  2820 D nativeloader:   com_android_os_statsd: libstats_jni.so
+11-24 20:23:34.046  2820  2820 D nativeloader:   com_android_tethering: libandroid_net_connectivity_com_android_net_module_util_jni.so:libcrypto.so:libframework-connectivity-jni.so:libframework-connectivity-tiramisu-jni.so:libmainlinecronet.121.0.6167.71.so:libservice-connectivity.so:libservice-thread-jni.so:libssl.so
+11-24 20:23:34.046  2820  2820 D nativeloader:   com_android_uwb: libuwb_uci_jni_rust.so
+11-24 20:23:34.046  2820  2820 D nativeloader:   com_android_virt: libvirtualizationservice_jni.so:libvirtualmachine_jni.so
+11-24 20:23:34.046  2820  2820 D CompatChangeReporter: Compat change id reported: 202956589; UID 1027; state: ENABLED
+11-24 20:23:34.050  2820  2820 V GraphicsEnvironment: Currently set values for:
+11-24 20:23:34.050  2820  2820 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
+11-24 20:23:34.050  2820  2820 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
+11-24 20:23:34.050  2820  2820 V GraphicsEnvironment: Global.Settings values are invalid: number of packages: 0, number of values: 0
+11-24 20:23:34.051  2820  2820 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+11-24 20:23:34.054  2819  2819 D nativeloader: Configuring clns-shared-7 for other apk /system/priv-app/DynamicSystemInstallationService/DynamicSystemInstallationService.apk. target_sdk_version=35, uses_libraries=, library_path=/system/priv-app/DynamicSystemInstallationService/lib/x86_64:/system/priv-app/DynamicSystemInstallationService/DynamicSystemInstallationService.apk!/lib/x86_64:/system/lib64:/system_ext/lib64, permitted_path=/data:/mnt/expand:/data/user/0/com.android.dynsystem:/system/priv-app/DynamicSystemInstallationService:/system/lib64:/system_ext/lib64
+11-24 20:23:34.054   920  1063 I QuickAccessWalletTile: QAW service is unavailable, recreating the wallet client.
+11-24 20:23:34.060  2819  2819 D CompatChangeReporter: Compat change id reported: 202956589; UID 1000; state: ENABLED
+11-24 20:23:34.078  2819  2819 V GraphicsEnvironment: Currently set values for:
+11-24 20:23:34.079  2819  2819 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
+11-24 20:23:34.079  2819  2819 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
+11-24 20:23:34.079  2819  2819 V GraphicsEnvironment: Global.Settings values are invalid: number of packages: 0, number of values: 0
+11-24 20:23:34.079  2819  2819 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+11-24 20:23:34.090   564  2087 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
+11-24 20:23:34.090   564  2087 D PackageManager: Clear ephemeral installer activity
+11-24 20:23:34.093   564   599 D CompatChangeReporter: Compat change id reported: 151861875; UID 2000; state: ENABLED
+11-24 20:23:34.096  2819  2819 D DynamicSystemInstallationService: onStartCommand(): action=android.os.image.action.NOTIFY_IF_IN_USE
+11-24 20:23:34.096   564   584 I DynamicSystemService: isInstalled(): false
+11-24 20:23:34.098   564   584 D CompatChangeReporter: Compat change id reported: 311208629; UID 1000; state: ENABLED
+11-24 20:23:34.102   564   623 I ActivityManager: Killing 2820:com.android.nfc/1027 (adj 905): change com.android.nfc
+11-24 20:23:34.106  1217  1906 I SQLiteCastDBHelper: Creating cast database
+11-24 20:23:34.108   564   588 D DisplayManagerService: Drop pending events for gone uid 1027
+11-24 20:23:34.123   365   365 D Zygote  : Forked child process 2848
+11-24 20:23:34.127   365   365 I Zygote  : Process 2820 exited due to signal 9 (Killed)
+11-24 20:23:34.128  1217  1928 I NearbySharing: A new client has bound to the NearbySharingService ClientBridge for calling package com.google.android.gms and PID 1385 [CONTEXT service_id=194 ]
+11-24 20:23:34.134  2848  2848 I m.android.shell: Using CollectorTypeCMC GC.
+11-24 20:23:34.135  2848  2848 W m.android.shell: Unexpected CPU variant for x86: x86_64.
+11-24 20:23:34.135  2848  2848 W m.android.shell: Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, goldmont-without-sha-xsaves, tremont, kabylake, default
+11-24 20:23:34.138  2848  2848 E m.android.shell: Not starting debugger since process cannot load the jdwp agent.
+11-24 20:23:34.157   364   422 I netd    : tetherGetStats() -> {[]} <1.12ms>
+11-24 20:23:34.158   564  1181 V ActivityManager: Got obituary of 2820:com.android.nfc
+11-24 20:23:34.158   564   600 W ActivityManager: Slow operation: 65ms so far, now at startProcess: done updating battery stats
+11-24 20:23:34.159   564   600 W ActivityManager: Slow operation: 65ms so far, now at startProcess: building log message
+11-24 20:23:34.159   564   600 I ActivityManager: Start proc 2848:com.android.shell/2000 for broadcast {com.android.shell/com.android.shell.HeapDumpReceiver}
+11-24 20:23:34.159   564   600 W ActivityManager: Slow operation: 65ms so far, now at startProcess: starting to update pids map
+11-24 20:23:34.159   564   600 W ActivityManager: Slow operation: 65ms so far, now at startProcess: done updating pids map
+11-24 20:23:34.162   564   601 I libprocessgroup: Removed cgroup /sys/fs/cgroup/uid_1027/pid_2820
+11-24 20:23:34.167  2848  2848 D nativeloader: Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok
+11-24 20:23:34.176  1571  1571 I GnpSdk  : (REDACTED) Intent received for action [%s] package [%s].
+11-24 20:23:34.177  1571  1571 I GnpSdk  : Phenotype initialized.
+11-24 20:23:34.181   564  1584 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
+11-24 20:23:34.191  1571  1831 I SodaEnrollmentClient: Already has an initialized EnrollmentManager.
+11-24 20:23:34.194  1571  2035 I A       : getHotwordSpeakerIdModels
+11-24 20:23:34.196  1571  2035 I SodaEnrollmentClient: Returning empty SpeakerId model
+11-24 20:23:34.200  1217  1906 I SQLiteCastStore: 0 CastNetworkInfo instances loaded, 0 CastDeviceInfo instances loaded, 0 paired guest mode devices loaded.
+11-24 20:23:34.204  1385  1390 W gle.android.gms: Suspending all threads took: 5.206ms
+11-24 20:23:34.223  1077  1256 I HeadsetPhoneState: stopListenForPhoneState(), no listener indicates nothing is listening
+11-24 20:23:34.223  1077  1256 W HeadsetPhoneState: startListenForPhoneState, no event to listen
+11-24 20:23:34.224  1100  1100 D CarrierConfigLoader: EVENT_FETCH_DEFAULT_DONE phoneId: 0
+11-24 20:23:34.225  1385  2371 I NearbySharing: Failed to log ADD_QUICK_SETTINGS_TILE, due to checkbox consent is not opt in. [CONTEXT service_id=194 ]
+11-24 20:23:34.227  2847  2847 W BpBinder: Linking to death on android.gui.ISurfaceComposer but there are no threads (yet?) listening to incoming transactions. See ProcessState::startThreadPool and ProcessState::setThreadPoolMaxThreadCount. Generally you should setup the binder threadpool before other initialization steps.
+11-24 20:23:34.227  2847  2847 W ProcessState: Extra binder thread started, but 0 threads requested. Do not use *startThreadPool when zero threads are requested.
+11-24 20:23:34.229  1571  1801 W A       : Couldn't calculate ClientInstanceId, no account name
+11-24 20:23:34.230   564  1584 D PackageManager: Clear ephemeral installer activity
+11-24 20:23:34.237  1100  1100 D CarrierConfigLoader: updateSubscriptionDatabase: phoneId=0
+11-24 20:23:34.240  1571  1801 W A       : Couldn't calculate ClientInstanceId, no AndroidId
+11-24 20:23:34.241   154   154 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.mapper@4.0::IMapper/default in either framework or device VINTF manifest.
+11-24 20:23:34.241  2847  2858 I Gralloc4: mapper 4.x is not supported
+11-24 20:23:34.417     0     0 I servicemanager: Caller(pid=2847,uid=2000,sid=u:r:shell:s0) Could not find android.hardware.graphics.allocator.IAllocator/default in the VINTF manifest. No alternative instances declared in VINTF.
+11-24 20:23:34.270  1571  1571 I GnpSdk  : (REDACTED) Validation OK for action [%s].
+11-24 20:23:34.273  1571  1571 I GnpSdk  : (REDACTED) Submitting Broadcast execution [%d] to tiktok executor.
+11-24 20:23:34.273   564  1542 D SafetySourceDataValidat: No cert check requested for package com.android.settings
+11-24 20:23:34.273  1571  1803 I GnpSdk  : (REDACTED) Executing action in BroadcastReceiver [%s].
+11-24 20:23:34.300  1571  1571 W JobService: onNetworkChanged() not implemented in androidx.work.impl.background.systemjob.SystemJobService. Must override in a subclass.
+11-24 20:23:34.328  1101  1101 I ActiveUnlockStatusUtils: authority not set
+11-24 20:23:34.336   564  1544 D SafetySourceDataValidat: No cert check requested for package com.android.settings
+11-24 20:23:34.337  1100  1100 D MultiSimSettingController: notifySubscriptionInfoChanged
+11-24 20:23:34.338  1101  1101 D PrivateSpaceSafetySrc: Setting safety source data
+11-24 20:23:34.338   564  1559 D SafetySourceDataValidat: No cert check requested for package com.android.settings
+11-24 20:23:34.339   564  1584 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
+11-24 20:23:34.339   564  1584 D PackageManager: Clear ephemeral installer activity
+11-24 20:23:34.339  1101  1101 D BatteryUsageBroadcastReceiver: onReceive:android.intent.action.BATTERY_LEVEL_CHANGED
+11-24 20:23:34.355  1169  1169 D StatsLog: LAUNCHER_ALLAPPS_COUNT
+11-24 20:23:34.363  1101  1101 D PrivateSpaceBroadcastReceiver: Received Intent: android.intent.action.BOOT_COMPLETED
+11-24 20:23:34.364   564   564 I AS.AudioService: onSubscriptionsChanged()
+11-24 20:23:34.366  1100  1100 D MultiSimSettingController: notifySubscriptionInfoChanged
+11-24 20:23:34.368  1101  1101 D PrivateSpaceBroadcastReceiver: Setting component ComponentInfo{com.android.settings/com.android.settings.privatespace.PrivateSpaceAuthenticationActivity} state: 1
+11-24 20:23:34.386  1100  1282 D CellBroadcastConfigTracker-0: IdleState message:5
+11-24 20:23:34.386  1100  1282 D CellBroadcastConfigTracker-0: DefaultState message:5
+11-24 20:23:34.390   564   564 I AS.AudioService: onSubscriptionsChanged()
+11-24 20:23:34.395  1100  1100 D MultiSimSettingController: notifySubscriptionInfoChanged
+11-24 20:23:34.396   564   866 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_CHANGED on user 0
+11-24 20:23:34.396  1100  1282 D CellBroadcastConfigTracker-0: IdleState message:5
+11-24 20:23:34.396  1100  1282 D CellBroadcastConfigTracker-0: DefaultState message:5
+11-24 20:23:34.401   564   884 D ShortcutService: received package broadcast intent: Intent { act=android.intent.action.PACKAGE_CHANGED dat=package: flg=0x5000010 (has extras) }
+11-24 20:23:34.401   564   884 D ShortcutService: changing package: com.android.nfc userId0
+11-24 20:23:34.401   564   884 D ShortcutService: handlePackageRemoved: com.android.nfc user=0
+11-24 20:23:34.415   564   845 E AppOps  : attributionTag VCN not declared in manifest of android
+11-24 20:23:34.431  1100  1100 D CarrierConfigLoader: EVENT_SUBSCRIPTION_INFO_UPDATED phoneId: 0
+11-24 20:23:34.431  2200  2293 D ThemeSanitizerReceiver: No config existed, skipping theme sanitizer
+11-24 20:23:34.437  1100  1282 D CellBroadcastConfigTracker-0: IdleState message:5
+11-24 20:23:34.437  1100  1282 D CellBroadcastConfigTracker-0: DefaultState message:5
+11-24 20:23:34.444   177  2527 W keystore2: system/security/keystore2/watchdog/src/lib.rs:114 - ### Keystore Watchdog report - BEGIN ###
+11-24 20:23:34.444   177  2527 W keystore2: system/security/keystore2/watchdog/src/lib.rs:123 - When extracting from a bug report, please include this header
+11-24 20:23:34.444   177  2527 W keystore2: system/security/keystore2/watchdog/src/lib.rs:124 - and all 1 records below.
+11-24 20:23:34.444   177  2527 W keystore2: system/security/keystore2/watchdog/src/lib.rs:164 - ThreadId(1) KeystoreDB::store_new_key Pending: 500.247343ms Overdue 247.723µs
+11-24 20:23:34.444   177  2527 W keystore2: system/security/keystore2/watchdog/src/lib.rs:175 - ### Keystore Watchdog report - END ###
+11-24 20:23:34.451   564   832 D WifiService: Remove settings for package:com.android.nfc
+11-24 20:23:34.452  1100  1100 D CarrierConfigLoader: Broadcast CARRIER_CONFIG_CHANGED for phone 0, subId=1
+11-24 20:23:34.453   564   832 D WifiConfigManager: Remove all networks for app ApplicationInfo{4b88af3 com.android.nfc}
+11-24 20:23:34.454  1100  1100 D MultiSimSettingController: onSubscriptionsChanged
+11-24 20:23:34.454  1100  1100 D MultiSimSettingController: Carrier config subId 1 is not loaded.
+11-24 20:23:34.454   564   564 I AS.AudioService: onSubscriptionsChanged()
+11-24 20:23:34.455   564   845 E AppOps  : attributionTag VCN not declared in manifest of android
+11-24 20:23:34.455  1100  1100 D MultiSimSettingController: isReadyToReevaluate: subInfoInitialized=true, carrierConfigsLoaded=false, satelliteEnabledOrBeingEnabled=false
+11-24 20:23:34.457  1100  1100 I Telephony: TelecomAccountRegistry: onSubscriptionsChanged - update accounts
+11-24 20:23:34.457   564   832 I PasspointManager: No app ops listener found for com.android.nfc
+11-24 20:23:34.457  1100  1100 I Telephony: PstnIncomingCallNotifier: Unregistering: [0]
+11-24 20:23:34.460   925  2222 I PermissionControllerServiceImpl: Updating user sensitive for uid 1027
+11-24 20:23:34.461  1100  1100 D Telephony: Unregistering: Handler (com.android.internal.telephony.GsmCdmaPhone) {e8b4dfc}
+11-24 20:23:34.462  2200  2232 D DefaultGoogleWallpaperPreferences: getDefaultRecentWallpapers -> had defaults, returning
+11-24 20:23:34.465  1100  1100 I PhoneInterfaceManager: unregisterMmTelCapabilityCallback: 1 is inactive, ignoring unregister.
+11-24 20:23:34.466  1100  1100 I PhoneInterfaceManager: unregisterImsRegistrationCallback: 1is inactive, ignoring unregister.
+11-24 20:23:34.467   564   845 E AppOps  : attributionTag VCN not declared in manifest of android
+11-24 20:23:34.470  1100  1100 I Telephony: TelecomAccountRegistry: setupAccounts: Found 1 phones.  Attempting to register.
+11-24 20:23:34.471   564   832 D WifiService: ACTION_CARRIER_CONFIG_CHANGED, active subId: -1
+11-24 20:23:34.472  1100  1100 I Telephony: TelecomAccountRegistry: setupAccounts: Phone with subscription id 1
+11-24 20:23:34.478   564   564 I Telecom : PhoneAccountRegistrar: getSimCallManager: SimCallManager for subId 1 queried, returning: null: TSI.gSCMFU(a)@AH8🔒
+11-24 20:23:34.482  1100  1100 V SimultaneousCallingTracker: Device is not simultaneous calling capable
+11-24 20:23:34.498  1571  1829 D nativeloader: Load libgeller_jni_lib_split.so using ns product-clns-7 from class loader (caller=/product/priv-app/Velvet/Velvet.apk!classes6.dex): dlopen failed: library "libgeller_jni_lib_split.so" not found
+11-24 20:23:34.502   564  2087 D CompatChangeReporter: Compat change id reported: 297989574; UID 10138; state: ENABLED
+11-24 20:23:34.503  2011  2137 W System.err: Seeding context with ref: 38422308
+11-24 20:23:34.503  2011  2137 W System.err: val in interceptor: null
+11-24 20:23:34.504  1442  2140 W AiAiFed : [AiAi SimpleStorage Federated Collection] Cancelling training failed [mode=FEDERATION, population=aiai/playstore/smartselect/train/en/phone-or-pasted-to-dialer-apps, session=smartselect/train/en/phone-or-pasted-to-dialer-apps]
+11-24 20:23:34.504  1442  2140 W AiAiFed : java.lang.IllegalArgumentException: Unsupported response code3
+11-24 20:23:34.504  1442  2140 W AiAiFed : 	at qgb.run(PG:48)
+11-24 20:23:34.504  1442  2140 W AiAiFed : 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+11-24 20:23:34.504  1442  2140 W AiAiFed : 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+11-24 20:23:34.504  1442  2140 W AiAiFed : 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:307)
+11-24 20:23:34.504  1442  2140 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-24 20:23:34.504  1442  2140 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-24 20:23:34.504  1442  2140 W AiAiFed : 	at java.lang.Thread.run(Thread.java:1012)
+11-24 20:23:34.504  1442  2140 W AiAiFed : [AiAi SimpleStorage Federated Collection] Cancelling training failed [mode=FEDERATION, population=aiai/playstore/smartselect/train/en/phone-or-pasted-to-dialer-apps, session=smartselect/train/en/phone-or-pasted-to-dialer-apps]
+11-24 20:23:34.504  1442  2140 W AiAiFed : zkd: UNKNOWN
+11-24 20:23:34.504  1442  2140 W AiAiFed : 	at zkb.i(PG:3)
+11-24 20:23:34.504  1442  2140 W AiAiFed : 	at aaac.cB(PG:15)
+11-24 20:23:34.504  1442  2140 W AiAiFed : 	at zom.a(PG:32)
+11-24 20:23:34.504  1442  2140 W AiAiFed : 	at zpd.run(PG:7)
+11-24 20:23:34.504  1442  2140 W AiAiFed : 	at zvw.run(PG:17)
+11-24 20:23:34.504  1442  2140 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-24 20:23:34.504  1442  2140 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-24 20:23:34.504  1442  2140 W AiAiFed : 	at java.lang.Thread.run(Thread.java:1012)
+11-24 20:23:34.512   564   673 I RoleService: Granting default roles...
+11-24 20:23:34.513  2541  2541 D CompatChangeReporter: Compat change id reported: 330583731; UID 10138; state: ENABLED
+11-24 20:23:34.514  1571  1829 D nativeloader: Load /product/priv-app/Velvet/Velvet.apk!/lib/x86_64/libgeller_jni_lib.so using ns product-clns-7 from class loader (caller=/product/priv-app/Velvet/Velvet.apk!classes6.dex): ok
+11-24 20:23:34.518  1100  1100 D Telephony: isEmergencyPreferredAccount: subId=1, activeData=-1
+11-24 20:23:34.518  1100  1100 D Telephony: isEmergencyPreferredAccount: Device does not require preference.
+11-24 20:23:34.522  1571  1829 W A       : Account id is not cached
+11-24 20:23:34.523  1571  1829 W A       : Account id is not cached
+11-24 20:23:34.523  1571  1829 W A       : Account id is not cached
+11-24 20:23:34.525  1442  1936 I SP.AiAi : Registering captions_i18n_v0_background.20210623, url: https://storage.googleapis.com/captions/captions_i18n_v0_20210623_manifest.json, constraints: W:b:u:l, flags: bg, requested: 20210623, current: -1
+11-24 20:23:34.531  1009  1062 E SystemServiceRegistry: No service published for: ethernet
+11-24 20:23:34.531  1009  1062 E SystemServiceRegistry: android.os.ServiceManager$ServiceNotFoundException: No service published for: ethernet
+11-24 20:23:34.531  1009  1062 E SystemServiceRegistry: 	at android.os.ServiceManager.getServiceOrThrow(ServiceManager.java:203)
+11-24 20:23:34.531  1009  1062 E SystemServiceRegistry: 	at android.app.SystemServiceRegistry$145.createService(SystemServiceRegistry.java:2120)
+11-24 20:23:34.531  1009  1062 E SystemServiceRegistry: 	at android.app.SystemServiceRegistry$CachedServiceFetcher.getService(SystemServiceRegistry.java:2231)
+11-24 20:23:34.531  1009  1062 E SystemServiceRegistry: 	at android.app.SystemServiceRegistry.getSystemService(SystemServiceRegistry.java:1812)
+11-24 20:23:34.531  1009  1062 E SystemServiceRegistry: 	at android.app.ContextImpl.getSystemService(ContextImpl.java:2241)
+11-24 20:23:34.531  1009  1062 E SystemServiceRegistry: 	at android.content.ContextWrapper.getSystemService(ContextWrapper.java:936)
+11-24 20:23:34.531  1009  1062 E SystemServiceRegistry: 	at com.android.networkstack.tethering.Tethering.isEthernetSupported(Tethering.java:1579)
+11-24 20:23:34.531  1009  1062 E SystemServiceRegistry: 	at com.android.networkstack.tethering.Tethering.makeSupportedDownstreams(Tethering.java:2562)
+11-24 20:23:34.531  1009  1062 E SystemServiceRegistry: 	at com.android.networkstack.tethering.Tethering.updateSupportedDownstreams(Tethering.java:2536)
+11-24 20:23:34.531  1009  1062 E SystemServiceRegistry: 	at com.android.networkstack.tethering.Tethering.updateConfiguration(Tethering.java:549)
+11-24 20:23:34.531  1009  1062 E SystemServiceRegistry: 	at com.android.networkstack.tethering.Tethering.lambda$new$4(Tethering.java:347)
+11-24 20:23:34.531  1009  1062 E SystemServiceRegistry: 	at com.android.networkstack.tethering.Tethering.$r8$lambda$4V1rGOzF7AkW0XBFoABAQmt9cHM(Tethering.java:0)
+11-24 20:23:34.531  1009  1062 E SystemServiceRegistry: 	at com.android.networkstack.tethering.Tethering$$ExternalSyntheticLambda12.accept(R8$$SyntheticClass:0)
+11-24 20:23:34.531  1009  1062 E SystemServiceRegistry: 	at com.android.networkstack.tethering.util.VersionedBroadcastListener$Receiver.onReceive(VersionedBroadcastListener.java:103)
+11-24 20:23:34.531  1009  1062 E SystemServiceRegistry: 	at android.app.LoadedApk$ReceiverDispatcher$Args.lambda$getRunnable$0(LoadedApk.java:1814)
+11-24 20:23:34.531  1009  1062 E SystemServiceRegistry: 	at android.app.LoadedApk$ReceiverDispatcher$Args.$r8$lambda$mcNAAl1SQ4MyJPyDg8TJ2x2h0Rk(Unknown Source:0)
+11-24 20:23:34.531  1009  1062 E SystemServiceRegistry: 	at android.app.LoadedApk$ReceiverDispatcher$Args$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+11-24 20:23:34.531  1009  1062 E SystemServiceRegistry: 	at android.os.Handler.handleCallback(Handler.java:959)
+11-24 20:23:34.531  1009  1062 E SystemServiceRegistry: 	at android.os.Handler.dispatchMessage(Handler.java:100)
+11-24 20:23:34.531  1009  1062 E SystemServiceRegistry: 	at android.os.Looper.loopOnce(Looper.java:232)
+11-24 20:23:34.531  1009  1062 E SystemServiceRegistry: 	at android.os.Looper.loop(Looper.java:317)
+11-24 20:23:34.531  1009  1062 E SystemServiceRegistry: 	at android.os.HandlerThread.run(HandlerThread.java:85)
+11-24 20:23:34.546  1100  1100 I Telephony: isRttCurrentlySupported -- regular acct, hasVoiceAvailability: false
+11-24 20:23:34.546  1100  1100 I Telephony:  isRttSupported: false
+11-24 20:23:34.546  1100  1100 I Telephony:  alwaysAllowWhileRoaming: false
+11-24 20:23:34.546  1100  1100 I Telephony:  isRoaming: false
+11-24 20:23:34.546  1100  1100 I Telephony:  isOnWfc: false
+11-24 20:23:34.548  1517  1517 D CellBroadcastReceiver: onReceive Intent { act=android.telephony.action.CARRIER_CONFIG_CHANGED flg=0x15000010 cmp=com.google.android.cellbroadcastreceiver/com.android.cellbroadcastreceiver.CellBroadcastReceiver (has extras) }
+11-24 20:23:34.550  1442  1956 I TrainerClient: Preparing to schedule training for population:aiai/playstore/smartselect/train/en/pasted-to-maps-apps session_name:smartselect/train/en/pasted-to-maps-apps
+11-24 20:23:34.555  1442  1956 I TrainerClient: Preparing to schedule training for population:aiai/playstore/smartselect/train/en/address-phone-other-translate session_name:smartselect/train/en/address-phone-other-translate
