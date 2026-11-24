@@ -135,6 +135,17 @@ jobs:
           echo "VELORA_CERT_SHA256=${CERT_SHA256}" >> "$GITHUB_ENV"
           printf 'SHA256: %s\n' "$CERT_SHA256" > cert-fingerprint.txt
 
+      - name: Pin isolated test backend before compilation
+        run: |
+          python3 - <<'PYTEST'
+          from pathlib import Path
+          p=Path('src/config.ts')
+          s=p.read_text().replace("process.env.EXPO_PUBLIC_API_URL ?? 'https://velora-api.vedant-753.workers.dev'", "'http://127.0.0.1:8787'")
+          assert "'http://127.0.0.1:8787'" in s
+          p.write_text(s)
+          PYTEST
+          sed -i 's/<application /<application android:usesCleartextTraffic="true" /' android/app/src/main/AndroidManifest.xml
+          rm -rf android/app/build .expo
       - name: 📱 Build Android Release APK
         working-directory: android
         run: |
@@ -146,54 +157,15 @@ jobs:
           VELORA_UPLOAD_KEY_ALIAS: ${{ secrets.VELORA_UPLOAD_KEY_ALIAS }}
           VELORA_UPLOAD_KEY_PASSWORD: ${{ secrets.VELORA_UPLOAD_KEY_PASSWORD }}
 
-      - name: 🔍 Locate & Prepare APK
-        id: prepare_apk
+      - name: Verify isolated backend URL before running emulators
         run: |
-          TAG="${{ steps.stamp.outputs.tag }}"
-          APK_FILE="velora-${TAG}.apk"
-          cp android/app/build/outputs/apk/release/app-release.apk "./${APK_FILE}"
-          ls -lh "./${APK_FILE}"
-          echo "apk_file=${APK_FILE}" >> $GITHUB_OUTPUT
-          echo "tag=${TAG}" >> $GITHUB_OUTPUT
-
-      - name: 🔐 Generate SHA-256 checksum (verified by the in-app updater before install)
-        id: checksum
-        run: |
-          CHECKSUM_FILE="velora-${{ steps.prepare_apk.outputs.tag }}-checksums.txt"
-          sha256sum "./${{ steps.prepare_apk.outputs.apk_file }}" > "./${CHECKSUM_FILE}"
-          cat "./${CHECKSUM_FILE}"
-          echo "checksum_file=${CHECKSUM_FILE}" >> $GITHUB_OUTPUT
-
-      - name: 🔐 Record signing certificate fingerprint (for audit + OAuth registration)
-        run: |
-          TAG="${{ steps.prepare_apk.outputs.tag }}"
-          CERT=$(unzip -p "./velora-${TAG}.apk" META-INF/CERT.RSA 2>/dev/null | keytool -printcert 2>/dev/null | grep -E 'SHA1:|SHA256:' || echo 'unavailable')
-          echo "$CERT" >> $GITHUB_STEP_SUMMARY
-          echo "$CERT"
-
-      - name: Preserve signed APK for native verification before publication
-        uses: actions/upload-artifact@v4
-        with:
-          name: velora-permissions-production
-          path: |
-            ${{ steps.prepare_apk.outputs.apk_file }}
-            ${{ steps.checksum.outputs.checksum_file }}
-            cert-fingerprint.txt
-          retention-days: 1
-          if-no-files-found: error
-
-      - name: Build isolated local-backend verification APK
-        run: |
-          sed -i 's/<application /<application android:usesCleartextTraffic="true" /' android/app/src/main/AndroidManifest.xml
-          cd android
-          ./gradlew assembleRelease --no-daemon
-          cp app/build/outputs/apk/release/app-release.apk /tmp/permission-test.apk
-        env:
-          EXPO_PUBLIC_API_URL: http://127.0.0.1:8787
-          VELORA_UPLOAD_KEYSTORE_PATH: /tmp/velora-upload.keystore
-          VELORA_UPLOAD_STORE_PASSWORD: ${{ secrets.VELORA_UPLOAD_STORE_PASSWORD }}
-          VELORA_UPLOAD_KEY_ALIAS: ${{ secrets.VELORA_UPLOAD_KEY_ALIAS }}
-          VELORA_UPLOAD_KEY_PASSWORD: ${{ secrets.VELORA_UPLOAD_KEY_PASSWORD }}
+          python3 - <<'PYTEST'
+          import zipfile
+          b=zipfile.ZipFile('android/app/build/outputs/apk/release/app-release.apk').read('assets/index.android.bundle')
+          assert b'http://127.0.0.1:8787' in b, 'Local test URL missing: refuse emulator launch'
+          assert b'https://velora-api.vedant-753.workers.dev' not in b, 'Production backend present in isolated test APK'
+          PYTEST
+          cp android/app/build/outputs/apk/release/app-release.apk /tmp/permission-test.apk
       - uses: actions/upload-artifact@v4
         with:
           name: velora-permissions-local-test
@@ -250,10 +222,10 @@ jobs:
           git config user.email ci@velora.local
           EV=$(mktemp -d)
           git worktree add --detach "$EV"
-          git -C "$EV" checkout --orphan ci-evidence/permissions-${{ matrix.api }}
+          git -C "$EV" checkout --orphan ci-evidence/permissions-fixed-${{ matrix.api }}
           git -C "$EV" rm -rf .
           cp -r permission-evidence/. "$EV/" || true
           printf 'run_id=%s\nsha=%s\napi=%s\n' '${{ github.run_id }}' '${{ github.sha }}' '${{ matrix.api }}' > "$EV/META.txt"
           git -C "$EV" add -A
           git -C "$EV" commit -m 'test: native permission evidence'
-          git -C "$EV" push origin HEAD:ci-evidence/permissions-${{ matrix.api }}
+          git -C "$EV" push origin HEAD:ci-evidence/permissions-fixed-${{ matrix.api }}
