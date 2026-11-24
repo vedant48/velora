@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
-        with: { name: velora-production-candidate, path: candidate, github-token: '${{ secrets.GITHUB_TOKEN }}', run-id: 45490858374 }
+        with: { name: velora-production-candidate, path: candidate, github-token: '${{ secrets.GITHUB_TOKEN }}', run-id: 45493634300 }
       - name: Draft asset must be byte-identical to the artifact, source must be the tested commit
         env: { GH_TOKEN: '${{ secrets.GITHUB_TOKEN }}' }
         run: |
