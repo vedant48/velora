@@ -1,0 +1,46 @@
+appId: com.vedant.velora
+---
+- addMedia:
+    - media/velora-picker.jpg
+- launchApp
+- tapOn: 'Log in / Sign up'
+- tapOn: Username
+- inputText: e2e_alice
+- tapOn: Password
+- inputText: e2e-alice-pass-1
+- hideKeyboard
+- tapOn:
+    text: 'Log in'
+    below: Password
+- extendedWaitUntil:
+    visible: E2E Alice
+    timeout: 30000
+- tapOn: Settings
+- assertVisible: Change photo
+- tapOn: Change photo
+- runFlow:
+    when:
+      visible: Allow
+    commands:
+      - tapOn: Allow
+- takeScreenshot: photo-picker
+- tapOn:
+    id: '.*icon_thumbnail'
+- takeScreenshot: photo-crop
+- tapOn: '(?i)crop|done'
+- extendedWaitUntil:
+    visible: Change photo
+    timeout: 30000
+- assertVisible: Remove profile photo
+- takeScreenshot: uploaded-avatar
+- tapOn: Remove profile photo
+- tapOn: '^Remove$'
+- extendedWaitUntil:
+    notVisible: Remove profile photo
+    timeout: 20000
+- takeScreenshot: removed-avatar
+- scrollUntilVisible:
+    element: About & Credits
+    direction: DOWN
+    timeout: 15000
+- takeScreenshot: credits
