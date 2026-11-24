@@ -1,0 +1,47 @@
+name: Store screenshots from released APK
+on:
+  push:
+    branches: [test/uptodown-146-six-captures]
+    paths: [.ci/uptodown-captures]
+permissions:
+  contents: write
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download unchanged published APK
+        run: |
+          mkdir -p store-captures
+          curl -fL https://github.com/vedant48/velora/releases/download/v1.4.6/velora-v1.4.6.apk -o /tmp/velora.apk
+          echo 'd651705e132042312cb3fce554450f297fb781782bcca3a2492152ac1ef376a5  /tmp/velora.apk' | sha256sum -c -
+      - name: Enable emulator acceleration
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          target: google_apis
+          arch: x86_64
+          profile: pixel_2
+          ram-size: 3072
+          disable-animations: false
+          emulator-options: -no-window -gpu swiftshader -no-snapshot -noaudio -no-boot-anim
+          script: python3 scripts/store-captures.py
+      - name: Save capture evidence
+        if: always()
+        run: |
+          git config user.name velora-ci
+          git config user.email ci@velora.local
+          EV=$(mktemp -d)
+          git worktree add --detach "$EV"
+          git -C "$EV" checkout --orphan ci-evidence/uptodown-146-six
+          git -C "$EV" rm -rf .
+          cp -r store-captures/. "$EV/"
+          printf 'run_id=%s\nsource=%s\napk_sha256=d651705e132042312cb3fce554450f297fb781782bcca3a2492152ac1ef376a5\n' '${{ github.run_id }}' '${{ github.sha }}' > "$EV/META.txt"
+          git -C "$EV" add -A
+          git -C "$EV" commit -m 'test: capture released app for store review'
+          git -C "$EV" push origin HEAD:ci-evidence/uptodown-146-six
