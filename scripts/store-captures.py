@@ -49,7 +49,11 @@ root=xml()
 fields=[n for n in root.iter('node') if n.get('class')=='android.widget.EditText']
 if not fields: raise RuntimeError('No search input')
 b=list(map(int,re.findall(r'\d+',fields[0].get('bounds',''))));adb('shell','input','tap',str((b[0]+b[2])//2),str((b[1]+b[3])//2))
-adb('shell','input','text','Interstellar');time.sleep(15);adb('shell','input','keyevent','4');time.sleep(2)
+adb('shell','input','text','The%sMartian');time.sleep(15);adb('shell','input','keyevent','4');time.sleep(2)
 shot('search-dark')
-tap('Interstellar');time.sleep(18);shot('details-dark')
+for n in xml().iter('node'):
+ if n.get('content-desc')=='The Martian' and n.get('class')=='android.widget.Button':
+  b=list(map(int,re.findall(r'\d+',n.get('bounds',''))));adb('shell','input','tap',str((b[0]+b[2])//2),str((b[1]+b[3])//2));break
+else:raise RuntimeError('Exact movie card absent')
+time.sleep(18);shot('details-dark')
 (out/'complete.json').write_text(json.dumps({'apk':'v1.4.6','signed_out':True,'backend_mutations':False,'screens':['movies-dark','movies-lower-dark','series-dark','explore-dark','search-dark','details-dark']}))
