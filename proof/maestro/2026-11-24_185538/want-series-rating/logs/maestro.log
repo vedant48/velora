@@ -1,0 +1,130 @@
+18:55:49.772 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Define variables RUNNING
+18:55:49.776 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Define variables COMPLETED
+18:55:49.777 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Apply configuration RUNNING
+18:55:49.777 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Apply configuration COMPLETED
+18:55:49.777 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Launch app "com.vedant.velora" RUNNING
+18:55:50.346 [DEBUG] maestro.Maestro.setPermissionInternal: Failed to set permission com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE for app com.vedant.velora: shell command failed (exit -1): 
+Exception occurred while executing 'grant':
+java.lang.IllegalArgumentException: Unknown permission com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE
+	at com.android.server.permission.access.permission.PermissionService.setRuntimePermissionGranted(PermissionService.kt:911)
+	at com.android.server.permission.access.permission.PermissionService.access$setRuntimePermissionGranted(PermissionService.kt:108)
+	at com.android.server.permission.access.permission.PermissionService.setRuntimePermissionGranted(PermissionService.kt:809)
+	at com.android.server.permission.access.permission.PermissionService.setRuntimePermissionGranted$default(PermissionService.kt:714)
+	at com.android.server.permission.access.permission.PermissionService.grantRuntimePermission(PermissionService.kt:676)
+	at com.android.server.pm.permission.PermissionManagerService.grantRuntimePermission(PermissionManagerService.java:585)
+	at android.permission.PermissionManager.grantRuntimePermissionInternal(PermissionManager.java:679)
+	at android.permission.PermissionManager.grantRuntimePermission(PermissionManager.java:642)
+	at com.android.server.pm.PackageManagerShellCommand.runGrantRevokePermission(PackageManagerShellCommand.java:2690)
+	at com.android.server.pm.PackageManagerShellCommand.onCommand(PackageManagerShellCommand.java:316)
+	at com.android.modules.utils.BasicShellCommandHandler.exec(BasicShellCommandHandler.java:97)
+	at android.os.ShellCommand.exec(ShellCommand.java:38)
+	at com.android.server.pm.PackageManagerService$IPackageManagerImpl.onShellCommand(PackageManagerService.java:6561)
+	at android.os.Binder.shellCommand(Binder.java:1230)
+	at android.os.Binder.onTransact(Binder.java:1043)
+	at android.content.pm.IPackageManager$Stub.onTransact(IPackageManager.java:4620)
+	at com.android.server.pm.PackageManagerService$IPackageManagerImpl.onTransact(PackageManagerService.java:6545)
+	at android.os.Binder.execTransactInternal(Binder.java:1505)
+	at android.os.Binder.execTransact(Binder.java:1444)
+
+18:55:50.348 [ INFO] maestro.Maestro.launchApp$lambda$6: Launching app com.vedant.velora
+18:55:50.349 [ INFO] maestro.Maestro.launchApp$lambda$6: Stopping com.vedant.velora app during launch
+18:55:50.465 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Launch app "com.vedant.velora" COMPLETED
+18:55:50.467 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "Log in / Sign up" RUNNING
+18:55:52.793 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=Log in / Sign up, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[262,812][459,850], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.TextView, important-for-accessibility=true, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=262, y=812, width=197, height=38))
+18:55:54.778 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+18:55:54.783 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (360, 831) using hierarchy based logic for wait
+18:55:56.556 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+18:55:56.556 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "Log in / Sign up" COMPLETED
+18:55:56.556 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "Username" RUNNING
+18:55:56.733 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=, hintText=Username, ignoreBoundsFiltering=false, resource-id=, clickable=true, bounds=[48,498][672,588], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.EditText, important-for-accessibility=true, error=}, children=[], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=48, y=498, width=624, height=90))
+18:55:58.087 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+18:55:58.088 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (360, 543) using hierarchy based logic for wait
+18:55:59.064 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+18:55:59.064 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "Username" COMPLETED
+18:55:59.064 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Input text e2e_alice RUNNING
+18:55:59.068 [ INFO] maestro.Maestro.inputText: Inputting text: e2e_alice
+18:56:03.484 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Input text e2e_alice COMPLETED
+18:56:03.486 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "Password" RUNNING
+18:56:04.878 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=, hintText=Password, ignoreBoundsFiltering=false, resource-id=, clickable=true, bounds=[48,616][672,706], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.EditText, important-for-accessibility=true, error=}, children=[], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=48, y=616, width=624, height=90))
+18:56:07.234 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+18:56:07.237 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (360, 661) using hierarchy based logic for wait
+18:56:09.561 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+18:56:09.561 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "Password" COMPLETED
+18:56:09.562 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Input text e2e-alice-pass-1 RUNNING
+18:56:09.562 [ INFO] maestro.Maestro.inputText: Inputting text: e2e-alice-pass-1
+18:56:13.247 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Input text e2e-alice-pass-1 COMPLETED
+18:56:13.248 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Hide Keyboard RUNNING
+18:56:13.249 [ INFO] maestro.Maestro.hideKeyboard$lambda$13: Hiding Keyboard
+18:56:14.571 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Hide Keyboard COMPLETED
+18:56:14.572 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "Log in", Below "Password" RUNNING
+18:56:14.674 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=Log in, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[321,759][399,797], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.TextView, important-for-accessibility=true, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=321, y=759, width=78, height=38))
+18:56:15.919 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+18:56:15.920 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (360, 778) using hierarchy based logic for wait
+18:56:20.134 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+18:56:20.134 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "Log in", Below "Password" COMPLETED
+18:56:20.135 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "E2E Alice" is visible RUNNING
+18:56:20.232 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "E2E Alice" is visible COMPLETED
+18:56:20.233 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "Pulp Fiction" is visible RUNNING
+18:56:20.310 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "Pulp Fiction" is visible COMPLETED
+18:56:20.311 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "The Last Kingdom" is visible RUNNING
+18:56:20.460 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "The Last Kingdom" is visible COMPLETED
+18:56:20.460 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Take screenshot 1-want-tab-has-want-series RUNNING
+18:56:20.462 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+18:56:20.464 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+18:56:20.807 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Take screenshot 1-want-tab-has-want-series COMPLETED
+18:56:20.812 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Swipe from (85%, 65%) to (20%, 65%) in 1200 ms RUNNING
+18:56:23.402 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Swipe from (85%, 65%) to (20%, 65%) in 1200 ms COMPLETED
+18:56:23.402 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "Inception" is visible RUNNING
+18:56:23.476 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "Inception" is visible COMPLETED
+18:56:23.477 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Take screenshot 2-watched-tab RUNNING
+18:56:23.477 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+18:56:23.478 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+18:56:23.576 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Take screenshot 2-watched-tab COMPLETED
+18:56:23.577 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Swipe from (85%, 65%) to (20%, 65%) in 1200 ms RUNNING
+18:56:26.184 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Swipe from (85%, 65%) to (20%, 65%) in 1200 ms COMPLETED
+18:56:26.184 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "Breaking Bad" is visible RUNNING
+18:56:26.290 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "Breaking Bad" is visible COMPLETED
+18:56:26.290 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "The Last Kingdom" is not visible RUNNING
+18:56:26.929 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "The Last Kingdom" is not visible COMPLETED
+18:56:26.929 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Take screenshot 3-series-tab-no-want-series RUNNING
+18:56:26.930 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+18:56:26.931 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+18:56:27.093 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Take screenshot 3-series-tab-no-want-series COMPLETED
+18:56:27.093 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "Want" RUNNING
+18:56:27.166 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=Want, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[221,375][276,408], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.TextView, important-for-accessibility=true, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=221, y=375, width=55, height=33))
+18:56:28.419 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+18:56:28.420 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (248, 391) using hierarchy based logic for wait
+18:56:28.791 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "Want" COMPLETED
+18:56:28.792 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Scrolling DOWN until "The Last Kingdom" is visible with speed 40, visibility percentage 100%, timeout 20000 ms, with centering disabled RUNNING
+18:56:29.459 [ WARN] maestro.orchestra.Orchestra.scrollUntilVisible: Error: maestro.MaestroException$ElementNotFound: Element not found: Text matching regex: The Last Kingdom
+18:56:29.503 [ INFO] maestro.Maestro.swipeFromCenter: Swiping UP from center
+18:56:30.869 [ WARN] maestro.orchestra.Orchestra.scrollUntilVisible: Error: maestro.MaestroException$ElementNotFound: Element not found: Text matching regex: The Last Kingdom
+18:56:30.912 [ INFO] maestro.Maestro.swipeFromCenter: Swiping UP from center
+18:56:32.265 [ WARN] maestro.orchestra.Orchestra.scrollUntilVisible: Error: maestro.MaestroException$ElementNotFound: Element not found: Text matching regex: The Last Kingdom
+18:56:32.307 [ INFO] maestro.Maestro.swipeFromCenter: Swiping UP from center
+18:56:33.727 [ WARN] maestro.orchestra.Orchestra.scrollUntilVisible: Error: maestro.MaestroException$ElementNotFound: Element not found: Text matching regex: The Last Kingdom
+18:56:33.771 [ INFO] maestro.Maestro.swipeFromCenter: Swiping UP from center
+18:56:35.339 [ WARN] maestro.orchestra.Orchestra.scrollUntilVisible: Error: maestro.MaestroException$ElementNotFound: Element not found: Text matching regex: The Last Kingdom
+18:56:35.382 [ INFO] maestro.Maestro.swipeFromCenter: Swiping UP from center
+18:56:37.083 [ WARN] maestro.orchestra.Orchestra.scrollUntilVisible: Error: maestro.MaestroException$ElementNotFound: Element not found: Text matching regex: The Last Kingdom
+18:56:37.126 [ INFO] maestro.Maestro.swipeFromCenter: Swiping UP from center
+18:56:38.552 [ WARN] maestro.orchestra.Orchestra.scrollUntilVisible: Error: maestro.MaestroException$ElementNotFound: Element not found: Text matching regex: The Last Kingdom
+18:56:38.596 [ INFO] maestro.Maestro.swipeFromCenter: Swiping UP from center
+18:56:40.000 [ WARN] maestro.orchestra.Orchestra.scrollUntilVisible: Error: maestro.MaestroException$ElementNotFound: Element not found: Text matching regex: The Last Kingdom
+18:56:40.042 [ INFO] maestro.Maestro.swipeFromCenter: Swiping UP from center
+18:56:41.502 [ WARN] maestro.orchestra.Orchestra.scrollUntilVisible: Error: maestro.MaestroException$ElementNotFound: Element not found: Text matching regex: The Last Kingdom
+18:56:41.546 [ INFO] maestro.Maestro.swipeFromCenter: Swiping UP from center
+18:56:42.964 [ WARN] maestro.orchestra.Orchestra.scrollUntilVisible: Error: maestro.MaestroException$ElementNotFound: Element not found: Text matching regex: The Last Kingdom
+18:56:42.967 [ INFO] maestro.Maestro.swipeFromCenter: Swiping UP from center
+18:56:44.399 [ WARN] maestro.orchestra.Orchestra.scrollUntilVisible: Error: maestro.MaestroException$ElementNotFound: Element not found: Text matching regex: The Last Kingdom
+18:56:44.442 [ INFO] maestro.Maestro.swipeFromCenter: Swiping UP from center
+18:56:45.802 [ WARN] maestro.orchestra.Orchestra.scrollUntilVisible: Error: maestro.MaestroException$ElementNotFound: Element not found: Text matching regex: The Last Kingdom
+18:56:45.844 [ INFO] maestro.Maestro.swipeFromCenter: Swiping UP from center
+18:56:47.331 [ WARN] maestro.orchestra.Orchestra.scrollUntilVisible: Error: maestro.MaestroException$ElementNotFound: Element not found: Text matching regex: The Last Kingdom
+18:56:47.373 [ INFO] maestro.Maestro.swipeFromCenter: Swiping UP from center
+18:56:48.766 [ WARN] maestro.orchestra.Orchestra.scrollUntilVisible: Error: maestro.MaestroException$ElementNotFound: Element not found: Text matching regex: The Last Kingdom
+18:56:48.808 [ INFO] maestro.Maestro.swipeFromCenter: Swiping UP from center
+18:56:49.715 [ERROR] maestro.orchestra.Orchestra.executeCommands: [Command execution] CommandFailed: No visible element found: "The Last Kingdom"
+18:56:49.830 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+18:56:49.831 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+18:56:50.086 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Scrolling DOWN until "The Last Kingdom" is visible with speed 40, visibility percentage 100%, timeout 20000 ms, with centering disabled FAILED
