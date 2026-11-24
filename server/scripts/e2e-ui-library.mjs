@@ -3,7 +3,6 @@ const {aliceToken}=JSON.parse(readFileSync('/tmp/e2e-tokens.json','utf8'));
 const rows=[
  {mediaType:'movie',tmdbId:680,title:'Pulp Fiction',posterPath:'/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg',status:'want'},
  {mediaType:'movie',tmdbId:550,title:'Fight Club',posterPath:'/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg',status:'want'},
- {mediaType:'movie',tmdbId:13,title:'Forrest Gump',posterPath:'/arw2vcBveWOVZr6pxd9XTd1TdQa.jpg',status:'want'},
  {mediaType:'movie',tmdbId:27205,title:'Inception',posterPath:'/oYuLEt3zVCKq57qu2F8dT7NIa6f.jpg',status:'watched'},
  {mediaType:'tv',tmdbId:1396,title:'Breaking Bad',posterPath:'/ztkUQFLlC19CCMYHW9o1zWhJRNq.jpg',status:'watching',totalEpisodes:62},
 ];

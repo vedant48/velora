@@ -33,9 +33,9 @@ try:
  tap('Watched');time.sleep(4);shot('watched')
  tap('Series');time.sleep(4);shot('series')
  tap('Breaking Bad','android.widget.Button');time.sleep(12)
- scrollto('All episodes');adb('shell','input','swipe','360','1040','360','650','500');time.sleep(3);shot('episode-before')
+ scrollto('All episodes');adb('shell','input','swipe','360','1100','360','330','650');time.sleep(3);shot('episode-before')
  n=scrollto('Pilot');b=list(map(int,re.findall(r'\d+',n.get('bounds',''))));y=(b[1]+b[3])//2
- adb('shell','input','swipe','85',str(y),'650',str(y),'700');time.sleep(5);shot('episode-after')
+ assert 200<y<1050, f'Episode not fully on screen: {y}';adb('shell','input','swipe','85',str(y),'650',str(y),'700');time.sleep(5);shot('episode-after')
  adb('shell','input','keyevent','4');time.sleep(3)
  tap('Search');time.sleep(2)
  fields=[n for n in xml().iter('node') if n.get('class')=='android.widget.EditText'];hit(fields[0]);adb('shell','input','text','The%sMartian');time.sleep(10);adb('shell','input','keyevent','4');time.sleep(2)
