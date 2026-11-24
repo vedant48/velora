@@ -142,3 +142,23 @@ test('a title that fails validation writes nothing and a rerun fills it fully; e
   assert.equal(r3.results[0].episodesAdded, 0);
   assert.equal((sqlite.prepare('SELECT title t, rating r FROM library_items WHERE tmdb_id=20').get() as any).t, 'Mine');
 });
+
+test('review recovery: interrupted Must title gets its review, user titles and existing reviews are untouched', async () => {
+  // Title + provenance saved by an interrupted earlier import, review lost.
+  await lib.upsert('u1', 'movie', 10, { title: 'Film', status: 'watched', rating: 8 });
+  sqlite.prepare("INSERT INTO import_sources (id, user_id, source, source_id, media_type, tmdb_id) VALUES ('x','u1','must','m1','movie',10)").run();
+  // Title the user already had (no earlier Must provenance) with no review.
+  await lib.upsert('u1', 'movie', 11, { title: 'Mine', status: 'watched', rating: 5 });
+  // Interrupted title whose review the user has since written themselves.
+  await lib.upsert('u1', 'movie', 12, { title: 'Own', status: 'watched', rating: 6 });
+  sqlite.prepare("INSERT INTO import_sources (id, user_id, source, source_id, media_type, tmdb_id) VALUES ('y','u1','must','m3','movie',12)").run();
+  sqlite.prepare("INSERT INTO reviews (id, user_id, media_type, tmdb_id, season_number, rating, body) VALUES ('r','u1','movie',12,0,6,'my words')").run();
+  const { results } = await lib.importMust('u1', { items: [
+    movie(), movie({ mustId: 'm2', tmdbId: 11, review: { body: 'must text 2' } }), movie({ mustId: 'm3', tmdbId: 12, review: { body: 'must text 3' } }) ] });
+  assert.deepEqual(results.map((r) => r.outcome), ['existing_kept', 'existing_kept', 'existing_kept']);
+  const body = (id: number) => (sqlite.prepare('SELECT body b FROM reviews WHERE tmdb_id=? AND season_number=0').get(id) as any)?.b;
+  assert.equal(body(10), 'good');
+  assert.equal(body(11), undefined);
+  assert.equal(body(12), 'my words');
+  assert.equal((sqlite.prepare('SELECT rating r, status s FROM library_items WHERE tmdb_id=10').get() as any).r, 8);
+});

@@ -533,7 +533,18 @@ export class LibraryService {
         });
         // Title review (only when the title was created now: an existing review is never replaced).
         const review = i.review as Record<string, unknown> | null | undefined;
-        if (outcome === 'created' && review && typeof review.body === 'string' && review.body.trim()) {
+        // Recovery: a title saved by an earlier, interrupted Must import (its Must provenance row exists) but
+        // still without a review gets the Must review now. INSERT OR IGNORE never replaces a review, and a title
+        // the user had before any Must import (no earlier provenance row) is never given a review.
+        let recoverReview = false;
+        if (existing && review && typeof review.body === 'string' && review.body.trim()) {
+          const prior = await this.db.first(
+            "SELECT 1 AS x FROM import_sources WHERE user_id = ? AND source = 'must' AND source_id = ? AND media_type = ? AND tmdb_id = ?",
+            [userId, mustId, mediaType, tmdbId],
+          );
+          recoverReview = !!prior;
+        }
+        if ((outcome === 'created' || recoverReview) && review && typeof review.body === 'string' && review.body.trim()) {
           stmts.push({
             sql: `INSERT OR IGNORE INTO reviews (id, user_id, media_type, tmdb_id, season_number, rating, body)
              VALUES (?, ?, ?, ?, 0, ?, ?)`,
