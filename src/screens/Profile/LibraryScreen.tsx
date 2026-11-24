@@ -314,7 +314,7 @@ export const LibraryScreen: React.FC = () => {
     <View style={[styles.root, { paddingTop: insets.top }]}>
       {/* Owner rule (25 Nov): no VELORA text; app icon only on the left, settings + overflow on the right. */}
       <View style={styles.topRow}>
-        <Image source={require('../../assets/icon.png')} style={styles.brandIcon} accessibilityLabel="Velora" />
+        <Image source={require('../../../assets/icon.png')} style={styles.brandIcon} accessibilityLabel="Velora" />
         <View style={styles.topActions}>
           <Pressable onPress={() => navigation.navigate('Account')} style={styles.topButton} accessibilityLabel="Settings"><Ionicons name="settings-sharp" size={16} color={colors.textTertiary} /></Pressable>
           <Pressable onPress={() => setMenuVisible(true)} style={styles.topButton} accessibilityLabel="More profile actions"><Ionicons name="ellipsis-vertical" size={18} color={colors.textTertiary} /></Pressable>
