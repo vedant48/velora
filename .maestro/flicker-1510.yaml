@@ -1,0 +1,27 @@
+appId: com.vedant.velora
+---
+# Fast fling cycles across the collapse boundary - the user's reported flicker zone
+- launchApp
+- extendedWaitUntil:
+    visible: E2E Alice
+    timeout: 30000
+- takeScreenshot: f0-before
+- swipe: { direction: UP, duration: 120 }
+- swipe: { direction: UP, duration: 120 }
+- swipe: { direction: DOWN, duration: 120 }
+- swipe: { direction: DOWN, duration: 120 }
+- swipe: { direction: UP, duration: 150 }
+- swipe: { direction: DOWN, duration: 150 }
+- swipe: { direction: UP, duration: 120 }
+- swipe: { direction: UP, duration: 120 }
+- swipe: { direction: UP, duration: 120 }
+- takeScreenshot: f1-collapsed
+- swipe: { direction: DOWN, duration: 120 }
+- swipe: { direction: DOWN, duration: 120 }
+- swipe: { direction: DOWN, duration: 120 }
+- takeScreenshot: f2-restored
+- swipe: { direction: UP, duration: 200 }
+- swipe: { direction: DOWN, duration: 200 }
+- swipe: { direction: UP, duration: 200 }
+- swipe: { direction: DOWN, duration: 200 }
+- takeScreenshot: f3-after-cycles
