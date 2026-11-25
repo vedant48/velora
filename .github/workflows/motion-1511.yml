@@ -13,6 +13,8 @@ jobs:
       EXPO_PUBLIC_API_URL: http://127.0.0.1:8787
     steps:
       - uses: actions/checkout@v4
+      - name: Preflight - resolve every referenced seed/script/flow path before building
+        run: bash scripts/ci-preflight.sh scripts/motion-1511.sh
       - uses: actions/setup-java@v4
         with: { distribution: temurin, java-version: '17' }
       - uses: actions/setup-node@v4
