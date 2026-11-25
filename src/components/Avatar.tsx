@@ -3,6 +3,7 @@ import { Image, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { avatarUrl, sessionToken, VeloraUser } from '../api/velora';
 import { useAppTheme } from '../theme/ThemeContext';
+import { avatarInitials } from '../utils/initials';
 
 /**
  * Shared user avatar: profile photo when the user has one, otherwise a
@@ -33,8 +34,7 @@ export function Avatar({ user, size = 40, letters = 1 }: { user?: Pick<VeloraUse
   }, [uri]);
 
   const radius = size / 2;
-  const base = (user?.displayName || user?.username || '?').trim() || '?';
-  const initial = (letters === 2 ? base.slice(0, 2) : base.charAt(0)).toUpperCase();
+  const initial = avatarInitials(user?.displayName || user?.username, letters);
 
   if (uri && token && !failed) {
     return (
