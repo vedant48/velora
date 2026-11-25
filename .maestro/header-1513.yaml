@@ -1,0 +1,44 @@
+appId: com.vedant.velora
+---
+- runFlow: login-design2.yaml
+- assertVisible: 'Member since.*'
+- assertVisible:
+    id: library-tab-series
+- takeScreenshot: h0-initial
+- swipe:
+    start: 85%, 65%
+    end: 15%, 65%
+    duration: 900
+- takeScreenshot: h1-after-swipe-watched
+- assertVisible: 'Member since.*'
+- swipe:
+    start: 50%, 80%
+    end: 50%, 25%
+    duration: 500
+- takeScreenshot: h2-collapsed-watched
+- swipe:
+    start: 85%, 65%
+    end: 15%, 65%
+    duration: 900
+- takeScreenshot: h3-collapsed-series
+- swipe:
+    start: 15%, 65%
+    end: 85%, 65%
+    duration: 900
+- takeScreenshot: h4-back-watched-collapsed
+- swipe:
+    start: 50%, 30%
+    end: 50%, 85%
+    duration: 400
+- swipe:
+    start: 50%, 30%
+    end: 50%, 85%
+    duration: 400
+- takeScreenshot: h5-expanded
+- assertVisible: 'Member since.*'
+- tapOn:
+    id: library-tab-insights
+- takeScreenshot: h6-insights
+- tapOn:
+    id: library-tab-want
+- takeScreenshot: h7-want
