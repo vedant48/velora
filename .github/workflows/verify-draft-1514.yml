@@ -1,0 +1,40 @@
+name: Verify draft release bytes (v1.5.14)
+on:
+  push:
+    branches: [test/ui-proof-1514]
+    paths: [.ci/verify1514]
+permissions:
+  contents: write
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TAG: v1.5.14
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download draft assets with the workflow token and verify
+        run: |
+          mkdir -p out dl
+          gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json isDraft,tagName,assets,targetCommitish > out/release.json || true
+          gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --dir dl || echo DOWNLOAD_FAILED > out/download.err
+          ls -la dl > out/ls.txt || true
+          APK=$(ls dl/*.apk | head -1); SUMS=$(ls dl/*checksums.txt | head -1)
+          sha256sum "$APK" > out/apk.sha256
+          cp "$SUMS" out/published-checksums.txt
+          BT=$(ls -d $ANDROID_HOME/build-tools/* | sort -V | tail -1)
+          "$BT/apksigner" verify --verbose --print-certs "$APK" > out/apksigner.txt 2>&1 || true
+          "$BT/aapt" dump badging "$APK" | head -3 > out/badging.txt || true
+          mkdir v13; gh release download v1.5.13 --repo "$GITHUB_REPOSITORY" --pattern '*.apk' --dir v13
+          "$BT/apksigner" verify --print-certs v13/*.apk > out/apksigner-v1513.txt 2>&1 || true
+          cat out/apk.sha256 out/published-checksums.txt out/badging.txt; grep -i "SHA-256" out/apksigner.txt out/apksigner-v1513.txt
+      - name: Publish evidence
+        if: always()
+        run: |
+          git config user.email ci@velora.local; git config user.name velora-ci
+          EV=$(mktemp -d); git worktree add --detach "$EV"
+          git -C "$EV" checkout --orphan ci-evidence/verify1514-${{ github.run_id }}
+          git -C "$EV" rm -rf . >/dev/null 2>&1 || true
+          cp -r out "$EV/" 2>/dev/null || true
+          git -C "$EV" add -A; git -C "$EV" commit -m "verify1514 evidence"
+          git -C "$EV" push origin HEAD:ci-evidence/verify1514-${{ github.run_id }}
