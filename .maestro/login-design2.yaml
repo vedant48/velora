@@ -1,0 +1,16 @@
+appId: com.vedant.velora
+---
+# Shared login subflow (design2 auth screen: submit button is "Sign in").
+- launchApp
+- tapOn: 'Log in / Sign up'
+- tapOn: Username
+- inputText: e2e_alice
+- tapOn: Password
+- inputText: e2e-alice-pass-1
+- hideKeyboard
+- tapOn:
+    text: 'Sign in'
+    below: Password
+- extendedWaitUntil:
+    visible: 'E2E Alice.*'
+    timeout: 30000

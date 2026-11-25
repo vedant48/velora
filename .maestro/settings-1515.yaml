@@ -1,0 +1,67 @@
+appId: com.vedant.velora
+---
+- runFlow: login-design2.yaml
+- assertVisible: 'Member since.*'
+- takeScreenshot: p0-home-one-icon
+- swipe:
+    start: 50%, 70%
+    end: 50%, 45%
+    duration: 800
+- takeScreenshot: p1-home-partial-collapse
+- swipe:
+    start: 50%, 85%
+    end: 50%, 15%
+    duration: 400
+- takeScreenshot: p2-home-collapsed
+- tapOn: Series
+- takeScreenshot: p3-series-after-collapse
+- swipe:
+    start: 85%, 60%
+    end: 15%, 60%
+    duration: 300
+- takeScreenshot: p4-swipe-tab
+- scrollUntilVisible:
+    element: 'Member since.*'
+    direction: DOWN
+    timeout: 20000
+- takeScreenshot: p5-expanded
+- tapOn: Settings
+- assertVisible: Settings
+- takeScreenshot: s1-settings-top
+- swipe:
+    start: 50%, 80%
+    end: 50%, 25%
+    duration: 500
+- takeScreenshot: s2-settings-mid
+- swipe:
+    start: 50%, 80%
+    end: 50%, 20%
+    duration: 500
+- takeScreenshot: s3-settings-bottom
+- scrollUntilVisible:
+    element: Appearance
+    direction: UP
+    timeout: 20000
+- tapOn: Appearance
+- takeScreenshot: s4-appearance-sheet
+- tapOn: Cancel
+- scrollUntilVisible:
+    element: Check for updates
+    direction: DOWN
+    timeout: 20000
+- tapOn: Check for updates
+- extendedWaitUntil:
+    visible: '.*(update|Update|Velora is up to date).*'
+    timeout: 20000
+- takeScreenshot: s5-update-check
+- tapOn: OK
+- scrollUntilVisible:
+    element: Activity
+    direction: DOWN
+    timeout: 20000
+- tapOn: Activity
+- takeScreenshot: s6-activity-opens
+- back
+- back
+- assertVisible: 'Member since.*'
+- takeScreenshot: s7-back-home

@@ -8,7 +8,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 
 const API = 'http://127.0.0.1:8787/api';
-const ALICE = { username: 'e2e_alice', password: 'e2e-alice-pass-1', displayName: 'E2E Alice' };
+const ALICE = { username: 'e2e_alice', password: 'e2e-alice-pass-1', displayName: 'E2E Alice Longnametest' };
 const BOB = { username: 'e2e_bob', password: 'e2e-bob-pass-1', displayName: 'E2E Bob' };
 
 async function signup({ username, password, displayName }) {
