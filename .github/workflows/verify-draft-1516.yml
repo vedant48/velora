@@ -1,8 +1,8 @@
-name: Verify draft release bytes (v1.5.16)
+name: Verify and publish v1.5.16 draft
 on:
   push:
     branches: [test/verify-1516]
-    paths: [.ci/verify1516]
+    paths: [.ci/verify1516b]
 permissions:
   contents: write
   actions: read
@@ -14,42 +14,51 @@ jobs:
       TAG: v1.5.16
     steps:
       - uses: actions/checkout@v4
-      - name: Diagnose failed publish step and list releases
+      - name: Verify draft bytes, add missing checksums asset, publish
         run: |
-          mkdir -p out
-          gh release list --repo "$GITHUB_REPOSITORY" --limit 6 > out/releases.txt 2>&1 || true
-          gh run view 45649400327 --repo "$GITHUB_REPOSITORY" --log-failed 2>&1 | tail -60 > out/failed-1516.log || true
-          gh run view 45646659684 --repo "$GITHUB_REPOSITORY" --log-failed 2>&1 | tail -30 > out/failed-1515.log || true
-      - name: Download draft assets with the workflow token and verify
-        continue-on-error: true
-        run: |
-          mkdir -p out dl
-          gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json isDraft,tagName,assets,targetCommitish > out/release.json || true
-          gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --dir dl || echo DOWNLOAD_FAILED > out/download.err
-          ls -la dl > out/ls.txt || true
-          APK=$(ls dl/*.apk | head -1); SUMS=$(ls dl/*checksums.txt | head -1)
-          sha256sum "$APK" > out/apk.sha256
-          cp "$SUMS" out/published-checksums.txt
+          set -euo pipefail
+          mkdir -p out dl v14
+          gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json isDraft,tagName,assets,targetCommitish > out/release-before.json
+          gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --dir dl
+          ls -la dl > out/ls.txt
+          APK=dl/velora-v1.5.16.apk
           BT=$(ls -d $ANDROID_HOME/build-tools/* | sort -V | tail -1)
-          "$BT/apksigner" verify --verbose --print-certs "$APK" > out/apksigner.txt 2>&1 || true
-          "$BT/aapt" dump badging "$APK" | head -3 > out/badging.txt || true
-          mkdir v14; gh release download v1.5.14 --repo "$GITHUB_REPOSITORY" --pattern '*.apk' --dir v14
-          "$BT/apksigner" verify --print-certs v14/*.apk > out/apksigner-v1514.txt 2>&1 || true
-          cat out/apk.sha256 out/published-checksums.txt out/badging.txt; grep -i "SHA-256" out/apksigner.txt out/apksigner-v1514.txt
-      - name: Remove stray v1.5.15 draft release and tag (draft only, never published)
-        run: |
-          D=$(gh release view v1.5.15 --repo "$GITHUB_REPOSITORY" --json isDraft -q .isDraft 2>/dev/null || echo none)
-          echo "v1.5.15 isDraft=$D" > out/cleanup.txt
-          if [ "$D" = "true" ]; then gh release delete v1.5.15 --repo "$GITHUB_REPOSITORY" --yes --cleanup-tag >> out/cleanup.txt 2>&1 || true; fi
-          gh release view v1.5.15 --repo "$GITHUB_REPOSITORY" >> out/cleanup.txt 2>&1 || echo "v1.5.15 release gone" >> out/cleanup.txt
-          git ls-remote --tags origin v1.5.15 >> out/cleanup.txt 2>&1 || true
+          "$BT/apksigner" verify --verbose --print-certs "$APK" > out/apksigner.txt 2>&1
+          "$BT/aapt" dump badging "$APK" | head -3 > out/badging.txt
+          gh release download v1.5.14 --repo "$GITHUB_REPOSITORY" --pattern '*.apk' --dir v14
+          "$BT/apksigner" verify --print-certs v14/*.apk > out/apksigner-v1514.txt 2>&1
+          cat out/badging.txt
+          grep -q "package: name='com.vedant.velora' versionCode='10516' versionName='1.5.16'" out/badging.txt
+          S_NEW=$(grep -i "certificate SHA-256" out/apksigner.txt | head -1 | awk '{print $NF}')
+          S_OLD=$(grep -i "certificate SHA-256" out/apksigner-v1514.txt | head -1 | awk '{print $NF}')
+          echo "signer new=$S_NEW old=$S_OLD" | tee out/signer.txt
+          [ "$S_NEW" = "8d32a5e1c39a8210b2d5b41cf6774381b0121f73b053ba4626abffcdc43427f3" ]
+          [ "$S_NEW" = "$S_OLD" ]
+          grep -q "Verified using v2 scheme (APK Signature Scheme v2): true" out/apksigner.txt
+          SHA=$(sha256sum "$APK" | awk '{print $1}')
+          echo "apk sha256 $SHA" | tee out/sha.txt
+          gh run view 45649400327 --repo "$GITHUB_REPOSITORY" --log 2>/dev/null | grep -i "sha256\|checksum" | grep -o '[0-9a-f]\{64\}' | sort -u > out/buildlog-hashes.txt || true
+          cat out/buildlog-hashes.txt
+          if [ -s out/buildlog-hashes.txt ]; then grep -q "$SHA" out/buildlog-hashes.txt; echo "matches build log hash" >> out/sha.txt; else echo "no hash found in build log" >> out/sha.txt; fi
+          printf '%s  ./velora-v1.5.16.apk\n' "$SHA" > velora-v1.5.16-checksums.txt
+          cp velora-v1.5.16-checksums.txt out/
+          gh release upload "$TAG" velora-v1.5.16-checksums.txt --repo "$GITHUB_REPOSITORY" --clobber
+          gh release edit "$TAG" --repo "$GITHUB_REPOSITORY" --draft=false --latest
+          sleep 8
+          gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json isDraft,isPrerelease,tagName,assets,url > out/release-after.json
+          mkdir anon; cd anon
+          curl -sSL -o a.apk "https://github.com/$GITHUB_REPOSITORY/releases/download/$TAG/velora-v1.5.16.apk"
+          curl -sSL -o c.txt "https://github.com/$GITHUB_REPOSITORY/releases/download/$TAG/velora-v1.5.16-checksums.txt"
+          sha256sum a.apk > ../out/anon.sha256; cp c.txt ../out/anon-checksums.txt
+          cat ../out/anon.sha256 c.txt
+          [ "$(sha256sum a.apk | awk '{print $1}')" = "$SHA" ]
       - name: Publish evidence
         if: always()
         run: |
           git config user.email ci@velora.local; git config user.name velora-ci
           EV=$(mktemp -d); git worktree add --detach "$EV"
-          git -C "$EV" checkout --orphan ci-evidence/verify1516-${{ github.run_id }}
+          git -C "$EV" checkout --orphan ci-evidence/verify1516b-${{ github.run_id }}
           git -C "$EV" rm -rf . >/dev/null 2>&1 || true
           cp -r out "$EV/" 2>/dev/null || true
-          git -C "$EV" add -A; git -C "$EV" commit -m "verify1516 evidence"
-          git -C "$EV" push origin HEAD:ci-evidence/verify1516-${{ github.run_id }}
+          git -C "$EV" add -A; git -C "$EV" commit -m "verify1516b evidence"
+          git -C "$EV" push origin HEAD:ci-evidence/verify1516b-${{ github.run_id }}
