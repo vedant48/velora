@@ -28,27 +28,28 @@ export const TabNavigator: React.FC = () => {
           bottom: 0,
           left: 0,
           right: 0,
-          backgroundColor: colors.cardBackground,
-          borderTopColor: colors.border,
-          borderTopWidth: 0,
+          backgroundColor: colors.appleTabBar,
+          borderTopColor: colors.appleSeparator,
+          borderTopWidth: StyleSheet.hairlineWidth,
           height: 60 + Math.max(insets.bottom - 6, 0),
           paddingBottom: Math.max(insets.bottom - 4, 6),
           paddingTop: 6,
           elevation: 8,
         },
-        tabBarShowLabel: false,
+        // Apple redesign: labeled tabs (Home / Movies / Series / Explore / Search).
+        tabBarShowLabel: true,
         tabBarActiveTintColor: colors.primary,
-        tabBarInactiveTintColor: colors.textTertiary,
+        tabBarInactiveTintColor: colors.appleText2,
         tabBarLabelStyle: {
           fontSize: 10,
-          fontWeight: '600',
+          fontWeight: '500',
           marginTop: -2,
         },
         tabBarIcon: ({ color, focused, size }) => {
           let iconName: keyof typeof Ionicons.glyphMap = 'home';
 
           if (route.name === 'HomeTab') {
-            iconName = focused ? 'compass' : 'compass-outline';
+            iconName = focused ? 'film' : 'film-outline';
           } else if (route.name === 'SearchTab') {
             iconName = focused ? 'search' : 'search-outline';
           } else if (route.name === 'ProfileTab') {
@@ -79,8 +80,8 @@ export const TabNavigator: React.FC = () => {
         component={MoviesExploreScreen}
         options={{ tabBarLabel: 'Movies', tabBarAccessibilityLabel: 'Explore Movies' }}
       />
-      <Tab.Screen name="TVTab" component={TVExploreScreen} options={{ tabBarAccessibilityLabel: 'Explore TV Series' }} />
-      <Tab.Screen name="ExploreAllTab" component={AllExploreScreen} options={{ tabBarAccessibilityLabel: 'Explore All' }} />
+      <Tab.Screen name="TVTab" component={TVExploreScreen} options={{ tabBarLabel: 'Series', tabBarAccessibilityLabel: 'Explore TV Series' }} />
+      <Tab.Screen name="ExploreAllTab" component={AllExploreScreen} options={{ tabBarLabel: 'Explore', tabBarAccessibilityLabel: 'Explore All' }} />
       <Tab.Screen
         name="SearchTab"
         component={SearchScreen}

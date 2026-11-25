@@ -1,10 +1,9 @@
-import { Expandable } from '../../experience/Expandable';
 import { ratingDistribution } from '../../experience/ratingDistribution';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { FlashList } from '@shopify/flash-list';
 import React, { memo, useCallback, useMemo, useRef, useState } from 'react';
-import { Alert, Animated, Image, Modal, Pressable, RefreshControl, Share, StyleSheet, Text, View } from 'react-native';
+import { Alert, Animated, Image, Modal, Pressable, RefreshControl, Share, StyleSheet, Switch, Text, View } from 'react-native';
 import { ContentPager } from '../../experience/ContentPager';
 import { endedCompleteLast, itemInTab, LibraryTab } from './libraryTabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -16,9 +15,10 @@ import { ActionSheet } from '../../components/Library/ActionSheet';
 import { LibraryCard } from '../../components/Library/LibraryCard';
 import { LibraryQuickAction } from '../../components/Library/LibraryQuickAction';
 import { isEndedComplete, seriesProgress } from '../../components/Library/seriesProgress';
+import { CachedImage } from '../../experience/CachedImage';
 import { useQueries } from '@tanstack/react-query';
 import { getTVDetails } from '../../api/tv';
-import { GC_TIME, STALE_TIME } from '../../api/queries';
+import { GC_TIME, STALE_TIME, useTVDetailsQuery } from '../../api/queries';
 import { checkForUpdate, downloadAndInstall } from '../../services/updates';
 import { useAuth } from '../../state/AuthContext';
 import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
@@ -243,6 +243,21 @@ export const LibraryScreen: React.FC = () => {
     [openItem, removeItem, styles],
   );
 
+  // Apple redesign: the Series tab is a grouped list card with per-series progress bars.
+  const renderSeriesItem = useCallback(
+    ({ item, index }: { item: LibraryItem; index: number }) => (
+      <SeriesRow
+        item={item}
+        first={index === 0}
+        last={index === itemsByTab.series.length - 1}
+        onPress={openItem}
+        onLongPress={i => setQuickItem(i)}
+      />
+    ),
+    [openItem, itemsByTab.series.length],
+  );
+  const renderSeriesSep = useCallback(() => <View style={styles.seriesSep} />, [styles]);
+
   const insights = useMemo(() => {
     const watchedMovies = allItems.filter((i) => i.media_type === 'movie' && i.status === 'watched');
     const series = allItems.filter((i) => itemInTab(i, 'series'));
@@ -259,42 +274,52 @@ export const LibraryScreen: React.FC = () => {
   // Owner rule (25 Nov, with Must reference video): profile details scroll away with the grid;
   // only the Want/Watched/Series/Insights tabs and the filter icon stay pinned at the top.
   // So the identity/stats block lives in each page's list header and the tab row stays fixed.
+  const memberSince = useMemo(() => {
+    if (!user?.createdAt) return '';
+    const d = new Date(user.createdAt);
+    if (isNaN(d.getTime())) return '';
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return `${months[d.getMonth()]} ${d.getFullYear()}`;
+  }, [user?.createdAt]);
+
+  // Apple redesign: iOS large-title identity row, then one grouped stats card.
   const profileHeader = useMemo(
     () => (
       <View style={styles.header}>
-        {/* Name left, avatar right */}
         <View style={styles.identityRow}>
           <View style={styles.identityText}>
             <Text style={styles.name}>{user?.displayName}</Text>
-
+            <Text style={styles.handle}>@{user?.username}{memberSince ? ` · Member since ${memberSince}` : ''}</Text>
             {!!user?.bio && <Text style={styles.bio} numberOfLines={2}>{user.bio}</Text>}
           </View>
           <Pressable accessibilityLabel="View profile photo" accessibilityRole="imagebutton" onPress={() => setPhotoViewerVisible(true)}>
-            <Avatar user={user} size={60} />
+            <Avatar user={user} size={62} />
           </Pressable>
         </View>
 
-        {/* Stats row */}
-        <View style={styles.statsRow}>
+        <View style={styles.statCard}>
           <Stat label="Place" value={stats ? `#${stats.rank}` : undefined} />
+          <View style={styles.statSep} />
           <Stat label="Want" value={stats?.want} />
+          <View style={styles.statSep} />
           <Stat label="Watched" value={stats?.watched} />
+          <View style={styles.statSep} />
           <Stat label="Series" value={stats?.series} />
         </View>
       </View>
     ),
-    [user, stats, colors, styles],
+    [user, stats, memberSince, colors, styles],
   );
 
+  // Apple redesign: iOS segmented control instead of tab pills, filter stays a circle button.
   const tabsHeader = useMemo(
     () => (
       <View style={styles.header}>
-        {/* Tabs + filter */}
-        <View style={styles.tabsRow}>
-          <View style={styles.tabsGroup}>
+        <View style={styles.segRow}>
+          <View style={styles.seg}>
             {TABS.map((t) => (
-              <Pressable key={t.key} testID={`library-tab-${t.key}`} accessibilityRole="tab" accessibilityState={{ selected: tab === t.key }} accessibilityLabel={t.label} onPress={() => selectTab(t.key)} style={[styles.tab, tab === t.key && styles.tabActive]}>
-                <Text style={[styles.tabText, tab === t.key && styles.tabTextActive]}>{t.label}</Text>
+              <Pressable key={t.key} testID={`library-tab-${t.key}`} accessibilityRole="tab" accessibilityState={{ selected: tab === t.key }} accessibilityLabel={t.label} onPress={() => selectTab(t.key)} style={[styles.segItem, tab === t.key && styles.segItemActive]}>
+                <Text style={[styles.segText, tab === t.key && styles.segTextActive]}>{t.label}</Text>
               </Pressable>
             ))}
           </View>
@@ -302,8 +327,8 @@ export const LibraryScreen: React.FC = () => {
             <Pressable onPress={() => {
               setHideMovies(appliedFilters.hideMovies); setHideSeries(appliedFilters.hideSeries); setHideUnreleased(appliedFilters.hideUnreleased); setSort(appliedSort);
               setSortSheetVisible(v => !v);
-            }} style={styles.filterButton} accessibilityLabel="Filter and sort" accessibilityState={{ expanded: sortSheetVisible }}>
-              <Ionicons name="filter" size={16} color={colors.textSecondary} />
+            }} style={styles.circleButton} accessibilityLabel="Filter and sort" accessibilityState={{ expanded: sortSheetVisible }}>
+              <Ionicons name="options-outline" size={17} color={colors.appleText} />
             </Pressable>
           )}
         </View>
@@ -338,7 +363,8 @@ export const LibraryScreen: React.FC = () => {
               testID={`library-page-${pageTab}`}
               maintainVisibleContentPosition={{ disabled: true }}
               data={pageTab === 'insights' || loading || loadError ? [] : itemsByTab[pageTab]}
-              keyExtractor={keyExtractor} renderItem={renderItem} numColumns={2}
+              keyExtractor={keyExtractor} renderItem={pageTab === 'series' ? renderSeriesItem : renderItem} numColumns={pageTab === 'series' ? 1 : 2}
+              ItemSeparatorComponent={pageTab === 'series' ? renderSeriesSep : undefined}
               drawDistance={280}
               onScroll={pageTab === tab
                 ? Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], { useNativeDriver: false, listener: (e: any) => { pageOffsets.current[pageTab] = e.nativeEvent.contentOffset.y; } })
@@ -348,30 +374,32 @@ export const LibraryScreen: React.FC = () => {
               refreshControl={<RefreshControl refreshing={refreshing && tab === pageTab} onRefresh={refreshProfile} colors={['#000000']} tintColor="#000000" progressBackgroundColor="#FFFFFF" progressViewOffset={insets.top + collapseH + pinnedH} />}
               ListHeaderComponent={pageTab === 'insights' && insights ? (
               <View style={styles.insights}>
-                <View style={styles.insightRow}>
-                  <InsightCell label="Movies watched" value={insights.watchedMovies} />
-                  <InsightCell label="Series tracked" value={insights.series} />
-                  <InsightCell label="Episodes" value={insights.episodes} />
+                <View style={styles.insightGrid}>
+                  <View style={styles.insightTile}>
+                    <Text style={styles.insightTileLabel}>Movies watched</Text>
+                    <Text style={styles.insightTileValue}>{insights.watchedMovies}</Text>
+                  </View>
+                  <View style={styles.insightTile}>
+                    <Text style={styles.insightTileLabel}>Series tracked</Text>
+                    <Text style={styles.insightTileValue}>{insights.series}</Text>
+                  </View>
+                  <View style={styles.insightTile}>
+                    <Text style={styles.insightTileLabel}>Episodes</Text>
+                    <Text style={styles.insightTileValue}>{insights.episodes}</Text>
+                  </View>
+                  <View style={styles.insightTile}>
+                    <Text style={styles.insightTileLabel}>Average rating</Text>
+                    <Text style={styles.insightTileValue}>{insights.avg ?? '-'}</Text>
+                    <Text style={styles.insightTileSub}>{insights.ratedCount} rated titles & seasons</Text>
+                  </View>
                 </View>
-                <View style={styles.insightBlock}>
-                  <Text style={styles.insightHeading}>Average rating</Text>
-                  <Text style={styles.insightBig}>{insights.avg ?? '-'}</Text>
-                  <Text style={styles.insightSub}>{insights.ratedCount} rated titles & seasons</Text>
-                </View>
-                <View style={styles.insightBlock}>
-                  <Text style={styles.insightHeading}>Rating distribution</Text>
-                  <View style={styles.distRow}>
+                <View style={styles.chartCard}>
+                  <Text style={styles.chartTitle}>Your ratings</Text>
+                  <View style={styles.chart}>
                     {insights.dist.map((count, v) => (
-                      <View key={v} style={styles.distCol}>
-                        <View style={styles.distBarTrack}>
-                          <View
-                            style={[
-                              styles.distBarFill,
-                              { height: Math.max((count / insights.maxDist) * 72, count > 0 ? 4 : 1) },
-                            ]}
-                          />
-                        </View>
-                        <Text style={styles.distLabel}>{v}</Text>
+                      <View key={v} style={styles.chartCol}>
+                        <View style={[styles.chartBar, { height: Math.max((count / insights.maxDist) * 90, count > 0 ? 4 : 1) }, count === insights.maxDist && count > 0 && styles.chartBarPeak]} />
+                        <Text style={styles.chartLabel}>{v + 1}</Text>
                       </View>
                     ))}
                   </View>
@@ -383,7 +411,6 @@ export const LibraryScreen: React.FC = () => {
             />
           </View>)}
       </ContentPager>
-          {sortSheetVisible && <Pressable accessibilityLabel="Dismiss filters without applying" onPress={() => setSortSheetVisible(false)} style={[StyleSheet.absoluteFill, styles.filterScrim]} />}
       </View>
       <Animated.View style={[styles.headerOverlay, { backgroundColor: colors.background }]}>
         <View style={{ height: insets.top }} />
@@ -393,8 +420,8 @@ export const LibraryScreen: React.FC = () => {
             <View style={styles.topRow}>
               <Image source={require('../../../assets/icon.png')} style={styles.brandIcon} accessibilityLabel="Velora" />
               <View style={styles.topActions}>
-                <Pressable onPress={() => navigation.navigate('Account')} style={styles.topButton} accessibilityLabel="Settings"><Ionicons name="settings-sharp" size={16} color={colors.textTertiary} /></Pressable>
-                <Pressable onPress={() => setMenuVisible(true)} style={styles.topButton} accessibilityLabel="More profile actions"><Ionicons name="ellipsis-vertical" size={18} color={colors.textTertiary} /></Pressable>
+                <Pressable onPress={() => navigation.navigate('Account')} style={styles.circleButton} accessibilityLabel="Settings"><Ionicons name="settings-outline" size={17} color={colors.appleText} /></Pressable>
+                <Pressable onPress={() => setMenuVisible(true)} style={styles.circleButton} accessibilityLabel="More profile actions"><Ionicons name="ellipsis-horizontal" size={18} color={colors.appleText} /></Pressable>
               </View>
             </View>
 
@@ -403,24 +430,41 @@ export const LibraryScreen: React.FC = () => {
         </Animated.View>
           <View onLayout={(e) => setPinnedH(e.nativeEvent.layout.height)}>
             <View style={{ paddingHorizontal: ui.component.libraryTabs.horizontalPadding, paddingTop: ui.component.libraryTabs.topPadding }}>{tabsHeader}</View>
-            <Expandable open={sortSheetVisible && tab !== 'insights'}>
-                  <View style={styles.filters}>
-                    <View style={styles.filterChips}>
-                      {[
-                        { label: 'Hide Movies', selected: hideMovies, toggle: () => setHideMovies(v => !v) },
-                        { label: 'Hide Series', selected: hideSeries, toggle: () => setHideSeries(v => !v) },
-                        { label: 'Hide Unreleased', selected: hideUnreleased, toggle: () => setHideUnreleased(v => !v) },
-                      ].map(c => <Pressable key={c.label} accessibilityLabel={c.label} onPress={c.toggle} accessibilityRole="checkbox" accessibilityState={{ checked: c.selected }} style={[styles.filterChip, c.selected && styles.filterChipSelected]}><Text style={styles.tabText}>{c.label}</Text></Pressable>)}
-                    </View>
-                    <View style={styles.filterChips}>{([
-                      ['recent', 'Date added'], ['release', 'Release date'], ['title', 'Title A-Z'], ['rating', 'Highest rated'],
-                    ] as const).map(([key, label]) => <Pressable key={key} onPress={() => setSort(key)} accessibilityRole="radio" accessibilityState={{ selected: sort === key }} style={styles.filterChip}><Text style={[styles.tabText, sort === key && { color: colors.primary }]}>{label}</Text></Pressable>)}</View>
-                    <Pressable accessibilityLabel="Apply filters" onPress={() => { setAppliedFilters({ hideMovies, hideSeries, hideUnreleased }); setAppliedSort(sort); setSortSheetVisible(false); }} style={styles.apply}><Text style={styles.tabText}>Apply</Text></Pressable>
-                  </View>
-            </Expandable>
-
           </View>
       </Animated.View>
+
+      {/* Sort & filter: iOS-style bottom sheet - sort radios, hide switches, Apply (approved gallery design). */}
+      <Modal visible={sortSheetVisible && tab !== 'insights'} transparent animationType="fade" onRequestClose={() => setSortSheetVisible(false)}>
+        <Pressable accessibilityLabel="Dismiss filters without applying" style={styles.sheetScrim} onPress={() => setSortSheetVisible(false)} />
+        <View style={[styles.sheet, { paddingBottom: insets.bottom + 14 }]}>
+          <View style={styles.sheetGrabber} />
+          <Text style={styles.sheetHeading}>Sort by</Text>
+          <View style={styles.sheetCard}>
+            {([
+              ['recent', 'Date added'], ['release', 'Release date'], ['title', 'Title A-Z'], ['rating', 'Highest rated'],
+            ] as const).map(([key, label], i, arr) => (
+              <Pressable key={key} onPress={() => setSort(key)} accessibilityRole="radio" accessibilityState={{ selected: sort === key }} style={[styles.sheetRow, i < arr.length - 1 && styles.sheetRowSep]}>
+                <Text style={[styles.sheetRowText, sort === key && { color: colors.primary }]}>{label}</Text>
+                {sort === key && <Ionicons name="checkmark" size={18} color={colors.primary} />}
+              </Pressable>
+            ))}
+          </View>
+          <Text style={styles.sheetHeading}>Hide</Text>
+          <View style={styles.sheetCard}>
+            {([
+              ['Movies', hideMovies, setHideMovies], ['Series', hideSeries, setHideSeries], ['Unreleased', hideUnreleased, setHideUnreleased],
+            ] as const).map(([label, value, set], i, arr) => (
+              <View key={label} style={[styles.sheetRow, i < arr.length - 1 && styles.sheetRowSep]}>
+                <Text style={styles.sheetRowText}>{label}</Text>
+                <Switch value={value} onValueChange={() => set(v => !v)} trackColor={{ false: 'rgba(120,120,128,0.32)', true: colors.appleGreen }} thumbColor="#FFFFFF" ios_backgroundColor="rgba(120,120,128,0.32)" />
+              </View>
+            ))}
+          </View>
+          <Pressable accessibilityLabel="Apply filters" onPress={() => { setAppliedFilters({ hideMovies, hideSeries, hideUnreleased }); setAppliedSort(sort); setSortSheetVisible(false); }} style={styles.sheetApply}>
+            <Text style={styles.sheetApplyText}>Apply</Text>
+          </Pressable>
+        </View>
+      </Modal>
 
       <ActionSheet visible={menuVisible} onClose={() => setMenuVisible(false)} options={[
         { label: 'Share profile', onPress: shareProfile },
@@ -441,6 +485,8 @@ export const LibraryScreen: React.FC = () => {
   );
 };
 
+const TMDB_IMG = 'https://image.tmdb.org/t/p/w342';
+
 const Stat = memo(function Stat({ label, value }: { label: string; value?: number | string }) {
   const { colors } = useAppTheme();
   const styles = useThemedStyles(createStyles);
@@ -452,30 +498,60 @@ const Stat = memo(function Stat({ label, value }: { label: string; value?: numbe
   );
 });
 
-const InsightCell = memo(function InsightCell({ label, value }: { label: string; value: number }) {
+// Apple redesign: series list row - poster, title, episode progress bar, chevron (grouped card look).
+const SeriesRow = memo(function SeriesRow({ item, first, last, onPress, onLongPress }: { item: LibraryItem; first: boolean; last: boolean; onPress: (item: LibraryItem) => void; onLongPress?: (item: LibraryItem) => void }) {
   const { colors } = useAppTheme();
   const styles = useThemedStyles(createStyles);
+  const prog = seriesProgress(item);
+  const { data: tmdb } = useTVDetailsQuery(item.tmdb_id, !!prog && prog.left === 0);
+  const ended = isEndedComplete(prog, tmdb);
+  const uri = item.poster_path ? `${TMDB_IMG}${item.poster_path}` : null;
   return (
-    <View style={styles.insightCell}>
-      <Text style={styles.insightCellValue}>{value}</Text>
-      <Text style={styles.insightCellLabel}>{label}</Text>
-    </View>
+    <Pressable accessibilityRole="button" accessibilityLabel={item.title} onPress={() => onPress(item)} onLongPress={onLongPress ? () => onLongPress(item) : undefined}
+      style={[styles.seriesRow, first && styles.seriesRowFirst, last && styles.seriesRowLast]}>
+      {uri ? (
+        <CachedImage source={{ uri }} style={styles.seriesPoster} contentFit="cover" transition={150} recyclingKey={uri} />
+      ) : (
+        <View style={[styles.seriesPoster, styles.seriesPosterFallback]}><Ionicons name="tv-outline" size={20} color={colors.textMuted} /></View>
+      )}
+      <View style={styles.seriesMeta}>
+        <Text style={styles.seriesTitle} numberOfLines={1}>{item.title}</Text>
+        <Text style={styles.seriesLine}>
+          {prog ? `${prog.watched} of ${prog.total} episodes${ended ? ' · Done' : ''}` : ''}
+          {item.rating !== null && <Text style={{ color: colors.appleAmber }}>{`  ★ ${item.rating}`}</Text>}
+        </Text>
+        {prog && <View style={styles.seriesProgress}><View style={[styles.seriesProgressFill, { width: `${Math.round(prog.fraction * 100)}%` }]} /></View>}
+      </View>
+      <Ionicons name="chevron-forward" size={16} color={colors.appleText3} />
+    </Pressable>
   );
 });
 
 const createStyles = (colors: AppColors) => StyleSheet.create({
-  filterScrim: { position: 'absolute', left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(255,255,255,0.55)' },
-  topRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: ui.component.topRow.horizontalPadding },
-  topButton: { width: ui.component.topRow.buttonSize, height: ui.component.topRow.buttonSize, alignItems: 'center', justifyContent: 'center' },
+  topRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: ui.component.topRow.horizontalPadding, paddingBottom: ui.space.sm },
+  // Apple redesign: iOS circle buttons and red V tile.
+  circleButton: {
+    width: ui.component.topRow.buttonSize,
+    height: ui.component.topRow.buttonSize,
+    borderRadius: ui.component.topRow.buttonSize / 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.appleFill,
+  },
   brand: { fontSize: 9, letterSpacing: 2, color: colors.primary, fontWeight: '700' },
-  brandIcon: { width: ui.component.topRow.brandIconSize, height: ui.component.topRow.brandIconSize, borderRadius: ui.component.topRow.brandIconRadius, marginLeft: ui.component.topRow.brandIconMarginLeft },
-  topActions: { flexDirection: 'row', alignItems: 'center' },
+  brandIcon: {
+    width: ui.component.topRow.brandIconSize,
+    height: ui.component.topRow.brandIconSize,
+    borderRadius: ui.component.topRow.brandIconRadius,
+    marginLeft: ui.component.topRow.brandIconMarginLeft,
+    shadowColor: colors.primary,
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 3 },
+    elevation: 3,
+  },
+  topActions: { flexDirection: 'row', alignItems: 'center', gap: ui.space.md },
   photoViewerBackdrop: { flex: 1, backgroundColor: 'rgba(0,0,0,0.92)', alignItems: 'center', justifyContent: 'center' },
-  filters: { padding: ui.space.md, gap: ui.component.libraryFilters.gap },
-  filterChips: { flexDirection: 'row', flexWrap: 'wrap', gap: ui.space.sm },
-  filterChip: { paddingHorizontal: ui.space.md, paddingVertical: ui.space.sm, borderRadius: ui.purpose.chipRadius, backgroundColor: colors.surface },
-  filterChipSelected: { backgroundColor: colors.surfaceLight },
-  apply: { alignSelf: 'center', paddingHorizontal: ui.component.libraryFilters.applyHorizontalPadding, paddingVertical: ui.component.libraryFilters.applyVerticalPadding, borderRadius: ui.purpose.chipRadius, backgroundColor: colors.surface },
   root: { flex: 1, backgroundColor: colors.background },
   headerOverlay: { position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10, elevation: 10 },
   listContent: { paddingHorizontal: ui.component.libraryGrid.horizontalPadding, paddingTop: ui.component.libraryGrid.topPadding, paddingBottom: ui.component.libraryGrid.bottomPadding },
@@ -497,91 +573,112 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     justifyContent: 'center',
   },
   avatarText: { fontSize: ui.component.profileHeader.avatarTextSize, fontWeight: '900', color: '#fff' },
-  name: { fontSize: ui.component.profileHeader.nameSize, fontWeight: '700', color: colors.textPrimary },
+  // Apple redesign: iOS large title + secondary handle line.
+  name: { fontSize: 34, fontWeight: '700', letterSpacing: 0.3, color: colors.appleText },
+  handle: { fontSize: 13, color: colors.appleText2, marginTop: 2 },
   username: { fontSize: 13, color: colors.textTertiary },
-  bio: { fontSize: 13, color: colors.textSecondary, marginTop: ui.space.xs },
-  statsRow: {
-    paddingTop: ui.space.xxl, paddingBottom: ui.space.lg,
+  bio: { fontSize: 13, color: colors.appleText2, marginTop: ui.space.xs },
+  // Apple redesign: one grouped stats card with hairline separators.
+  statCard: {
+    marginTop: 14,
+    backgroundColor: colors.appleCard,
+    borderRadius: 14,
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingRight: ui.component.profileHeader.statsRightPadding,
-    marginTop: 2, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.borderHighlight,
+    paddingVertical: 10,
+    paddingHorizontal: 4,
   },
   stat: { flex: 1, alignItems: 'center' },
-  statValue: { fontSize: ui.component.profileHeader.statValueSize, fontWeight: '600', color: colors.textPrimary },
-  statLabel: { fontSize: ui.type.label, color: colors.textTertiary, marginTop: 1 },
-  actionsRow: {
-    flexDirection: 'row',
-    gap: ui.component.profileHeader.actionsGap,
-    marginTop: 2,
-  },
-  iconAction: {
-    width: ui.purpose.actionIconSize,
-    height: ui.purpose.actionIconSize,
-    borderRadius: ui.purpose.actionIconRadius,
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.surfaceBorder,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  updatePct: { fontSize: 10, fontWeight: '800', color: colors.textPrimary },
-  divider: {
-    height: StyleSheet.hairlineWidth,
-    backgroundColor: 'rgba(255,255,255,0.16)',
-    marginTop: ui.space.xs,
-  },
-  tabsRow: {
-    paddingTop: ui.space.lg,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  tabsGroup: { flexDirection: 'row', gap: 2, flexShrink: 1 },
-  tab: { paddingHorizontal: ui.component.libraryTabs.tabHorizontalPadding, paddingVertical: ui.component.libraryTabs.tabVerticalPadding, borderRadius: ui.component.libraryTabs.tabRadius, backgroundColor: 'transparent' },
-  tabActive: { backgroundColor: colors.surfaceLight },
-  tabText: { fontSize: ui.type.label, fontWeight: '700', color: colors.textTertiary },
-  tabTextActive: { color: colors.textPrimary },
-  filterButton: {
-    width: ui.purpose.iconButtonSize,
-    height: ui.purpose.iconButtonSize,
-    borderRadius: ui.purpose.iconButtonRadius,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.surface,
-  },
-  insights: { gap: ui.component.libraryInsights.gap, paddingTop: 6, paddingBottom: 20 },
-  insightRow: { flexDirection: 'row', gap: ui.component.libraryInsights.rowGap },
-  insightCell: {
+  statValue: { fontSize: 17, fontWeight: '700', color: colors.appleText },
+  statLabel: { fontSize: 11, color: colors.appleText2, marginTop: 1 },
+  statSep: { width: StyleSheet.hairlineWidth, backgroundColor: colors.appleSeparator, marginVertical: 4 },
+  // Apple redesign: iOS segmented control + filter circle button.
+  segRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  seg: {
     flex: 1,
-    backgroundColor: colors.surface,
-    borderRadius: ui.component.libraryInsights.cardRadius,
-    paddingVertical: ui.space.lg,
+    flexDirection: 'row',
+    backgroundColor: colors.appleSegTrack,
+    borderRadius: 10,
+    padding: 2,
+  },
+  segItem: { flex: 1, alignItems: 'center', paddingVertical: 6, borderRadius: 8 },
+  segItemActive: {
+    backgroundColor: colors.appleSegActive,
+    shadowColor: '#000',
+    shadowOpacity: 0.35,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 2,
+  },
+  segText: { fontSize: 13, fontWeight: '500', color: colors.appleText2 },
+  segTextActive: { color: colors.appleText },
+  // Apple redesign: iOS bottom sheet for sort & filter.
+  sheetScrim: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.4)' },
+  sheet: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: colors.appleCard,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    paddingHorizontal: 16,
+    paddingTop: 8,
+  },
+  sheetGrabber: { width: 36, height: 5, borderRadius: 2.5, backgroundColor: 'rgba(120,120,128,0.5)', alignSelf: 'center', marginBottom: 10 },
+  sheetHeading: { fontSize: 13, fontWeight: '600', color: colors.appleText2, marginTop: 4, marginBottom: 6, marginLeft: 4 },
+  sheetCard: { backgroundColor: 'rgba(120,120,128,0.16)', borderRadius: 12 },
+  sheetRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 14, paddingVertical: 11 },
+  sheetRowSep: { borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.appleSeparator },
+  sheetRowText: { fontSize: 15, color: colors.appleText },
+  sheetApply: { marginTop: 12, backgroundColor: colors.primary, borderRadius: 12, alignItems: 'center', paddingVertical: 12 },
+  sheetApplyText: { fontSize: 16, fontWeight: '600', color: '#fff' },
+  // Apple redesign: series rows in a grouped card.
+  seriesRow: {
+    flexDirection: 'row',
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: colors.surfaceBorder,
+    gap: ui.space.md,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    marginHorizontal: ui.component.libraryGrid.cellPadding,
+    backgroundColor: colors.appleCard,
   },
-  insightCellValue: { fontSize: ui.component.libraryInsights.valueSize, fontWeight: '800', color: colors.textPrimary },
-  insightCellLabel: { fontSize: ui.type.caption, color: colors.textTertiary, marginTop: 3, fontWeight: '600' },
-  insightBlock: {
-    backgroundColor: colors.surface,
-    borderRadius: ui.component.libraryInsights.cardRadius,
-    padding: ui.space.lg,
-    borderWidth: 1,
-    borderColor: colors.surfaceBorder,
+  seriesRowFirst: { borderTopLeftRadius: 14, borderTopRightRadius: 14 },
+  seriesRowLast: { borderBottomLeftRadius: 14, borderBottomRightRadius: 14, marginBottom: 14 },
+  seriesPoster: { width: 48, height: 72, borderRadius: 8, backgroundColor: '#2C2C2E' },
+  seriesPosterFallback: { alignItems: 'center', justifyContent: 'center' },
+  seriesMeta: { flex: 1 },
+  seriesTitle: { fontSize: 15, fontWeight: '600', color: colors.appleText },
+  seriesLine: { fontSize: 12, color: colors.appleText2, marginTop: 1 },
+  seriesProgress: { height: 4, borderRadius: 2, backgroundColor: 'rgba(120,120,128,0.3)', overflow: 'hidden', marginTop: 5 },
+  seriesProgressFill: { height: '100%', borderRadius: 2, backgroundColor: colors.appleBlue },
+  seriesSep: { height: StyleSheet.hairlineWidth, backgroundColor: colors.appleSeparator, marginLeft: 80, marginRight: 20 },
+  // Apple redesign: insights tiles + red ratings chart card.
+  insights: { paddingTop: 6, paddingBottom: 20 },
+  insightGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, paddingHorizontal: ui.component.libraryGrid.cellPadding },
+  insightTile: {
+    flexBasis: '47%',
+    flexGrow: 1,
+    backgroundColor: colors.appleCard,
+    borderRadius: 14,
+    padding: 12,
+    gap: 2,
   },
-  insightHeading: { fontSize: 13, fontWeight: '800', color: colors.textSecondary, letterSpacing: 0.4 },
-  insightBig: { fontSize: ui.component.libraryInsights.bigValueSize, fontWeight: '900', color: colors.textPrimary, marginTop: 6 },
-  insightSub: { fontSize: ui.type.label, color: colors.textTertiary, marginTop: 2 },
-  distRow: { flexDirection: 'row', alignItems: 'flex-end', gap: ui.component.libraryInsights.distGap, marginTop: ui.space.md },
-  distCol: { flex: 1, alignItems: 'center', gap: ui.space.xs },
-  distBarTrack: { height: ui.component.libraryInsights.distBarHeight, width: '100%', justifyContent: 'flex-end' },
-  distBarFill: {
-    width: '100%',
-    borderRadius: 3,
-    backgroundColor: colors.trackBlue,
+  insightTileLabel: { fontSize: 12, color: colors.appleText2 },
+  insightTileValue: { fontSize: 24, fontWeight: '700', color: colors.appleText },
+  insightTileSub: { fontSize: 11, color: colors.appleText3 },
+  chartCard: {
+    marginTop: 10,
+    marginHorizontal: ui.component.libraryGrid.cellPadding,
+    backgroundColor: colors.appleCard,
+    borderRadius: 14,
+    padding: 14,
   },
-  distLabel: { fontSize: 10, color: colors.textTertiary, fontWeight: '700' },
+  chartTitle: { fontSize: 15, fontWeight: '600', color: colors.appleText },
+  chart: { flexDirection: 'row', alignItems: 'flex-end', gap: 6, height: 110, paddingTop: 10 },
+  chartCol: { flex: 1, alignItems: 'center', gap: 4, height: '100%', justifyContent: 'flex-end' },
+  chartBar: { width: '100%', borderTopLeftRadius: 3, borderTopRightRadius: 3, backgroundColor: colors.appleRedSoft },
+  chartBarPeak: { backgroundColor: colors.primary },
+  chartLabel: { fontSize: 10, color: colors.appleText3 },
   emptyRoot: {
     flex: 1,
     alignItems: 'center',

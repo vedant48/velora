@@ -28,14 +28,15 @@ export const ui = {
   // to the base scale changes pixels and is a separate, reviewed decision.
   component: {
     topRow: {
-      horizontalPadding: 10,
+      // Apple redesign: 20px screen padding, 34px red V tile.
+      horizontalPadding: 20,
       buttonSize: 34,
-      brandIconSize: 28,
-      brandIconRadius: 6,
-      brandIconMarginLeft: 6,
+      brandIconSize: 34,
+      brandIconRadius: 9,
+      brandIconMarginLeft: 0,
     },
     profileHeader: {
-      horizontalPadding: 15,
+      horizontalPadding: 20,
       identityGap: 14,
       avatarSize: 52,
       avatarTextSize: 26,
@@ -46,7 +47,7 @@ export const ui = {
     },
     libraryHeader: {
       // Shared by the profile and tabs header blocks.
-      innerHorizontalPadding: 5,
+      innerHorizontalPadding: 0,
     },
     libraryTabs: {
       horizontalPadding: 20,
@@ -56,10 +57,11 @@ export const ui = {
       tabRadius: 18,
     },
     libraryGrid: {
-      horizontalPadding: 15,
+      // 14 + 6 cell padding = 20px outer edge, 12px between posters.
+      horizontalPadding: 14,
       topPadding: 14,
       bottomPadding: 100,
-      cellPadding: 5,
+      cellPadding: 6,
     },
     libraryFilters: {
       gap: 10,
