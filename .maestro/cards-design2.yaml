@@ -32,7 +32,7 @@ appId: com.vedant.velora
 - extendedWaitUntil:
     visible: 'Sort & filter'
     timeout: 10000
-- assertVisible: Hide
+- assertVisible: 'Hide movies'
 - takeScreenshot: 1d-filter-sheet
 - tapOn: 'Dismiss filters without applying'
 # Movie details: merged Cast & Crew, director card first (F1 seeded as most recent Want)
