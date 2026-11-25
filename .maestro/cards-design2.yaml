@@ -109,3 +109,17 @@ appId: com.vedant.velora
     timeout: 20000
 - takeScreenshot: 9-providers-sheet
 - tapOn: 'Close watch providers'
+# Episode marking consistency proof (main's 62/62-vs-0/7 question): the seed
+# writes only aggregate counts, so per-episode rows start empty. A REAL mark
+# via the UI must move the season counter 0 -> 1 (backend syncEpisodeCount
+# keeps aggregate and per-episode rows consistent on real marks). Runs LAST:
+# the mark mutates fixture state, and each CI run reseeds a fresh backend.
+- swipe:
+    from:
+      text: Pilot
+    direction: RIGHT
+    duration: 600
+- extendedWaitUntil:
+    visible: '1 of 7 episodes'
+    timeout: 20000
+- takeScreenshot: 10-episode-mark-readback
