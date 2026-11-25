@@ -63,3 +63,32 @@ appId: com.vedant.velora
 - tapOn:
     id: library-tab-insights
 - takeScreenshot: b1-insights
+- tapOn:
+    id: library-tab-want
+- swipe:
+    start: 50%, 80%
+    end: 50%, 25%
+    duration: 500
+- tapOn:
+    id: library-tab-series
+- takeScreenshot: c0-series-after-tap
+- swipe:
+    start: 50%, 70%
+    end: 50%, 60%
+    duration: 3000
+- takeScreenshot: c1-series-partial
+- tapOn:
+    id: library-tab-watched
+- takeScreenshot: c2-watched
+- tapOn:
+    id: library-tab-want
+- takeScreenshot: c3-want
+- swipe:
+    start: 85%, 65%
+    end: 15%, 65%
+    duration: 900
+- swipe:
+    start: 85%, 65%
+    end: 15%, 65%
+    duration: 900
+- takeScreenshot: c4-series-by-swipe
