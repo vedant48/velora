@@ -20,6 +20,7 @@ maestro test --format junit --output proof/ui-flicker.xml --test-output-dir proo
 adb shell pkill -INT screenrecord || true
 wait "$record_pid" || true
 adb pull /sdcard/flicker.mp4 proof/flicker.mp4 || true
+adb shell pm clear com.vedant.velora
 maestro test --format junit --output proof/ui-cards.xml --test-output-dir proof/maestro-cards .maestro/cards-1510.yaml || status=1
 adb logcat -d -t 1000 > proof/logcat.txt || true
 exit $status

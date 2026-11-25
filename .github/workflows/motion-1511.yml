@@ -65,4 +65,4 @@ jobs:
           cp -r proof "$EV/" 2>/dev/null || true
           printf 'run_id=%s\ncommit=%s\n' "${{ github.run_id }}" "$GITHUB_SHA" > "$EV/META.txt"
           git -C "$EV" add -A; git -C "$EV" commit -m "uimotion1511 evidence"
-          git -C "$EV" push origin HEAD:ci-evidence/uimotion1511-${{ github.run_id }}
+          git -C "$EV" push origin +HEAD:ci-evidence/uimotion1511-${{ github.run_id }}
