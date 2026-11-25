@@ -109,17 +109,53 @@ appId: com.vedant.velora
     timeout: 20000
 - takeScreenshot: 9-providers-sheet
 - tapOn: 'Close watch providers'
-# Episode marking consistency proof (main's 62/62-vs-0/7 question): the seed
-# writes only aggregate counts, so per-episode rows start empty. A REAL mark
-# via the UI must move the season counter 0 -> 1 (backend syncEpisodeCount
-# keeps aggregate and per-episode rows consistent on real marks). Runs LAST:
-# the mark mutates fixture state, and each CI run reseeds a fresh backend.
+# Episode marking consistency loop (main's 62/62-vs-0/7 ruling): the coherent
+# seed marks Prison Break S1(22)+S2(18) through the real API. Mark S2E19 in
+# the UI, verify the season counter, the list aggregate on return, and
+# persisted readback on reopen. Runs LAST (mutates fixture; fresh D1 per run).
+- back
+- scrollUntilVisible:
+    element:
+      text: 'Prison Break'
+    direction: DOWN
+    timeout: 30000
+- tapOn: 'Prison Break'
+- extendedWaitUntil:
+    visible: '22 of 22 episodes'
+    timeout: 60000
+- tapOn:
+    id: season-menu
+- tapOn: 'Season 2'
+- extendedWaitUntil:
+    visible: '18 of 22 episodes'
+    timeout: 30000
+- scrollUntilVisible:
+    element:
+      text: 'Sweet Caroline'
+    direction: UP
+    timeout: 30000
 - swipe:
     from:
-      text: Pilot
+      text: 'Sweet Caroline'
     direction: RIGHT
     duration: 600
 - extendedWaitUntil:
-    visible: '1 of 7 episodes'
+    visible: '19 of 22 episodes'
     timeout: 20000
 - takeScreenshot: 10-episode-mark-readback
+- back
+- extendedWaitUntil:
+    visible: '41 of 88 episodes'
+    timeout: 30000
+- takeScreenshot: 11-list-aggregate-updated
+- tapOn: 'Prison Break'
+- extendedWaitUntil:
+    visible: '22 of 22 episodes'
+    timeout: 60000
+- tapOn:
+    id: season-menu
+- tapOn: 'Season 2'
+- extendedWaitUntil:
+    visible: '19 of 22 episodes'
+    timeout: 30000
+- takeScreenshot: 12-details-persisted
