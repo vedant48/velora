@@ -6,6 +6,7 @@ import { Avatar } from '../../components/Avatar';
 import { useAuth } from '../../state/AuthContext';
 import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
 import { metrics } from '../../theme/metrics';
+import { ui } from '../../theme/ui';
 
 export const ProfileScreen: React.FC = () => {
   const { colors } = useAppTheme();
@@ -152,12 +153,12 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   userCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 16,
+    gap: ui.space.lg,
     backgroundColor: colors.surface,
-    padding: 16,
+    padding: ui.space.lg,
     borderRadius: 12,
-    marginTop: 8,
-    marginBottom: 24,
+    marginTop: ui.space.sm,
+    marginBottom: ui.space.xl,
     borderWidth: 1,
     borderColor: colors.border,
   },
@@ -185,7 +186,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   planBadge: {
     backgroundColor: 'rgba(229, 9, 20, 0.15)',
     paddingVertical: 3,
-    paddingHorizontal: 8,
+    paddingHorizontal: ui.space.sm,
     borderRadius: 4,
     alignSelf: 'flex-start',
     borderWidth: 0.5,
@@ -199,16 +200,16 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   },
   sectionTitle: {
     color: colors.textPrimary,
-    fontSize: 14,
+    fontSize: ui.type.body,
     fontWeight: '700',
     marginBottom: 10,
-    marginTop: 8,
+    marginTop: ui.space.sm,
     letterSpacing: 0.3,
   },
   settingsGroup: {
     backgroundColor: colors.surface,
     borderRadius: 12,
-    paddingHorizontal: 16,
+    paddingHorizontal: ui.space.lg,
     marginBottom: 18,
     borderWidth: 1,
     borderColor: colors.border,
@@ -217,7 +218,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 14,
-    gap: 12,
+    gap: ui.space.md,
   },
   settingIconCircle: {
     width: 34,
@@ -233,19 +234,19 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   },
   settingLabel: {
     color: colors.textPrimary,
-    fontSize: 14,
+    fontSize: ui.type.body,
     fontWeight: '600',
   },
   settingSubLabel: {
     color: colors.textSecondary,
-    fontSize: 12,
+    fontSize: ui.type.label,
   },
   divider: {
     height: 1,
     backgroundColor: colors.border,
   },
   signOutButton: {
-    marginTop: 12,
+    marginTop: ui.space.md,
     backgroundColor: 'rgba(239, 68, 68, 0.12)',
     paddingVertical: 14,
     borderRadius: 8,

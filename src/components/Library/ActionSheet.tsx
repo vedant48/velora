@@ -79,6 +79,6 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   cancel: {
     borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: colors.border,
-    marginTop: 4,
+    marginTop: ui.space.xs,
   },
 });

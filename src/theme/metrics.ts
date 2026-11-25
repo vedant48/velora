@@ -21,6 +21,7 @@ export const metrics = {
   heroWidth: SCREEN_WIDTH,
 
   // Spacing & padding
+  // DEPRECATED for new code: use ui.space from './ui' (same values). Kept for existing imports.
   spacingXs: 4,
   spacingSm: 8,
   spacingMd: 12,

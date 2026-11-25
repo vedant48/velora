@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { memo } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
+import { ui } from '../../theme/ui';
 
 interface EpisodeTrackerProps {
   watched: number;
@@ -49,7 +50,7 @@ export const EpisodeTracker = memo(function EpisodeTracker({ watched, total, onC
 
 const createStyles = (colors: AppColors) => StyleSheet.create({
   container: {
-    gap: 8,
+    gap: ui.space.sm,
   },
   infoRow: {
     flexDirection: 'row',
@@ -62,7 +63,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     color: colors.textPrimary,
   },
   left: {
-    fontSize: 12,
+    fontSize: ui.type.label,
     fontWeight: '600',
     color: colors.accentCyan,
   },
@@ -79,12 +80,12 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   },
   buttons: {
     flexDirection: 'row',
-    gap: 8,
+    gap: ui.space.sm,
   },
   stepButton: {
     flex: 1,
     alignItems: 'center',
-    paddingVertical: 8,
+    paddingVertical: ui.space.sm,
     borderRadius: 10,
     backgroundColor: colors.surface,
     borderWidth: 1,

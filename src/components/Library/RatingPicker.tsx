@@ -2,6 +2,7 @@ import { memo, useCallback } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
+import { ui } from '../../theme/ui';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -74,7 +75,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     borderColor: colors.accentAmber,
   },
   chipText: {
-    fontSize: 12,
+    fontSize: ui.type.label,
     fontWeight: '700',
     color: colors.textSecondary,
   },

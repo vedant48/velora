@@ -6,6 +6,7 @@ import type { LibraryItem } from '../../api/velora';
 import { useTVDetailsQuery } from '../../api/queries';
 import { isEndedComplete, seriesProgress } from './seriesProgress';
 import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
+import { ui } from '../../theme/ui';
 
 const TMDB_IMG = 'https://image.tmdb.org/t/p/w342';
 
@@ -78,14 +79,14 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     backgroundColor: colors.glassDark,
   },
   progressBadge: {
-    position: 'absolute', top: 6, left: 6, flexDirection: 'row', alignItems: 'center', gap: 4,
+    position: 'absolute', top: 6, left: 6, flexDirection: 'row', alignItems: 'center', gap: ui.space.xs,
     paddingHorizontal: 6, paddingVertical: 3, borderRadius: 8, backgroundColor: colors.glassDark,
     borderWidth: 1, borderColor: colors.accentCyan,
   },
   pie: { width: 13, height: 13, borderRadius: 7, borderWidth: 1.5, borderColor: colors.accentCyan, overflow: 'hidden', justifyContent: 'flex-end' },
   pieFill: { width: '100%', backgroundColor: colors.accentCyan },
-  progressText: { fontSize: 12, fontWeight: '800', color: colors.accentCyan },
-  ratingText: { fontSize: 12, fontWeight: '800', color: colors.accentAmber },
-  title: { marginTop: 6, fontSize: 11, fontWeight: '600', color: colors.textSecondary },
+  progressText: { fontSize: ui.type.label, fontWeight: '800', color: colors.accentCyan },
+  ratingText: { fontSize: ui.type.label, fontWeight: '800', color: colors.accentAmber },
+  title: { marginTop: 6, fontSize: ui.type.caption, fontWeight: '600', color: colors.textSecondary },
   progress: { marginTop: 2, fontSize: 10, fontWeight: '700', color: colors.accentCyan },
 });

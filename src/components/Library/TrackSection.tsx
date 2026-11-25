@@ -8,6 +8,7 @@ import { AppLoader } from '../common/AppLoader';
 import { EpisodeTracker } from './EpisodeTracker';
 import { RatingPicker } from './RatingPicker';
 import { StatusPicker } from './StatusPicker';
+import { ui } from '../../theme/ui';
 
 interface TrackSectionProps {
   mediaType: MediaType;
@@ -119,7 +120,7 @@ export const TrackSection = memo(function TrackSection({
         {saving && <AppLoader size="small" />}
       </View>
       {loading ? (
-        <AppLoader style={{ marginVertical: 12 }} />
+        <AppLoader style={{ marginVertical: ui.space.md }} />
       ) : (
         <>
           <StatusPicker status={item?.status ?? null} onChange={(status) => save({ status: status ?? undefined })} />
@@ -145,8 +146,8 @@ export const TrackSection = memo(function TrackSection({
 
 const createStyles = (colors: AppColors) => StyleSheet.create({
   container: {
-    marginTop: 24,
-    padding: 16,
+    marginTop: ui.space.xl,
+    padding: ui.space.lg,
     borderRadius: 16,
     backgroundColor: colors.cardBackground,
     borderWidth: 1,
@@ -165,7 +166,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   },
   subheading: {
     marginTop: 6,
-    fontSize: 12,
+    fontSize: ui.type.label,
     fontWeight: '700',
     color: colors.textTertiary,
     textTransform: 'uppercase',
@@ -178,7 +179,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     backgroundColor: colors.primary,
   },
   loginCtaText: {
-    fontSize: 14,
+    fontSize: ui.type.body,
     fontWeight: '700',
     color: '#fff',
   },

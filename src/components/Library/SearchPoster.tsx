@@ -3,6 +3,7 @@ import { memo } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { MediaItem } from '../../api/types';
 import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
+import { ui } from '../../theme/ui';
 
 export const SearchPoster = memo(function SearchPoster({ item, width, onPress, labels = true }: {
   item: MediaItem; width: number; onPress: (item: MediaItem) => void; labels?: boolean;
@@ -16,6 +17,6 @@ export const SearchPoster = memo(function SearchPoster({ item, width, onPress, l
 });
 const createStyles = (colors: AppColors) => StyleSheet.create({
   poster: { aspectRatio: 2 / 3, borderRadius: 3, backgroundColor: colors.surfaceLight },
-  title: { color: colors.textSecondary, fontSize: 11, textAlign: 'center', marginTop: 6 },
+  title: { color: colors.textSecondary, fontSize: ui.type.caption, textAlign: 'center', marginTop: 6 },
   year: { color: colors.textTertiary, fontSize: 10, textAlign: 'center', marginTop: 3 },
 });

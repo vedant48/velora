@@ -3,6 +3,7 @@ import { memo, useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Review, veloraApi } from '../../api/velora';
 import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
+import { ui } from '../../theme/ui';
 
 interface SeasonReviewCardsProps {
   seriesId: number;
@@ -83,13 +84,13 @@ export const SeasonReviewCards = memo(function SeasonReviewCards({
 
 const createStyles = (colors: AppColors) => StyleSheet.create({
   root: { marginTop: 18 },
-  scroll: { gap: 12, paddingRight: 16 },
+  scroll: { gap: ui.space.md, paddingRight: ui.space.lg },
   card: {
     width: 250,
     backgroundColor: colors.surfaceLight,
     borderRadius: 14,
     padding: 14,
-    gap: 8,
+    gap: ui.space.sm,
   },
   headerRow: {
     flexDirection: 'row',
@@ -112,7 +113,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   headerText: { flex: 1, gap: 3 },
   name: {
     color: colors.textPrimary,
-    fontSize: 14,
+    fontSize: ui.type.body,
     fontWeight: '700',
   },
   starsRow: { flexDirection: 'row', gap: 1 },

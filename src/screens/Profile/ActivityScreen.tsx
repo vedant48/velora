@@ -61,7 +61,7 @@ export const ActivityScreen: React.FC = () => {
 
   return (
     <View style={[styles.root, { paddingTop: insets.top + 8 }]}>
-      <View style={{paddingHorizontal: 16}}><ScreenHeader title="Friends activity" onBack={() => navigation.goBack()} /></View>
+      <View style={{paddingHorizontal: ui.space.lg}}><ScreenHeader title="Friends activity" onBack={() => navigation.goBack()} /></View>
 
       {isLoading ? (
         <AppLoader style={{ marginTop: 40 }} />
@@ -84,7 +84,7 @@ export const ActivityScreen: React.FC = () => {
           data={feed}
           keyExtractor={(e, i) => `${e.username}-${e.media_type}-${e.tmdb_id}-${i}`}
           refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={() => refetch()} tintColor={colors.primary} colors={[colors.primary]} />}
-          contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 30 }}
+          contentContainerStyle={{ paddingHorizontal: ui.space.lg, paddingBottom: 30 }}
           renderItem={({ item }) => (
             <Pressable
               style={styles.row}
@@ -119,7 +119,7 @@ export const ActivityScreen: React.FC = () => {
 
 const createStyles = (colors: AppColors) => StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
-  headerRow: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 16, paddingBottom: 12 },
+  headerRow: { flexDirection: 'row', alignItems: 'center', gap: ui.space.md, paddingHorizontal: ui.space.lg, paddingBottom: ui.space.md },
   back: {
     width: 38,
     height: 38,
@@ -129,13 +129,13 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     backgroundColor: colors.surface,
   },
   title: { fontSize: 20, fontWeight: '800', color: colors.textPrimary },
-  empty: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12, paddingHorizontal: 32 },
+  empty: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: ui.space.md, paddingHorizontal: ui.space.xxl },
   emptyText: { fontSize: 13, color: colors.textSecondary, textAlign: 'center', lineHeight: 19 },
   retry: { paddingHorizontal: 18, paddingVertical: 9, borderRadius: 10, backgroundColor: colors.surface },
   retryText: { color: colors.textPrimary, fontWeight: '700', fontSize: 13 },
   row: {
     flexDirection: 'row',
-    gap: 12,
+    gap: ui.space.md,
     backgroundColor: colors.surface,
     borderRadius: ui.radius.button,
     padding: 10,
@@ -146,6 +146,6 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   line: { fontSize: 13, color: colors.textSecondary, lineHeight: 18 },
   who: { fontWeight: '800', color: colors.textPrimary },
   what: { fontWeight: '700', color: colors.textPrimary },
-  body: { fontSize: 12, color: colors.textSecondary, fontStyle: 'italic' },
-  when: { fontSize: 11, color: colors.textMuted },
+  body: { fontSize: ui.type.label, color: colors.textSecondary, fontStyle: 'italic' },
+  when: { fontSize: ui.type.caption, color: colors.textMuted },
 });

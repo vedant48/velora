@@ -7,6 +7,7 @@ import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContex
 import { AppLoader } from '../common/AppLoader';
 import { ActionSheet, ActionSheetOption } from './ActionSheet';
 import { RateReviewSheet } from './RateReviewSheet';
+import { ui } from '../../theme/ui';
 
 interface TrackingControlsProps extends LibraryMeta {
   /**
@@ -58,7 +59,7 @@ export const TrackingControls = memo(function TrackingControls(props: TrackingCo
   );
 
   if (!apiReady) return null;
-  if (lib.loading) return <AppLoader style={{ paddingVertical: 16 }} />;
+  if (lib.loading) return <AppLoader style={{ paddingVertical: ui.space.lg }} />;
 
   if (!signedIn) {
     return (
@@ -182,10 +183,10 @@ export const TrackingControls = memo(function TrackingControls(props: TrackingCo
 });
 
 const createStyles = (colors: AppColors) => StyleSheet.create({
-  container: { marginTop: 4 },
+  container: { marginTop: ui.space.xs },
   pillsRow: {
     flexDirection: 'row',
-    gap: 12,
+    gap: ui.space.md,
   },
   pill: {
     flex: 1,
@@ -213,7 +214,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   statusBarCenter: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: ui.space.sm,
   },
   statusBarText: {
     color: '#FFF',

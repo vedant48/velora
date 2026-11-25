@@ -220,7 +220,7 @@ export const AccountScreen: React.FC = () => {
       <AppButton title="Save profile" onPress={saveProfile} loading={saving} />
 
       <Text style={styles.section}>Appearance</Text>
-      <View accessibilityRole="radiogroup" accessibilityLabel="Appearance" style={{ flexDirection: 'row', gap: 8 }}>
+      <View accessibilityRole="radiogroup" accessibilityLabel="Appearance" style={{ flexDirection: 'row', gap: ui.space.sm }}>
         {(['system', 'light', 'dark'] as const).map(choice => (
           <Pressable key={choice} accessibilityRole="radio" accessibilityLabel={`${choice[0].toUpperCase()}${choice.slice(1)} theme`}
             accessibilityState={{ checked: preference === choice }} aria-checked={preference === choice}
@@ -230,7 +230,7 @@ export const AccountScreen: React.FC = () => {
           </Pressable>
         ))}
       </View>
-      <Text style={[styles.rowHint, { marginTop: 8 }]}>System follows your device appearance.</Text>
+      <Text style={[styles.rowHint, { marginTop: ui.space.sm }]}>System follows your device appearance.</Text>
 
       <Text style={styles.section}>Privacy</Text>
       <View style={styles.row}>
@@ -264,8 +264,8 @@ export const AccountScreen: React.FC = () => {
       </Pressable>
 
       <Text style={styles.section}>About & Credits</Text>
-      <View style={{ padding: 16, borderRadius: 8, backgroundColor: colors.surface, gap: 12 }}>
-        <Text style={{ fontSize: 18, fontWeight: '700', color: colors.textPrimary }}>Velora</Text>
+      <View style={{ padding: ui.space.lg, borderRadius: 8, backgroundColor: colors.surface, gap: ui.space.md }}>
+        <Text style={{ fontSize: ui.type.heading, fontWeight: '700', color: colors.textPrimary }}>Velora</Text>
         <Text style={styles.rowHint}>Track movies and TV series, reviews and episode progress.</Text>
         <Pressable accessibilityRole="link" accessibilityLabel="The Movie Database" onPress={() => Linking.openURL('https://www.themoviedb.org')}>
           <Image source={require('../../../assets/credits/tmdb-logo.png')} resizeMode="contain" style={{ width: 110, height: 45, alignSelf: 'flex-start' }} />
@@ -285,8 +285,8 @@ export const AccountScreen: React.FC = () => {
 const createStyles = (colors: AppColors) => StyleSheet.create({
   themeChoice: { flex: 1, borderWidth: 1, borderColor: colors.surfaceBorder, paddingVertical: 13, alignItems: 'center', borderRadius: 8 },
   photoRow: { flexDirection: 'row', alignItems: 'center', marginVertical: 18 },
-  removePhoto: { color: colors.primary, fontSize: 14, fontWeight: '600', marginTop: 10, alignSelf: 'flex-start' },
-  readonly: { color: colors.textSecondary, paddingVertical: 12, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.border },
+  removePhoto: { color: colors.primary, fontSize: ui.type.body, fontWeight: '600', marginTop: 10, alignSelf: 'flex-start' },
+  readonly: { color: colors.textSecondary, paddingVertical: ui.space.md, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.border },
   root: { flex: 1, backgroundColor: colors.background },
   back: {
     width: 38,
@@ -295,7 +295,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: colors.surface,
-    marginBottom: 8,
+    marginBottom: ui.space.sm,
   },
   title: { fontSize: ui.type.screenTitle, fontWeight: '800', color: colors.textPrimary, marginBottom: 10 },
   section: { fontSize: 13, fontWeight: '800', color: colors.textMuted, textTransform: 'uppercase', letterSpacing: 1, marginTop: 22, marginBottom: 10 },
@@ -305,17 +305,17 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.surfaceBorder,
     paddingHorizontal: 14,
-    paddingVertical: 12,
+    paddingVertical: ui.space.md,
     color: colors.textPrimary,
-    fontSize: 14,
+    fontSize: ui.type.body,
     marginBottom: 10,
   },
   bioInput: { minHeight: 76, textAlignVertical: 'top' },
   button: { borderRadius: ui.radius.button, backgroundColor: colors.primary, paddingVertical: 13, alignItems: 'center' },
-  buttonText: { color: '#fff', fontWeight: '800', fontSize: 14 },
-  row: { flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: colors.surface, borderRadius: ui.radius.button, padding: 14 },
-  rowLabel: { fontSize: 14, fontWeight: '700', color: colors.textPrimary },
-  rowHint: { fontSize: 12, color: colors.textSecondary, marginTop: 3, lineHeight: 17 },
+  buttonText: { color: '#fff', fontWeight: '800', fontSize: ui.type.body },
+  row: { flexDirection: 'row', alignItems: 'center', gap: ui.space.md, backgroundColor: colors.surface, borderRadius: ui.radius.button, padding: 14 },
+  rowLabel: { fontSize: ui.type.body, fontWeight: '700', color: colors.textPrimary },
+  rowHint: { fontSize: ui.type.label, color: colors.textSecondary, marginTop: 3, lineHeight: 17 },
   rowButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -323,8 +323,8 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     backgroundColor: colors.surface,
     borderRadius: ui.radius.button,
     padding: 14,
-    marginBottom: 8,
+    marginBottom: ui.space.sm,
   },
-  rowButtonText: { fontSize: 14, fontWeight: '700', color: colors.textPrimary },
+  rowButtonText: { fontSize: ui.type.body, fontWeight: '700', color: colors.textPrimary },
   danger: { borderWidth: 1, borderColor: colors.error },
 });

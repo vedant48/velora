@@ -6,6 +6,7 @@ import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContex
 import { getImageUrl, IMAGE_CONFIG } from '../../utils/image';
 import { AppLoader } from '../common/AppLoader';
 import { BottomSheet } from '../common/BottomSheet';
+import { ui } from '../../theme/ui';
 
 const RATING_VALUES = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
 
@@ -165,7 +166,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 18,
     paddingVertical: 10,
-    gap: 12,
+    gap: ui.space.md,
   },
   posterWrap: {
     width: 52,
@@ -206,13 +207,13 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   ratingRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 12,
+    paddingVertical: ui.space.md,
     paddingLeft: 14,
   },
-  emoji: { marginRight: 4 },
+  emoji: { marginRight: ui.space.xs },
   ratingScroll: {
     gap: 10,
-    paddingRight: 16,
+    paddingRight: ui.space.lg,
     alignItems: 'center',
   },
   circle: {
@@ -253,7 +254,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   },
   saveText: {
     color: '#FFF',
-    fontSize: 18,
+    fontSize: ui.type.heading,
     fontWeight: '700',
   },
 });

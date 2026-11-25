@@ -9,6 +9,7 @@ import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContex
 import { AppLoader } from '../common/AppLoader';
 import { RateReviewSheet } from './RateReviewSheet';
 import { SeasonReviewCards } from './SeasonReviewCards';
+import { ui } from '../../theme/ui';
 
 const HINT_KEY = '@velora_episode_swipe_hint_seen';
 
@@ -317,11 +318,11 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 8,
+    gap: ui.space.sm,
     paddingVertical: 20,
   },
   loadingText: { color: colors.textSecondary, fontSize: 13 },
-  emptyText: { color: colors.textTertiary, fontSize: 13, paddingVertical: 12 },
+  emptyText: { color: colors.textTertiary, fontSize: 13, paddingVertical: ui.space.md },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -331,7 +332,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   epNumber: {
     width: 26,
     color: colors.textSecondary,
-    fontSize: 14,
+    fontSize: ui.type.body,
     fontWeight: '600',
   },
   epMark: { marginRight: 2 },
@@ -340,7 +341,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     height: 8,
     borderRadius: 4,
     backgroundColor: colors.trackBlue,
-    marginHorizontal: 4,
+    marginHorizontal: ui.space.xs,
   },
   epTextWrap: { flex: 1, marginLeft: 10 },
   epTitle: {
@@ -376,7 +377,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   },
   hintText: {
     color: colors.trackBlue,
-    fontSize: 12,
+    fontSize: ui.type.label,
     fontWeight: '700',
   },
   footer: {
@@ -384,7 +385,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 10,
-    marginTop: 16,
+    marginTop: ui.space.lg,
   },
   footerButton: {
     backgroundColor: colors.surfaceLight,
@@ -394,7 +395,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   },
   footerButtonText: {
     color: colors.textPrimary,
-    fontSize: 14,
+    fontSize: ui.type.body,
     fontWeight: '700',
   },
 });

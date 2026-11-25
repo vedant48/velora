@@ -3,6 +3,7 @@ import { memo } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import type { LibraryStatus } from '../../api/velora';
 import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
+import { ui } from '../../theme/ui';
 
 const OPTIONS: { key: LibraryStatus; label: string; icon: keyof typeof Ionicons.glyphMap }[] = [
   { key: 'want', label: 'Want', icon: 'bookmark-outline' },
@@ -43,7 +44,7 @@ export const StatusPicker = memo(function StatusPicker({ status, onChange }: Sta
 const createStyles = (colors: AppColors) => StyleSheet.create({
   row: {
     flexDirection: 'row',
-    gap: 8,
+    gap: ui.space.sm,
   },
   option: {
     flex: 1,
@@ -62,7 +63,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     borderColor: colors.primary,
   },
   optionText: {
-    fontSize: 12,
+    fontSize: ui.type.label,
     fontWeight: '700',
     color: colors.textSecondary,
   },

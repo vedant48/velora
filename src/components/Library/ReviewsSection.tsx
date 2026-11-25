@@ -5,6 +5,7 @@ import { MediaType, Review, veloraApi } from '../../api/velora';
 import { useAuth } from '../../state/AuthContext';
 import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
 import { AppLoader } from '../common/AppLoader';
+import { ui } from '../../theme/ui';
 
 interface ReviewsSectionProps {
   mediaType: MediaType;
@@ -73,7 +74,7 @@ export const ReviewsSection = memo(function ReviewsSection({ mediaType, tmdbId, 
         </View>
       )}
       {loading ? (
-        <AppLoader style={{ marginVertical: 12 }} />
+        <AppLoader style={{ marginVertical: ui.space.md }} />
       ) : reviews.length === 0 ? (
         <Text style={styles.empty}>No reviews yet.</Text>
       ) : (
@@ -98,13 +99,13 @@ export const ReviewsSection = memo(function ReviewsSection({ mediaType, tmdbId, 
 
 const createStyles = (colors: AppColors) => StyleSheet.create({
   container: {
-    marginTop: 24,
-    padding: 16,
+    marginTop: ui.space.xl,
+    padding: ui.space.lg,
     borderRadius: 16,
     backgroundColor: colors.cardBackground,
     borderWidth: 1,
     borderColor: colors.border,
-    gap: 12,
+    gap: ui.space.md,
   },
   heading: {
     fontSize: 16,
@@ -114,7 +115,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   composer: {
     flexDirection: 'row',
     alignItems: 'flex-end',
-    gap: 8,
+    gap: ui.space.sm,
   },
   input: {
     flex: 1,
@@ -124,7 +125,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.surfaceBorder,
-    paddingHorizontal: 12,
+    paddingHorizontal: ui.space.md,
     paddingVertical: 9,
     color: colors.textPrimary,
     fontSize: 13,
@@ -142,7 +143,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     color: colors.textTertiary,
   },
   review: {
-    gap: 4,
+    gap: ui.space.xs,
     paddingTop: 10,
     borderTopWidth: 1,
     borderTopColor: colors.border,
@@ -163,7 +164,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     gap: 3,
   },
   reviewRatingText: {
-    fontSize: 12,
+    fontSize: ui.type.label,
     fontWeight: '700',
     color: colors.accentAmber,
   },

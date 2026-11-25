@@ -22,6 +22,7 @@ import { GC_TIME, STALE_TIME } from '../../api/queries';
 import { checkForUpdate, downloadAndInstall } from '../../services/updates';
 import { useAuth } from '../../state/AuthContext';
 import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
+import { ui } from '../../theme/ui';
 
 type TabKey = LibraryTab;
 type SortKey = 'recent' | 'release' | 'title' | 'rating';
@@ -322,7 +323,7 @@ export const LibraryScreen: React.FC = () => {
             : 'Backend not configured yet. Set EXPO_PUBLIC_API_URL to enable accounts.'}
         </Text>
         {apiReady && (
-          <AppButton title="Log in / Sign up" style={{ marginTop: 8 }} onPress={() => navigation.navigate('Auth')} />
+          <AppButton title="Log in / Sign up" style={{ marginTop: ui.space.sm }} onPress={() => navigation.navigate('Auth')} />
         )}
       </View>
     );
@@ -378,7 +379,7 @@ export const LibraryScreen: React.FC = () => {
               </View>
             ) : null}
               contentContainerStyle={[styles.listContent, { paddingTop: insets.top + collapseH + pinnedH + 14 }]}
-              ListEmptyComponent={pageTab === 'insights' ? null : loading ? <AppLoader style={{ marginTop: 32 }} /> : loadError ? <Pressable onPress={() => setRefreshKey(k => k + 1)} accessibilityRole="button"><Text style={styles.emptyText}>Could not load your library. Tap to retry.</Text></Pressable> : <Text style={styles.emptyText}>Nothing here yet. Rate and track from any title page.</Text>}
+              ListEmptyComponent={pageTab === 'insights' ? null : loading ? <AppLoader style={{ marginTop: ui.space.xxl }} /> : loadError ? <Pressable onPress={() => setRefreshKey(k => k + 1)} accessibilityRole="button"><Text style={styles.emptyText}>Could not load your library. Tap to retry.</Text></Pressable> : <Text style={styles.emptyText}>Nothing here yet. Rate and track from any title page.</Text>}
             />
           </View>)}
       </ContentPager>
@@ -470,16 +471,16 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   brandIcon: { width: 28, height: 28, borderRadius: 6, marginLeft: 6 },
   topActions: { flexDirection: 'row', alignItems: 'center' },
   photoViewerBackdrop: { flex: 1, backgroundColor: 'rgba(0,0,0,0.92)', alignItems: 'center', justifyContent: 'center' },
-  filters: { padding: 12, gap: 10 },
-  filterChips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
-  filterChip: { paddingHorizontal: 12, paddingVertical: 8, borderRadius: 20, backgroundColor: colors.surface },
+  filters: { padding: ui.space.md, gap: 10 },
+  filterChips: { flexDirection: 'row', flexWrap: 'wrap', gap: ui.space.sm },
+  filterChip: { paddingHorizontal: ui.space.md, paddingVertical: ui.space.sm, borderRadius: 20, backgroundColor: colors.surface },
   filterChipSelected: { backgroundColor: colors.surfaceLight },
   apply: { alignSelf: 'center', paddingHorizontal: 30, paddingVertical: 9, borderRadius: 20, backgroundColor: colors.surface },
   root: { flex: 1, backgroundColor: colors.background },
   headerOverlay: { position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10, elevation: 10 },
   listContent: { paddingHorizontal: 15, paddingTop: 14, paddingBottom: 100 },
   gridCell: { flex: 1 / 2, padding: 5 },
-  header: { gap: 0, paddingBottom: 12, paddingHorizontal: 5 },
+  header: { gap: 0, paddingBottom: ui.space.md, paddingHorizontal: 5 },
   identityRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -498,9 +499,9 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   avatarText: { fontSize: 26, fontWeight: '900', color: '#fff' },
   name: { fontSize: 27, fontWeight: '700', color: colors.textPrimary },
   username: { fontSize: 13, color: colors.textTertiary },
-  bio: { fontSize: 13, color: colors.textSecondary, marginTop: 4 },
+  bio: { fontSize: 13, color: colors.textSecondary, marginTop: ui.space.xs },
   statsRow: {
-    paddingTop: 32, paddingBottom: 16,
+    paddingTop: ui.space.xxl, paddingBottom: ui.space.lg,
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingRight: 45,
@@ -508,7 +509,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   },
   stat: { flex: 1, alignItems: 'center' },
   statValue: { fontSize: 15, fontWeight: '600', color: colors.textPrimary },
-  statLabel: { fontSize: 12, color: colors.textTertiary, marginTop: 1 },
+  statLabel: { fontSize: ui.type.label, color: colors.textTertiary, marginTop: 1 },
   actionsRow: {
     flexDirection: 'row',
     gap: 10,
@@ -528,10 +529,10 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   divider: {
     height: StyleSheet.hairlineWidth,
     backgroundColor: 'rgba(255,255,255,0.16)',
-    marginTop: 4,
+    marginTop: ui.space.xs,
   },
   tabsRow: {
-    paddingTop: 16,
+    paddingTop: ui.space.lg,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -539,7 +540,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   tabsGroup: { flexDirection: 'row', gap: 2, flexShrink: 1 },
   tab: { paddingHorizontal: 9, paddingVertical: 10, borderRadius: 18, backgroundColor: 'transparent' },
   tabActive: { backgroundColor: colors.surfaceLight },
-  tabText: { fontSize: 12, fontWeight: '700', color: colors.textTertiary },
+  tabText: { fontSize: ui.type.label, fontWeight: '700', color: colors.textTertiary },
   tabTextActive: { color: colors.textPrimary },
   filterButton: {
     width: 34,
@@ -555,25 +556,25 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     flex: 1,
     backgroundColor: colors.surface,
     borderRadius: 14,
-    paddingVertical: 16,
+    paddingVertical: ui.space.lg,
     alignItems: 'center',
     borderWidth: 1,
     borderColor: colors.surfaceBorder,
   },
   insightCellValue: { fontSize: 22, fontWeight: '800', color: colors.textPrimary },
-  insightCellLabel: { fontSize: 11, color: colors.textTertiary, marginTop: 3, fontWeight: '600' },
+  insightCellLabel: { fontSize: ui.type.caption, color: colors.textTertiary, marginTop: 3, fontWeight: '600' },
   insightBlock: {
     backgroundColor: colors.surface,
     borderRadius: 14,
-    padding: 16,
+    padding: ui.space.lg,
     borderWidth: 1,
     borderColor: colors.surfaceBorder,
   },
   insightHeading: { fontSize: 13, fontWeight: '800', color: colors.textSecondary, letterSpacing: 0.4 },
   insightBig: { fontSize: 34, fontWeight: '900', color: colors.textPrimary, marginTop: 6 },
-  insightSub: { fontSize: 12, color: colors.textTertiary, marginTop: 2 },
-  distRow: { flexDirection: 'row', alignItems: 'flex-end', gap: 5, marginTop: 12 },
-  distCol: { flex: 1, alignItems: 'center', gap: 4 },
+  insightSub: { fontSize: ui.type.label, color: colors.textTertiary, marginTop: 2 },
+  distRow: { flexDirection: 'row', alignItems: 'flex-end', gap: 5, marginTop: ui.space.md },
+  distCol: { flex: 1, alignItems: 'center', gap: ui.space.xs },
   distBarTrack: { height: 76, width: '100%', justifyContent: 'flex-end' },
   distBarFill: {
     width: '100%',
@@ -586,9 +587,9 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 10,
-    padding: 32,
+    padding: ui.space.xxl,
     backgroundColor: colors.background,
   },
-  emptyTitle: { fontSize: 18, fontWeight: '800', color: colors.textPrimary },
-  emptyText: { fontSize: 13, color: colors.textTertiary, textAlign: 'center', lineHeight: 19, paddingHorizontal: 16, marginTop: 24 },
+  emptyTitle: { fontSize: ui.type.heading, fontWeight: '800', color: colors.textPrimary },
+  emptyText: { fontSize: 13, color: colors.textTertiary, textAlign: 'center', lineHeight: 19, paddingHorizontal: ui.space.lg, marginTop: ui.space.xl },
 });
