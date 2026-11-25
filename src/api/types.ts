@@ -81,6 +81,10 @@ export interface MovieDetails extends Movie {
     poster_path: string | null;
     backdrop_path: string | null;
   } | null;
+  /** With append_to_response=release_dates: per-country certifications. */
+  release_dates?: {
+    results: { iso_3166_1: string; release_dates: { certification: string }[] }[];
+  };
 }
 
 export interface TVDetails extends TVSeries {
@@ -96,6 +100,10 @@ export interface TVDetails extends TVSeries {
     episode_count: number;
     poster_path: string | null;
   }[];
+  /** With append_to_response=content_ratings: per-country ratings. */
+  content_ratings?: {
+    results: { iso_3166_1: string; rating: string }[];
+  };
 }
 
 export interface Episode {

@@ -16,7 +16,7 @@ import { LibraryCard } from '../../components/Library/LibraryCard';
 import { LibraryQuickAction } from '../../components/Library/LibraryQuickAction';
 import { isEndedComplete, seriesProgress } from '../../components/Library/seriesProgress';
 import { CachedImage } from '../../experience/CachedImage';
-import { useQueries } from '@tanstack/react-query';
+import { useQueries, useQuery } from '@tanstack/react-query';
 import { getTVDetails } from '../../api/tv';
 import { GC_TIME, STALE_TIME, useTVDetailsQuery } from '../../api/queries';
 import { checkForUpdate, downloadAndInstall } from '../../services/updates';
@@ -557,6 +557,21 @@ const SeriesRow = memo(function SeriesRow({ item, first, last, onPress, onLongPr
   const prog = seriesProgress(item);
   const { data: tmdb } = useTVDetailsQuery(item.tmdb_id, !!prog && prog.left === 0);
   const ended = isEndedComplete(prog, tmdb);
+  const { apiReady } = useAuth();
+  // Current-season label: the latest season with recorded watched progress (a fact
+  // from the progress endpoint, not an inferred "next unwatched" guess). Lazy + cached.
+  const { data: epProgress } = useQuery({
+    queryKey: ['epProgress', item.tmdb_id],
+    queryFn: () => veloraApi.getEpisodeProgress(item.tmdb_id),
+    staleTime: STALE_TIME,
+    gcTime: GC_TIME,
+    enabled: apiReady && item.total_episodes > 0,
+  });
+  const currentSeason = useMemo(() => {
+    const watched = epProgress?.watched ?? [];
+    if (watched.length === 0) return null;
+    return Math.max(...watched.map((w) => w.season));
+  }, [epProgress]);
   const uri = item.poster_path ? `${TMDB_IMG}${item.poster_path}` : null;
   return (
     <Pressable accessibilityRole="button" accessibilityLabel={item.title} onPress={() => onPress(item)} onLongPress={onLongPress ? () => onLongPress(item) : undefined}
@@ -569,7 +584,7 @@ const SeriesRow = memo(function SeriesRow({ item, first, last, onPress, onLongPr
       <View style={styles.seriesMeta}>
         <Text style={styles.seriesTitle} numberOfLines={1}>{item.title}</Text>
         <Text style={styles.seriesLine}>
-          {prog ? `${prog.watched} of ${prog.total} episodes${ended ? ' · Done' : ''}` : ''}
+          {prog ? `${currentSeason ? `S${currentSeason} · ` : ''}${prog.watched} of ${prog.total} episodes${ended ? ' · Done' : ''}` : ''}
           {item.rating !== null && <Text style={{ color: colors.appleAmber }}>{`  ★ ${item.rating}`}</Text>}
         </Text>
         {prog && <View style={styles.seriesProgress}><View style={[styles.seriesProgressFill, { width: `${Math.round(prog.fraction * 100)}%` }]} /></View>}
