@@ -75,7 +75,37 @@ appId: com.vedant.velora
 - extendedWaitUntil:
     visible: 'E2E Bob'
     timeout: 15000
+# Member restyle (d5781ed): truthful joined line + stats cards
+- extendedWaitUntil:
+    visible: '@e2e_bob · Joined .*'
+    timeout: 10000
+- assertVisible: Followers
 - takeScreenshot: b5-member-profile
+# Real action: overflow -> Share profile -> native sheet dismissed WITHOUT sending
+- tapOn: 'More actions'
+- extendedWaitUntil:
+    visible: 'Share profile'
+    timeout: 5000
+- takeScreenshot: b5a-member-overflow
+- tapOn: 'Share profile'
+- waitForAnimationToEnd:
+    timeout: 3000
+- back
+- extendedWaitUntil:
+    visible: 'E2E Bob'
+    timeout: 10000
+# Real action: Follow toggle on the test fixture, then restore baseline
+- tapOn: Follow
+- extendedWaitUntil:
+    visible: Following
+    timeout: 10000
+- takeScreenshot: b5b-member-following
+- tapOn:
+    text: Following
+    above: Followers
+- extendedWaitUntil:
+    visible: Follow
+    timeout: 10000
 - back
 # Movie details: hero restyle + tracking controls + action sheet + rate sheet (no save)
 # Redesign Search is a pushed full-screen route (no tab bar): back again lands on Home.
