@@ -1,0 +1,81 @@
+02:27:38.477 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Define variables RUNNING
+02:27:38.480 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Define variables COMPLETED
+02:27:38.481 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Apply configuration RUNNING
+02:27:38.481 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Apply configuration COMPLETED
+02:27:38.481 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Launch app "com.vedant.velora" RUNNING
+02:27:39.022 [DEBUG] maestro.Maestro.setPermissionInternal: Failed to set permission com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE for app com.vedant.velora: shell command failed (exit -1): 
+Exception occurred while executing 'grant':
+java.lang.IllegalArgumentException: Unknown permission com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE
+	at com.android.server.permission.access.permission.PermissionService.setRuntimePermissionGranted(PermissionService.kt:911)
+	at com.android.server.permission.access.permission.PermissionService.access$setRuntimePermissionGranted(PermissionService.kt:108)
+	at com.android.server.permission.access.permission.PermissionService.setRuntimePermissionGranted(PermissionService.kt:809)
+	at com.android.server.permission.access.permission.PermissionService.setRuntimePermissionGranted$default(PermissionService.kt:714)
+	at com.android.server.permission.access.permission.PermissionService.grantRuntimePermission(PermissionService.kt:676)
+	at com.android.server.pm.permission.PermissionManagerService.grantRuntimePermission(PermissionManagerService.java:585)
+	at android.permission.PermissionManager.grantRuntimePermissionInternal(PermissionManager.java:679)
+	at android.permission.PermissionManager.grantRuntimePermission(PermissionManager.java:642)
+	at com.android.server.pm.PackageManagerShellCommand.runGrantRevokePermission(PackageManagerShellCommand.java:2690)
+	at com.android.server.pm.PackageManagerShellCommand.onCommand(PackageManagerShellCommand.java:316)
+	at com.android.modules.utils.BasicShellCommandHandler.exec(BasicShellCommandHandler.java:97)
+	at android.os.ShellCommand.exec(ShellCommand.java:38)
+	at com.android.server.pm.PackageManagerService$IPackageManagerImpl.onShellCommand(PackageManagerService.java:6561)
+	at android.os.Binder.shellCommand(Binder.java:1230)
+	at android.os.Binder.onTransact(Binder.java:1043)
+	at android.content.pm.IPackageManager$Stub.onTransact(IPackageManager.java:4620)
+	at com.android.server.pm.PackageManagerService$IPackageManagerImpl.onTransact(PackageManagerService.java:6545)
+	at android.os.Binder.execTransactInternal(Binder.java:1505)
+	at android.os.Binder.execTransact(Binder.java:1444)
+
+02:27:39.026 [ INFO] maestro.Maestro.launchApp$lambda$6: Launching app com.vedant.velora
+02:27:39.026 [ INFO] maestro.Maestro.launchApp$lambda$6: Stopping com.vedant.velora app during launch
+02:27:39.652 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Launch app "com.vedant.velora" COMPLETED
+02:27:39.653 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "E2E Alice" is visible RUNNING
+02:27:43.886 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "E2E Alice" is visible COMPLETED
+02:27:43.887 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Take screenshot f0-before RUNNING
+02:27:43.889 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+02:27:43.891 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+02:27:44.462 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Take screenshot f0-before COMPLETED
+02:27:44.465 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Swiping in UP direction in 120 ms RUNNING
+02:28:17.280 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Swiping in UP direction in 120 ms COMPLETED
+02:28:17.284 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Swiping in UP direction in 120 ms RUNNING
+02:28:46.614 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Swiping in UP direction in 120 ms COMPLETED
+02:28:46.614 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Swiping in DOWN direction in 120 ms RUNNING
+02:29:20.302 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Swiping in DOWN direction in 120 ms COMPLETED
+02:29:20.303 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Swiping in DOWN direction in 120 ms RUNNING
+02:29:45.204 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Swiping in DOWN direction in 120 ms COMPLETED
+02:29:45.204 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Swiping in UP direction in 150 ms RUNNING
+02:30:03.017 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Swiping in UP direction in 150 ms COMPLETED
+02:30:03.019 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Swiping in DOWN direction in 150 ms RUNNING
+02:30:04.472 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Swiping in DOWN direction in 150 ms COMPLETED
+02:30:04.472 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Swiping in UP direction in 120 ms RUNNING
+02:30:24.066 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Swiping in UP direction in 120 ms COMPLETED
+02:30:24.069 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Swiping in UP direction in 120 ms RUNNING
+02:30:45.794 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Swiping in UP direction in 120 ms COMPLETED
+02:30:45.794 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Swiping in UP direction in 120 ms RUNNING
+02:31:05.266 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Swiping in UP direction in 120 ms COMPLETED
+02:31:05.267 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Take screenshot f1-collapsed RUNNING
+02:31:05.268 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+02:31:05.269 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+02:31:06.039 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Take screenshot f1-collapsed COMPLETED
+02:31:06.039 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Swiping in DOWN direction in 120 ms RUNNING
+02:31:25.615 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Swiping in DOWN direction in 120 ms COMPLETED
+02:31:25.615 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Swiping in DOWN direction in 120 ms RUNNING
+02:31:47.368 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Swiping in DOWN direction in 120 ms COMPLETED
+02:31:47.369 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Swiping in DOWN direction in 120 ms RUNNING
+02:32:07.472 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Swiping in DOWN direction in 120 ms COMPLETED
+02:32:07.479 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Take screenshot f2-restored RUNNING
+02:32:07.480 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+02:32:07.481 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+02:32:08.825 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Take screenshot f2-restored COMPLETED
+02:32:08.825 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Swiping in UP direction in 200 ms RUNNING
+02:32:30.108 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Swiping in UP direction in 200 ms COMPLETED
+02:32:30.108 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Swiping in DOWN direction in 200 ms RUNNING
+02:32:31.409 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Swiping in DOWN direction in 200 ms COMPLETED
+02:32:31.409 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Swiping in UP direction in 200 ms RUNNING
+02:32:52.455 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Swiping in UP direction in 200 ms COMPLETED
+02:32:52.455 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Swiping in DOWN direction in 200 ms RUNNING
+02:33:12.409 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Swiping in DOWN direction in 200 ms COMPLETED
+02:33:12.409 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Take screenshot f3-after-cycles RUNNING
+02:33:12.410 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+02:33:12.411 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+02:33:13.462 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Take screenshot f3-after-cycles COMPLETED
