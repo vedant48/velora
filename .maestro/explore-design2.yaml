@@ -7,9 +7,13 @@ appId: com.vedant.velora
     timeout: 30000
 # Explore Movies tab: hero banner + wide trending rail + labeled tab bar
 - tapOn: 'Explore Movies'
-- extendedWaitUntil:
-    visible: 'Trending this week'
+# 'Trending this week' is a LazySection: it mounts only after entering the viewport.
+- scrollUntilVisible:
+    element: 'Trending this week'
+    direction: DOWN
     timeout: 60000
+- waitForAnimationToEnd:
+    timeout: 5000
 - takeScreenshot: b1-explore-movies
 - swipe:
     direction: UP
@@ -17,15 +21,21 @@ appId: com.vedant.velora
 - takeScreenshot: b1b-explore-movies-scrolled
 # Explore TV Series tab
 - tapOn: 'Explore TV Series'
-- extendedWaitUntil:
-    visible: 'Trending TV shows'
+- scrollUntilVisible:
+    element: 'Trending TV shows'
+    direction: DOWN
     timeout: 60000
+- waitForAnimationToEnd:
+    timeout: 5000
 - takeScreenshot: b2-explore-tv
 # Explore All tab
 - tapOn: 'Explore All'
-- extendedWaitUntil:
-    visible: 'Trending this week'
+- scrollUntilVisible:
+    element: 'Trending this week'
+    direction: DOWN
     timeout: 60000
+- waitForAnimationToEnd:
+    timeout: 5000
 - takeScreenshot: b3-explore-all
 # Search: iOS field + movie results
 - tapOn: 'Search'
