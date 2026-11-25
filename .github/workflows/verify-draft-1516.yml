@@ -5,6 +5,7 @@ on:
     paths: [.ci/verify1516]
 permissions:
   contents: write
+  actions: read
 jobs:
   verify:
     runs-on: ubuntu-latest
@@ -13,7 +14,14 @@ jobs:
       TAG: v1.5.16
     steps:
       - uses: actions/checkout@v4
+      - name: Diagnose failed publish step and list releases
+        run: |
+          mkdir -p out
+          gh release list --repo "$GITHUB_REPOSITORY" --limit 6 > out/releases.txt 2>&1 || true
+          gh run view 45649400327 --repo "$GITHUB_REPOSITORY" --log-failed 2>&1 | tail -60 > out/failed-1516.log || true
+          gh run view 45646659684 --repo "$GITHUB_REPOSITORY" --log-failed 2>&1 | tail -30 > out/failed-1515.log || true
       - name: Download draft assets with the workflow token and verify
+        continue-on-error: true
         run: |
           mkdir -p out dl
           gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json isDraft,tagName,assets,targetCommitish > out/release.json || true
