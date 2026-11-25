@@ -1,0 +1,225 @@
+appId: com.vedant.velora
+---
+# Flow B: redesign route coverage (batches 2-7). Assumes Flow A already logged e2e_alice in.
+- launchApp
+# Wait for a settled state first (session restore can briefly show the logged-out
+# screen): either the profile is back or the login CTA is really there.
+- extendedWaitUntil:
+    visible: "E2E Alice|Log in / Sign up"
+    timeout: 30000
+- runFlow:
+    when:
+      visible: 'Log in / Sign up'
+    file: login-design2.yaml
+- extendedWaitUntil:
+    visible: E2E Alice
+    timeout: 30000
+# Explore Movies tab: hero banner + wide trending rail + labeled tab bar
+- tapOn: 'Explore Movies'
+# Movies tab first rail is 'Trending movies' (seed=0: alice has no watched movies, so
+# trending rather than 'For you'); 'Trending this week' is the All-tab wide rail only.
+# LazySection: mounts only after entering the viewport.
+- scrollUntilVisible:
+    element: 'Trending movies'
+    direction: DOWN
+    timeout: 60000
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: b1-explore-movies
+- swipe:
+    direction: UP
+    duration: 600
+- takeScreenshot: b1b-explore-movies-scrolled
+# Explore TV Series tab
+- tapOn: 'Explore TV Series'
+- scrollUntilVisible:
+    element: 'Trending TV shows'
+    direction: DOWN
+    timeout: 60000
+# Reviewer needs the UNSCROLLED Series top (hero assessment): content is now
+# loaded, scroll back to the top, capture, then return to the rail shot.
+- swipe:
+    direction: DOWN
+    duration: 700
+- swipe:
+    direction: DOWN
+    duration: 700
+- swipe:
+    direction: DOWN
+    duration: 700
+- waitForAnimationToEnd:
+    timeout: 3000
+- takeScreenshot: b2a-explore-tv-top
+- scrollUntilVisible:
+    element: 'Trending TV shows'
+    direction: DOWN
+    timeout: 60000
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: b2-explore-tv
+# Explore All tab - capture the top first: centered 'Explore' title (2587224)
+# sits above the hero and scrolls away with the rail
+- tapOn: 'Explore All'
+- extendedWaitUntil:
+    visible: 'Trending this week'
+    timeout: 60000
+- waitForAnimationToEnd:
+    timeout: 3000
+- takeScreenshot: b3a-explore-all-top
+- scrollUntilVisible:
+    element: 'Trending this week'
+    direction: DOWN
+    timeout: 60000
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: b3-explore-all
+# Search: iOS field + movie results
+- tapOn: 'Search'
+- extendedWaitUntil:
+    visible: 'Movies, series, people…'
+    timeout: 20000
+- assertVisible: 'Movies, series, people…'
+- tapOn: 'Movies, series, people…'
+- inputText: 'F1'
+- extendedWaitUntil:
+    visible: 'Clear search'
+    timeout: 30000
+- takeScreenshot: b4-search-results
+# Search users -> member profile (UserProfile, batch6)
+- tapOn: 'Clear search'
+- tapOn: 'Movies, series, people…'
+- inputText: 'e2e_bob'
+- hideKeyboard
+# Redesign search has scope chips (All/Movies/TV Series/People); member results
+# render only under People.
+- tapOn: People
+- extendedWaitUntil:
+    visible: 'E2E Bob'
+    timeout: 20000
+- takeScreenshot: b4b-search-users
+- tapOn: 'E2E Bob'
+- extendedWaitUntil:
+    visible: 'E2E Bob'
+    timeout: 15000
+# Member restyle (d5781ed): truthful joined line + stats cards
+- extendedWaitUntil:
+    visible: '@e2e_bob · Joined .*'
+    timeout: 10000
+- assertVisible: Followers
+- assertVisible: EB
+- takeScreenshot: b5-member-profile
+# Real action: overflow -> Share profile -> native sheet dismissed WITHOUT sending
+- tapOn: 'More actions'
+- extendedWaitUntil:
+    visible: 'Share profile'
+    timeout: 5000
+- takeScreenshot: b5a-member-overflow
+- tapOn: 'Share profile'
+- waitForAnimationToEnd:
+    timeout: 3000
+- back
+- extendedWaitUntil:
+    visible: 'E2E Bob'
+    timeout: 10000
+# Real action: Follow toggle on the test fixture. Alice FOLLOWS bob from the
+# activity seed, so toggle off then back on; end state keeps the feed populated.
+- tapOn:
+    text: Following
+    above: Followers
+- extendedWaitUntil:
+    visible: Follow
+    timeout: 10000
+- takeScreenshot: b5b-member-follow-toggle
+- tapOn: Follow
+- extendedWaitUntil:
+    visible: Following
+    timeout: 10000
+- back
+# Movie details: hero restyle + tracking controls + action sheet + rate sheet (no save)
+# Redesign Search is a pushed full-screen route (no tab bar): back again lands on Home.
+- back
+- extendedWaitUntil:
+    visible: E2E Alice
+    timeout: 20000
+- tapOn: 'F1'
+- extendedWaitUntil:
+    visible: 'Cast & Crew'
+    timeout: 60000
+- takeScreenshot: b6-details-tracking
+- tapOn: 'Want, options'
+- extendedWaitUntil:
+    visible: 'Move to Watched'
+    timeout: 10000
+- takeScreenshot: b7-action-sheet
+- tapOn: 'Move to Watched'
+- extendedWaitUntil:
+    visible: 'Save review'
+    timeout: 10000
+- takeScreenshot: b8-rate-sheet
+- tapOn: 'Dismiss'
+- back
+# TV details: season progress + episode checklist (batch7)
+- tapOn:
+    id: library-tab-series
+- extendedWaitUntil:
+    visible: Prison Break
+    timeout: 90000
+- tapOn: Breaking Bad
+- extendedWaitUntil:
+    visible: 'Watch online'
+    timeout: 60000
+- swipe:
+    direction: UP
+    duration: 500
+- swipe:
+    direction: UP
+    duration: 500
+- takeScreenshot: b9-tv-episodes
+- back
+# Settings (AccountScreen, batch4) - own-profile header shows the seeded photo avatar
+- takeScreenshot: b9c-own-profile-header
+- tapOn: Settings
+- extendedWaitUntil:
+    visible: 'Save profile'
+    timeout: 15000
+- assertVisible: Settings
+- takeScreenshot: b10-settings
+- scrollUntilVisible:
+    element:
+      text: 'Velora for Android · made by Vedant'
+    direction: DOWN
+    timeout: 15000
+- takeScreenshot: b10a-settings-footer
+- back
+# Activity (batch4)
+- tapOn: 'More profile actions'
+- extendedWaitUntil:
+    visible: Activity
+    timeout: 10000
+- tapOn: Activity
+- extendedWaitUntil:
+    visible: 'What people you follow watched, rated and reviewed.'
+    timeout: 30000
+- takeScreenshot: b11-activity
+- back
+# Activity pops back to own profile; quick actions live on the Home library grid
+- tapOn: Home
+- extendedWaitUntil:
+    visible:
+      id: library-tab-want
+    timeout: 20000
+# F1 is alice's Want MOVIE - the Series tab (default) can't show it; cards proves this route green
+- tapOn:
+    id: library-tab-want
+- extendedWaitUntil:
+    visible: F1
+    timeout: 20000
+# Quick actions sheet via long-press (batch7 header + icons)
+- longPressOn: F1
+- extendedWaitUntil:
+    visible: Dismiss
+    timeout: 10000
+- waitForAnimationToEnd:
+    timeout: 3000
+- takeScreenshot: b12-quick-actions
+- tapOn: Dismiss

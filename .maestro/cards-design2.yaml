@@ -1,0 +1,182 @@
+appId: com.vedant.velora
+---
+- runFlow: login-design2.yaml
+# Initial order (owner reference): icon bar, then profile details, then tab row
+- assertVisible: Settings
+- assertVisible: More profile actions
+- assertVisible:
+    id: library-tab-series
+- takeScreenshot: 1-initial-order
+# Profile photo opens enlarged, tap closes
+- tapOn: View profile photo
+- extendedWaitUntil:
+    visible: Close profile photo
+    timeout: 5000
+- takeScreenshot: 2-photo-viewer
+- tapOn: Close profile photo
+# Insights tab: 2x2 stat tiles + ratings chart (redesign fidelity)
+- tapOn:
+    id: library-tab-insights
+- extendedWaitUntil:
+    visible: 'Your ratings'
+    timeout: 20000
+- assertVisible: 'Top genre'
+# Time watched stays hidden below its data floor (0 watched movies, no cached
+# episode runtimes on this seed) - assert the intended absence, not the tile.
+- assertNotVisible: 'Time watched'
+- takeScreenshot: 1c-insights
+# Filter sheet: iOS bottom sheet with sort radios, hide switches, Apply (redesign fidelity)
+- tapOn:
+    id: library-tab-want
+- tapOn: 'Filter and sort'
+- extendedWaitUntil:
+    visible: 'Sort & filter'
+    timeout: 10000
+- assertVisible: 'Hide movies'
+- takeScreenshot: 1d-filter-sheet
+- tapOn: 'Dismiss filters without applying'
+# Movie details: merged Cast & Crew, director card first (F1 seeded as most recent Want)
+- tapOn: F1
+- extendedWaitUntil:
+    visible: 'Cast & Crew'
+    timeout: 60000
+- takeScreenshot: 7a-details-hero
+- swipe:
+    direction: UP
+    duration: 500
+- assertVisible: 'Cast & Crew'
+- assertVisible: Director
+- takeScreenshot: 7-movie-cast-crew-director-first
+- back
+# Scroll: icon bar AND profile details scroll away; only tabs + filter pin
+- takeScreenshot: 3-scroll-before
+# Partial collapse: header mid-collapse must clip cleanly (status-bar bleed regression, v1.5.9)
+- swipe:
+    direction: UP
+    duration: 250
+- takeScreenshot: 3b-scroll-partial
+- swipe:
+    direction: UP
+    duration: 700
+- swipe:
+    direction: UP
+    duration: 700
+- assertNotVisible: E2E Alice
+- assertNotVisible: Settings
+- assertNotVisible: Place
+- assertVisible:
+    id: library-tab-series
+- takeScreenshot: 4-scroll-tabs-pinned
+# Return to top: header expands back, icon bar + profile visible again
+- swipe:
+    direction: DOWN
+    duration: 600
+- swipe:
+    direction: DOWN
+    duration: 600
+- waitForAnimationToEnd:
+    timeout: 5000
+- assertVisible: E2E Alice
+- assertVisible: Settings
+- takeScreenshot: 4b-scroll-return-top
+# Series sort: ended+fully-watched sink to the bottom
+- tapOn:
+    id: library-tab-series
+- extendedWaitUntil:
+    visible: Prison Break
+    timeout: 90000
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: 5-series-top
+- swipe:
+    direction: UP
+    duration: 700
+# Ended-complete marker: the row's accessibilityLabel ends with the phrase
+# (visible text is the short '· Done' badge); Maestro matches text as FULL regex.
+- extendedWaitUntil:
+    visible: '.*Ended, all episodes watched'
+    timeout: 60000
+- takeScreenshot: 6-series-bottom-ended-last
+# Series details: Watch online compact row opens the provider sheet
+- tapOn: Breaking Bad
+- extendedWaitUntil:
+    visible: 'Watch online'
+    timeout: 60000
+- takeScreenshot: 8-watch-online-row
+- tapOn: 'Watch online: show all providers'
+- extendedWaitUntil:
+    visible: Subscription
+    timeout: 20000
+- takeScreenshot: 9-providers-sheet
+- tapOn: 'Close watch providers'
+# Episode marking consistency loop (main's 62/62-vs-0/7 ruling): the coherent
+# seed marks Prison Break S1(22)+S2(18) through the real API. Mark S2E19 in
+# the UI, verify the season counter, the list aggregate on return, and
+# persisted readback on reopen. Runs LAST (mutates fixture; fresh D1 per run).
+- back
+- scrollUntilVisible:
+    element:
+      text: 'Prison Break'
+    direction: DOWN
+    timeout: 30000
+- tapOn: 'Prison Break'
+- extendedWaitUntil:
+    visible: '22 of 22 episodes'
+    timeout: 60000
+- tapOn:
+    id: season-menu
+- tapOn: 'Resurrection'  # TMDB names PB S5 'Resurrection'; sheet row shows the season name
+- extendedWaitUntil:
+    visible: '0 of 9 episodes'
+    timeout: 30000
+# S5E1 'Ogygia' is row 1 (visible without scrolling; the deep-scroll to S2E19
+# proved unreliable in 45567713433). Fully unwatched season, first row.
+- swipe:
+    from:
+      text: 'Ogygia'
+    direction: RIGHT
+    duration: 600
+- extendedWaitUntil:
+    visible: '1 of 9 episodes'
+    timeout: 20000
+- takeScreenshot: 10-episode-mark-readback
+- back
+- extendedWaitUntil:
+    visible: '.*41 of 88 episodes'  # list subtitle is composite 'Latest progress S5 · 41 of 88 episodes' - Maestro matches FULL regex
+    timeout: 30000
+- takeScreenshot: 11-list-aggregate-updated
+- tapOn: 'Prison Break'
+- extendedWaitUntil:
+    visible: '22 of 22 episodes'
+    timeout: 60000
+- tapOn:
+    id: season-menu
+- tapOn: 'Resurrection'  # TMDB names PB S5 'Resurrection'; sheet row shows the season name
+- extendedWaitUntil:
+    visible: '1 of 9 episodes'
+    timeout: 30000
+- takeScreenshot: 12-details-persisted
+# Deep-scroll probe (main 13:34): is the S2E19 scrollUntilVisible failure
+# harness-only or a real nested-scroll defect? Ordinary user swipes on the
+# same APK must reach deep episode rows. If 'Sweet Caroline' appears after
+# plain swipes, the earlier failure was harness-specific; if not, PRODUCT bug.
+- tapOn:
+    id: season-menu
+- tapOn: 'Season 2'
+- extendedWaitUntil:
+    visible: '18 of 22 episodes'
+    timeout: 30000
+- swipe:
+    direction: UP
+    duration: 700
+- swipe:
+    direction: UP
+    duration: 700
+- swipe:
+    direction: UP
+    duration: 700
+- swipe:
+    direction: UP
+    duration: 700
+- assertVisible: 'Sweet Caroline'
+- takeScreenshot: 13-deep-scroll-probe

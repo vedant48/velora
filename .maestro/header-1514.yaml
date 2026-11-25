@@ -1,0 +1,65 @@
+appId: com.vedant.velora
+---
+- runFlow: login-design2.yaml
+- assertVisible: 'Member since.*'
+- takeScreenshot: a0-expanded
+# slow short drags: stop mid-collapse (stats/identity partly scrolled)
+- swipe:
+    start: 50%, 70%
+    end: 50%, 62%
+    duration: 3000
+- takeScreenshot: a1-partial-1
+- swipe:
+    start: 50%, 70%
+    end: 50%, 58%
+    duration: 3000
+- takeScreenshot: a2-partial-2
+- swipe:
+    start: 50%, 70%
+    end: 50%, 55%
+    duration: 3000
+- takeScreenshot: a3-partial-3
+- swipe:
+    start: 50%, 80%
+    end: 50%, 25%
+    duration: 500
+- takeScreenshot: a4-collapsed
+# horizontal swipes while collapsed and while partial
+- swipe:
+    start: 85%, 65%
+    end: 15%, 65%
+    duration: 900
+- takeScreenshot: a5-collapsed-watched
+- swipe:
+    start: 85%, 65%
+    end: 15%, 65%
+    duration: 900
+- takeScreenshot: a6-collapsed-series
+- swipe:
+    start: 50%, 30%
+    end: 50%, 40%
+    duration: 3000
+- takeScreenshot: a7-partial-expanding-series
+- swipe:
+    start: 15%, 65%
+    end: 85%, 65%
+    duration: 900
+- takeScreenshot: a8-swipe-back-partial
+- swipe:
+    start: 50%, 30%
+    end: 50%, 85%
+    duration: 400
+- swipe:
+    start: 50%, 30%
+    end: 50%, 85%
+    duration: 400
+- takeScreenshot: a9-expanded
+- assertVisible: 'Member since.*'
+- swipe:
+    start: 85%, 65%
+    end: 15%, 65%
+    duration: 900
+- takeScreenshot: b0-expanded-swipe
+- tapOn:
+    id: library-tab-insights
+- takeScreenshot: b1-insights
