@@ -51,7 +51,7 @@ appId: com.vedant.velora
 # Search: iOS field + movie results
 - tapOn: 'Search'
 - extendedWaitUntil:
-    visible: 'Search movies, TV shows, actors...'
+    visible: 'Movies, series, people…'
     timeout: 20000
 - assertVisible: 'Movies, series, people…'
 - tapOn: 'Movies, series, people…'
@@ -176,6 +176,11 @@ appId: com.vedant.velora
 - assertVisible: 'What people you follow watched, rated and reviewed.'
 - takeScreenshot: b11-activity
 - back
+# Activity pops back to own profile; quick actions live on the Home library grid
+- tapOn: Home
+- extendedWaitUntil:
+    visible: F1
+    timeout: 20000
 # Quick actions sheet via long-press (batch7 header + icons)
 - longPressOn: F1
 - extendedWaitUntil:
