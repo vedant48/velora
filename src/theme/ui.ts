@@ -77,6 +77,10 @@ export const ui = {
       bigValueSize: 34,
       valueSize: 22,
     },
+    details: {
+      /** Scroll offset after which the floating back/share row gets a solid themed band (hero is 250 tall). */
+      headerSolidOffset: 200,
+    },
     circleReviews: {
       cardWidth: 300,
       cardRadius: 14,
