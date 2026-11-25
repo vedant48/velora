@@ -20,13 +20,27 @@ appId: com.vedant.velora
     end: 15%, 60%
     duration: 300
 - takeScreenshot: p4-swipe-tab
-- scrollUntilVisible:
-    element: 'Member since.*'
-    direction: DOWN
-    timeout: 20000
+- tapOn: Want
+- swipe:
+    start: 50%, 25%
+    end: 50%, 90%
+    duration: 300
+- swipe:
+    start: 50%, 25%
+    end: 50%, 90%
+    duration: 300
+- swipe:
+    start: 50%, 25%
+    end: 50%, 90%
+    duration: 300
+- swipe:
+    start: 50%, 25%
+    end: 50%, 90%
+    duration: 300
 - takeScreenshot: p5-expanded
-- tapOn: Settings
-- assertVisible: Settings
+- tapOn:
+    point: 80%, 4%
+- assertVisible: 'Export your data|Appearance|Settings'
 - takeScreenshot: s1-settings-top
 - swipe:
     start: 50%, 80%
