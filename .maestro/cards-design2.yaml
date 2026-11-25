@@ -91,8 +91,10 @@ appId: com.vedant.velora
 - swipe:
     direction: UP
     duration: 700
+# Ended-complete marker: the row's accessibilityLabel ends with the phrase
+# (visible text is the short '· Done' badge); Maestro matches text as FULL regex.
 - extendedWaitUntil:
-    visible: 'Ended, all episodes watched'
+    visible: '.*Ended, all episodes watched'
     timeout: 60000
 - takeScreenshot: 6-series-bottom-ended-last
 # Series details: Watch online compact row opens the provider sheet
