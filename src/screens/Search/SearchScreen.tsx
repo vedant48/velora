@@ -190,7 +190,7 @@ export const SearchScreen: React.FC = () => {
           <Ionicons name="search" size={20} color={colors.textSecondary} style={styles.searchIcon} />
           <TextInput
             style={styles.input}
-            placeholder="Search movies, TV shows, actors..."
+            placeholder="Movies, series, people…"
             placeholderTextColor={colors.textMuted}
             value={inputQuery}
             onChangeText={setInputQuery}

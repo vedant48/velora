@@ -8,6 +8,7 @@ import React from 'react';
 import { Pressable, RefreshControl, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ActivityEvent, veloraApi } from '../../api/velora';
+import { Avatar } from '../../components/Avatar';
 import { AppLoader } from '../../components/common/AppLoader';
 import { ScreenHeader } from '../../components/common/ScreenHeader';
 import { RootStackParamList } from '../../navigation/types';
@@ -86,17 +87,19 @@ export const ActivityScreen: React.FC = () => {
           refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={() => refetch()} tintColor={colors.primary} colors={[colors.primary]} />}
           contentContainerStyle={styles.feedCard}
           ItemSeparatorComponent={() => <View style={styles.sep} />}
+          ListFooterComponent={
+            <Text style={styles.explainer}>What people you follow watched, rated and reviewed.</Text>
+          }
           renderItem={({ item }) => {
             const name = item.display_name || item.username;
-            const initials = name.slice(0, 2).toUpperCase();
             return (
             <Pressable
               style={styles.row}
               onPress={() => navigation.navigate('UserProfile', { username: item.username })}
             >
-              <View style={styles.avatar}>
-                <Text style={styles.avatarText}>{initials}</Text>
-              </View>
+              {/* Feed events carry no avatarAt, so this renders the gallery gradient
+                  fallback; the shared component swaps in a real photo the moment one exists. */}
+              <Avatar user={{ username: item.username, displayName: item.display_name, avatarAt: null }} size={38} letters={2} />
               <View style={styles.rowText}>
                 <Text style={styles.line} numberOfLines={2}>
                   <Text style={styles.who}>{name} </Text>
@@ -149,6 +152,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     overflow: 'hidden',
   },
   sep: { height: StyleSheet.hairlineWidth, backgroundColor: colors.appleSeparator, marginLeft: 62 },
+  explainer: { textAlign: 'center', color: colors.appleText2, fontSize: 13, paddingVertical: 18, backgroundColor: colors.background },
   avatar: {
     width: 38,
     height: 38,

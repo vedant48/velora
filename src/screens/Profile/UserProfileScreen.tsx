@@ -114,7 +114,7 @@ export const UserProfileScreen: React.FC = () => {
       </View>
 
       <View style={styles.header}>
-        <Avatar user={user} size={88} />
+        <Avatar user={user} size={62} letters={2} />
         <Text style={styles.name}>{user.displayName}</Text>
         <Text style={styles.username}>@{user.username}{joinedYear ? ` · Joined ${joinedYear}` : ''}</Text>
         {!!user.bio && <Text style={styles.bio}>{user.bio}</Text>}

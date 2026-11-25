@@ -10,7 +10,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { veloraApi } from '../../api/velora';
 import { AppButton } from '../../components/common/AppButton';
 import { AppTextField } from '../../components/common/AppTextField';
-import { ScreenHeader } from '../../components/common/ScreenHeader';
 import { Avatar } from '../../components/Avatar';
 import { useAuth } from '../../state/AuthContext';
 import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
@@ -177,7 +176,12 @@ export const AccountScreen: React.FC = () => {
       style={styles.root}
       contentContainerStyle={{ paddingTop: insets.top + 8, paddingBottom: 40, paddingHorizontal: 20 }}
     >
-      <ScreenHeader title="Settings" onBack={() => navigation.goBack()} />
+      {/* Gallery settings mock: iOS large title. The back circle stays (functional difference
+          from the mock, which omits it) so the pushed screen keeps its exit. */}
+      <Pressable accessibilityRole="button" accessibilityLabel="Back" onPress={() => navigation.goBack()} style={styles.back} hitSlop={6}>
+        <Ionicons name="arrow-back" size={20} color={colors.textPrimary} />
+      </Pressable>
+      <Text style={styles.largeTitle}>Settings</Text>
 
       {/* Apple redesign: iOS grouped settings - identity + photo actions */}
       <View style={styles.group}>
@@ -319,6 +323,9 @@ export const AccountScreen: React.FC = () => {
           <Text style={[styles.setrowLabel, { color: colors.error }]}>Delete account</Text>
         </Pressable>
       </View>
+
+      {/* Gallery settings mock footnote (owner-confirmed credit line). */}
+      <Text style={styles.footnote}>Velora for Android · made by Vedant</Text>
     </ScrollView>
   );
 };
@@ -329,6 +336,8 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   removePhoto: { color: colors.primary, fontSize: ui.type.body, fontWeight: '600', marginTop: 10, alignSelf: 'flex-start' },
   readonly: { color: colors.textSecondary, paddingVertical: ui.space.md, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.border },
   root: { flex: 1, backgroundColor: colors.background },
+  largeTitle: { fontSize: 34, fontWeight: '700', letterSpacing: 0.3, color: colors.appleText, marginBottom: 14 },
+  footnote: { textAlign: 'center', color: colors.appleText2, fontSize: 13, marginTop: 28 },
   back: {
     width: 38,
     height: 38,
