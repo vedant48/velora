@@ -179,48 +179,71 @@ export const AccountScreen: React.FC = () => {
     >
       <ScreenHeader title="Settings" onBack={() => navigation.goBack()} />
 
-      <View style={styles.photoRow}>
-        {user ? (
+      {/* Apple redesign: iOS grouped settings - identity + photo actions */}
+      <View style={styles.group}>
+        <View style={styles.profileRow}>
+          {user ? (
+            <>
+              <Avatar user={user} size={52} />
+              <View style={styles.profileMeta}>
+                <Text style={styles.profileName}>{user.displayName || user.username}</Text>
+                <Text style={styles.profileSub}>@{user.username}</Text>
+              </View>
+            </>
+          ) : null}
+        </View>
+        <View style={styles.sep} />
+        <Pressable accessibilityRole="button" accessibilityLabel="Change profile photo" onPress={changePhoto} disabled={photoBusy} style={styles.setrow}>
+          <Text style={styles.setrowLabel}>{photoBusy ? 'Uploading...' : 'Change photo'}</Text>
+        </Pressable>
+        {user?.avatarAt ? (
           <>
-            <Avatar user={user} size={78} />
-            <View style={{ flex: 1, marginLeft: 14 }}>
-              <AppButton title="Change photo" onPress={changePhoto} loading={photoBusy} />
-              {user.avatarAt ? (
-                <Pressable accessibilityRole="button" accessibilityLabel="Remove profile photo" onPress={removePhoto} disabled={photoBusy} hitSlop={8}>
-                  <Text style={styles.removePhoto}>Remove photo</Text>
-                </Pressable>
-              ) : null}
-            </View>
+            <View style={styles.sep} />
+            <Pressable accessibilityRole="button" accessibilityLabel="Remove profile photo" onPress={removePhoto} disabled={photoBusy} style={styles.setrow}>
+              <Text style={styles.setrowLabel}>Remove photo</Text>
+            </Pressable>
           </>
         ) : null}
       </View>
-      <Text style={styles.section}>Name</Text>
-      <AppTextField
-        accessibilityLabel="Display name"
-        value={displayName}
-        onChangeText={setDisplayName}
-        placeholder="Display name"
-        placeholderTextColor={colors.textMuted}
-        style={styles.input}
-        maxLength={50}
-      />
-      <Text style={styles.section}>Username</Text>
-      <Text style={styles.readonly}>{user?.username}</Text>
-      <Text style={styles.section}>Bio</Text>
-      <AppTextField
-        accessibilityLabel="Bio"
-        value={bio}
-        onChangeText={setBio}
-        placeholder="Bio"
-        placeholderTextColor={colors.textMuted}
-        style={[styles.input, styles.bioInput]}
-        maxLength={300}
-        multiline
-      />
+      <Text style={styles.section}>Profile</Text>
+      <View style={styles.group}>
+        <View style={styles.fieldRow}>
+          <Text style={styles.fieldLabel}>Name</Text>
+          <AppTextField
+            accessibilityLabel="Display name"
+            value={displayName}
+            onChangeText={setDisplayName}
+            placeholder="Display name"
+            placeholderTextColor={colors.appleText3}
+            style={styles.fieldInput}
+            maxLength={50}
+          />
+        </View>
+        <View style={styles.sep} />
+        <View style={styles.fieldRow}>
+          <Text style={styles.fieldLabel}>Username</Text>
+          <Text style={styles.fieldValue}>{user?.username}</Text>
+        </View>
+        <View style={styles.sep} />
+        <View style={[styles.fieldRow, { alignItems: 'flex-start' }]}>
+          <Text style={styles.fieldLabel}>Bio</Text>
+          <AppTextField
+            accessibilityLabel="Bio"
+            value={bio}
+            onChangeText={setBio}
+            placeholder="Bio"
+            placeholderTextColor={colors.appleText3}
+            style={[styles.fieldInput, styles.bioInput]}
+            maxLength={300}
+            multiline
+          />
+        </View>
+      </View>
       <AppButton title="Save profile" onPress={saveProfile} loading={saving} />
 
       <Text style={styles.section}>Appearance</Text>
-      <View accessibilityRole="radiogroup" accessibilityLabel="Appearance" style={{ flexDirection: 'row', gap: ui.space.sm }}>
+      <View style={[styles.group, { padding: 10 }]}>
+        <View accessibilityRole="radiogroup" accessibilityLabel="Appearance" style={{ flexDirection: 'row', gap: ui.space.sm }}>
         {(['system', 'light', 'dark'] as const).map(choice => (
           <Pressable key={choice} accessibilityRole="radio" accessibilityLabel={`${choice[0].toUpperCase()}${choice.slice(1)} theme`}
             accessibilityState={{ checked: preference === choice }} aria-checked={preference === choice}
@@ -229,42 +252,50 @@ export const AccountScreen: React.FC = () => {
             <Text style={{ color: colors.textPrimary, fontWeight: preference === choice ? '700' : '400' }}>{choice[0].toUpperCase() + choice.slice(1)}</Text>
           </Pressable>
         ))}
+        </View>
       </View>
       <Text style={[styles.rowHint, { marginTop: ui.space.sm }]}>System follows your device appearance.</Text>
 
       <Text style={styles.section}>Privacy</Text>
-      <View style={styles.row}>
-        <View style={{ flex: 1 }}>
-          <Text style={styles.rowLabel}>Private account</Text>
-          <Text style={styles.rowHint}>
-            Other members can find your profile, but only you can see your library and stats.
-          </Text>
+      <View style={styles.group}>
+        <View style={styles.setrow}>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.setrowLabel}>Private account</Text>
+            <Text style={styles.rowHint}>
+              Other members can find your profile, but only you can see your library and stats.
+            </Text>
+          </View>
+          <Switch
+            value={isPrivate}
+            onValueChange={togglePrivate}
+            trackColor={{ false: colors.appleFill, true: '#30D158' }}
+            thumbColor="#fff"
+          />
         </View>
-        <Switch
-          value={isPrivate}
-          onValueChange={togglePrivate}
-          trackColor={{ false: colors.surfaceLight, true: colors.primary }}
-          thumbColor="#fff"
-        />
       </View>
 
       <Text style={styles.section}>Your data</Text>
-      <Pressable onPress={() => exportData('velora')} style={styles.rowButton} disabled={busy !== null}>
-        <Ionicons name="download-outline" size={17} color={colors.textPrimary} />
-        <Text style={styles.rowButtonText}>{busy === 'velora' ? 'Preparing...' : 'Export library (JSON)'}</Text>
-      </Pressable>
-      <Pressable onPress={() => exportData('simkl')} style={styles.rowButton} disabled={busy !== null}>
-        <Ionicons name="download-outline" size={17} color={colors.textPrimary} />
-        <Text style={styles.rowButtonText}>{busy === 'simkl' ? 'Preparing...' : 'Export library (SIMKL CSV)'}</Text>
-      </Pressable>
-
-      <Pressable onPress={() => navigation.navigate('ImportMust')} style={styles.rowButton} disabled={busy !== null}>
-        <Ionicons name="cloud-upload-outline" size={17} color={colors.textPrimary} />
-        <Text style={styles.rowButtonText}>Import from Must</Text>
-      </Pressable>
+      <View style={styles.group}>
+        <Pressable onPress={() => navigation.navigate('ImportMust')} style={styles.setrow} disabled={busy !== null} accessibilityRole="button">
+          <Ionicons name="cloud-upload-outline" size={18} color={colors.textPrimary} />
+          <Text style={styles.setrowLabel}>Import from Must</Text>
+          <View style={{ flex: 1 }} />
+          <Ionicons name="chevron-forward" size={16} color={colors.appleText3} />
+        </Pressable>
+        <View style={styles.sep} />
+        <Pressable onPress={() => exportData('velora')} style={styles.setrow} disabled={busy !== null} accessibilityRole="button">
+          <Ionicons name="download-outline" size={18} color={colors.textPrimary} />
+          <Text style={styles.setrowLabel}>{busy === 'velora' ? 'Preparing...' : 'Export library (JSON)'}</Text>
+        </Pressable>
+        <View style={styles.sep} />
+        <Pressable onPress={() => exportData('simkl')} style={styles.setrow} disabled={busy !== null} accessibilityRole="button">
+          <Ionicons name="download-outline" size={18} color={colors.textPrimary} />
+          <Text style={styles.setrowLabel}>{busy === 'simkl' ? 'Preparing...' : 'Export library (SIMKL CSV)'}</Text>
+        </Pressable>
+      </View>
 
       <Text style={styles.section}>About & Credits</Text>
-      <View style={{ padding: ui.space.lg, borderRadius: 8, backgroundColor: colors.surface, gap: ui.space.md }}>
+      <View style={{ padding: ui.space.lg, borderRadius: 14, backgroundColor: colors.appleCard, gap: ui.space.md }}>
         <Text style={{ fontSize: ui.type.heading, fontWeight: '700', color: colors.textPrimary }}>Velora</Text>
         <Text style={styles.rowHint}>Track movies and TV series, reviews and episode progress.</Text>
         <Pressable accessibilityRole="link" accessibilityLabel="The Movie Database" onPress={() => Linking.openURL('https://www.themoviedb.org')}>
@@ -274,10 +305,20 @@ export const AccountScreen: React.FC = () => {
       </View>
 
       <Text style={styles.section}>Danger zone</Text>
-      <Pressable onPress={deleteAccount} style={[styles.rowButton, styles.danger]}>
-        <Ionicons name="trash-outline" size={17} color={colors.error} />
-        <Text style={[styles.rowButtonText, { color: colors.error }]}>Delete account</Text>
-      </Pressable>
+      <View style={styles.group}>
+        <Pressable
+          onPress={() => Alert.alert('Log out?', undefined, [{ text: 'Cancel', style: 'cancel' }, { text: 'Log out', style: 'destructive', onPress: () => void logout() }])}
+          style={styles.setrow}
+          accessibilityRole="button"
+        >
+          <Text style={[styles.setrowLabel, { color: colors.error }]}>Log out</Text>
+        </Pressable>
+        <View style={styles.sep} />
+        <Pressable onPress={deleteAccount} style={styles.setrow} accessibilityRole="button">
+          <Ionicons name="trash-outline" size={17} color={colors.error} />
+          <Text style={[styles.setrowLabel, { color: colors.error }]}>Delete account</Text>
+        </Pressable>
+      </View>
     </ScrollView>
   );
 };
@@ -298,7 +339,19 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     marginBottom: ui.space.sm,
   },
   title: { fontSize: ui.type.screenTitle, fontWeight: '800', color: colors.textPrimary, marginBottom: 10 },
-  section: { fontSize: 13, fontWeight: '800', color: colors.textMuted, textTransform: 'uppercase', letterSpacing: 1, marginTop: 22, marginBottom: 10 },
+  section: { fontSize: 13, fontWeight: '600', color: colors.appleText2, textTransform: 'uppercase', letterSpacing: 0.5, marginTop: 22, marginBottom: 8, marginLeft: 4 },
+  group: { backgroundColor: colors.appleCard, borderRadius: 14, overflow: 'hidden' },
+  sep: { height: StyleSheet.hairlineWidth, backgroundColor: colors.appleSeparator, marginLeft: 14 },
+  setrow: { flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 14, paddingVertical: 13 },
+  setrowLabel: { fontSize: 16, fontWeight: '400', color: colors.textPrimary, flexShrink: 1 },
+  profileRow: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 14, paddingVertical: 12 },
+  profileMeta: { flex: 1, gap: 1 },
+  profileName: { fontSize: 17, fontWeight: '600', color: colors.textPrimary },
+  profileSub: { fontSize: 13, color: colors.appleText2 },
+  fieldRow: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 14, paddingVertical: 6 },
+  fieldLabel: { width: 76, fontSize: 16, color: colors.textPrimary },
+  fieldValue: { fontSize: 16, color: colors.appleText2 },
+  fieldInput: { flex: 1, color: colors.textPrimary, fontSize: 16, paddingVertical: 8 },
   input: {
     borderRadius: ui.radius.button,
     backgroundColor: colors.surface,
