@@ -1,0 +1,33 @@
+appId: com.vedant.velora
+---
+- runFlow: login-design2.yaml
+- assertVisible: 'Member since.*'
+- tapOn: F1
+- extendedWaitUntil:
+    visible: 'Best racing movie in years.*'
+    timeout: 30000
+- assertNotVisible: 'Write a review.*'
+- takeScreenshot: c1-movie-top
+- swipe:
+    start: 50%, 70%
+    end: 50%, 40%
+    duration: 500
+- takeScreenshot: c2-movie-scrolled
+- back
+- tapOn: Series
+- tapOn: 'Breaking Bad'
+- extendedWaitUntil:
+    visible: 'Season three is where.*'
+    timeout: 30000
+- assertNotVisible: 'Write a review.*'
+- takeScreenshot: c3-series-top
+- swipe:
+    start: 85%, 60%
+    end: 15%, 60%
+    duration: 400
+- takeScreenshot: c4-series-cards-scrolled
+- swipe:
+    start: 50%, 75%
+    end: 50%, 35%
+    duration: 500
+- takeScreenshot: c5-series-scrolled

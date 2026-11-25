@@ -12,6 +12,12 @@ export class ReviewsController {
     return this.reviews.mine(userId);
   }
 
+  @Get(':mediaType/:tmdbId/circle')
+  @UseGuards(AuthGuard)
+  circle(@CurrentUserId() userId: string, @Param('mediaType') mediaType: string, @Param('tmdbId') tmdbId: string) {
+    return this.reviews.circle(userId, mediaType, tmdbId);
+  }
+
   @Get(':mediaType/:tmdbId')
   list(@Param('mediaType') mediaType: string, @Param('tmdbId') tmdbId: string, @Query('season') season?: string) {
     return this.reviews.listForTitle(mediaType, tmdbId, season);

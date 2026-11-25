@@ -1,8 +1,8 @@
 name: UI proof design2 (full build; all five gates)
 on:
   push:
-    branches: [test/ui-proof-1516]
-    paths: [.ci/uiproof1516]
+    branches: [test/ui-proof-1517]
+    paths: [.ci/uiproof1517]
 permissions:
   contents: write
 jobs:
@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Preflight - resolve every referenced seed/script/flow path before building
-        run: bash scripts/ci-preflight.sh scripts/ui-proof-1516.sh
+        run: bash scripts/ci-preflight.sh scripts/ui-proof-1517.sh
       - uses: actions/setup-java@v4
         with: { distribution: temurin, java-version: '17' }
       - uses: actions/setup-node@v4
@@ -54,15 +54,15 @@ jobs:
           ram-size: 3072
           disable-animations: false
           emulator-options: -no-window -gpu swiftshader -no-snapshot -noaudio -no-boot-anim
-          script: bash scripts/ui-proof-1516.sh
+          script: bash scripts/ui-proof-1517.sh
       - name: Publish evidence
         if: always()
         run: |
           git config user.email ci@velora.local; git config user.name velora-ci
           EV=$(mktemp -d); git worktree add --detach "$EV"
-          git -C "$EV" checkout --orphan ci-evidence/ui1516-${{ github.run_id }}
+          git -C "$EV" checkout --orphan ci-evidence/ui1517-${{ github.run_id }}
           git -C "$EV" rm -rf . >/dev/null 2>&1 || true
           cp -r proof "$EV/" 2>/dev/null || true
           printf 'run_id=%s\ncommit=%s\n' "${{ github.run_id }}" "$GITHUB_SHA" > "$EV/META.txt"
-          git -C "$EV" add -A; git -C "$EV" commit -m "ui1516 evidence"
-          git -C "$EV" push origin HEAD:ci-evidence/ui1516-${{ github.run_id }}
+          git -C "$EV" add -A; git -C "$EV" commit -m "ui1517 evidence"
+          git -C "$EV" push origin HEAD:ci-evidence/ui1517-${{ github.run_id }}

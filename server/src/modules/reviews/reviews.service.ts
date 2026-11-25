@@ -52,6 +52,22 @@ export class ReviewsService {
     return { reviews };
   }
 
+  /** Reviews of this title by the caller and the people the caller follows, with each author's photo marker. */
+  async circle(userId: string, mediaTypeRaw: unknown, tmdbIdRaw: unknown) {
+    const mediaType = requireMediaType(mediaTypeRaw);
+    const tmdbId = requireTmdbId(tmdbIdRaw);
+    const reviews = await this.db.all(
+      `SELECT r.id, r.user_id, r.media_type, r.tmdb_id, r.season_number, r.rating, r.body,
+              r.created_at, r.updated_at, u.username, u.display_name, u.avatar_at
+       FROM reviews r JOIN users u ON u.id = r.user_id
+       WHERE r.media_type = ? AND r.tmdb_id = ?
+         AND (r.user_id = ? OR r.user_id IN (SELECT followee_id FROM follows WHERE follower_id = ?))
+       ORDER BY r.updated_at DESC LIMIT 300`,
+      [mediaType, tmdbId, userId, userId],
+    );
+    return { reviews };
+  }
+
   async mine(userId: string) {
     const reviews = await this.db.all(
       `SELECT * FROM reviews WHERE user_id = ? ORDER BY updated_at DESC LIMIT 500`,
