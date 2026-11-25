@@ -2,6 +2,10 @@ appId: com.vedant.velora
 ---
 # Flow B: redesign route coverage (batches 2-7). Assumes Flow A already logged e2e_alice in.
 - launchApp
+- runFlow:
+    when:
+      visible: 'Log in / Sign up'
+    file: login-design2.yaml
 - extendedWaitUntil:
     visible: E2E Alice
     timeout: 30000

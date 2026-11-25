@@ -1,18 +1,6 @@
 appId: com.vedant.velora
 ---
-- launchApp
-- tapOn: 'Log in / Sign up'
-- tapOn: Username
-- inputText: e2e_alice
-- tapOn: Password
-- inputText: e2e-alice-pass-1
-- hideKeyboard
-- tapOn:
-    text: 'Log in'
-    below: Password
-- extendedWaitUntil:
-    visible: E2E Alice
-    timeout: 30000
+- runFlow: login-design2.yaml
 # Initial order (owner reference): icon bar, then profile details, then tab row
 - assertVisible: Settings
 - assertVisible: More profile actions
