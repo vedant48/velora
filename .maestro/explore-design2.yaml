@@ -1,0 +1,120 @@
+appId: com.vedant.velora
+---
+# Flow B: redesign route coverage (batches 2-7). Assumes Flow A already logged e2e_alice in.
+- launchApp
+- extendedWaitUntil:
+    visible: E2E Alice
+    timeout: 30000
+# Explore Movies tab: hero banner + wide trending rail + labeled tab bar
+- tapOn: 'Explore Movies'
+- extendedWaitUntil:
+    visible: 'Trending this week'
+    timeout: 60000
+- takeScreenshot: b1-explore-movies
+- swipe:
+    direction: UP
+    duration: 600
+- takeScreenshot: b1b-explore-movies-scrolled
+# Explore TV Series tab
+- tapOn: 'Explore TV Series'
+- extendedWaitUntil:
+    visible: 'Trending TV shows'
+    timeout: 60000
+- takeScreenshot: b2-explore-tv
+# Explore All tab
+- tapOn: 'Explore All'
+- extendedWaitUntil:
+    visible: 'Trending this week'
+    timeout: 60000
+- takeScreenshot: b3-explore-all
+# Search: iOS field + movie results
+- tapOn: 'Search'
+- extendedWaitUntil:
+    visible: 'Search movies, TV shows, actors...'
+    timeout: 20000
+- tapOn: 'Search movies, TV shows, actors...'
+- inputText: 'F1'
+- extendedWaitUntil:
+    visible: 'Clear search'
+    timeout: 30000
+- takeScreenshot: b4-search-results
+# Search users -> member profile (UserProfile, batch6)
+- tapOn: 'Clear search'
+- tapOn: 'Search movies, TV shows, actors...'
+- inputText: 'e2e_bob'
+- extendedWaitUntil:
+    visible: 'E2E Bob'
+    timeout: 20000
+- takeScreenshot: b4b-search-users
+- tapOn: 'E2E Bob'
+- extendedWaitUntil:
+    visible: 'E2E Bob'
+    timeout: 15000
+- takeScreenshot: b5-member-profile
+- back
+# Movie details: hero restyle + tracking controls + action sheet + rate sheet (no save)
+- tapOn: 'Home'
+- extendedWaitUntil:
+    visible: E2E Alice
+    timeout: 20000
+- tapOn: 'F1'
+- extendedWaitUntil:
+    visible: 'Cast & Crew'
+    timeout: 60000
+- takeScreenshot: b6-details-tracking
+- tapOn: 'Want, options'
+- extendedWaitUntil:
+    visible: 'Move to Watched'
+    timeout: 10000
+- takeScreenshot: b7-action-sheet
+- tapOn: 'Move to Watched'
+- extendedWaitUntil:
+    visible: 'Save review'
+    timeout: 10000
+- takeScreenshot: b8-rate-sheet
+- tapOn: 'Dismiss'
+- back
+# TV details: season progress + episode checklist (batch7)
+- tapOn:
+    id: library-tab-series
+- extendedWaitUntil:
+    visible: Prison Break
+    timeout: 90000
+- tapOn: Breaking Bad
+- extendedWaitUntil:
+    visible: 'Watch online'
+    timeout: 60000
+- swipe:
+    direction: UP
+    duration: 500
+- swipe:
+    direction: UP
+    duration: 500
+- takeScreenshot: b9-tv-episodes
+- back
+# Settings (AccountScreen, batch4)
+- tapOn: Settings
+- extendedWaitUntil:
+    visible: 'Save profile'
+    timeout: 15000
+- takeScreenshot: b10-settings
+- back
+# Activity (batch4)
+- tapOn: 'More profile actions'
+- extendedWaitUntil:
+    visible: Activity
+    timeout: 10000
+- tapOn: Activity
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: b11-activity
+- back
+# Quick actions sheet via long-press (batch7 header + icons)
+- longPressOn: F1
+- extendedWaitUntil:
+    visible: Dismiss
+    timeout: 10000
+- waitForAnimationToEnd:
+    timeout: 3000
+- takeScreenshot: b12-quick-actions
+- tapOn: Dismiss
