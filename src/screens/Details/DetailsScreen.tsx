@@ -13,7 +13,7 @@ import { MediaItem } from '../../api/types';
 import { veloraApi } from '../../api/velora';
 import { WatchProviders } from '../../components/Details/WatchProviders';
 import { EpisodeChecklist } from '../../components/Library/EpisodeChecklist';
-import { ReviewsSection } from '../../components/Library/ReviewsSection';
+import { CircleReviews } from '../../components/Library/CircleReviews';
 import { TrackingControls } from '../../components/Library/TrackingControls';
 import { MovieCarousel } from '../../components/MovieCarousel/MovieCarousel';
 import { PersonModal } from '../../components/Person/PersonModal';
@@ -22,6 +22,7 @@ import { RootStackParamList } from '../../navigation/types';
 import { useAuth } from '../../state/AuthContext';
 import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
 import { metrics } from '../../theme/metrics';
+import { ui } from '../../theme/ui';
 import { getImageUrl, IMAGE_CONFIG } from '../../utils/image';
 
 type DetailsRouteProp = RouteProp<RootStackParamList, 'Details'>;
@@ -32,6 +33,12 @@ export const DetailsScreen: React.FC = () => {
   const styles = useThemedStyles(createStyles);
   const queryClient = useQueryClient();
   const insets = useSafeAreaInsets();
+  // Once the hero has scrolled away, the floating back/share row gets an opaque themed band so page text never runs under the clock or the buttons.
+  const [headerSolid, setHeaderSolid] = useState(false);
+  const onDetailScroll = useCallback((e: { nativeEvent: { contentOffset: { y: number } } }) => {
+    const solid = e.nativeEvent.contentOffset.y > ui.component.details.headerSolidOffset;
+    setHeaderSolid((prev) => (prev === solid ? prev : solid));
+  }, []);
   const route = useRoute<DetailsRouteProp>();
   const navigation = useNavigation<NavigationProp>();
 
@@ -331,6 +338,7 @@ export const DetailsScreen: React.FC = () => {
         style={[
           styles.floatingHeader,
           { paddingTop: Math.max(insets.top, 12) },
+          headerSolid && styles.floatingHeaderSolid,
         ]}
       >
         <Pressable
@@ -357,6 +365,8 @@ export const DetailsScreen: React.FC = () => {
         style={styles.container}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
+        onScroll={onDetailScroll}
+        scrollEventThrottle={32}
       >
         {/* Apple redesign: full-bleed backdrop hero fading into the page */}
         <View style={styles.hero}>
@@ -466,6 +476,9 @@ export const DetailsScreen: React.FC = () => {
 
           {/* Where to Watch (series: right under stats, per reference) */}
           <WatchProviders id={initialItem.id} isMovie={isMovie} />
+
+          {/* Reviews and ratings from me and the people I follow */}
+          <CircleReviews mediaType={isMovie ? 'movie' : 'tv'} tmdbId={initialItem.id} refreshSignal={`${lib.item?.updated_at ?? ""}-${statsRefreshKey}`} />
 
           {/* Synopsis */}
           <Text style={styles.sectionHeading}>Overview</Text>
@@ -645,12 +658,7 @@ export const DetailsScreen: React.FC = () => {
             </View>
           )}
 
-          {/* Reviews (whole title) */}
-          <ReviewsSection
-            mediaType={isMovie ? 'movie' : 'tv'}
-            tmdbId={initialItem.id}
-            seasonNumber={0}
-          />
+          {/* The old "Reviews / Write a review" box is removed (ReviewsSection.tsx is kept, unused). */}
 
           {/* Similar Titles Carousel */}
           {similarMoviesQuery.data && similarMoviesQuery.data.length > 0 && (
@@ -713,6 +721,9 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  floatingHeaderSolid: {
+    backgroundColor: colors.background,
   },
   circleButton: {
     width: 38,

@@ -16,6 +16,7 @@ import { RootStackParamList } from '../../navigation/types';
 import { useAuth } from '../../state/AuthContext';
 import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
 import { getImageUrl, IMAGE_CONFIG } from '../../utils/image';
+import { PosterGridSkeleton } from '../../components/Skeleton/ContentSkeletons';
 
 type CollectionRouteProp = RouteProp<RootStackParamList, 'Collection'>;
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
@@ -138,7 +139,7 @@ export const CollectionScreen: React.FC = () => {
   return (
     <View style={styles.root}>
       {query.isLoading ? (
-        <AppLoader style={{ marginTop: 40 }} />
+        <PosterGridSkeleton />
       ) : query.isError ? (
         <Pressable accessibilityRole="button" onPress={() => query.refetch()} style={{padding: 24}}><Text style={{color: colors.textPrimary}}>Could not load collection. Tap to retry.</Text></Pressable>
       ) : data.length === 0 ? <Text style={{padding: 24, color: colors.textSecondary}}>No titles in this collection.</Text> : (

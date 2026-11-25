@@ -1,0 +1,19 @@
+Anonymous analytics enabled. To opt out, set MAESTRO_CLI_NO_ANALYTICS environment variable to any value before running Maestro.
+
+Running on test
+ > Flow login-design2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.google.protobuf.UnsafeUtil$MemoryAccessor (file:/home/runner/.maestro/lib/protobuf-java-3.21.9.jar)
+WARNING: Please consider reporting this to the maintainers of class com.google.protobuf.UnsafeUtil$MemoryAccessor
+WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release
+Launch app "com.vedant.velora"... COMPLETED
+Run flow when "Log in / Sign up" is visible...
+  Tap on "Log in / Sign up"... COMPLETED
+  Tap on "Username"... COMPLETED
+  Input text e2e_alice... COMPLETED
+  Tap on "Password"... COMPLETED
+  Input text e2e-alice-pass-1... COMPLETED
+  Hide Keyboard... COMPLETED
+  Tap on "Sign in", Below "Password"... COMPLETED
+Run flow when "Log in / Sign up" is visible... COMPLETED
+Assert that "E2E Alice.*" is visible... COMPLETED

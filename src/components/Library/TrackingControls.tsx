@@ -8,6 +8,7 @@ import { AppLoader } from '../common/AppLoader';
 import { ActionSheet, ActionSheetOption } from './ActionSheet';
 import { RateReviewSheet } from './RateReviewSheet';
 import { ui } from '../../theme/ui';
+import { PillRowSkeleton } from '../Skeleton/ContentSkeletons';
 
 interface TrackingControlsProps extends LibraryMeta {
   /**
@@ -59,7 +60,7 @@ export const TrackingControls = memo(function TrackingControls(props: TrackingCo
   );
 
   if (!apiReady) return null;
-  if (lib.loading) return <AppLoader style={{ paddingVertical: ui.space.lg }} />;
+  if (lib.loading) return <PillRowSkeleton />;
 
   if (!signedIn) {
     return (

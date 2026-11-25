@@ -28,6 +28,13 @@ export class ReviewsService {
          updated_at = datetime('now')`,
       [randomId(), userId, mediaType, tmdbId, seasonNumber, rating, text],
     );
+    // A movie rating given through the review path must also show on the library card (one rating, two stores).
+    if (mediaType === 'movie' && rating !== null) {
+      await this.db.run(
+        `UPDATE library_items SET rating = ? WHERE user_id = ? AND media_type = 'movie' AND tmdb_id = ?`,
+        [rating, userId, tmdbId],
+      );
+    }
     return this.db.first(
       `SELECT r.*, u.username, u.display_name FROM reviews r JOIN users u ON u.id = r.user_id
        WHERE r.user_id = ? AND r.media_type = ? AND r.tmdb_id = ? AND r.season_number = ?`,
@@ -50,6 +57,54 @@ export class ReviewsService {
       params,
     );
     return { reviews };
+  }
+
+  /** Reviews of this title by the caller and the people the caller follows, with each author's photo marker. */
+  async circle(userId: string, mediaTypeRaw: unknown, tmdbIdRaw: unknown) {
+    const mediaType = requireMediaType(mediaTypeRaw);
+    const tmdbId = requireTmdbId(tmdbIdRaw);
+    const reviews = await this.db.all(
+      `SELECT r.id, r.user_id, r.media_type, r.tmdb_id, r.season_number, r.rating, r.body,
+              r.created_at, r.updated_at, u.username, u.display_name, u.avatar_at
+       FROM reviews r JOIN users u ON u.id = r.user_id
+       WHERE r.media_type = ? AND r.tmdb_id = ? AND (u.is_private = 0 OR r.user_id = ?)
+         AND (r.user_id = ? OR r.user_id IN (SELECT followee_id FROM follows WHERE follower_id = ?))
+       ORDER BY r.updated_at DESC LIMIT 300`,
+      [mediaType, tmdbId, userId, userId, userId],
+    );
+    // Many ratings (e.g. imported movies) live only on library_items. Add them as rating-only title rows
+    // when the person has no rated review row for the title, so the rating row and cards stay complete.
+    const libRatings = await this.db.all(
+      `SELECT l.user_id, l.rating, l.updated_at, l.added_at, u.username, u.display_name, u.avatar_at
+       FROM library_items l JOIN users u ON u.id = l.user_id
+       WHERE l.media_type = ? AND l.tmdb_id = ? AND l.rating IS NOT NULL AND (u.is_private = 0 OR l.user_id = ?)
+         AND (l.user_id = ? OR l.user_id IN (SELECT followee_id FROM follows WHERE follower_id = ?))`,
+      [mediaType, tmdbId, userId, userId, userId],
+    );
+    for (const l of libRatings as any[]) {
+      const own = (reviews as any[]).find((r) => r.user_id === l.user_id && r.season_number === 0);
+      if (own && own.rating != null) continue; // the review row's rating wins
+      if (own) { own.rating = l.rating; continue; }
+      // For a series, the title-level rating only counts when no season rating exists (client rule).
+      (reviews as any[]).push({
+        id: `lib-${l.user_id}`, user_id: l.user_id, media_type: mediaType, tmdb_id: tmdbId, season_number: 0,
+        rating: l.rating, body: '', created_at: l.added_at, updated_at: l.updated_at,
+        username: l.username, display_name: l.display_name, avatar_at: l.avatar_at,
+      });
+    }
+    // Seasons each person has watched (any episode), for the per-person drawer. Private accounts other than the caller stay hidden.
+    const watched =
+      mediaType === 'tv'
+        ? await this.db.all(
+            `SELECT e.user_id, e.season AS season_number, COUNT(*) AS episodes
+             FROM episode_progress e JOIN users u ON u.id = e.user_id
+             WHERE e.tmdb_id = ? AND e.season > 0 AND (u.is_private = 0 OR e.user_id = ?)
+               AND (e.user_id = ? OR e.user_id IN (SELECT followee_id FROM follows WHERE follower_id = ?))
+             GROUP BY e.user_id, e.season`,
+            [tmdbId, userId, userId, userId],
+          )
+        : [];
+    return { reviews, watched };
   }
 
   async mine(userId: string) {

@@ -9,6 +9,7 @@ import { metrics } from '../../theme/metrics';
 import { getPosterUrl } from '../../utils/image';
 import { MovieCard } from '../MovieCard/MovieCard';
 import { AppLoader } from '../common/AppLoader';
+import { ProfileSkeleton } from '../Skeleton/ContentSkeletons';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -96,8 +97,7 @@ export const PersonModal = memo(
 
             {isLoading && !person ? (
               <View style={styles.centerLoading}>
-                <AppLoader size="large" />
-                <Text style={styles.loadingText}>Loading details...</Text>
+                <ProfileSkeleton />
               </View>
             ) : (
               <ScrollView

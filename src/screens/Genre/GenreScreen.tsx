@@ -12,6 +12,7 @@ import { AppLoader } from '../../components/common/AppLoader';
 import { RootStackParamList } from '../../navigation/types';
 import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
 import { metrics } from '../../theme/metrics';
+import { PosterGridSkeleton } from '../../components/Skeleton/ContentSkeletons';
 
 type GenreRouteProp = RouteProp<RootStackParamList, 'Genre'>;
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
@@ -136,7 +137,7 @@ export const GenreScreen: React.FC = () => {
 
       {/* Grid Content */}
       {isLoading ? (
-        <AppLoader style={{ flex: 1 }} />
+        <PosterGridSkeleton count={9} />
       ) : isError && items.length === 0 ? (
         <View style={styles.emptyContainer}><Text style={styles.emptyTitle}>Could not load titles</Text>
           <Pressable onPress={() => refetch()} accessibilityRole="button"><Text style={styles.emptySubtitle}>Tap to retry</Text></Pressable>
