@@ -18,7 +18,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = React.memo(
     return (
       <View style={styles.container}>
         <View style={styles.titleColumn}>
-          <Text style={[typography.sectionTitle, { color: colors.textPrimary }]}>{title}</Text>
+          <Text style={[typography.sectionTitle, { color: colors.textPrimary, fontSize: 22, letterSpacing: -0.2 }]}>{title}</Text>
           {subtitle ? <Text style={[typography.caption, { color: colors.textTertiary }]}>{subtitle}</Text> : null}
         </View>
 

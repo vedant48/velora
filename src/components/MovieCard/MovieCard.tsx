@@ -76,7 +76,7 @@ const MovieCardComponent: React.FC<MovieCardProps> = ({
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}
         onPress={handlePress}
-        style={[styles.card, { width, height }, minimal && { borderRadius: 4, borderWidth: 0 }]}
+        style={[styles.card, { width, height }, minimal && { borderRadius: 12, borderWidth: 0 }]}
         accessibilityRole="button"
         accessibilityLabel={item.title}
       >
@@ -91,9 +91,9 @@ const MovieCardComponent: React.FC<MovieCardProps> = ({
         />
 
         {minimal && trackingStatus && <View style={{ position: 'absolute', right: 5, top: 5, borderRadius: 5, paddingVertical: 2, paddingHorizontal: 5, backgroundColor: colors.glassDark }}><Text style={{ fontSize: 11, color: colors.textPrimary, fontWeight: '700' }}>{trackingStatus === 'want' ? 'Want' : trackingStatus === 'watched' ? 'Watched' : 'Watching'}</Text></View>}
-        {/* Top-Right Rating Badge */}
-        {!minimal && item.vote_average > 0 && (
-          <View style={styles.badgeContainer}>
+        {/* Top-Right Rating Badge (below the tracking pill when both are shown) */}
+        {item.vote_average > 0 && (
+          <View style={[styles.badgeContainer, minimal && trackingStatus ? { top: 28 } : null]}>
             <Badge rating={item.vote_average} variant="rating" />
           </View>
         )}
@@ -113,11 +113,16 @@ const MovieCardComponent: React.FC<MovieCardProps> = ({
         )}
       </Pressable>
 
-      {/* Optional Title under card */}
+      {/* Optional Title + year under card */}
       {showTitle && (
-        <Text style={[typography.cardTitle, { color: colors.textPrimary }]} numberOfLines={1}>
-          {item.title}
-        </Text>
+        <View>
+          <Text style={[typography.cardTitle, { color: colors.textPrimary }]} numberOfLines={1}>
+            {item.title}
+          </Text>
+          {!!(item.release_date ?? '').slice(0, 4) && (
+            <Text style={[typography.cardSubtitle, { color: colors.textTertiary }]}>{(item.release_date ?? '').slice(0, 4)}</Text>
+          )}
+        </View>
       )}
     </Animated.View>
   );

@@ -1,5 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { BlurView } from 'expo-blur';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -15,7 +16,7 @@ import { AppColors, useAppTheme, useThemedStyles } from '../theme/ThemeContext';
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
 export const TabNavigator: React.FC = () => {
-  const { colors } = useAppTheme();
+  const { colors, mode } = useAppTheme();
   const styles = useThemedStyles(createStyles);
   const insets = useSafeAreaInsets();
 
@@ -23,32 +24,35 @@ export const TabNavigator: React.FC = () => {
     <Tab.Navigator initialRouteName="ProfileTab"
       screenOptions={({ route }) => ({
         headerShown: false,
+        // Apple redesign: frosted iOS tab bar (blur + hairline).
+        tabBarBackground: () => <BlurView intensity={60} tint={mode === 'dark' ? 'dark' : 'light'} style={StyleSheet.absoluteFill} />,
         tabBarStyle: {
           position: 'absolute',
           bottom: 0,
           left: 0,
           right: 0,
-          backgroundColor: colors.cardBackground,
-          borderTopColor: colors.border,
-          borderTopWidth: 0,
+          backgroundColor: mode === 'dark' ? 'rgba(20,20,22,0.6)' : 'rgba(249,249,249,0.6)',
+          borderTopColor: colors.appleSeparator,
+          borderTopWidth: StyleSheet.hairlineWidth,
           height: 60 + Math.max(insets.bottom - 6, 0),
           paddingBottom: Math.max(insets.bottom - 4, 6),
           paddingTop: 6,
           elevation: 8,
         },
-        tabBarShowLabel: false,
+        // Apple redesign: labeled tabs (Home / Movies / Series / Explore / Search).
+        tabBarShowLabel: true,
         tabBarActiveTintColor: colors.primary,
-        tabBarInactiveTintColor: colors.textTertiary,
+        tabBarInactiveTintColor: colors.appleText2,
         tabBarLabelStyle: {
           fontSize: 10,
-          fontWeight: '600',
+          fontWeight: '500',
           marginTop: -2,
         },
         tabBarIcon: ({ color, focused, size }) => {
           let iconName: keyof typeof Ionicons.glyphMap = 'home';
 
           if (route.name === 'HomeTab') {
-            iconName = focused ? 'compass' : 'compass-outline';
+            iconName = focused ? 'film' : 'film-outline';
           } else if (route.name === 'SearchTab') {
             iconName = focused ? 'search' : 'search-outline';
           } else if (route.name === 'ProfileTab') {
@@ -79,8 +83,8 @@ export const TabNavigator: React.FC = () => {
         component={MoviesExploreScreen}
         options={{ tabBarLabel: 'Movies', tabBarAccessibilityLabel: 'Explore Movies' }}
       />
-      <Tab.Screen name="TVTab" component={TVExploreScreen} options={{ tabBarAccessibilityLabel: 'Explore TV Series' }} />
-      <Tab.Screen name="ExploreAllTab" component={AllExploreScreen} options={{ tabBarAccessibilityLabel: 'Explore All' }} />
+      <Tab.Screen name="TVTab" component={TVExploreScreen} options={{ tabBarLabel: 'Series', tabBarAccessibilityLabel: 'Explore TV Series' }} />
+      <Tab.Screen name="ExploreAllTab" component={AllExploreScreen} options={{ tabBarLabel: 'Explore', tabBarAccessibilityLabel: 'Explore All' }} />
       <Tab.Screen
         name="SearchTab"
         component={SearchScreen}

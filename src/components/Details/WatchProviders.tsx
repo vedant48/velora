@@ -86,13 +86,13 @@ export const WatchProviders = memo(({ id, isMovie }: WatchProvidersProps) => {
         accessibilityLabel="Watch online: show all providers"
       >
         <View style={styles.playCircle}>
-          <Ionicons name="play" size={13} color={colors.textPrimary} />
+          <Ionicons name="play" size={13} color={colors.primary} />
         </View>
         <Text style={styles.rowTitle}>Watch online</Text>
         <View style={styles.rowSpacer} />
         <View style={styles.logoRow}>
           {providers.slice(0, 4).map(({ provider }) => (
-            <ProviderLogo key={provider.provider_id} provider={provider} size={26} />
+            <ProviderLogo key={provider.provider_id} provider={provider} size={22} />
           ))}
         </View>
       </Pressable>
@@ -122,20 +122,23 @@ export const WatchProviders = memo(({ id, isMovie }: WatchProvidersProps) => {
 
 const createStyles = (colors: AppColors) => StyleSheet.create({
   container: {
-    marginTop: metrics.spacingLg,
-    marginBottom: metrics.spacingMd,
-    paddingHorizontal: metrics.screenHorizontalPadding,
+    marginTop: 0,
+    marginBottom: 0,
   },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 10,
+    // Apple redesign: grouped card like the gallery's Watch online row (was bare page bg).
+    backgroundColor: colors.appleCard,
+    borderRadius: 14,
+    paddingVertical: 12,
+    paddingHorizontal: 14,
   },
   playCircle: {
     width: 30,
     height: 30,
     borderRadius: 15,
-    backgroundColor: colors.surfaceLight,
+    backgroundColor: 'rgba(229,9,20,0.18)',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
@@ -154,7 +157,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   sheetRoot: { flex: 1, justifyContent: 'flex-end' },
   sheetScrim: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.72)' },
   sheet: {
-    backgroundColor: colors.surface,
+    backgroundColor: colors.appleCard,
     borderTopLeftRadius: 18,
     borderTopRightRadius: 18,
     paddingTop: 10,

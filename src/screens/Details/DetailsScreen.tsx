@@ -2,10 +2,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { CachedImage as Image } from '../../experience/CachedImage';
+import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Linking, Pressable, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
+import { Linking, Modal, Pressable, ScrollView, Share, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useMovieCreditsQuery, useMovieDetailsQuery, useMovieVideosQuery, useSeasonEpisodesQuery, useSimilarMoviesQuery, useTVCreditsQuery, useTVDetailsQuery, useTVVideosQuery } from '../../api/queries';
+import { useQueryClient } from '@tanstack/react-query';
 import { getSeasonEpisodes } from '../../api/tv';
 import { MediaItem } from '../../api/types';
 import { veloraApi } from '../../api/velora';
@@ -28,6 +30,7 @@ type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 export const DetailsScreen: React.FC = () => {
   const { colors, mode } = useAppTheme();
   const styles = useThemedStyles(createStyles);
+  const queryClient = useQueryClient();
   const insets = useSafeAreaInsets();
   const route = useRoute<DetailsRouteProp>();
   const navigation = useNavigation<NavigationProp>();
@@ -38,6 +41,7 @@ export const DetailsScreen: React.FC = () => {
   const isTV = !isMovie;
 
   const [selectedSeason, setSelectedSeason] = useState(1);
+  const [seasonPickerOpen, setSeasonPickerOpen] = useState(false);
   const [selectedPersonId, setSelectedPersonId] = useState<number | null>(null);
   const [isPersonModalVisible, setIsPersonModalVisible] = useState(false);
   const [statsRefreshKey, setStatsRefreshKey] = useState(0);
@@ -177,10 +181,12 @@ export const DetailsScreen: React.FC = () => {
         // Whole-series scope includes the series-level (season 0) review.
         await veloraApi.deleteReview('tv', initialItem.id, 0).catch(() => undefined);
       }
+      // Watch state changed on the server: no consumer may serve the old progress.
+      queryClient.invalidateQueries({ queryKey: ['epProgress', initialItem.id] });
       setStatsRefreshKey((k) => k + 1);
       return true;
     },
-    [availableSeasons, selectedSeason, episodes, initialItem.id, initialItem.poster_path, title, totalEpisodes],
+    [availableSeasons, selectedSeason, episodes, initialItem.id, initialItem.poster_path, title, totalEpisodes, queryClient],
   );
 
   // Trailer: official YouTube trailer/teaser if one exists (never implies in-app playback)
@@ -260,21 +266,67 @@ export const DetailsScreen: React.FC = () => {
     return null;
   }, [isTV, details]);
 
-  const statusBadge = lib.status
-    ? lib.status === 'want'
-      ? 'Want'
-      : lib.status === 'watching'
-        ? 'Watching'
-        : 'Watched'
-    : null;
+
+  // Apple redesign: backdrop hero + grouped stats card (approved gallery direction)
+  const backdropUrl = getImageUrl(
+    (details as any)?.backdrop_path || initialItem.backdrop_path || null,
+    'backdrop'
+  );
+  const year = releaseDate ? String(releaseDate).slice(0, 4) : '';
+  const runtimeMinutes =
+    Number((details as any)?.runtime ?? (details as any)?.episode_run_time?.[0] ?? 0) || 0;
+  const runtimeText =
+    runtimeMinutes > 0 ? `${Math.floor(runtimeMinutes / 60)}h ${runtimeMinutes % 60}m` : '';
+  // Content rating from the enriched details query. IN is shown plain; a fallback
+  // region's rating is labeled with its country code, never presented as the
+  // viewer's own region and never invented.
+  const certification = useMemo(() => {
+    if (!details) return null;
+    let value: string | null = null;
+    let cc = 'IN';
+    if (isMovie) {
+      const results = (details as any).release_dates?.results ?? [];
+      const pick = (code: string) =>
+        results
+          .find((r: any) => r.iso_3166_1 === code)
+          ?.release_dates?.map((d: any) => String(d.certification ?? '').trim())
+          .find(Boolean) ?? null;
+      value = pick('IN');
+      if (!value) { value = pick('US'); cc = 'US'; }
+    } else {
+      const results = (details as any).content_ratings?.results ?? [];
+      const pick = (code: string) => results.find((r: any) => r.iso_3166_1 === code)?.rating ?? null;
+      value = pick('IN');
+      if (!value) { value = pick('US'); cc = 'US'; }
+    }
+    return value ? (cc === 'IN' ? value : `${value} (${cc})`) : null;
+  }, [details, isMovie]);
+  // User-triggered share via the native sheet; shares the title and its TMDB page, nothing else.
+  const shareTitle = useCallback(() => {
+    const kind = isMovie ? 'movie' : 'tv';
+    const tmdbId = (details as any)?.id ?? initialItem.id;
+    Share.share({ message: `${title} on Velora - https://www.themoviedb.org/${kind}/${tmdbId}` }).catch(() => undefined);
+  }, [details, initialItem.id, isMovie, title]);
+
+  const metaLine = [isMovie ? year : airRange ?? '', runtimeText, certification]
+    .filter(Boolean)
+    .join(' · ');
+  const genresText = (details?.genres ?? []).map((g) => g.name).join(' · ');
+  const statCells: { value: string; label: string; accent?: boolean }[] = [
+    ...(tmdbRating > 0 ? [{ value: tmdbRating.toFixed(1), label: 'TMDB', accent: true }] : []),
+    { value: String(titleStats?.want ?? '-'), label: 'Want' },
+    {
+      value: String(isMovie ? titleStats?.watched ?? '-' : titleStats?.watching ?? '-'),
+      label: isMovie ? 'Watched' : 'Watching',
+    },
+    { value: String(titleStats?.reviews ?? '-'), label: 'Reviews' },
+  ];
 
   return (
     <View style={styles.root}>
       <StatusBar barStyle={mode === 'dark' ? 'light-content' : 'dark-content'} translucent backgroundColor="transparent" />
 
-      {/* Opaque top bar: back + collapse. Content scrolls under it
-          without showing through, and the scroll inset below keeps the
-          first content clear of the buttons. */}
+      {/* Floating back + collapse circles over the hero (approved mock). */}
       <View
         style={[
           styles.floatingHeader,
@@ -287,73 +339,97 @@ export const DetailsScreen: React.FC = () => {
           hitSlop={8}
           accessibilityLabel="Go back"
         >
-          <Ionicons name="arrow-back" size={20} color={colors.textTertiary} />
+          <Ionicons name="arrow-back" size={20} color="#FFF" />
         </Pressable>
 
         <Pressable
-          onPress={handleBack}
+          onPress={shareTitle}
           style={styles.circleButton}
           hitSlop={8}
-          accessibilityLabel="Close details"
+          accessibilityLabel={`Share ${title}`}
+          accessibilityRole="button"
         >
-          <Ionicons name="chevron-down" size={22} color={colors.textTertiary} />
+          <Ionicons name="share-outline" size={20} color="#FFF" />
         </Pressable>
       </View>
 
       <ScrollView
         style={styles.container}
-        contentContainerStyle={[
-          styles.scrollContent,
-          { paddingTop: Math.max(insets.top, 12) + 46 },
-        ]}
+        contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {/* Centered portrait poster with trailer play (Must reference) */}
-        <View style={styles.posterSection}>
-          <View style={styles.posterWrap}>
+        {/* Apple redesign: full-bleed backdrop hero fading into the page */}
+        <View style={styles.hero}>
+          {backdropUrl ? (
             <Image
-              source={posterUrl ? { uri: posterUrl } : undefined}
-              style={styles.poster}
+              source={{ uri: backdropUrl }}
+              style={StyleSheet.absoluteFill}
               contentFit="cover"
               priority="high"
               transition={IMAGE_CONFIG.transition}
               cachePolicy={IMAGE_CONFIG.cachePolicy}
               placeholder={IMAGE_CONFIG.placeholder}
             />
-            {trailerUrl && (
-              <Pressable
-                onPress={openTrailer}
-                style={styles.playButton}
-                accessibilityLabel="Play trailer on YouTube"
-                accessibilityRole="button"
-              >
-                <Ionicons name="play" size={30} color="#FFF" style={{ marginLeft: 3 }} />
-              </Pressable>
-            )}
-            {statusBadge && (
-              <View style={styles.statusBadge}>
-                <Text style={styles.statusBadgeText}>{statusBadge}</Text>
-              </View>
-            )}
-          </View>
+          ) : null}
+          <LinearGradient
+            colors={['rgba(0,0,0,0.2)', 'rgba(0,0,0,0.45)', colors.background]}
+            locations={[0, 0.55, 1]}
+            style={StyleSheet.absoluteFill}
+            pointerEvents="none"
+          />
         </View>
 
         {/* Content Section */}
         <View style={styles.mainInfo}>
-          {/* Title */}
-          <Text style={styles.title}>{title}</Text>
-
-          {/* Date / air range + ended badge */}
-          <View style={styles.dateRow}>
-            {isMovie && releaseDate ? (
-              <Text style={styles.dateText}>{formatDateLong(releaseDate)}</Text>
-            ) : null}
-            {isTV && airRange ? <Text style={styles.dateText}>{airRange}</Text> : null}
-            {endedBadge ? (
-              <View style={styles.endedPill}>
-                <Text style={styles.endedPillText}>{endedBadge}</Text>
-              </View>
-            ) : null}
+          {/* Poster + title/meta overlapping the hero bottom (approved mock detailhead) */}
+          <View style={styles.detailHead}>
+            <View style={styles.posterWrap}>
+              <Image
+                source={posterUrl ? { uri: posterUrl } : undefined}
+                style={styles.poster}
+                contentFit="cover"
+                priority="high"
+                transition={IMAGE_CONFIG.transition}
+                cachePolicy={IMAGE_CONFIG.cachePolicy}
+                placeholder={IMAGE_CONFIG.placeholder}
+              />
+              {trailerUrl && (
+                <Pressable
+                  onPress={openTrailer}
+                  style={styles.playButton}
+                  accessibilityLabel="Play trailer on YouTube"
+                  accessibilityRole="button"
+                >
+                  <Ionicons name="play" size={16} color="#FFF" style={{ marginLeft: 2 }} />
+                </Pressable>
+              )}
+            </View>
+            <View style={styles.detailTitleCol}>
+              <Text style={styles.title}>{title}</Text>
+              {metaLine ? <Text style={styles.metaLineText}>{metaLine}</Text> : null}
+              {genresText ? (
+                <View style={styles.genresRow}>
+                  {(details?.genres ?? []).map((g, i) => (
+                    <Pressable
+                      key={g.id}
+                      onPress={() => navigation.push('Genre', { genreId: g.id, genreName: g.name, mediaType: isMovie ? 'movie' : 'tv' })}
+                      accessibilityRole="link"
+                      accessibilityLabel={`${g.name} genre`}
+                      hitSlop={4}
+                    >
+                      <Text style={styles.genresLineText}>
+                        {g.name}{i < (details?.genres?.length ?? 0) - 1 ? ' · ' : ''}
+                      </Text>
+                    </Pressable>
+                  ))}
+                </View>
+              ) : null}
+              {endedBadge ? (
+                <View style={styles.endedPill}>
+                  <Text style={styles.endedPillText}>{endedBadge}</Text>
+                </View>
+              ) : null}
+            </View>
           </View>
 
           {/* Must-style tracking controls (pills / blue status bar + sheets) */}
@@ -371,29 +447,21 @@ export const DetailsScreen: React.FC = () => {
             onMarkAllUnwatched={isTV ? () => markAllSeasons(false) : undefined}
           />
 
-          {/* Stats row: rating + platform counts */}
+          {/* Apple redesign: grouped stats card (real TMDB + platform counts) */}
           <View style={styles.statsRow}>
-            {tmdbRating > 0 && (
-              <View style={styles.statCell}>
-                <Ionicons name="analytics" size={15} color={colors.accentCyan} />
-                <Text style={styles.statValue}>{tmdbRating.toFixed(1)}</Text>
-                <Text style={styles.statLabel}>TMDB</Text>
+            {statCells.map((cell, i) => (
+              <View key={cell.label} style={[styles.statCell, i > 0 && styles.statCellDivider]}>
+                {cell.accent ? (
+                  <View style={styles.statValueRow}>
+                    <Ionicons name="star" size={13} color="#FF9F0A" />
+                    <Text style={[styles.statValue, styles.statValueAccent]}>{cell.value}</Text>
+                  </View>
+                ) : (
+                  <Text style={styles.statValue}>{cell.value}</Text>
+                )}
+                <Text style={styles.statLabel}>{cell.label}</Text>
               </View>
-            )}
-            <View style={styles.statCell}>
-              <Text style={styles.statValue}>{titleStats?.want ?? '-'}</Text>
-              <Text style={styles.statLabel}>Want</Text>
-            </View>
-            <View style={styles.statCell}>
-              <Text style={styles.statValue}>
-                {isMovie ? titleStats?.watched ?? '-' : titleStats?.watching ?? '-'}
-              </Text>
-              <Text style={styles.statLabel}>{isMovie ? 'Watched' : 'Watching'}</Text>
-            </View>
-            <View style={styles.statCell}>
-              <Text style={styles.statValue}>{titleStats?.reviews ?? '-'}</Text>
-              <Text style={styles.statLabel}>Reviews</Text>
-            </View>
+            ))}
           </View>
 
           {/* Where to Watch (series: right under stats, per reference) */}
@@ -405,8 +473,6 @@ export const DetailsScreen: React.FC = () => {
             {overview || 'No overview available for this title.'}
           </Text>
 
-          {!!details?.genres?.length && <View style={styles.genreRow}>{details.genres.map(g => <View key={g.id} style={styles.genrePill}><Text style={styles.genreText}>{g.name}</Text></View>)}</View>}
-
           {/* Seasons & Episodes for TV Series */}
           {isTV && (
             <View style={styles.episodesSection}>
@@ -417,35 +483,71 @@ export const DetailsScreen: React.FC = () => {
                 )}
               </View>
 
-              {/* Season Selector Pills with rating badges */}
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.seasonsScroll}
+              {/* Apple redesign: season menu (mock single row) opening a picker sheet;
+                  per-season star ratings are preserved on the picker rows. */}
+              {(() => {
+                const current = availableSeasons.find((s: any) => s.season_number === selectedSeason);
+                const currentRating = mySeasonRatings[selectedSeason];
+                return (
+                  <Pressable
+                    testID="season-menu"
+                    style={styles.seasonMenu}
+                    onPress={() => setSeasonPickerOpen(true)}
+                    accessibilityRole="button"
+                    accessibilityLabel={`Choose season, current ${current?.name || `Season ${selectedSeason}`}`}
+                  >
+                    <Text style={styles.seasonMenuText}>{current?.name || `Season ${selectedSeason}`}</Text>
+                    {currentRating != null && (
+                      <View style={styles.ratingBadge}>
+                        <Ionicons name="star" size={10} color="#FFF" />
+                        <Text style={styles.ratingBadgeText}>{currentRating}</Text>
+                      </View>
+                    )}
+                    <Ionicons name="chevron-expand" size={14} color={colors.appleText2} />
+                  </Pressable>
+                );
+              })()}
+              <Modal
+                visible={seasonPickerOpen}
+                transparent
+                animationType="slide"
+                onRequestClose={() => setSeasonPickerOpen(false)}
               >
-                {availableSeasons.map((s: any) => {
-                  const isSelected = selectedSeason === s.season_number;
-                  const rating = mySeasonRatings[s.season_number];
-                  return (
-                    <Pressable
-                      key={s.id || s.season_number}
-                      onPress={() => setSelectedSeason(s.season_number)}
-                      style={[styles.seasonPill, isSelected && styles.seasonPillActive]}
-                      hitSlop={6}
-                    >
-                      <Text style={[styles.seasonPillText, isSelected && styles.seasonPillTextActive]}>
-                        {s.name || `Season ${s.season_number}`}
-                      </Text>
-                      {rating != null && (
-                        <View style={styles.ratingBadge}>
-                          <Ionicons name="star" size={10} color="#FFF" />
-                          <Text style={styles.ratingBadgeText}>{rating}</Text>
-                        </View>
-                      )}
-                    </Pressable>
-                  );
-                })}
-              </ScrollView>
+                <View style={styles.seasonSheetRoot}>
+                  <Pressable style={styles.seasonSheetScrim} accessibilityLabel="Close season picker" onPress={() => setSeasonPickerOpen(false)} />
+                  <View style={styles.seasonSheet}>
+                    <View style={styles.seasonSheetGrabber} />
+                    <ScrollView bounces={false}>
+                      {availableSeasons.map((s: any, i: number) => {
+                        const isSelected = selectedSeason === s.season_number;
+                        const rating = mySeasonRatings[s.season_number];
+                        return (
+                          <Pressable
+                            key={s.id || s.season_number}
+                            onPress={() => {
+                              setSelectedSeason(s.season_number);
+                              setSeasonPickerOpen(false);
+                            }}
+                            style={[styles.seasonSheetRow, i > 0 && styles.seasonSheetRowSep]}
+                            accessibilityRole="button"
+                            accessibilityLabel={s.name || `Season ${s.season_number}`}
+                          >
+                            <Text style={styles.seasonSheetRowText}>{s.name || `Season ${s.season_number}`}</Text>
+                            {rating != null && (
+                              <View style={styles.ratingBadge}>
+                                <Ionicons name="star" size={10} color="#FFF" />
+                                <Text style={styles.ratingBadgeText}>{rating}</Text>
+                              </View>
+                            )}
+                            <View style={{ flex: 1 }} />
+                            {isSelected && <Ionicons name="checkmark" size={18} color={colors.primary} />}
+                          </Pressable>
+                        );
+                      })}
+                    </ScrollView>
+                  </View>
+                </View>
+              </Modal>
 
               <EpisodeChecklist
                 seriesId={initialItem.id}
@@ -496,10 +598,10 @@ export const DetailsScreen: React.FC = () => {
                           </View>
                         )}
                       </View>
-                      <Text style={styles.actorName} numberOfLines={1}>
+                      <Text style={styles.actorName} numberOfLines={2}>
                         {member.name}
                       </Text>
-                      <Text style={styles.characterName} numberOfLines={1}>
+                      <Text style={styles.characterName} numberOfLines={2}>
                         {member.job}
                       </Text>
                     </Pressable>
@@ -530,10 +632,10 @@ export const DetailsScreen: React.FC = () => {
                           </View>
                         )}
                       </View>
-                      <Text style={styles.actorName} numberOfLines={1}>
+                      <Text style={styles.actorName} numberOfLines={2}>
                         {actor.name}
                       </Text>
-                      <Text style={styles.characterName} numberOfLines={1}>
+                      <Text style={styles.characterName} numberOfLines={2}>
                         {actor.character}
                       </Text>
                     </Pressable>
@@ -557,6 +659,9 @@ export const DetailsScreen: React.FC = () => {
                 title="More Like This"
                 data={similarMoviesQuery.data}
                 onItemPress={handleSimilarItemPress}
+                minimal
+                cardWidth={104}
+                cardHeight={156}
               />
             </View>
           )}
@@ -608,75 +713,79 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: colors.background,
   },
   circleButton: {
     width: 38,
     height: 38,
     borderRadius: 19,
-    backgroundColor: colors.surface,
+    backgroundColor: 'rgba(28,28,32,0.55)',
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 0.5,
-    borderColor: colors.border,
   },
-  posterSection: {
-    alignItems: 'center',
-    paddingTop: 12,
-    paddingBottom: 4,
-    backgroundColor: colors.background,
+  hero: {
+    height: 250,
+    backgroundColor: colors.cardBackground,
+  },
+  detailHead: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    gap: 14,
+    marginTop: -72,
+    marginBottom: 2,
+  },
+  detailTitleCol: {
+    flex: 1,
+    gap: 4,
+    paddingBottom: 2,
+  },
+  metaLineText: {
+    color: colors.appleText2,
+    fontSize: 13,
+    fontWeight: '500',
+  },
+  genresLineText: {
+    color: colors.appleText3,
+    fontSize: 13,
+  },
+  genresRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
   posterWrap: {
-    width: 218,
-    aspectRatio: 2 / 3,
+    width: 96,
+    height: 144,
     position: 'relative',
-    shadowColor: '#000', shadowOpacity: 0.18, shadowRadius: 16, shadowOffset: { width: 0, height: 10 }, elevation: 10,
+    shadowColor: '#000', shadowOpacity: 0.3, shadowRadius: 12, shadowOffset: { width: 0, height: 6 }, elevation: 8,
   },
   poster: {
-    width: 218,
-    aspectRatio: 2 / 3,
-    borderRadius: 3,
+    width: 96,
+    height: 144,
+    borderRadius: 12,
     backgroundColor: colors.cardBackground,
   },
   playButton: {
     position: 'absolute',
-    bottom: 12,
-    right: 12,
-    width: 38,
-    height: 38,
-    borderRadius: 19,
+    bottom: 8,
+    right: 8,
+    width: 30,
+    height: 30,
+    borderRadius: 15,
     backgroundColor: 'rgba(30, 30, 36, 0.85)',
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.25)',
   },
-  statusBadge: {
-    position: 'absolute',
-    right: 10,
-    top: 10,
-    backgroundColor: 'rgba(14, 14, 20, 0.8)',
-    borderRadius: 8,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderWidth: 0.5,
-    borderColor: 'rgba(255,255,255,0.2)',
-  },
-  statusBadgeText: {
-    color: '#FFFFFF',
-    fontSize: 11,
-    fontWeight: '800',
-  },
   mainInfo: {
-    marginTop: 24,
+    marginTop: 0,
     paddingHorizontal: metrics.screenHorizontalPadding,
     gap: 12,
   },
   title: {
-    fontSize: 18,
-    fontWeight: '800',
+    fontSize: 22,
+    fontWeight: '700',
     color: colors.textPrimary,
-    letterSpacing: -0.3,
+    letterSpacing: -0.4,
   },
   dateRow: {
     flexDirection: 'row',
@@ -704,31 +813,42 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-evenly',
-    paddingVertical: 10,
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderColor: colors.border,
+    backgroundColor: colors.appleCard,
+    borderRadius: 14,
+    paddingVertical: 12,
   },
   statCell: {
+    flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
     gap: 3,
   },
+  statCellDivider: {
+    borderLeftWidth: StyleSheet.hairlineWidth,
+    borderColor: colors.appleSeparator,
+  },
+  statValueRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
   statValue: {
     color: colors.textPrimary,
-    fontSize: 15,
-    fontWeight: '800',
+    fontSize: 17,
+    fontWeight: '700',
+  },
+  statValueAccent: {
+    color: '#FF9F0A',
   },
   statLabel: {
-    color: colors.textSecondary,
-    fontSize: 13,
-    fontWeight: '600',
+    color: colors.appleText2,
+    fontSize: 12,
   },
   sectionHeading: {
-    fontSize: 16,
-    fontWeight: '700',
+    fontSize: 17,
+    fontWeight: '600',
     color: colors.textPrimary,
-    marginTop: 10,
+    marginTop: 14,
     marginBottom: 2,
   },
   overviewText: {
@@ -744,7 +864,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     gap: 12,
   },
   castCard: {
-    width: 80,
+    width: 84,
     alignItems: 'center',
   },
   actorAvatar: {
@@ -754,8 +874,6 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     backgroundColor: colors.surfaceLight,
     overflow: 'hidden',
     marginBottom: 6,
-    borderWidth: 1,
-    borderColor: colors.border,
   },
   avatarPlaceholder: {
     flex: 1,
@@ -765,14 +883,14 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   },
   actorName: {
     color: colors.textPrimary,
-    fontSize: 11,
+    fontSize: 12,
     fontWeight: '600',
     textAlign: 'center',
     width: '100%',
   },
   characterName: {
-    color: colors.textTertiary,
-    fontSize: 10,
+    color: colors.appleText2,
+    fontSize: 11,
     textAlign: 'center',
     width: '100%',
   },
@@ -797,6 +915,51 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   seasonsScroll: {
     paddingVertical: 10,
     gap: 8,
+  },
+  seasonMenu: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    alignSelf: 'flex-start',
+    paddingVertical: 8,
+  },
+  seasonMenuText: {
+    color: colors.textPrimary,
+    fontSize: 15,
+    fontWeight: '600',
+  },
+  seasonSheetRoot: { flex: 1, justifyContent: 'flex-end' },
+  seasonSheetScrim: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.72)' },
+  seasonSheet: {
+    backgroundColor: colors.appleCard,
+    borderTopLeftRadius: 18,
+    borderTopRightRadius: 18,
+    paddingTop: 10,
+    paddingBottom: 34,
+    maxHeight: '60%',
+  },
+  seasonSheetGrabber: {
+    alignSelf: 'center',
+    width: 36,
+    height: 5,
+    borderRadius: 3,
+    backgroundColor: colors.appleSeparator,
+    marginBottom: 6,
+  },
+  seasonSheetRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 13,
+  },
+  seasonSheetRowSep: {
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: colors.appleSeparator,
+  },
+  seasonSheetRowText: {
+    color: colors.textPrimary,
+    fontSize: 16,
   },
   seasonPill: {
     flexDirection: 'row',

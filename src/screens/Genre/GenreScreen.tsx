@@ -81,6 +81,7 @@ export const GenreScreen: React.FC = () => {
           width={cardWidth}
           height={cardHeight}
           hasMarginRight={false}
+          minimal
         />
       </View>
     ),
@@ -183,16 +184,14 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: metrics.screenHorizontalPadding,
     paddingBottom: metrics.spacingMd,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255, 255, 255, 0.08)',
   },
   backButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 34,
+    height: 34,
+    borderRadius: 17,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+    backgroundColor: colors.appleFill,
   },
   headerTitleContainer: {
     flex: 1,
@@ -205,18 +204,18 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   },
   toggleRow: {
     flexDirection: 'row',
-    backgroundColor: colors.surfaceLight,
-    borderRadius: 18,
-    padding: 3,
-    gap: 4,
+    backgroundColor: colors.appleSegTrack,
+    borderRadius: 9,
+    padding: 2,
+    gap: 2,
   },
   togglePill: {
     paddingHorizontal: 12,
     paddingVertical: 5,
-    borderRadius: 14,
+    borderRadius: 7,
   },
   togglePillActive: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.appleSegActive,
   },
   toggleText: {
     fontSize: 12,

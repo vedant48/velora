@@ -61,19 +61,29 @@ export const AuthScreen: React.FC = () => {
         <Pressable onPress={() => navigation.goBack()} style={styles.back} accessibilityLabel="Back">
           <Ionicons name="arrow-back" size={22} color={colors.textPrimary} />
         </Pressable>
-        <Text style={styles.title}>Velora</Text>
+        <View style={styles.logoTile}>
+          <Text style={styles.logoLetter}>V</Text>
+        </View>
+        <Text style={styles.title}>Welcome to Velora</Text>
         <Text style={styles.subtitle}>
-          Track what you watch, rate titles, and see what friends are watching.
+          Track movies and TV series, reviews and episode progress.
         </Text>
 
-        <View style={styles.switchRow}>
-          {(['login', 'signup'] as const).map((m) => (
-            <Pressable key={m} onPress={() => setMode(m)} style={[styles.switchTab, mode === m && styles.switchTabActive]}>
-              <Text style={[styles.switchText, mode === m && styles.switchTextActive]}>
-                {m === 'login' ? 'Log in' : 'Sign up'}
-              </Text>
-            </Pressable>
-          ))}
+        <Pressable onPress={google} style={[styles.googleBtn, googleBusy && { opacity: 0.6 }]} disabled={googleBusy}>
+          {googleBusy ? (
+            <AppLoader />
+          ) : (
+            <>
+              <Ionicons name="logo-google" size={18} color="#111111" />
+              <Text style={styles.googleText}>Continue with Google</Text>
+            </>
+          )}
+        </Pressable>
+
+        <View style={styles.dividerRow}>
+          <View style={styles.divider} />
+          <Text style={styles.dividerText}>or</Text>
+          <View style={styles.divider} />
         </View>
 
         {mode === 'signup' && (
@@ -81,7 +91,7 @@ export const AuthScreen: React.FC = () => {
             value={displayName}
             onChangeText={setDisplayName}
             placeholder="Display name"
-            placeholderTextColor={colors.textMuted}
+            placeholderTextColor={colors.appleText3}
             style={styles.input}
             autoCapitalize="words"
           />
@@ -90,7 +100,7 @@ export const AuthScreen: React.FC = () => {
           value={username}
           onChangeText={setUsername}
           placeholder="Username"
-          placeholderTextColor={colors.textMuted}
+          placeholderTextColor={colors.appleText3}
           style={styles.input}
           autoCapitalize="none"
           autoCorrect={false}
@@ -99,27 +109,18 @@ export const AuthScreen: React.FC = () => {
           value={password}
           onChangeText={setPassword}
           placeholder="Password"
-          placeholderTextColor={colors.textMuted}
+          placeholderTextColor={colors.appleText3}
           style={styles.input}
           secureTextEntry
         />
         {error && <Text style={styles.error}>{error}</Text>}
-        <AppButton title={mode === 'login' ? 'Log in' : 'Create account'} onPress={submit} loading={busy} />
+        <AppButton title={mode === 'login' ? 'Sign in' : 'Create account'} onPress={submit} loading={busy} />
 
-        <View style={styles.dividerRow}>
-          <View style={styles.divider} />
-          <Text style={styles.dividerText}>or</Text>
-          <View style={styles.divider} />
-        </View>
-        <Pressable onPress={google} style={[styles.googleBtn, googleBusy && { opacity: 0.6 }]} disabled={googleBusy}>
-          {googleBusy ? (
-            <AppLoader />
-          ) : (
-            <>
-              <Ionicons name="logo-google" size={18} color={colors.textPrimary} />
-              <Text style={styles.googleText}>Continue with Google</Text>
-            </>
-          )}
+        <Pressable onPress={() => setMode(mode === 'login' ? 'signup' : 'login')} style={styles.footerToggle} accessibilityRole="button">
+          <Text style={styles.footerText}>
+            {mode === 'login' ? 'New here? ' : 'Already have an account? '}
+            <Text style={styles.footerLink}>{mode === 'login' ? 'Create an account' : 'Sign in'}</Text>
+          </Text>
         </Pressable>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -140,22 +141,35 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: colors.surface,
   },
-  title: { fontSize: 34, fontWeight: '900', color: colors.primary, textAlign: 'center', letterSpacing: 1 },
-  subtitle: { fontSize: 14, color: colors.textSecondary, textAlign: 'center', marginBottom: 10 },
+  title: { fontSize: 28, fontWeight: '700', color: colors.textPrimary, textAlign: 'center', letterSpacing: -0.3 },
+  logoTile: {
+    width: 64,
+    height: 64,
+    borderRadius: 16,
+    backgroundColor: colors.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    shadowColor: colors.primary,
+    shadowOpacity: 0.35,
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 6,
+  },
+  logoLetter: { color: '#FFF', fontSize: 32, fontWeight: '800' },
+  subtitle: { fontSize: 14, color: colors.appleText2, textAlign: 'center', marginBottom: 10 },
   switchRow: { flexDirection: 'row', backgroundColor: colors.surface, borderRadius: ui.radius.button, padding: 4 },
   switchTab: { flex: 1, paddingVertical: 9, borderRadius: 9, alignItems: 'center' },
   switchTabActive: { backgroundColor: colors.primary },
   switchText: { fontSize: 13, fontWeight: '700', color: colors.textTertiary },
   switchTextActive: { color: '#fff' },
   input: {
-    borderRadius: ui.radius.button,
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.surfaceBorder,
+    borderRadius: 12,
+    backgroundColor: colors.appleFill,
     paddingHorizontal: 14,
-    paddingVertical: 12,
+    paddingVertical: 13,
     color: colors.textPrimary,
-    fontSize: 14,
+    fontSize: 15,
   },
   error: { color: colors.error, fontSize: 13, textAlign: 'center' },
   submit: { marginTop: 6, borderRadius: ui.radius.button, backgroundColor: colors.primary, paddingVertical: 14, alignItems: 'center' },
@@ -166,13 +180,14 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   googleBtn: {
     flexDirection: 'row',
     gap: 10,
-    borderRadius: ui.radius.button,
-    borderWidth: 1,
-    borderColor: colors.surfaceBorder,
-    backgroundColor: colors.surface,
+    borderRadius: 12,
+    backgroundColor: '#FFFFFF',
     paddingVertical: 13,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  googleText: { fontSize: 14, fontWeight: '700', color: colors.textPrimary },
+  googleText: { fontSize: 15, fontWeight: '600', color: '#111111' },
+  footerToggle: { alignItems: 'center', paddingVertical: 6 },
+  footerText: { fontSize: 13, color: colors.appleText2 },
+  footerLink: { color: colors.primary, fontWeight: '700' },
 });

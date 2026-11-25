@@ -14,6 +14,11 @@ const lightColors: AppColors = {
   border: '#E8E8EC', borderHighlight: '#B6B6C0',
   overlayDark: 'rgba(255,255,255,0.8)', glassDark: 'rgba(255,255,255,0.94)',
   shimmerBase: '#E7E7EC', shimmerHighlight: '#F4F4F6',
+  // Apple-style redesign palette, light-theme values (iOS system colors).
+  appleCard: '#FFFFFF', appleFill: 'rgba(120,120,128,0.16)', appleSegTrack: 'rgba(118,118,128,0.12)',
+  appleSegActive: '#FFFFFF', appleText: '#000000', appleText2: 'rgba(60,60,67,0.6)',
+  appleText3: 'rgba(60,60,67,0.45)', appleSeparator: 'rgba(0,0,0,0.08)', appleBlue: '#007AFF',
+  appleAmber: '#FF9500', appleGreen: '#34C759', appleRedSoft: 'rgba(229,9,20,0.4)', appleTabBar: '#F9F9FA',
 };
 const ThemeContext = createContext({
   colors: darkColors as AppColors, preference: 'system' as ThemePreference,

@@ -1,6 +1,9 @@
-## Library scroll fix
+## Apple-style redesign
 
-- Fixed the flicker some phones showed while scrolling the library: series tiles bouncing and re-drawing as the profile header collapsed.
-- The profile header now collapses natively while you scroll; the Want/Watched/Series/Insights tab row stays pinned exactly as before, and series grouping and Insights are unchanged.
+- Library: new home with your profile on top; scrolling hides the profile and pins the Want/Watched/Series/Insights tabs.
+- Title pages: new hero, compact Watch online row with provider logos, season picker with per-episode tracking; swipe right on an episode to mark it watched.
+- Explore: hero picks, trending, trailers and streaming rows; search with scope chips and member results.
+- Member profiles: follow/unfollow, share profile, and an Activity feed of what people you follow watched and reviewed.
+- Settings, sheets, filters and Insights restyled to match.
 
 No change to your account or library; update in place.

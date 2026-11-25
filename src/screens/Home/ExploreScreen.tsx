@@ -8,6 +8,8 @@ import { MediaItem } from '../../api/types';
 import { LibraryItem, veloraApi } from '../../api/velora';
 import { TVCollections } from '../../components/Collections/TVCollections';
 import { CollectionsRail } from '../../components/Collections/CollectionsRail';
+import { HeroBanner } from '../../components/Home/HeroBanner';
+import { WideCardRail } from '../../components/Home/WideCardRail';
 import { TrailersRail } from '../../components/Home/TrailersRail';
 import { WatchNextRail } from '../../components/Home/WatchNextRail';
 import { MovieCarousel } from '../../components/MovieCarousel/MovieCarousel';
@@ -41,15 +43,41 @@ export function ExploreScreen({ kind }: { kind: 'movies' | 'tv' | 'all' }) {
     return () => { active = false; };
   }, [user?.username, apiReady]));
   const open = useCallback((item: MediaItem) => navigation.navigate('Details', { item }), [navigation]);
+  // Apple redesign hero: Want adds straight to the library (same upsert the details page uses).
+  const addToWant = useCallback(async (item: MediaItem) => {
+    if (!user || !apiReady) { navigation.navigate('Auth'); return; }
+    const mediaType = (item.media_type ?? 'movie') as 'movie' | 'tv';
+    try {
+      await veloraApi.upsertItem({ mediaType, tmdbId: item.id, title: item.title, posterPath: item.poster_path, backdropPath: item.backdrop_path, releaseDate: item.release_date ?? null, status: 'want' });
+      setTracked(prev => ({ ...prev, [`${mediaType}:${item.id}`]: 'want' }));
+    } catch { /* failed add stays untracked; retry from the details page */ }
+  }, [user, apiReady, navigation]);
   const openSeries = useCallback((item: LibraryItem) => open({ id: item.tmdb_id, media_type: item.media_type, title: item.title, overview: '', poster_path: item.poster_path, backdrop_path: item.backdrop_path, vote_average: 0 }), [open]);
   const collections = <CollectionsRail onPressCollection={(collectionId, collectionName) => navigation.navigate('Collection', { collectionId, collectionName })} />;
   const forYou = seed ? recommended : trending;
-  const rail = (title: string, query: typeof trending) => <MovieCarousel title={title} data={query.data} isLoading={query.isLoading} isError={query.isError} onRetry={query.refetch} onItemPress={open} cardWidth={124} cardHeight={186} minimal trackingStatus={tracked} />;
+  const heroItem = kind === 'tv' ? television.data?.[0] : forYou.data?.[0];
+  const rail = (title: string, query: typeof trending) => <MovieCarousel title={title} data={query.data} isLoading={query.isLoading} isError={query.isError} onRetry={query.refetch} onItemPress={open} cardWidth={116} cardHeight={174} minimal trackingStatus={tracked} />;
   return <View style={{ flex: 1, backgroundColor: colors.background, paddingTop: insets.top }}>
     <ViewportContext.Provider value={{ offset, height: viewportHeight }}><ScrollView onScroll={e => setOffset(Math.floor(e.nativeEvent.contentOffset.y / 160) * 160)} scrollEventThrottle={100} contentContainerStyle={{ paddingBottom: insets.bottom + 88 }} showsVerticalScrollIndicator={false} refreshControl={<RefreshControl refreshing={trending.isRefetching || television.isRefetching} onRefresh={() => { void trending.refetch(); void television.refetch(); void nowPlaying.refetch(); void upcoming.refetch(); void streaming.refetch(); if (seed) void recommended.refetch(); }} tintColor={colors.primary} />}>
-      <Text accessibilityRole="header" style={[styles.title, { color: colors.textPrimary }]}>{kind === 'tv' ? 'TV Shows' : kind === 'movies' ? 'Movies' : 'Explore All'}</Text>
+      {/* Gallery: only the explore-all mock carries a (centered) screen title; the movies/tv
+          mocks open flush on the hero. The mock's sparkle affordance has no real feature, so it
+          is intentionally absent. */}
+      {kind === 'all' && <Text accessibilityRole="header" style={[styles.centeredTitle, { color: colors.appleText }]}>Explore</Text>}
+      {heroItem && (
+        <HeroBanner
+          item={heroItem}
+          eyebrow={kind === 'tv' ? 'Series pick for you' : kind === 'all' ? 'Featured' : 'Trending now'}
+          tracked={tracked[`${heroItem.media_type ?? 'movie'}:${heroItem.id}`]}
+          onDetails={open}
+          onWant={addToWant}
+        />
+      )}
       {kind !== 'tv' && <>
-        <LazySection>{rail(seed ? 'For you' : 'Trending movies', forYou)}</LazySection>
+        {kind === 'all' ? (
+          <LazySection height={240}><WideCardRail title="Trending this week" items={trending.data ?? []} onItemPress={open} /></LazySection>
+        ) : (
+          <LazySection>{rail(seed ? 'For you' : 'Trending movies', forYou)}</LazySection>
+        )}
         <LazySection height={230}><TrailersRail items={nowPlaying.data ?? []} onItemPress={open} /></LazySection>
         <LazySection>{rail('Available for streaming', streaming)}</LazySection>
         <LazySection>{rail('In Theaters Now', nowPlaying)}</LazySection>
@@ -67,4 +95,4 @@ export function ExploreScreen({ kind }: { kind: 'movies' | 'tv' | 'all' }) {
 export const MoviesExploreScreen = () => <ExploreScreen kind="movies" />;
 export const TVExploreScreen = () => <ExploreScreen kind="tv" />;
 export const AllExploreScreen = () => <ExploreScreen kind="all" />;
-const styles = StyleSheet.create({ title: { fontSize: 25, fontWeight: '700', marginHorizontal: 20, marginTop: 28, marginBottom: 12 } });
+const styles = StyleSheet.create({ centeredTitle: { fontSize: 17, fontWeight: '700', textAlign: 'center', marginBottom: 10 } });

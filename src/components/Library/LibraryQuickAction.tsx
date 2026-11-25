@@ -18,8 +18,14 @@ export function LibraryQuickAction({ item, onClose, onChanged }: {
     releaseDate: item.release_date ?? undefined, totalEpisodes: item.total_episodes,
   });
   return <>
-    <ActionSheet visible={!ratingOpen} showCancel={false} dismissOnSelect={false} onClose={onClose} options={[
-      { label: 'Move to Watched', onPress: () => setRatingOpen(true) },
+    <ActionSheet visible={!ratingOpen} showCancel={false} dismissOnSelect={false} onClose={onClose}
+      header={{
+        posterPath: item.poster_path,
+        title: item.title,
+        subtitle: item.release_date ? `${item.release_date.slice(0, 4)} · In your Want list` : 'In your Want list',
+      }}
+      options={[
+      { label: 'Mark as watched', icon: 'eye', iconColor: '#0A84FF', onPress: () => setRatingOpen(true) },
     ]} />
     <RateReviewSheet visible={ratingOpen} title={item.title}
       subtitle={item.release_date ? `(${item.release_date.slice(0, 4)})` : undefined}

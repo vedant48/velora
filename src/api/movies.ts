@@ -76,7 +76,7 @@ export async function getMovieDetails(
   id: number,
   signal?: AbortSignal
 ): Promise<MovieDetails> {
-  return proxyGet<MovieDetails>(`/v1/tmdb/3/movie/${id}`, { signal });
+  return proxyGet<MovieDetails>(`/v1/tmdb/3/movie/${id}?append_to_response=release_dates`, { signal });
 }
 
 export async function getMovieCredits(

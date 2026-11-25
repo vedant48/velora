@@ -8,6 +8,7 @@ import React from 'react';
 import { Pressable, RefreshControl, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ActivityEvent, veloraApi } from '../../api/velora';
+import { Avatar } from '../../components/Avatar';
 import { AppLoader } from '../../components/common/AppLoader';
 import { ScreenHeader } from '../../components/common/ScreenHeader';
 import { RootStackParamList } from '../../navigation/types';
@@ -61,7 +62,7 @@ export const ActivityScreen: React.FC = () => {
 
   return (
     <View style={[styles.root, { paddingTop: insets.top + 8 }]}>
-      <View style={{paddingHorizontal: ui.space.lg}}><ScreenHeader title="Friends activity" onBack={() => navigation.goBack()} /></View>
+      <View style={{paddingHorizontal: ui.space.lg}}><ScreenHeader title="Activity" onBack={() => navigation.goBack()} /></View>
 
       {isLoading ? (
         <AppLoader style={{ marginTop: 40 }} />
@@ -84,21 +85,24 @@ export const ActivityScreen: React.FC = () => {
           data={feed}
           keyExtractor={(e, i) => `${e.username}-${e.media_type}-${e.tmdb_id}-${i}`}
           refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={() => refetch()} tintColor={colors.primary} colors={[colors.primary]} />}
-          contentContainerStyle={{ paddingHorizontal: ui.space.lg, paddingBottom: 30 }}
-          renderItem={({ item }) => (
+          contentContainerStyle={styles.feedCard}
+          ItemSeparatorComponent={() => <View style={styles.sep} />}
+          ListFooterComponent={
+            <Text style={styles.explainer}>What people you follow watched, rated and reviewed.</Text>
+          }
+          renderItem={({ item }) => {
+            const name = item.display_name || item.username;
+            return (
             <Pressable
               style={styles.row}
               onPress={() => navigation.navigate('UserProfile', { username: item.username })}
             >
-              <Image
-                source={{ uri: getImageUrl(item.poster_path, 'thumbnail') ?? undefined }}
-                style={styles.poster}
-                contentFit="cover"
-                transition={120}
-              />
+              {/* Feed events carry no avatarAt, so this renders the gallery gradient
+                  fallback; the shared component swaps in a real photo the moment one exists. */}
+              <Avatar user={{ username: item.username, displayName: item.display_name, avatarAt: null }} size={38} letters={2} />
               <View style={styles.rowText}>
                 <Text style={styles.line} numberOfLines={2}>
-                  <Text style={styles.who}>{item.display_name || item.username} </Text>
+                  <Text style={styles.who}>{name} </Text>
                   {describe(item)}{' '}
                   <Text style={styles.what}>{item.title}</Text>
                 </Text>
@@ -109,8 +113,15 @@ export const ActivityScreen: React.FC = () => {
                 )}
                 <Text style={styles.when}>{timeAgo(item.updated_at)}</Text>
               </View>
+              <Image
+                source={{ uri: getImageUrl(item.poster_path, 'thumbnail') ?? undefined }}
+                style={styles.poster}
+                contentFit="cover"
+                transition={120}
+              />
             </Pressable>
-          )}
+            );
+          }}
         />
       )}
     </View>
@@ -133,15 +144,32 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   emptyText: { fontSize: 13, color: colors.textSecondary, textAlign: 'center', lineHeight: 19 },
   retry: { paddingHorizontal: 18, paddingVertical: 9, borderRadius: 10, backgroundColor: colors.surface },
   retryText: { color: colors.textPrimary, fontWeight: '700', fontSize: 13 },
+  feedCard: {
+    marginHorizontal: ui.space.lg,
+    marginBottom: 30,
+    backgroundColor: colors.appleCard,
+    borderRadius: 14,
+    overflow: 'hidden',
+  },
+  sep: { height: StyleSheet.hairlineWidth, backgroundColor: colors.appleSeparator, marginLeft: 62 },
+  explainer: { textAlign: 'center', color: colors.appleText2, fontSize: 13, paddingVertical: 18, backgroundColor: colors.background },
+  avatar: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    backgroundColor: colors.appleBlue,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  avatarText: { color: '#FFF', fontSize: 14, fontWeight: '700' },
   row: {
     flexDirection: 'row',
+    alignItems: 'center',
     gap: ui.space.md,
-    backgroundColor: colors.surface,
-    borderRadius: ui.radius.button,
-    padding: 10,
-    marginBottom: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
   },
-  poster: { width: 52, height: 78, borderRadius: 8 },
+  poster: { width: 38, height: 56, borderRadius: 6 },
   rowText: { flex: 1, gap: 3 },
   line: { fontSize: 13, color: colors.textSecondary, lineHeight: 18 },
   who: { fontWeight: '800', color: colors.textPrimary },

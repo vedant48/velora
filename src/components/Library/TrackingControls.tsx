@@ -117,14 +117,17 @@ export const TrackingControls = memo(function TrackingControls(props: TrackingCo
         <View style={styles.pillsRow}>
           <Pressable
             onPress={() => void lib.setStatus('want').then(onChanged)}
-            style={({ pressed }) => [styles.pill, pressed && styles.pillPressed]}
+            style={({ pressed }) => [styles.pill, styles.wantPill, pressed && styles.pillPressed]}
             accessibilityRole="button"
             accessibilityLabel="Want" disabled={saving}
           >
             {saving ? (
               <AppLoader size="small" />
             ) : (
-              <Text style={styles.pillText}>Want</Text>
+              <>
+                <Ionicons name="add" size={17} color="#FFF" />
+                <Text style={styles.pillText}>Want</Text>
+              </>
             )}
           </Pressable>
           <Pressable
@@ -135,25 +138,44 @@ export const TrackingControls = memo(function TrackingControls(props: TrackingCo
                 void lib.setStatus('watching').then(onChanged);
               }
             }}
-            style={({ pressed }) => [styles.pill, pressed && styles.pillPressed]}
+            style={({ pressed }) => [styles.pill, styles.bluePill, pressed && styles.pillPressed]}
             accessibilityRole="button"
             accessibilityLabel={secondStatus} disabled={saving}
           >
+            <Ionicons name={isMovie ? 'eye' : 'play'} size={15} color="#FFF" />
             <Text style={styles.pillText}>{secondStatus}</Text>
           </Pressable>
         </View>
       ) : (
-        <Pressable
-          onPress={() => setSheet(status === 'want' ? 'want' : status === 'watched' ? 'watched' : 'watching')}
-          style={({ pressed }) => [styles.statusBar, pressed && { opacity: 0.85 }]}
-          accessibilityRole="button"
-          accessibilityLabel={`${activeLabel}, options`} disabled={saving}
-        >
-          <View style={styles.statusBarCenter}>
-            <>{saving ? <AppLoader onAccent /> : <><Ionicons name="checkmark" size={20} color="#FFF" /><Text style={styles.statusBarText}>{activeLabel}</Text></>}</>
-          </View>
-          <Ionicons name="ellipsis-horizontal" size={20} color="#FFF" style={styles.statusBarEllipsis} />
-        </Pressable>
+        <View style={styles.pillsRow}>
+          <Pressable
+            onPress={() => setSheet(status === 'want' ? 'want' : status === 'watched' ? 'watched' : 'watching')}
+            style={({ pressed }) => [
+              styles.pill,
+              status === 'want' ? styles.wantPill : styles.bluePill,
+              pressed && styles.pillPressed,
+            ]}
+            accessibilityRole="button"
+            accessibilityLabel={`${activeLabel}, options`} disabled={saving}
+          >
+            {saving ? (
+              <AppLoader onAccent />
+            ) : (
+              <>
+                <Ionicons name="checkmark" size={16} color="#FFF" />
+                <Text style={styles.pillText}>{activeLabel}</Text>
+              </>
+            )}
+          </Pressable>
+          <Pressable
+            onPress={() => setSheet(status === 'want' ? 'want' : status === 'watched' ? 'watched' : 'watching')}
+            style={({ pressed }) => [styles.moreButton, pressed && styles.pillPressed]}
+            accessibilityRole="button"
+            accessibilityLabel="More options" disabled={saving}
+          >
+            <Ionicons name="ellipsis-horizontal" size={20} color={colors.textPrimary} />
+          </Pressable>
+        </View>
       )}
 
       <ActionSheet showCancel={false} visible={sheet === 'want'} options={wantOptions} onClose={() => setSheet('none')} />
@@ -186,50 +208,42 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   container: { marginTop: ui.space.xs },
   pillsRow: {
     flexDirection: 'row',
-    gap: ui.space.md,
+    gap: 10,
   },
+  // Apple redesign: mock action-row colors (red Want / blue Watched / gray ellipsis)
   pill: {
     flex: 1,
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 14,
-    borderRadius: 26,
-    backgroundColor: colors.surfaceLight,
+    gap: 6,
+    paddingVertical: 12,
+    borderRadius: 12,
+  },
+  wantPill: {
+    backgroundColor: colors.primary,
+  },
+  bluePill: {
+    backgroundColor: colors.appleBlue,
+  },
+  moreButton: {
+    width: 44,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.appleFill,
   },
   pillPressed: { opacity: 0.8 },
   pillText: {
-    color: colors.textPrimary,
-    fontSize: 16,
-    fontWeight: '700',
-  },
-  statusBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.trackBlue,
-    borderRadius: 26,
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-  },
-  statusBarCenter: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: ui.space.sm,
-  },
-  statusBarText: {
     color: '#FFF',
-    fontSize: 17,
-    fontWeight: '700',
-  },
-  statusBarEllipsis: {
-    position: 'absolute',
-    right: 20,
+    fontSize: 15,
+    fontWeight: '600',
   },
   loginCta: {
     alignItems: 'center',
     paddingVertical: 13,
-    borderRadius: 26,
-    backgroundColor: colors.trackBlue,
+    borderRadius: 12,
+    backgroundColor: colors.appleBlue,
   },
   loginCtaText: {
     fontSize: 15,
