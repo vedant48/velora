@@ -28,6 +28,13 @@ export class ReviewsService {
          updated_at = datetime('now')`,
       [randomId(), userId, mediaType, tmdbId, seasonNumber, rating, text],
     );
+    // A movie rating given through the review path must also show on the library card (one rating, two stores).
+    if (mediaType === 'movie' && rating !== null) {
+      await this.db.run(
+        `UPDATE library_items SET rating = ? WHERE user_id = ? AND media_type = 'movie' AND tmdb_id = ?`,
+        [rating, userId, tmdbId],
+      );
+    }
     return this.db.first(
       `SELECT r.*, u.username, u.display_name FROM reviews r JOIN users u ON u.id = r.user_id
        WHERE r.user_id = ? AND r.media_type = ? AND r.tmdb_id = ? AND r.season_number = ?`,
