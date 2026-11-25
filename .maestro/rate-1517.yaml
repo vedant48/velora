@@ -1,0 +1,44 @@
+appId: com.vedant.velora
+---
+# Reported journey: rate a movie in details (Want -> Move to Watched -> rate), go back WITHOUT relaunch,
+# Watched tab must show the badge; then Move to Want must clear it (no stale rating).
+- runFlow: login-design2.yaml
+- tapOn:
+    point: 15%, 34%
+- extendedWaitUntil:
+    visible: 'The Odyssey.*'
+    timeout: 15000
+- takeScreenshot: ${P}-r0-want-before
+- tapOn: 'The Odyssey.*'
+- extendedWaitUntil:
+    visible: 'Want, options'
+    timeout: 30000
+- tapOn: 'Want, options'
+- tapOn: 'Move to Watched'
+- tapOn: 'Rate 7 out of 10'
+- takeScreenshot: ${P}-r1-rate-sheet
+- tapOn: 'Save review'
+- extendedWaitUntil:
+    visible: 'Watched, options'
+    timeout: 20000
+- takeScreenshot: ${P}-r2-details-watched
+- back
+- tapOn:
+    point: 34%, 34%
+- extendedWaitUntil:
+    visible: 'The Odyssey.*'
+    timeout: 15000
+- takeScreenshot: ${P}-r3-watched-tab-badge
+- tapOn: 'The Odyssey.*'
+- extendedWaitUntil:
+    visible: 'Watched, options'
+    timeout: 30000
+- tapOn: 'Watched, options'
+- tapOn: 'Move to Want'
+- extendedWaitUntil:
+    visible: 'Want, options'
+    timeout: 20000
+- back
+- tapOn:
+    point: 15%, 34%
+- takeScreenshot: ${P}-r4-want-after-reset
