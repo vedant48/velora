@@ -594,10 +594,10 @@ export const DetailsScreen: React.FC = () => {
                           </View>
                         )}
                       </View>
-                      <Text style={styles.actorName} numberOfLines={1}>
+                      <Text style={styles.actorName} numberOfLines={2}>
                         {member.name}
                       </Text>
-                      <Text style={styles.characterName} numberOfLines={1}>
+                      <Text style={styles.characterName} numberOfLines={2}>
                         {member.job}
                       </Text>
                     </Pressable>
@@ -628,10 +628,10 @@ export const DetailsScreen: React.FC = () => {
                           </View>
                         )}
                       </View>
-                      <Text style={styles.actorName} numberOfLines={1}>
+                      <Text style={styles.actorName} numberOfLines={2}>
                         {actor.name}
                       </Text>
-                      <Text style={styles.characterName} numberOfLines={1}>
+                      <Text style={styles.characterName} numberOfLines={2}>
                         {actor.character}
                       </Text>
                     </Pressable>
@@ -876,13 +876,13 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     gap: 12,
   },
   castCard: {
-    width: 66,
+    width: 84,
     alignItems: 'center',
   },
   actorAvatar: {
-    width: 54,
-    height: 54,
-    borderRadius: 27,
+    width: 64,
+    height: 64,
+    borderRadius: 32,
     backgroundColor: colors.surfaceLight,
     overflow: 'hidden',
     marginBottom: 6,

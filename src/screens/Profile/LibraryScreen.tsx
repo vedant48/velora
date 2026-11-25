@@ -267,7 +267,9 @@ export const LibraryScreen: React.FC = () => {
     const avg = rated.length
       ? (rated.reduce((s, r) => s + (r.rating ?? 0), 0) / rated.length).toFixed(1)
       : null;
-    const dist = ratingDistribution(rated.map(r => r.rating));
+    // Real scale is 1-10; bin 0 (only exact-zero ratings, impossible on this scale)
+    // is dropped so the chart labels run 1..10, not 1..11.
+    const dist = ratingDistribution(rated.map(r => r.rating)).slice(1);
     const maxDist = Math.max(1, ...dist);
     // "This year" counts real rating events dated this year (review created_at).
     const year = new Date().getFullYear();
@@ -426,6 +428,9 @@ export const LibraryScreen: React.FC = () => {
                 </View>
                 <View style={styles.chartCard}>
                   <Text style={styles.chartTitle}>Your ratings</Text>
+                  {insights.ratedCount === 0 ? (
+                    <Text style={styles.chartEmpty}>No ratings yet. Rate a title or season and your 1-10 distribution shows here.</Text>
+                  ) : (
                   <View style={styles.chart}>
                     {insights.dist.map((count, v) => (
                       <View key={v} style={styles.chartCol}>
@@ -434,6 +439,7 @@ export const LibraryScreen: React.FC = () => {
                       </View>
                     ))}
                   </View>
+                  )}
                 </View>
                 {insights.activity.length > 0 && (
                   <View style={styles.chartCard}>
@@ -482,28 +488,24 @@ export const LibraryScreen: React.FC = () => {
         <Pressable accessibilityLabel="Dismiss filters without applying" style={styles.sheetScrim} onPress={() => setSortSheetVisible(false)} />
         <View style={[styles.sheet, { paddingBottom: insets.bottom + 14 }]}>
           <View style={styles.sheetGrabber} />
-          <Text style={styles.sheetHeading}>Sort by</Text>
-          <View style={styles.sheetCard}>
+          <Text style={styles.sheetTitle}>Sort & filter</Text>
+          {/* Gallery style: radio rows with red selection, no section cards. */}
             {([
-              ['recent', 'Date added'], ['release', 'Release date'], ['title', 'Title A-Z'], ['rating', 'Highest rated'],
+              ['recent', 'Recently added'], ['release', 'Release date'], ['title', 'Title A–Z'], ['rating', 'Your rating'],
             ] as const).map(([key, label], i, arr) => (
               <Pressable key={key} onPress={() => setSort(key)} accessibilityRole="radio" accessibilityState={{ selected: sort === key }} style={[styles.sheetRow, i < arr.length - 1 && styles.sheetRowSep]}>
-                <Text style={[styles.sheetRowText, sort === key && { color: colors.primary }]}>{label}</Text>
-                {sort === key && <Ionicons name="checkmark" size={18} color={colors.primary} />}
+                <View style={[styles.radio, sort === key && styles.radioOn]}>{sort === key && <View style={styles.radioDot} />}</View>
+                <Text style={[styles.sheetRowText, { flex: 1 }]}>{label}</Text>
               </Pressable>
             ))}
-          </View>
-          <Text style={styles.sheetHeading}>Hide</Text>
-          <View style={styles.sheetCard}>
             {([
-              ['Movies', hideMovies, setHideMovies], ['Series', hideSeries, setHideSeries], ['Unreleased', hideUnreleased, setHideUnreleased],
+              ['Hide movies', hideMovies, setHideMovies], ['Hide series', hideSeries, setHideSeries], ['Hide unreleased', hideUnreleased, setHideUnreleased],
             ] as const).map(([label, value, set], i, arr) => (
-              <View key={label} style={[styles.sheetRow, i < arr.length - 1 && styles.sheetRowSep]}>
+              <View key={label} style={[styles.sheetRow, i === 0 && styles.sheetRowSepTop, i < arr.length - 1 && styles.sheetRowSep]}>
                 <Text style={styles.sheetRowText}>{label}</Text>
                 <Switch value={value} onValueChange={() => set(v => !v)} trackColor={{ false: 'rgba(120,120,128,0.32)', true: colors.appleGreen }} thumbColor="#FFFFFF" ios_backgroundColor="rgba(120,120,128,0.32)" />
               </View>
             ))}
-          </View>
           <Pressable accessibilityLabel="Apply filters" onPress={() => { setAppliedFilters({ hideMovies, hideSeries, hideUnreleased }); setAppliedSort(sort); setSortSheetVisible(false); }} style={styles.sheetApply}>
             <Text style={styles.sheetApplyText}>Apply</Text>
           </Pressable>
@@ -596,7 +598,7 @@ const SeriesRow = memo(function SeriesRow({ item, first, last, onPress, onLongPr
   }, [epProgress]);
   const uri = item.poster_path ? `${TMDB_IMG}${item.poster_path}` : null;
   return (
-    <Pressable accessibilityRole="button" accessibilityLabel={item.title} onPress={() => onPress(item)} onLongPress={onLongPress ? () => onLongPress(item) : undefined}
+    <Pressable accessibilityRole="button" accessibilityLabel={`${item.title}${prog ? `, ${prog.watched} of ${prog.total} episodes` : ''}${ended ? ', Ended, all episodes watched' : ''}`} onPress={() => onPress(item)} onLongPress={onLongPress ? () => onLongPress(item) : undefined}
       style={[styles.seriesRow, first && styles.seriesRowFirst, last && styles.seriesRowLast]}>
       {uri ? (
         <CachedImage source={{ uri }} style={styles.seriesPoster} contentFit="cover" transition={150} recyclingKey={uri} />
@@ -715,10 +717,13 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     paddingTop: 8,
   },
   sheetGrabber: { width: 36, height: 5, borderRadius: 2.5, backgroundColor: 'rgba(120,120,128,0.5)', alignSelf: 'center', marginBottom: 10 },
-  sheetHeading: { fontSize: 13, fontWeight: '600', color: colors.appleText2, marginTop: 4, marginBottom: 6, marginLeft: 4 },
-  sheetCard: { backgroundColor: 'rgba(120,120,128,0.16)', borderRadius: 12 },
-  sheetRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 14, paddingVertical: 11 },
+  sheetTitle: { fontSize: 17, fontWeight: '700', color: colors.appleText, textAlign: 'center', marginBottom: 10 },
+  radio: { width: 22, height: 22, borderRadius: 11, borderWidth: 2, borderColor: colors.appleText3, alignItems: 'center', justifyContent: 'center', marginRight: 12 },
+  radioOn: { borderColor: colors.primary },
+  radioDot: { width: 12, height: 12, borderRadius: 6, backgroundColor: colors.primary },
+  sheetRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 14, paddingVertical: 13 },
   sheetRowSep: { borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.appleSeparator },
+  sheetRowSepTop: { borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.appleSeparator },
   sheetRowText: { fontSize: 15, color: colors.appleText },
   sheetApply: { marginTop: 12, backgroundColor: colors.primary, borderRadius: 12, alignItems: 'center', paddingVertical: 12 },
   sheetApplyText: { fontSize: 16, fontWeight: '600', color: '#fff' },
@@ -764,6 +769,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     padding: 14,
   },
   chartTitle: { fontSize: 15, fontWeight: '600', color: colors.appleText },
+  chartEmpty: { fontSize: 13, color: colors.appleText3, textAlign: 'center', paddingVertical: 28 },
   chart: { flexDirection: 'row', alignItems: 'flex-end', gap: 6, height: 110, paddingTop: 10 },
   chartCol: { flex: 1, alignItems: 'center', gap: 4, height: '100%', justifyContent: 'flex-end' },
   chartBar: { width: '100%', borderTopLeftRadius: 3, borderTopRightRadius: 3, backgroundColor: colors.appleRedSoft },
