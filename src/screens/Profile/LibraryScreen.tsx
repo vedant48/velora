@@ -2,8 +2,8 @@ import { ratingDistribution } from '../../experience/ratingDistribution';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { FlashList } from '@shopify/flash-list';
-import React, { memo, useCallback, useMemo, useRef, useState } from 'react';
-import { Alert, Modal, Pressable, RefreshControl, Share, StyleSheet, Switch, Text, View } from 'react-native';
+import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Alert, Image, Modal, Pressable, RefreshControl, Share, StyleSheet, Switch, Text, View } from 'react-native';
 import { ContentPager } from '../../experience/ContentPager';
 import { endedCompleteLast, itemInTab, LibraryTab } from './libraryTabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -17,7 +17,7 @@ import { LibraryQuickAction } from '../../components/Library/LibraryQuickAction'
 import { isEndedComplete, seriesProgress } from '../../components/Library/seriesProgress';
 import { useInsightsMeta } from './useInsightsMeta';
 import { CachedImage } from '../../experience/CachedImage';
-import { LinearGradient } from 'expo-linear-gradient';
+import Animated, { runOnJS, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import { useQueries, useQuery } from '@tanstack/react-query';
 import { getTVDetails } from '../../api/tv';
 import { GC_TIME, STALE_TIME, useTVDetailsQuery } from '../../api/queries';
@@ -35,6 +35,9 @@ const TABS: { key: TabKey; label: string }[] = [
   { key: 'series', label: 'Series' },
   { key: 'insights', label: 'Insights' },
 ];
+
+const AnimatedFlashList = Animated.createAnimatedComponent(FlashList) as unknown as typeof FlashList;
+const BRAND_V = require('../../../assets/velora-v.png');
 
 /** Must-style profile: name left/avatar right, rank + stats, tabs, 2-column grid. */
 export const LibraryScreen: React.FC = () => {
@@ -76,9 +79,50 @@ export const LibraryScreen: React.FC = () => {
   // stickyHeaderIndices=[0], so it pins natively once scrolled to. A static opaque spacer
   // above the list owns the status-bar strip. Each page list keeps its own scroll offset,
   // so tab switches preserve position with no scroll syncing.
-  const [pinnedH, setPinnedH] = useState(0);
+  // v1.5.13: the identity block and the tab strip are ONE overlay above the pager, so a
+  // horizontal page swipe moves only the lists. The overlay follows the active list's
+  // vertical offset on the UI thread (scrollY), collapsing the identity block and leaving
+  // the tab strip pinned. Each list reserves the overlay's height with spacers.
+  const [topH, setTopH] = useState(0);
+  const [tabsH, setTabsH] = useState(0);
+  const [pageH, setPageH] = useState(0);
+  const scrollY = useSharedValue(0);
+  const topHSV = useSharedValue(0);
+  const activeIdx = useSharedValue(0);
+  const listRefs = useRef<Array<{ scrollToOffset: (p: { offset: number; animated?: boolean }) => void } | null>>([null, null, null, null]);
+  const clampRef = useRef<number[]>([0, 0, 0, 0]);
+  const syncPages = useCallback((from: number, c: number) => {
+    clampRef.current[from] = c;
+    listRefs.current.forEach((ref, i) => {
+      if (i === from || !ref || clampRef.current[i] === c) return;
+      clampRef.current[i] = c;
+      ref.scrollToOffset({ offset: c, animated: false });
+    });
+  }, []);
+  const lastClamp = useSharedValue(0);
+  const mkScroll = (idx: number) => ({
+    onScroll: (e: { contentOffset: { y: number } }) => {
+      'worklet';
+      if (activeIdx.value !== idx) return;
+      const y = e.contentOffset.y;
+      scrollY.value = y;
+      const c = Math.max(0, Math.min(y, topHSV.value));
+      if (c !== lastClamp.value) { lastClamp.value = c; runOnJS(syncPages)(idx, c); }
+    },
+  });
+  const scrollHandlers = [
+    useAnimatedScrollHandler(mkScroll(0)),
+    useAnimatedScrollHandler(mkScroll(1)),
+    useAnimatedScrollHandler(mkScroll(2)),
+    useAnimatedScrollHandler(mkScroll(3)),
+  ];
+  const overlayStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: -Math.max(0, Math.min(scrollY.value, topHSV.value)) }],
+  }));
   const selectTab = useCallback((next: TabKey) => { setSortSheetVisible(false); setTab(next); }, []);
   const onPageChange = useCallback((index: number) => { setTab(TABS[index].key); }, []);
+  useEffect(() => { activeIdx.value = TABS.findIndex(t => t.key === tab); }, [tab]);
+  useEffect(() => { topHSV.value = topH; }, [topH]);
 
   const [items, setItems] = useState<LibraryItem[]>([]);
   const [allItems, setAllItems] = useState<LibraryItem[]>([]);
@@ -299,8 +343,9 @@ export const LibraryScreen: React.FC = () => {
       <View style={styles.header}>
         <View style={styles.identityRow}>
           <View style={styles.identityText}>
-            <Text style={styles.name}>{user?.displayName}</Text>
-            <Text style={styles.handle} numberOfLines={1} ellipsizeMode="tail">@{user?.username}{memberSince ? ` · Member since ${memberSince}` : ''}</Text>
+            <Text style={styles.name} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.6}>{user?.displayName}</Text>
+            <Text style={styles.handle} numberOfLines={1}>@{user?.username}</Text>
+            {!!memberSince && <Text style={styles.handle} numberOfLines={1}>Member since {memberSince}</Text>}
             {!!user?.bio && <Text style={styles.bio} numberOfLines={2}>{user.bio}</Text>}
           </View>
           <Pressable accessibilityLabel="View profile photo" accessibilityRole="imagebutton" onPress={() => setPhotoViewerVisible(true)}>
@@ -354,11 +399,7 @@ export const LibraryScreen: React.FC = () => {
     () => (
       <>
         <View style={styles.topRow}>
-          <View style={styles.brandTile} accessibilityLabel="Velora" accessibilityRole="image">
-            <LinearGradient colors={['#E50914', '#8f050d']} start={{ x: 0.25, y: 0.07 }} end={{ x: 0.75, y: 0.93 }} style={styles.brandTileGradient}>
-              <Text style={styles.brandTileV}>V</Text>
-            </LinearGradient>
-          </View>
+          <Image source={BRAND_V} style={styles.brandTile} resizeMode="contain" accessibilityLabel="Velora" />
           <View style={styles.topActions}>
             <Pressable onPress={() => navigation.navigate('Account')} style={styles.circleButton} accessibilityLabel="Settings"><Ionicons name="settings-outline" size={17} color={colors.appleText} /></Pressable>
             <Pressable onPress={() => setMenuVisible(true)} style={styles.circleButton} accessibilityLabel="More profile actions"><Ionicons name="ellipsis-horizontal" size={18} color={colors.appleText} /></Pressable>
@@ -436,17 +477,13 @@ export const LibraryScreen: React.FC = () => {
 
   const renderMetaRow = useCallback(
     (item: RowItem & { __row: string }) => {
-      if (item.__row === 'tabs') return (
-        <View onLayout={(e) => setPinnedH(e.nativeEvent.layout.height)} style={styles.stickyTabs}>
-          <View style={{ paddingHorizontal: ui.component.libraryTabs.horizontalPadding, paddingTop: ui.component.libraryTabs.topPadding }}>{tabsHeader}</View>
-        </View>
-      );
+      if (item.__row === 'tabs') return <View style={{ height: tabsH }} />;
       if (item.__row === 'insights') return insightsBody;
       if (item.__row === 'loader') return <AppLoader style={{ marginTop: ui.space.xxl }} />;
       if (item.__row === 'error') return <Pressable onPress={() => setRefreshKey(k => k + 1)} accessibilityRole="button"><Text style={styles.emptyText}>Could not load your library. Tap to retry.</Text></Pressable>;
       return <Text style={styles.emptyText}>Nothing here yet. Rate and track from any title page.</Text>;
     },
-    [styles, tabsHeader, insightsBody],
+    [styles, tabsH, insightsBody],
   );
   const renderItem = useCallback(
     ({ item }: { item: RowItem }) => {
@@ -503,10 +540,13 @@ export const LibraryScreen: React.FC = () => {
     <View style={styles.root}>
       {/* Static opaque spacer owns the status-bar strip: list content can never render behind it. */}
       <View style={{ height: insets.top, backgroundColor: colors.background }} />
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1 }} onLayout={(e) => setPageH(e.nativeEvent.layout.height)}>
       <ContentPager index={TABS.findIndex(t => t.key === tab)} onIndexChange={onPageChange} enabled={!sortSheetVisible && !menuVisible && !quickItem}>
-          {TABS.map(({ key: pageTab }) => <View key={pageTab} style={{ flex: 1 }}>
-            <FlashList
+          {TABS.map(({ key: pageTab }, pageIdx) => <View key={pageTab} style={{ flex: 1 }}>
+            <AnimatedFlashList
+              ref={(r: unknown) => { listRefs.current[pageIdx] = r as never; }}
+              onScroll={scrollHandlers[pageIdx] as never}
+              scrollEventThrottle={16}
               testID={`library-page-${pageTab}`}
               maintainVisibleContentPosition={{ disabled: true }}
               data={rowsByTab[pageTab]}
@@ -514,15 +554,21 @@ export const LibraryScreen: React.FC = () => {
               getItemType={getItemType}
               overrideItemLayout={(layout: { span?: number }, item: RowItem) => { if ('__row' in item) layout.span = pageTab === 'series' ? 1 : 2; }}
               ItemSeparatorComponent={pageTab === 'series' ? renderSeriesSep : undefined}
-              stickyHeaderIndices={[0]}
               drawDistance={280}
               scrollEnabled={!sortSheetVisible}
-              refreshControl={<RefreshControl refreshing={refreshing && tab === pageTab} onRefresh={refreshProfile} colors={['#000000']} tintColor="#000000" progressBackgroundColor="#FFFFFF" progressViewOffset={pinnedH} />}
-              ListHeaderComponent={listTopHeader}
+              refreshControl={<RefreshControl refreshing={refreshing && tab === pageTab} onRefresh={refreshProfile} colors={['#000000']} tintColor="#000000" progressBackgroundColor="#FFFFFF" progressViewOffset={topH + tabsH} />}
+              ListHeaderComponent={<View style={{ height: topH }} />}
+              ListFooterComponent={<View style={{ height: rowsByTab[pageTab]!.length < 12 ? pageH : 0 }} />}
               contentContainerStyle={styles.listContent}
             />
           </View>)}
       </ContentPager>
+      <Animated.View style={[styles.overlay, overlayStyle]}>
+        <View onLayout={(e) => setTopH(e.nativeEvent.layout.height)} style={styles.overlayBg}>{listTopHeader}</View>
+        <View onLayout={(e) => setTabsH(e.nativeEvent.layout.height)} style={styles.overlayBg}>
+          <View style={{ paddingHorizontal: ui.component.libraryTabs.horizontalPadding, paddingTop: ui.component.libraryTabs.topPadding }}>{tabsHeader}</View>
+        </View>
+      </Animated.View>
       </View>
 
       {/* Sort & filter: iOS-style bottom sheet - sort radios, hide switches, Apply (approved gallery design). */}
@@ -672,19 +718,9 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     backgroundColor: colors.appleFill,
   },
   brand: { fontSize: 9, letterSpacing: 2, color: colors.primary, fontWeight: '700' },
-  brandTile: {
-    width: 34,
-    height: 34,
-    borderRadius: 9,
-    marginLeft: 20,
-    shadowColor: '#E50914',
-    shadowOffset: { width: 0, height: 3 },
-    shadowRadius: 10,
-    shadowOpacity: 0.3,
-    elevation: 6,
-  },
-  brandTileGradient: { flex: 1, borderRadius: 9, alignItems: 'center', justifyContent: 'center' },
-  brandTileV: { color: '#FFFFFF', fontSize: 19, fontWeight: '800' },
+  brandTile: { width: 34, height: 34, marginLeft: 20 },
+  overlay: { position: 'absolute', top: 0, left: 0, right: 0 },
+  overlayBg: { backgroundColor: colors.background },
   stickyTabs: { backgroundColor: colors.background, marginHorizontal: -ui.component.libraryGrid.horizontalPadding, paddingHorizontal: ui.component.libraryGrid.horizontalPadding },
   topActions: { flexDirection: 'row', alignItems: 'center', gap: ui.space.md },
   photoViewerBackdrop: { flex: 1, backgroundColor: 'rgba(0,0,0,0.92)', alignItems: 'center', justifyContent: 'center' },
@@ -710,7 +746,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   },
   avatarText: { fontSize: ui.component.profileHeader.avatarTextSize, fontWeight: '900', color: '#fff' },
   // Apple redesign: iOS large title + secondary handle line.
-  name: { fontSize: 34, fontWeight: '700', letterSpacing: 0.3, color: colors.appleText },
+  name: { fontSize: 32, fontWeight: '700', letterSpacing: 0.3, color: colors.appleText },
   handle: { fontSize: 13, color: colors.appleText2, marginTop: 2 },
   username: { fontSize: 13, color: colors.textTertiary },
   bio: { fontSize: 13, color: colors.appleText2, marginTop: ui.space.xs },
