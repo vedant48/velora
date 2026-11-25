@@ -1,9 +1,8 @@
-## Apple-style redesign
+## Profile header fixes
 
-- Library: new home with your profile on top; scrolling hides the profile and pins the Want/Watched/Series/Insights tabs.
-- Title pages: new hero, compact Watch online row with provider logos, season picker with per-episode tracking; swipe right on an episode to mark it watched.
-- Explore: hero picks, trending, trailers and streaming rows; search with scope chips and member results.
-- Member profiles: follow/unfollow, share profile, and an Activity feed of what people you follow watched and reviewed.
-- Settings, sheets, filters and Insights restyled to match.
+- Swiping between Want, Watched, Series and Insights now moves only the list. The profile, stats and tabs stay put.
+- Your name always stays on one line.
+- "Member since" has its own line and is fully visible.
+- The top-left logo is the original Velora V again.
 
 No change to your account or library; update in place.
