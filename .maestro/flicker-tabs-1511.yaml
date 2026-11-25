@@ -1,0 +1,33 @@
+appId: com.vedant.velora
+---
+# Tab-switch motion for v1.5.11 collapse fix: deep scroll on Want, switch tabs mid-scroll,
+# fling inside Series, return to Want (per-tab scroll offsets must hold), scroll back to top.
+- launchApp
+- extendedWaitUntil:
+    visible: E2E Alice
+    timeout: 30000
+- takeScreenshot: t0-top
+- swipe: { direction: UP, duration: 300 }
+- swipe: { direction: UP, duration: 300 }
+- swipe: { direction: UP, duration: 300 }
+- takeScreenshot: t1-want-deep
+- tapOn:
+    id: library-tab-watched
+- takeScreenshot: t2-watched-midscroll
+- tapOn:
+    id: library-tab-series
+- extendedWaitUntil:
+    visible: Prison Break
+    timeout: 60000
+- swipe: { direction: UP, duration: 200 }
+- takeScreenshot: t3-series-scrolled
+- tapOn:
+    id: library-tab-want
+- takeScreenshot: t4-want-return
+- swipe: { direction: DOWN, duration: 400 }
+- swipe: { direction: DOWN, duration: 400 }
+- swipe: { direction: DOWN, duration: 400 }
+- extendedWaitUntil:
+    visible: E2E Alice
+    timeout: 10000
+- takeScreenshot: t5-top-restored
