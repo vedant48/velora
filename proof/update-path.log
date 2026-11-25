@@ -1,0 +1,44 @@
+== install v1.5.10 ==
+Performing Streamed Install
+Success
+== launch v1.5.10 ==
+  bash arg: -p
+  bash arg: com.vedant.velora
+  bash arg: -c
+  bash arg: android.intent.category.LAUNCHER
+  bash arg: 1
+args: [-p, com.vedant.velora, -c, android.intent.category.LAUNCHER, 1]
+ arg: "-p"
+ arg: "com.vedant.velora"
+ arg: "-c"
+ arg: "android.intent.category.LAUNCHER"
+ arg: "1"
+data="com.vedant.velora"
+data="android.intent.category.LAUNCHER"
+Events injected: 1
+## Network stats: elapsed time=131ms (0ms mobile, 0ms wifi, 131ms not connected)
+== snapshot app data dir BEFORE update ==
+22 proof/data-before.txt
+== install v1.5.11 OVER 1.5.10 (adb install -r, data preserved) ==
+Performing Streamed Install
+Success
+== snapshot app data dir AFTER update ==
+== launch v1.5.11 post-update ==
+  bash arg: -p
+  bash arg: com.vedant.velora
+  bash arg: -c
+  bash arg: android.intent.category.LAUNCHER
+  bash arg: 1
+args: [-p, com.vedant.velora, -c, android.intent.category.LAUNCHER, 1]
+ arg: "-p"
+ arg: "com.vedant.velora"
+ arg: "-c"
+ arg: "android.intent.category.LAUNCHER"
+ arg: "1"
+data="com.vedant.velora"
+data="android.intent.category.LAUNCHER"
+Events injected: 1
+## Network stats: elapsed time=144ms (0ms mobile, 0ms wifi, 144ms not connected)
+== data persistence check ==
+all pre-update top-level data entries still present
+== RESULT: update path smoke PASSED ==
