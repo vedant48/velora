@@ -23,6 +23,8 @@ export type RootStackParamList = {
   UserProfile: { username: string };
   Activity: undefined;
   Account: undefined;
+  EditProfile: undefined;
+  About: undefined;
   ImportMust: undefined;
 };
 
