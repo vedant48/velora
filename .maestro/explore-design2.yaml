@@ -36,11 +36,36 @@ appId: com.vedant.velora
     element: 'Trending TV shows'
     direction: DOWN
     timeout: 60000
+# Reviewer needs the UNSCROLLED Series top (hero assessment): content is now
+# loaded, scroll back to the top, capture, then return to the rail shot.
+- swipe:
+    direction: DOWN
+    duration: 700
+- swipe:
+    direction: DOWN
+    duration: 700
+- swipe:
+    direction: DOWN
+    duration: 700
+- waitForAnimationToEnd:
+    timeout: 3000
+- takeScreenshot: b2a-explore-tv-top
+- scrollUntilVisible:
+    element: 'Trending TV shows'
+    direction: DOWN
+    timeout: 60000
 - waitForAnimationToEnd:
     timeout: 5000
 - takeScreenshot: b2-explore-tv
-# Explore All tab
+# Explore All tab - capture the top first: centered 'Explore' title (2587224)
+# sits above the hero and scrolls away with the rail
 - tapOn: 'Explore All'
+- extendedWaitUntil:
+    visible: 'Trending this week'
+    timeout: 60000
+- waitForAnimationToEnd:
+    timeout: 3000
+- takeScreenshot: b3a-explore-all-top
 - scrollUntilVisible:
     element: 'Trending this week'
     direction: DOWN
