@@ -17,6 +17,7 @@ import { RootStackParamList } from '../../navigation/types';
 import { metrics } from '../../theme/metrics';
 import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
 import { Avatar } from '../../components/Avatar';
+import { PosterGridSkeleton, PosterRowSkeleton, RowsSkeleton } from '../../components/Skeleton/ContentSkeletons';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 type FilterType = 'all' | 'movie' | 'tv' | 'people';
@@ -251,7 +252,7 @@ export const SearchScreen: React.FC = () => {
             <Text style={styles.stateSubtitle}>Search Velora members by username or name.</Text>
           </View>
         ) : peopleQuery.isLoading ? (
-          <AppLoader style={{ marginTop: 40 }} />
+          <RowsSkeleton />
         ) : peopleQuery.isError ? (
           <View style={styles.centerState}>
             <Ionicons name="alert-circle-outline" size={48} color={colors.error} />
@@ -284,7 +285,7 @@ export const SearchScreen: React.FC = () => {
           />
         )
       ) : (isLoading || (isFetching && allResults.length === 0)) && debouncedQuery.trim().length > 1 ? (
-        <AppLoader style={{ flex: 1 }} />
+        <PosterGridSkeleton count={9} />
       ) : isError && allResults.length === 0 ? (
         <View style={styles.centerState}>
           <Ionicons name="alert-circle-outline" size={48} color={colors.error} />
@@ -305,7 +306,7 @@ export const SearchScreen: React.FC = () => {
       ) : debouncedQuery.trim().length <= 1 ? (
         <View style={styles.suggestions}>
           <Text style={styles.suggestedLabel}>Suggested</Text>
-          {suggestions.isLoading ? <AppLoader /> : suggestions.isError ?
+          {suggestions.isLoading ? <PosterRowSkeleton cardWidth={cardWidth} /> : suggestions.isError ?
             <Pressable onPress={() => suggestions.refetch()} accessibilityRole="button"><Text style={styles.stateSubtitle}>Could not load suggestions. Tap to retry.</Text></Pressable> :
             <View style={styles.suggestionsRow}>{suggestions.data?.slice(0, 3).map(item => <SearchPoster key={item.id} item={item} onPress={handleItemPress} width={cardWidth} labels={false} />)}</View>}
         </View>

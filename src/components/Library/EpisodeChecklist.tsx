@@ -11,6 +11,7 @@ import { AppLoader } from '../common/AppLoader';
 import { RateReviewSheet } from './RateReviewSheet';
 import { SeasonReviewCards } from './SeasonReviewCards';
 import { ui } from '../../theme/ui';
+import { RowsSkeleton } from '../Skeleton/ContentSkeletons';
 
 const HINT_KEY = '@velora_episode_swipe_hint_seen';
 
@@ -192,10 +193,7 @@ export const EpisodeChecklist = memo(function EpisodeChecklist({
   return (
     <View style={styles.container}>
       {loadingEpisodes ? (
-        <View style={styles.loadingRow}>
-          <AppLoader size="small" />
-          <Text style={styles.loadingText}>Loading episodes...</Text>
-        </View>
+        <RowsSkeleton count={5} avatar={false} />
       ) : episodes.length === 0 ? (
         <Text style={styles.emptyText}>No episodes available for this season.</Text>
       ) : (

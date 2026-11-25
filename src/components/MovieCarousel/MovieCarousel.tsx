@@ -9,6 +9,7 @@ import { getImageUrl, prefetchImagesWindow } from '../../utils/image';
 import { AppLoader } from '../common/AppLoader';
 import { MovieCard } from '../MovieCard/MovieCard';
 import { SectionHeader } from './SectionHeader';
+import { PosterRowSkeleton } from '../Skeleton/ContentSkeletons';
 
 interface MovieCarouselProps {
   title: string;
@@ -95,7 +96,7 @@ export const MovieCarousel: React.FC<MovieCarouselProps> = React.memo(
     const keyExtractor = useCallback((item: MediaItem) => item.id.toString(), []);
 
     if (isLoading) {
-      return <View style={styles.container}><SectionHeader title={title} subtitle={subtitle} /><AppLoader style={{ height: cardHeight }} /></View>;
+      return <View style={styles.container}><SectionHeader title={title} subtitle={subtitle} /><PosterRowSkeleton cardWidth={cardWidth} cardHeight={cardHeight} /></View>;
     }
 
     if (isError) {

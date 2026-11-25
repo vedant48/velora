@@ -8,6 +8,7 @@ import { veloraApi } from '../../api/velora';
 import { useAuth } from '../../state/AuthContext';
 import { useAppTheme } from '../../theme/ThemeContext';
 import { AppLoader } from '../common/AppLoader';
+import { PosterRowSkeleton } from '../Skeleton/ContentSkeletons';
 
 // Velora-owned collections selected from real TMDB TV genres. These are not
 // Must editorial lists. The saved snapshot is exactly the titles shown in the
@@ -47,7 +48,7 @@ export function TVCollections() {
   return <View style={{ marginTop: 22, paddingHorizontal: 20, gap: 12 }}>
     <Text style={{ fontSize: 18, fontWeight: '700', color: colors.textPrimary }}>Collections{cards.length ? ` · ${cards.length}` : ''}</Text>
     <Text style={{ color: colors.textTertiary, fontSize: 12 }}>Velora picks from TMDB</Text>
-    {loading && !cards.length ? <AppLoader /> : null}
+    {loading && !cards.length ? <PosterRowSkeleton /> : null}
     {failed && <Pressable onPress={() => setRetry(n => n + 1)}><Text style={{ color: colors.textSecondary }}>Could not load collections. Tap to retry.</Text></Pressable>}
     {cards.map(card => <Pressable key={card.id} accessibilityRole="button" accessibilityLabel={card.name} onPress={() => navigation.navigate('TVCollection', { title: card.name, items: card.items })} style={{ minHeight: 164, borderRadius: 5, backgroundColor: colors.surface, alignItems: 'center', justifyContent: 'center', padding: 20 }}>
       <Ionicons name={card.icon} size={36} color={colors.textSecondary} />

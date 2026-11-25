@@ -2,10 +2,12 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Shimmer } from './Shimmer';
 import { metrics } from '../../theme/metrics';
+import { useAppTheme } from '../../theme/ThemeContext';
 
 export const HeroSkeleton: React.FC = React.memo(() => {
+  const { colors } = useAppTheme();
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <Shimmer style={styles.backdrop} borderRadius={0} />
       <View style={styles.contentOverlay}>
         <Shimmer style={styles.tagline} borderRadius={4} />
@@ -25,7 +27,6 @@ const styles = StyleSheet.create({
   container: {
     width: metrics.screenWidth,
     height: metrics.heroHeight,
-    backgroundColor: '#09090B',
     position: 'relative',
     overflow: 'hidden',
   },

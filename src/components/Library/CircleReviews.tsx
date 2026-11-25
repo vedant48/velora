@@ -104,7 +104,7 @@ export const CircleReviews = memo(function CircleReviews({ mediaType, tmdbId, re
           {cards.map((r) => (
             <View key={r.id} style={styles.card}>
               <Pressable accessibilityRole="button" accessibilityLabel={`${r.display_name || r.username} reviews`} onPress={() => setOpenUserId(r.user_id)} style={styles.headerRow}>
-                <Avatar user={author(r)} size={52} />
+                <Avatar user={author(r)} size={ui.component.circleReviews.avatar} />
                 <View style={styles.headerText}>
                   <Text style={styles.name} numberOfLines={1}>
                     {r.display_name || r.username || 'Velora user'}
@@ -115,7 +115,7 @@ export const CircleReviews = memo(function CircleReviews({ mediaType, tmdbId, re
                         <Ionicons
                           key={i}
                           name={i < (r.rating ?? 0) ? 'star' : 'star-outline'}
-                          size={11}
+                          size={ui.component.circleReviews.starSize}
                           color={i < (r.rating ?? 0) ? colors.textPrimary : colors.textMuted}
                         />
                       ))}
@@ -135,9 +135,9 @@ export const CircleReviews = memo(function CircleReviews({ mediaType, tmdbId, re
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.ratingsScroll}>
           {ratings.map((r) => (
             <Pressable key={r.user_id} accessibilityRole="button" accessibilityLabel={`${r.display_name || r.username} ratings`} onPress={() => setOpenUserId(r.user_id)} style={styles.ratingItem}>
-              <Avatar user={author(r)} size={62} />
+              <Avatar user={author(r)} size={ui.component.circleReviews.ratingAvatar} />
               <View style={styles.badge}>
-                <Ionicons name="star" size={9} color={colors.textSecondary} />
+                <Ionicons name="star" size={ui.component.circleReviews.badgeStarSize} color={colors.textSecondary} />
                 <Text style={styles.badgeText}>{r.rating}</Text>
               </View>
             </Pressable>
@@ -147,7 +147,7 @@ export const CircleReviews = memo(function CircleReviews({ mediaType, tmdbId, re
       <BottomSheet visible={openUserId !== null} onClose={() => setOpenUserId(null)} showHandle>
         {openPerson && (
           <View style={styles.sheetHeader}>
-            <Avatar user={author(openPerson)} size={44} />
+            <Avatar user={author(openPerson)} size={ui.component.circleReviews.sheetAvatar} />
             <Text style={styles.sheetName} numberOfLines={1}>{openPerson.display_name || openPerson.username}</Text>
           </View>
         )}
@@ -158,7 +158,7 @@ export const CircleReviews = memo(function CircleReviews({ mediaType, tmdbId, re
                 <Text style={styles.sheetSeason}>{mediaType === 'tv' && season > 0 ? `Season ${season}` : mediaType === 'tv' ? 'Whole series' : 'Rating'}</Text>
                 {r?.rating != null && (
                   <View style={styles.badge}>
-                    <Ionicons name="star" size={9} color={colors.textSecondary} />
+                    <Ionicons name="star" size={ui.component.circleReviews.badgeStarSize} color={colors.textSecondary} />
                     <Text style={styles.badgeText}>{r.rating}</Text>
                   </View>
                 )}
@@ -180,33 +180,33 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   root: { marginTop: ui.space.lg, gap: ui.space.xl },
   cardsScroll: { gap: ui.space.md, paddingRight: ui.space.lg },
   card: {
-    width: 300,
+    width: ui.component.circleReviews.cardWidth,
     backgroundColor: colors.surfaceLight,
-    borderRadius: 14,
+    borderRadius: ui.component.circleReviews.cardRadius,
     padding: ui.space.lg,
     gap: ui.space.md,
   },
   headerRow: { flexDirection: 'row', alignItems: 'center', gap: ui.space.md },
-  headerText: { flex: 1, gap: 3 },
+  headerText: { flex: 1, gap: ui.space.xs },
   name: { color: colors.textPrimary, fontSize: ui.type.body, fontWeight: '700' },
-  starsRow: { flexDirection: 'row', gap: 1 },
+  starsRow: { flexDirection: 'row', gap: StyleSheet.hairlineWidth },
   seasonLabel: { color: colors.textSecondary, fontSize: ui.type.body, fontWeight: '700' },
-  body: { color: colors.textSecondary, fontSize: ui.type.body, lineHeight: 20 },
+  body: { color: colors.textSecondary, fontSize: ui.type.body, lineHeight: ui.type.body + ui.space.xs + ui.space.xs },
   ratingsScroll: { gap: ui.space.md, paddingRight: ui.space.lg },
   ratingItem: { alignItems: 'center', paddingBottom: ui.space.sm },
   badge: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 2,
-    marginTop: -10,
+    gap: ui.space.xs,
+    marginTop: ui.component.circleReviews.badgeOverlap,
     paddingHorizontal: ui.space.sm,
-    paddingVertical: 2,
+    paddingVertical: ui.space.xs,
     borderRadius: ui.radius.pill,
     backgroundColor: colors.surfaceLight,
   },
   sheetHeader: { flexDirection: 'row', alignItems: 'center', gap: ui.space.md, paddingHorizontal: ui.space.lg, paddingBottom: ui.space.md },
   sheetName: { flex: 1, color: colors.textPrimary, fontSize: ui.type.heading, fontWeight: '800' },
-  sheetScroll: { maxHeight: 420 },
+  sheetScroll: { maxHeight: ui.component.circleReviews.sheetMaxHeight },
   sheetContent: { paddingHorizontal: ui.space.lg, gap: ui.space.lg, paddingBottom: ui.space.lg },
   sheetRow: { gap: ui.space.sm },
   sheetRowTop: { flexDirection: 'row', alignItems: 'center', gap: ui.space.md },

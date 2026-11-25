@@ -15,6 +15,7 @@ import { RootStackParamList } from '../../navigation/types';
 import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
 import { ui } from '../../theme/ui';
 import { getImageUrl } from '../../utils/image';
+import { RowsSkeleton } from '../../components/Skeleton/ContentSkeletons';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 
@@ -65,7 +66,7 @@ export const ActivityScreen: React.FC = () => {
       <View style={{paddingHorizontal: ui.space.lg}}><ScreenHeader title="Activity" onBack={() => navigation.goBack()} /></View>
 
       {isLoading ? (
-        <AppLoader style={{ marginTop: 40 }} />
+        <RowsSkeleton />
       ) : isError ? (
         <View style={styles.empty}>
           <Text style={styles.emptyText}>Could not load the feed.</Text>
@@ -84,7 +85,7 @@ export const ActivityScreen: React.FC = () => {
         <FlashList
           data={feed}
           keyExtractor={(e, i) => `${e.username}-${e.media_type}-${e.tmdb_id}-${i}`}
-          refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={() => refetch()} tintColor={colors.primary} colors={[colors.primary]} />}
+          refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={() => refetch()} tintColor={colors.textPrimary} colors={[colors.textPrimary]} progressBackgroundColor={colors.appleCard} />}
           contentContainerStyle={styles.feedCard}
           ItemSeparatorComponent={() => <View style={styles.sep} />}
           ListFooterComponent={

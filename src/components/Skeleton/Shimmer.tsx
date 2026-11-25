@@ -7,7 +7,7 @@ import Animated, {
   withTiming,
   Easing,
 } from 'react-native-reanimated';
-import { colors } from '../../theme/colors';
+import { useAppTheme } from '../../theme/ThemeContext';
 
 interface ShimmerProps {
   style?: ViewStyle | ViewStyle[];
@@ -15,6 +15,7 @@ interface ShimmerProps {
 }
 
 export const Shimmer: React.FC<ShimmerProps> = ({ style, borderRadius = 8 }) => {
+  const { colors } = useAppTheme();
   const opacity = useSharedValue(0.35);
 
   useEffect(() => {
@@ -36,7 +37,7 @@ export const Shimmer: React.FC<ShimmerProps> = ({ style, borderRadius = 8 }) => 
     <Animated.View
       style={[
         styles.shimmerBase,
-        { borderRadius },
+        { borderRadius, backgroundColor: colors.surfaceLight },
         style,
         animatedStyle,
       ]}
@@ -46,7 +47,6 @@ export const Shimmer: React.FC<ShimmerProps> = ({ style, borderRadius = 8 }) => 
 
 const styles = StyleSheet.create({
   shimmerBase: {
-    backgroundColor: colors.surfaceLight,
     overflow: 'hidden',
   },
 });
