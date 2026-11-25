@@ -150,6 +150,11 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
+    shadowColor: colors.primary,
+    shadowOpacity: 0.35,
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 6,
   },
   logoLetter: { color: '#FFF', fontSize: 32, fontWeight: '800' },
   subtitle: { fontSize: 14, color: colors.appleText2, textAlign: 'center', marginBottom: 10 },
@@ -184,5 +189,5 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   googleText: { fontSize: 15, fontWeight: '600', color: '#111111' },
   footerToggle: { alignItems: 'center', paddingVertical: 6 },
   footerText: { fontSize: 13, color: colors.appleText2 },
-  footerLink: { color: colors.textPrimary, fontWeight: '700' },
+  footerLink: { color: colors.primary, fontWeight: '700' },
 });
