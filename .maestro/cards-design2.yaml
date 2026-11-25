@@ -156,3 +156,27 @@ appId: com.vedant.velora
     visible: '1 of 9 episodes'
     timeout: 30000
 - takeScreenshot: 12-details-persisted
+# Deep-scroll probe (main 13:34): is the S2E19 scrollUntilVisible failure
+# harness-only or a real nested-scroll defect? Ordinary user swipes on the
+# same APK must reach deep episode rows. If 'Sweet Caroline' appears after
+# plain swipes, the earlier failure was harness-specific; if not, PRODUCT bug.
+- tapOn:
+    id: season-menu
+- tapOn: 'Season 2'
+- extendedWaitUntil:
+    visible: '18 of 22 episodes'
+    timeout: 30000
+- swipe:
+    direction: UP
+    duration: 700
+- swipe:
+    direction: UP
+    duration: 700
+- swipe:
+    direction: UP
+    duration: 700
+- swipe:
+    direction: UP
+    duration: 700
+- assertVisible: 'Sweet Caroline'
+- takeScreenshot: 13-deep-scroll-probe
