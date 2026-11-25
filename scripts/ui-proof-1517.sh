@@ -11,15 +11,14 @@ export PATH="$PATH:$HOME/.maestro/bin"
 status=0
 run() { maestro test --format junit --output "proof/$1.xml" --test-output-dir "proof/$1" -e P="$2" ".maestro/$3.yaml" || status=1; }
 adb shell cmd uimode night yes
-run dark-circle dark circle-1517
-run dark-rate dark rate-1517
+[ -f .ci/skeleton-only ] || { run dark-circle dark circle-1517; run dark-rate dark rate-1517; }
 nohup node scripts/e2e-delay-proxy-skeleton.cjs > proof/delay.log 2>&1 &
 sleep 1
 adb reverse tcp:8787 tcp:8788
 run dark-skeleton dark skeleton-1517
 adb reverse tcp:8787 tcp:8787
 adb shell cmd uimode night no
-run light-circle light circle-1517
+[ -f .ci/skeleton-only ] || run light-circle light circle-1517
 adb reverse tcp:8787 tcp:8788
 run light-skeleton light skeleton-1517
 adb exec-out screencap -p > proof/final-screen.png || true

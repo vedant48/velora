@@ -2,7 +2,7 @@
 // refresh feedback. Does not ship and never receives production credentials.
 const http = require('http');
 http.createServer((req,res)=>{
- const delay=req.method==='GET' && /\/api\/(users|library|reviews|auth\/me)/.test(req.url) ? 15000 : 0;
+ const delay=req.method==='GET' && /\/api\/(users|library|reviews|social)/.test(req.url) ? 15000 : 0;
  if(delay)console.log('Delayed local read:',req.url);
  const upstream=http.request({hostname:'127.0.0.1',port:8787,path:req.url,method:req.method,headers:req.headers},r=>{
   const chunks=[];r.on('data',c=>chunks.push(c));r.on('end',()=>setTimeout(()=>{res.writeHead(r.statusCode,r.headers);res.end(Buffer.concat(chunks));},delay));
