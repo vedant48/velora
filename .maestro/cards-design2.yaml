@@ -20,14 +20,17 @@ appId: com.vedant.velora
 - extendedWaitUntil:
     visible: 'Your ratings'
     timeout: 20000
-- assertVisible: 'Movies watched'
+- assertVisible: 'Top genre'
+# Time watched stays hidden below its data floor (0 watched movies, no cached
+# episode runtimes on this seed) - assert the intended absence, not the tile.
+- assertNotVisible: 'Time watched'
 - takeScreenshot: 1c-insights
 # Filter sheet: iOS bottom sheet with sort radios, hide switches, Apply (redesign fidelity)
 - tapOn:
     id: library-tab-want
 - tapOn: 'Filter and sort'
 - extendedWaitUntil:
-    visible: 'Sort by'
+    visible: 'Sort & filter'
     timeout: 10000
 - assertVisible: Hide
 - takeScreenshot: 1d-filter-sheet

@@ -21,12 +21,12 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 22, cache: npm }
       - run: npm ci || npm install
-      - name: Download saved design2 test APK (built from c5f6a67, run 45524706484)
+      - name: Download saved design2 test APK (built from 24fcc8a, run 45548761997)
         uses: actions/download-artifact@v4
         with:
           name: ui-test-apk
           repository: ${{ github.repository }}
-          run-id: 45540668008
+          run-id: 45548761997
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path: dl
       - name: Stage APK

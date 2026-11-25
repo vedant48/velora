@@ -2,6 +2,11 @@ appId: com.vedant.velora
 ---
 # Flow B: redesign route coverage (batches 2-7). Assumes Flow A already logged e2e_alice in.
 - launchApp
+# Wait for a settled state first (session restore can briefly show the logged-out
+# screen): either the profile is back or the login CTA is really there.
+- extendedWaitUntil:
+    visible: "E2E Alice|Log in / Sign up"
+    timeout: 30000
 - runFlow:
     when:
       visible: 'Log in / Sign up'
@@ -11,9 +16,11 @@ appId: com.vedant.velora
     timeout: 30000
 # Explore Movies tab: hero banner + wide trending rail + labeled tab bar
 - tapOn: 'Explore Movies'
-# 'Trending this week' is a LazySection: it mounts only after entering the viewport.
+# Movies tab first rail is 'Trending movies' (seed=0: alice has no watched movies, so
+# trending rather than 'For you'); 'Trending this week' is the All-tab wide rail only.
+# LazySection: mounts only after entering the viewport.
 - scrollUntilVisible:
-    element: 'Trending this week'
+    element: 'Trending movies'
     direction: DOWN
     timeout: 60000
 - waitForAnimationToEnd:

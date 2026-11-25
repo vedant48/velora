@@ -3,6 +3,11 @@ appId: com.vedant.velora
 # Design native-header motion: tab switches and flings on the redesign library
 # (grouped Series list + Insights), with per-tab offset preservation.
 - launchApp
+# Wait for a settled state first (session restore can briefly show the logged-out
+# screen): either the profile is back or the login CTA is really there.
+- extendedWaitUntil:
+    visible: "E2E Alice|Log in / Sign up"
+    timeout: 30000
 - runFlow:
     when:
       visible: 'Log in / Sign up'
