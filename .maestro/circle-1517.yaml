@@ -2,6 +2,7 @@ appId: com.vedant.velora
 ---
 - runFlow: login-design2.yaml
 - assertVisible: 'Member since.*'
+- takeScreenshot: ${P}-c0-profile-want-badges
 - tapOn: F1
 - extendedWaitUntil:
     visible: 'Loud, fast.*'
