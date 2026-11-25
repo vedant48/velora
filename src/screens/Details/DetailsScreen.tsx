@@ -4,7 +4,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { CachedImage as Image } from '../../experience/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Linking, Modal, Pressable, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
+import { Linking, Modal, Pressable, ScrollView, Share, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useMovieCreditsQuery, useMovieDetailsQuery, useMovieVideosQuery, useSeasonEpisodesQuery, useSimilarMoviesQuery, useTVCreditsQuery, useTVDetailsQuery, useTVVideosQuery } from '../../api/queries';
 import { useQueryClient } from '@tanstack/react-query';
@@ -266,13 +266,6 @@ export const DetailsScreen: React.FC = () => {
     return null;
   }, [isTV, details]);
 
-  const statusBadge = lib.status
-    ? lib.status === 'want'
-      ? 'Want'
-      : lib.status === 'watching'
-        ? 'Watching'
-        : 'Watched'
-    : null;
 
   // Apple redesign: backdrop hero + grouped stats card (approved gallery direction)
   const backdropUrl = getImageUrl(
@@ -284,22 +277,37 @@ export const DetailsScreen: React.FC = () => {
     Number((details as any)?.runtime ?? (details as any)?.episode_run_time?.[0] ?? 0) || 0;
   const runtimeText =
     runtimeMinutes > 0 ? `${Math.floor(runtimeMinutes / 60)}h ${runtimeMinutes % 60}m` : '';
-  // Content rating from the enriched details query (IN first, US fallback; never invented)
+  // Content rating from the enriched details query. IN is shown plain; a fallback
+  // region's rating is labeled with its country code, never presented as the
+  // viewer's own region and never invented.
   const certification = useMemo(() => {
     if (!details) return null;
+    let value: string | null = null;
+    let cc = 'IN';
     if (isMovie) {
       const results = (details as any).release_dates?.results ?? [];
-      const pick = (cc: string) =>
+      const pick = (code: string) =>
         results
-          .find((r: any) => r.iso_3166_1 === cc)
+          .find((r: any) => r.iso_3166_1 === code)
           ?.release_dates?.map((d: any) => String(d.certification ?? '').trim())
-          .find(Boolean);
-      return pick('IN') ?? pick('US') ?? null;
+          .find(Boolean) ?? null;
+      value = pick('IN');
+      if (!value) { value = pick('US'); cc = 'US'; }
+    } else {
+      const results = (details as any).content_ratings?.results ?? [];
+      const pick = (code: string) => results.find((r: any) => r.iso_3166_1 === code)?.rating ?? null;
+      value = pick('IN');
+      if (!value) { value = pick('US'); cc = 'US'; }
     }
-    const results = (details as any).content_ratings?.results ?? [];
-    const pick = (cc: string) => results.find((r: any) => r.iso_3166_1 === cc)?.rating;
-    return pick('IN') ?? pick('US') ?? null;
+    return value ? (cc === 'IN' ? value : `${value} (${cc})`) : null;
   }, [details, isMovie]);
+  // User-triggered share via the native sheet; shares the title and its TMDB page, nothing else.
+  const shareTitle = useCallback(() => {
+    const kind = isMovie ? 'movie' : 'tv';
+    const tmdbId = (details as any)?.id ?? initialItem.id;
+    Share.share({ message: `${title} on Velora - https://www.themoviedb.org/${kind}/${tmdbId}` }).catch(() => undefined);
+  }, [details, initialItem.id, isMovie, title]);
+
   const metaLine = [isMovie ? year : airRange ?? '', runtimeText, certification]
     .filter(Boolean)
     .join(' · ');
@@ -335,12 +343,13 @@ export const DetailsScreen: React.FC = () => {
         </Pressable>
 
         <Pressable
-          onPress={handleBack}
+          onPress={shareTitle}
           style={styles.circleButton}
           hitSlop={8}
-          accessibilityLabel="Close details"
+          accessibilityLabel={`Share ${title}`}
+          accessibilityRole="button"
         >
-          <Ionicons name="chevron-down" size={22} color="#FFF" />
+          <Ionicons name="share-outline" size={20} color="#FFF" />
         </Pressable>
       </View>
 
@@ -393,11 +402,6 @@ export const DetailsScreen: React.FC = () => {
                 >
                   <Ionicons name="play" size={16} color="#FFF" style={{ marginLeft: 2 }} />
                 </Pressable>
-              )}
-              {statusBadge && (
-                <View style={styles.statusBadge}>
-                  <Text style={styles.statusBadgeText}>{statusBadge}</Text>
-                </View>
               )}
             </View>
             <View style={styles.detailTitleCol}>
@@ -771,22 +775,6 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     justifyContent: 'center',
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.25)',
-  },
-  statusBadge: {
-    position: 'absolute',
-    right: 10,
-    top: 10,
-    backgroundColor: 'rgba(14, 14, 20, 0.8)',
-    borderRadius: 8,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderWidth: 0.5,
-    borderColor: 'rgba(255,255,255,0.2)',
-  },
-  statusBadgeText: {
-    color: '#FFFFFF',
-    fontSize: 11,
-    fontWeight: '800',
   },
   mainInfo: {
     marginTop: 0,
