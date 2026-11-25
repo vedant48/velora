@@ -17,7 +17,7 @@ adb exec-out screencap -p > proof/final-screen.png || true
 adb logcat -d -t 1000 > proof/logcat.txt || true
 # Tab-switch motion on the same saved fixed APK (recorded like the flicker runs)
 adb shell pm clear com.vedant.velora
-maestro test .maestro/login.yaml || status=1
+maestro test .maestro/flicker-login-1511.yaml || status=1
 adb shell screenrecord --time-limit 70 --size 720x1480 /sdcard/flicker-tabs.mp4 &
 REC_PID=$!
 sleep 2
