@@ -179,21 +179,40 @@ export const ImportMustScreen: React.FC = () => {
             {items.filter((i) => i.type === 'tv' && i.status !== 'want').length} series ({items.filter((i) => i.type === 'tv' && i.seasons === null && i.status !== 'want').length} without episode detail in the file).
           </Text>
           {warnings.map((w) => <Text key={w} style={styles.warn}>{w}</Text>)}
-          <Text style={styles.row}>Matched automatically: {groups.sure.length}</Text>
-          <Text style={styles.row}>Need your pick: {groups.review.length}</Text>
-          <Text style={styles.row}>No match or skipped: {groups.none.length}</Text>
-          {groups.review.map((it) => (
-            <Pressable key={it.mustId} style={styles.item} onPress={() => setPicking(it)}>
-              <Text style={styles.itemTitle}>{it.title}{it.year ? ` (${it.year})` : ''}</Text>
-              <Text style={styles.itemSub}>{matches.get(it.mustId)?.reason}. Tap to choose.</Text>
-            </Pressable>
-          ))}
-          {groups.none.slice(0, 40).map((it) => (
-            <Pressable key={it.mustId} style={styles.item} onPress={() => matches.get(it.mustId)?.candidates.length ? setPicking(it) : undefined}>
-              <Text style={styles.itemTitle}>{it.title}{it.year ? ` (${it.year})` : ''}</Text>
-              <Text style={styles.itemSub}>{chosen[it.mustId] === 'skip' ? 'Skipped' : matches.get(it.mustId)?.reason}</Text>
-            </Pressable>
-          ))}
+          <View style={styles.card}>
+            <Text style={styles.cardRow}>Matched automatically: {groups.sure.length}</Text>
+            <View style={styles.sep} />
+            <Text style={styles.cardRow}>Need your pick: {groups.review.length}</Text>
+            <View style={styles.sep} />
+            <Text style={styles.cardRow}>No match or skipped: {groups.none.length}</Text>
+          </View>
+          {groups.review.length > 0 && <Text style={styles.h}>Needs your pick</Text>}
+          <View style={styles.card}>
+            {groups.review.map((it, i) => (
+              <View key={it.mustId}>
+                {i > 0 && <View style={styles.sep} />}
+                <Pressable style={styles.item} onPress={() => setPicking(it)}>
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.itemTitle}>{it.title}{it.year ? ` (${it.year})` : ''}</Text>
+                    <Text style={styles.itemSub}>{matches.get(it.mustId)?.reason}</Text>
+                  </View>
+                  <View style={styles.chooseBtn}><Text style={styles.chooseText}>Choose</Text></View>
+                </Pressable>
+              </View>
+            ))}
+            {groups.none.slice(0, 40).map((it, i) => (
+              <View key={it.mustId}>
+                {(i > 0 || groups.review.length > 0) && <View style={styles.sep} />}
+                <Pressable style={styles.item} onPress={() => matches.get(it.mustId)?.candidates.length ? setPicking(it) : undefined}>
+                  <View style={{ flex: 1 }}
+                  >
+                    <Text style={styles.itemTitle}>{it.title}{it.year ? ` (${it.year})` : ''}</Text>
+                    <Text style={styles.itemSub}>{chosen[it.mustId] === 'skip' ? 'Skipped' : matches.get(it.mustId)?.reason}</Text>
+                  </View>
+                </Pressable>
+              </View>
+            ))}
+          </View>
           <View style={{ height: 14 }} />
           <AppButton title={`Import ${groups.sure.length} titles`} onPress={confirmRun} disabled={groups.sure.length === 0} />
         </>
@@ -238,12 +257,17 @@ export const ImportMustScreen: React.FC = () => {
 const createStyles = (colors: AppColors) => StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
   body: { color: colors.textSecondary, fontSize: 14, lineHeight: 20, marginBottom: 16 },
-  h: { color: colors.textPrimary, fontSize: 17, fontWeight: '800', marginTop: 16, marginBottom: 8 },
+  h: { color: colors.textPrimary, fontSize: 17, fontWeight: '600', marginTop: 16, marginBottom: 8 },
+  card: { backgroundColor: colors.appleCard, borderRadius: 14, overflow: 'hidden', marginBottom: 10 },
+  sep: { height: StyleSheet.hairlineWidth, backgroundColor: colors.appleSeparator, marginLeft: 12 },
+  cardRow: { color: colors.textPrimary, fontSize: 15, paddingHorizontal: 12, paddingVertical: 11 },
+  chooseBtn: { backgroundColor: colors.appleFill, borderRadius: 8, paddingHorizontal: 12, paddingVertical: 6 },
+  chooseText: { color: colors.textPrimary, fontSize: 13, fontWeight: '600' },
   row: { color: colors.textPrimary, fontSize: 14, marginBottom: 6 },
   warn: { color: colors.error, fontSize: 12, marginBottom: 4 },
-  item: { backgroundColor: colors.surface, borderRadius: ui.radius.button, padding: 12, marginBottom: 8 },
+  item: { flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 12, paddingVertical: 11 },
   itemTitle: { color: colors.textPrimary, fontWeight: '700', fontSize: 14 },
   itemSub: { color: colors.textSecondary, fontSize: 12, marginTop: 2, marginBottom: 4 },
   modalWrap: { flex: 1, justifyContent: 'flex-end', backgroundColor: 'rgba(0,0,0,0.5)' },
-  modal: { backgroundColor: colors.background, padding: 18, borderTopLeftRadius: 16, borderTopRightRadius: 16, gap: 4 },
+  modal: { backgroundColor: colors.appleCard, padding: 18, borderTopLeftRadius: 16, borderTopRightRadius: 16, gap: 4 },
 });

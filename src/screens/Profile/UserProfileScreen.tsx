@@ -115,9 +115,12 @@ export const UserProfileScreen: React.FC = () => {
               </Text>
             </Pressable>
             {match?.percent != null && (
-              <View style={styles.matchBadge}>
-                <Ionicons name="heart" size={14} color={colors.primary} />
-                <Text style={styles.matchText}>{match.percent}% match</Text>
+              <View style={styles.matchCard}>
+                <Ionicons name="heart" size={18} color={colors.primary} />
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.matchTitle}>{match.percent}% match</Text>
+                  <Text style={styles.matchSub}>Based on {match.sharedRated} titles you both rated</Text>
+                </View>
               </View>
             )}
           </View>
@@ -152,7 +155,7 @@ export const UserProfileScreen: React.FC = () => {
         )}
       </View>
 
-      {!isPrivate && !!stats && <Text style={styles.sectionTitle}>Watched</Text>}
+      {!isPrivate && !!stats && <Text style={styles.sectionTitle}>Watched recently</Text>}
       {isPrivate || !stats ? null : libraryQuery.isLoading ? (
         <AppLoader />
       ) : watched.length === 0 ? (
@@ -210,14 +213,27 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   bio: { fontSize: 13, color: colors.textSecondary, textAlign: 'center', marginTop: ui.space.xs },
   actionRow: { flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: 10 },
   followButton: {
-    paddingHorizontal: 26,
-    paddingVertical: 9,
-    borderRadius: 20,
+    paddingHorizontal: 22,
+    paddingVertical: 8,
+    borderRadius: 12,
     backgroundColor: colors.primary,
   },
-  followingButton: { backgroundColor: 'transparent', borderWidth: 1, borderColor: colors.surfaceBorder },
-  followText: { color: '#fff', fontWeight: '800', fontSize: 13 },
-  followingText: { color: colors.textSecondary },
+  followingButton: { backgroundColor: colors.appleFill, borderWidth: 0 },
+  followText: { color: '#fff', fontWeight: '600', fontSize: 14 },
+  followingText: { color: colors.appleText2 },
+  matchCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    alignSelf: 'stretch',
+    marginTop: 10,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    borderRadius: 14,
+    backgroundColor: colors.appleCard,
+  },
+  matchTitle: { color: colors.textPrimary, fontWeight: '700', fontSize: 15 },
+  matchSub: { color: colors.appleText2, fontSize: 12, marginTop: 1 },
   matchBadge: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -235,15 +251,15 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     justifyContent: 'center',
     gap: 14,
     marginTop: 14,
-    backgroundColor: colors.surface,
+    backgroundColor: colors.appleCard,
     borderRadius: 14,
     paddingVertical: ui.space.md,
     paddingHorizontal: ui.space.sm,
   },
   stat: { alignItems: 'center', minWidth: 52 },
-  statValue: { fontSize: 16, fontWeight: '800', color: colors.textPrimary },
-  statLabel: { fontSize: 10, color: colors.textMuted, marginTop: 2 },
-  sectionTitle: { fontSize: 16, fontWeight: '800', color: colors.textPrimary, marginBottom: 10 },
+  statValue: { fontSize: 17, fontWeight: '700', color: colors.textPrimary },
+  statLabel: { fontSize: 10, color: colors.appleText2, marginTop: 2 },
+  sectionTitle: { fontSize: 17, fontWeight: '600', color: colors.textPrimary, marginBottom: 10 },
   emptyText: { fontSize: 13, color: colors.textMuted },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: ui.space.sm },
   cell: { width: '23%' },
