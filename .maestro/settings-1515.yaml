@@ -39,7 +39,7 @@ appId: com.vedant.velora
     duration: 300
 - takeScreenshot: p5-expanded
 - tapOn:
-    point: 90%, 5.1%
+    point: 90%, 5%
 - assertVisible: 'Save profile'
 - takeScreenshot: s1-settings-top
 - swipe:
@@ -75,7 +75,9 @@ appId: com.vedant.velora
     visible: '.*(update|Update|Velora is up to date).*'
     timeout: 20000
 - takeScreenshot: s5-update-check
-- tapOn: OK
+- tapOn:
+    text: OK
+    optional: true
 - scrollUntilVisible:
     element: Activity
     direction: DOWN
