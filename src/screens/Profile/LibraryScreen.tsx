@@ -100,9 +100,14 @@ export const LibraryScreen: React.FC = () => {
     });
   }, []);
   const lastClamp = useSharedValue(0);
+  // Real offset of every page list (written for all pages, not only the active one) so a page
+  // that never received/applied the shared collapse offset can be detected and corrected.
+  const off0 = useSharedValue(0), off1 = useSharedValue(0), off2 = useSharedValue(0), off3 = useSharedValue(0);
+  const offs = [off0, off1, off2, off3];
   const mkScroll = (idx: number) => ({
     onScroll: (e: { contentOffset: { y: number } }) => {
       'worklet';
+      offs[idx].value = e.contentOffset.y;
       if (activeIdx.value !== idx) return;
       const y = e.contentOffset.y;
       scrollY.value = y;
@@ -121,7 +126,24 @@ export const LibraryScreen: React.FC = () => {
   }));
   const selectTab = useCallback((next: TabKey) => { setSortSheetVisible(false); setTab(next); }, []);
   const onPageChange = useCallback((index: number) => { setTab(TABS[index].key); }, []);
-  useEffect(() => { activeIdx.value = TABS.findIndex(t => t.key === tab); }, [tab]);
+  useEffect(() => {
+    const idx = TABS.findIndex(t => t.key === tab);
+    activeIdx.value = idx;
+    // v1.5.14: a page whose own offset disagrees with the collapse state (e.g. the Series list
+    // when its sync scroll was dropped) showed a blank gap under the pinned tabs. Re-align the
+    // newly active page to the collapse offset, twice (second pass covers a not-yet-laid-out list).
+    const align = () => {
+      const c = Math.max(0, Math.min(scrollY.value, topHSV.value));
+      const off = offs[idx].value;
+      if (Math.min(off, topHSV.value) !== c) {
+        clampRef.current[idx] = c;
+        listRefs.current[idx]?.scrollToOffset({ offset: c, animated: false });
+      }
+    };
+    align();
+    const t = setTimeout(align, 120);
+    return () => clearTimeout(t);
+  }, [tab]);
   useEffect(() => { topHSV.value = topH; }, [topH]);
 
   const [items, setItems] = useState<LibraryItem[]>([]);
