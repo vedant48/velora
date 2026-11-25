@@ -324,7 +324,7 @@ export const AccountScreen: React.FC = () => {
         </Pressable>
       </View>
 
-      {/* Gallery settings mock footnote (owner-confirmed credit line). */}
+      {/* Gallery settings mock footnote: factual attribution to the app owner, a routine design decision within the approved gallery. */}
       <Text style={styles.footnote}>Velora for Android · made by Vedant</Text>
     </ScrollView>
   );
