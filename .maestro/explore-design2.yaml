@@ -78,7 +78,8 @@ appId: com.vedant.velora
 - takeScreenshot: b5-member-profile
 - back
 # Movie details: hero restyle + tracking controls + action sheet + rate sheet (no save)
-- tapOn: 'Home'
+# Redesign Search is a pushed full-screen route (no tab bar): back again lands on Home.
+- back
 - extendedWaitUntil:
     visible: E2E Alice
     timeout: 20000
