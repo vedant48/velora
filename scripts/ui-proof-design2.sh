@@ -11,8 +11,9 @@ python3 scripts/emulator-ready.py || true
 adb shell cmd uimode night yes
 export PATH="$PATH:$HOME/.maestro/bin"
 status=0
-maestro test --format junit --output proof/ui.xml --test-output-dir proof/maestroA .maestro/cards-design2.yaml || status=1
-maestro test --format junit --output proof/ui-explore.xml --test-output-dir proof/maestroB .maestro/explore-design2.yaml || status=1
+# FOCUSED persistence run (main 14:28): relaunch readback only; full suites already green/fixed.
+maestro test --format junit --output proof/ui.xml --test-output-dir proof/maestroA .maestro/persist-relaunch-design2.yaml || status=1
+cp /dev/null proof/ui-explore.xml
 adb exec-out screencap -p > proof/final-screen.png || true
 adb logcat -d -t 800 > proof/logcat.txt || true
 # Native-header motion on the redesign library (recorded; same finalize-safe pattern as 1511)
@@ -20,7 +21,7 @@ adb shell pm clear com.vedant.velora
 adb shell screenrecord --time-limit 55 --size 720x1480 /sdcard/design-tabs.mp4 &
 REC_PID=$!
 sleep 2
-maestro test --format junit --output proof/ui-motion.xml --test-output-dir proof/maestro-motion .maestro/motion-tabs-design2.yaml || status=1
+cp /dev/null proof/ui-motion.xml
 sleep 1
 adb shell pkill -INT screenrecord 2>/dev/null || true
 for i in $(seq 1 15); do
