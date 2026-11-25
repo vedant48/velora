@@ -228,15 +228,16 @@ export const LibraryScreen: React.FC = () => {
 
   // Sticky-header rows: row 0 of every page's data is the tab strip (pins natively);
   // loading/error/empty are single full-width rows after it.
-  type RowItem = LibraryItem | { __row: 'tabs' | 'loader' | 'error' | 'empty'; id: string };
+  type RowItem = LibraryItem | { __row: 'tabs' | 'loader' | 'error' | 'empty' | 'insights'; id: string };
   const ROW_TABS: RowItem = { __row: 'tabs', id: '__tabs' };
   const ROW_LOADER: RowItem = { __row: 'loader', id: '__loader' };
   const ROW_ERROR: RowItem = { __row: 'error', id: '__error' };
   const ROW_EMPTY: RowItem = { __row: 'empty', id: '__empty' };
+  const ROW_INSIGHTS: RowItem = { __row: 'insights', id: '__insights' };
   const rowsByTab = useMemo(() => {
     const out: Partial<Record<TabKey, RowItem[]>> = {};
     for (const t of TABS) {
-      if (t.key === 'insights') out[t.key] = [ROW_TABS];
+      if (t.key === 'insights') out[t.key] = [ROW_TABS, ROW_INSIGHTS];
       else if (loading) out[t.key] = [ROW_TABS, ROW_LOADER];
       else if (loadError) out[t.key] = [ROW_TABS, ROW_ERROR];
       else if (itemsByTab[t.key].length === 0) out[t.key] = [ROW_TABS, ROW_EMPTY];
@@ -299,7 +300,7 @@ export const LibraryScreen: React.FC = () => {
         <View style={styles.identityRow}>
           <View style={styles.identityText}>
             <Text style={styles.name}>{user?.displayName}</Text>
-            <Text style={styles.handle}>@{user?.username}{memberSince ? ` · Member since ${memberSince}` : ''}</Text>
+            <Text style={styles.handle} numberOfLines={1} ellipsizeMode="tail">@{user?.username}{memberSince ? ` · Member since ${memberSince}` : ''}</Text>
             {!!user?.bio && <Text style={styles.bio} numberOfLines={2}>{user.bio}</Text>}
           </View>
           <Pressable accessibilityLabel="View profile photo" accessibilityRole="imagebutton" onPress={() => setPhotoViewerVisible(true)}>
@@ -369,6 +370,70 @@ export const LibraryScreen: React.FC = () => {
     [profileHeader, navigation, colors, styles],
   );
 
+  // Insights page body: a full-width data row AFTER the sticky tab row (not part of
+  // the collapsing header), so the selector always sits above page content.
+  const insightsBody = useMemo(() => (insights ? (
+              <View style={styles.insights}>
+                <View style={styles.insightGrid}>
+                  <View style={styles.insightTile}>
+                    <Text style={styles.insightTileLabel}>This year</Text>
+                    <Text style={styles.insightTileValue}>{insights.thisYear}</Text>
+                    <Text style={styles.insightTileSub}>titles rated</Text>
+                  </View>
+                  {meta.timeWatched && (
+                    <View style={styles.insightTile}>
+                      <Text style={styles.insightTileLabel}>Time watched</Text>
+                      <Text style={styles.insightTileValue}>{formatMinutes(meta.timeWatched.minutes)}</Text>
+                      <Text style={styles.insightTileSub}>
+                        known runtime for {meta.timeWatched.moviesKnown}/{meta.timeWatched.moviesTotal} movies
+                        {meta.timeWatched.epsTotal > 0 ? ` · ${meta.timeWatched.epsKnown}/${meta.timeWatched.epsTotal} episodes` : ''}
+                      </Text>
+                    </View>
+                  )}
+                  <View style={styles.insightTile}>
+                    <Text style={styles.insightTileLabel}>Average rating</Text>
+                    <Text style={styles.insightTileValue}>{insights.avg ?? '-'}</Text>
+                    <Text style={styles.insightTileSub}>{insights.ratedCount} rated titles & seasons</Text>
+                  </View>
+                  {meta.topGenre && (
+                    <View style={styles.insightTile}>
+                      <Text style={styles.insightTileLabel}>Top genre</Text>
+                      <Text style={styles.insightTileValue}>{meta.topGenre.name}</Text>
+                      <Text style={styles.insightTileSub}>top primary genre · {meta.topGenre.known} of {meta.topGenre.total} tracked titles</Text>
+                    </View>
+                  )}
+                </View>
+                <View style={styles.chartCard}>
+                  <Text style={styles.chartTitle}>Your ratings</Text>
+                  {insights.ratedCount === 0 ? (
+                    <Text style={styles.chartEmpty}>No ratings yet. Rate a title or season and your 1-10 distribution shows here.</Text>
+                  ) : (
+                  <View style={styles.chart}>
+                    {insights.dist.map((count, v) => (
+                      <View key={v} style={styles.chartCol}>
+                        <View style={[styles.chartBar, { height: Math.max((count / insights.maxDist) * 90, count > 0 ? 4 : 1) }, count === insights.maxDist && count > 0 && styles.chartBarPeak]} />
+                        <Text style={styles.chartLabel}>{v + 1}</Text>
+                      </View>
+                    ))}
+                  </View>
+                  )}
+                </View>
+                {insights.activity.length > 0 && (
+                  <View style={styles.chartCard}>
+                    {insights.activity.map((a, i) => (
+                      <View key={a.id} style={[styles.actRow, i < insights.activity.length - 1 && styles.actRowSep]}>
+                        <Ionicons name="star" size={17} color={colors.appleAmber} />
+                        <View style={{ flex: 1 }}>
+                          <Text style={styles.actTitle}>{a.text}</Text>
+                          <Text style={styles.actSub}>{a.sub}</Text>
+                        </View>
+                      </View>
+                    ))}
+                  </View>
+                )}
+              </View>
+  ) : null), [insights, meta, styles, colors]);
+
   const renderMetaRow = useCallback(
     (item: RowItem & { __row: string }) => {
       if (item.__row === 'tabs') return (
@@ -376,11 +441,12 @@ export const LibraryScreen: React.FC = () => {
           <View style={{ paddingHorizontal: ui.component.libraryTabs.horizontalPadding, paddingTop: ui.component.libraryTabs.topPadding }}>{tabsHeader}</View>
         </View>
       );
+      if (item.__row === 'insights') return insightsBody;
       if (item.__row === 'loader') return <AppLoader style={{ marginTop: ui.space.xxl }} />;
       if (item.__row === 'error') return <Pressable onPress={() => setRefreshKey(k => k + 1)} accessibilityRole="button"><Text style={styles.emptyText}>Could not load your library. Tap to retry.</Text></Pressable>;
       return <Text style={styles.emptyText}>Nothing here yet. Rate and track from any title page.</Text>;
     },
-    [styles, tabsHeader],
+    [styles, tabsHeader, insightsBody],
   );
   const renderItem = useCallback(
     ({ item }: { item: RowItem }) => {
@@ -452,70 +518,7 @@ export const LibraryScreen: React.FC = () => {
               drawDistance={280}
               scrollEnabled={!sortSheetVisible}
               refreshControl={<RefreshControl refreshing={refreshing && tab === pageTab} onRefresh={refreshProfile} colors={['#000000']} tintColor="#000000" progressBackgroundColor="#FFFFFF" progressViewOffset={pinnedH} />}
-              ListHeaderComponent={<>
-                {listTopHeader}
-                {pageTab === 'insights' && insights ? (
-              <View style={styles.insights}>
-                <View style={styles.insightGrid}>
-                  <View style={styles.insightTile}>
-                    <Text style={styles.insightTileLabel}>This year</Text>
-                    <Text style={styles.insightTileValue}>{insights.thisYear}</Text>
-                    <Text style={styles.insightTileSub}>titles rated</Text>
-                  </View>
-                  {meta.timeWatched && (
-                    <View style={styles.insightTile}>
-                      <Text style={styles.insightTileLabel}>Time watched</Text>
-                      <Text style={styles.insightTileValue}>{formatMinutes(meta.timeWatched.minutes)}</Text>
-                      <Text style={styles.insightTileSub}>
-                        known runtime for {meta.timeWatched.moviesKnown}/{meta.timeWatched.moviesTotal} movies
-                        {meta.timeWatched.epsTotal > 0 ? ` · ${meta.timeWatched.epsKnown}/${meta.timeWatched.epsTotal} episodes` : ''}
-                      </Text>
-                    </View>
-                  )}
-                  <View style={styles.insightTile}>
-                    <Text style={styles.insightTileLabel}>Average rating</Text>
-                    <Text style={styles.insightTileValue}>{insights.avg ?? '-'}</Text>
-                    <Text style={styles.insightTileSub}>{insights.ratedCount} rated titles & seasons</Text>
-                  </View>
-                  {meta.topGenre && (
-                    <View style={styles.insightTile}>
-                      <Text style={styles.insightTileLabel}>Top genre</Text>
-                      <Text style={styles.insightTileValue}>{meta.topGenre.name}</Text>
-                      <Text style={styles.insightTileSub}>top primary genre · {meta.topGenre.known} of {meta.topGenre.total} tracked titles</Text>
-                    </View>
-                  )}
-                </View>
-                <View style={styles.chartCard}>
-                  <Text style={styles.chartTitle}>Your ratings</Text>
-                  {insights.ratedCount === 0 ? (
-                    <Text style={styles.chartEmpty}>No ratings yet. Rate a title or season and your 1-10 distribution shows here.</Text>
-                  ) : (
-                  <View style={styles.chart}>
-                    {insights.dist.map((count, v) => (
-                      <View key={v} style={styles.chartCol}>
-                        <View style={[styles.chartBar, { height: Math.max((count / insights.maxDist) * 90, count > 0 ? 4 : 1) }, count === insights.maxDist && count > 0 && styles.chartBarPeak]} />
-                        <Text style={styles.chartLabel}>{v + 1}</Text>
-                      </View>
-                    ))}
-                  </View>
-                  )}
-                </View>
-                {insights.activity.length > 0 && (
-                  <View style={styles.chartCard}>
-                    {insights.activity.map((a, i) => (
-                      <View key={a.id} style={[styles.actRow, i < insights.activity.length - 1 && styles.actRowSep]}>
-                        <Ionicons name="star" size={17} color={colors.appleAmber} />
-                        <View style={{ flex: 1 }}>
-                          <Text style={styles.actTitle}>{a.text}</Text>
-                          <Text style={styles.actSub}>{a.sub}</Text>
-                        </View>
-                      </View>
-                    ))}
-                  </View>
-                )}
-              </View>
-            ) : null}
-              </>}
+              ListHeaderComponent={listTopHeader}
               contentContainerStyle={styles.listContent}
             />
           </View>)}
