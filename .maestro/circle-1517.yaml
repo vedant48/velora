@@ -4,7 +4,7 @@ appId: com.vedant.velora
 - assertVisible: 'Member since.*'
 - tapOn: F1
 - extendedWaitUntil:
-    visible: 'Best racing movie in years.*'
+    visible: 'Loud, fast.*'
     timeout: 30000
 - assertNotVisible: 'Write a review.*'
 - takeScreenshot: ${P}-c1-movie-top
