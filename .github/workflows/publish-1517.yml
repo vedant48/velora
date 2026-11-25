@@ -1,0 +1,60 @@
+name: Verify and publish v1.5.17 draft
+on:
+  push:
+    branches: [test/ui-proof-1517]
+    paths: [.ci/publish1517]
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      TAG: v1.5.17
+      WANT_SIGNER: 8d32a5e1c39a8210b2d5b41cf6774381b0121f73b053ba4626abffcdc43427f3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify draft assets, publish, re-download and compare
+        run: |
+          set -euo pipefail
+          mkdir -p proof/draft proof/pub
+          BT=$(ls -d $ANDROID_HOME/build-tools/* | sort -V | tail -1)
+          gh release view $TAG --json isDraft,tagName,targetCommitish,assets > proof/release-before.json
+          cat proof/release-before.json
+          [ "$(jq -r .isDraft proof/release-before.json)" = "true" ] || { echo "not a draft"; exit 1; }
+          gh release download $TAG -D proof/draft
+          ls -l proof/draft
+          APK=proof/draft/velora-$TAG.apk
+          SUMS=proof/draft/velora-$TAG-checksums.txt
+          verify() { # $1 apk
+            $BT/aapt2 dump badging "$1" | head -1 | tee -a proof/verify.txt
+            $BT/aapt2 dump badging "$1" | head -1 | grep -q "name='com.vedant.velora' versionCode='10517' versionName='1.5.17'"
+            SIG=$($BT/apksigner verify --print-certs "$1" | tee -a proof/verify.txt | sed -n 's/.*certificate SHA-256 digest: //p' | head -1)
+            [ "$SIG" = "$WANT_SIGNER" ]
+            echo "signer ok $SIG" | tee -a proof/verify.txt
+            stat -c 'bytes %s' "$1" | tee -a proof/verify.txt
+            sha256sum "$1" | tee -a proof/verify.txt
+          }
+          verify $APK
+          (cd proof/draft && sha256sum -c velora-$TAG-checksums.txt) | tee -a proof/verify.txt
+          gh release edit $TAG --draft=false --latest
+          gh release view $TAG --json isDraft,url,publishedAt > proof/release-after.json; cat proof/release-after.json
+          URL=$(jq -r .url proof/release-after.json)
+          # re-download the public asset with no auth
+          curl -sSL -o proof/pub/velora-$TAG.apk "https://github.com/${{ github.repository }}/releases/download/$TAG/velora-$TAG.apk"
+          curl -sSL -o proof/pub/sums.txt "https://github.com/${{ github.repository }}/releases/download/$TAG/velora-$TAG-checksums.txt"
+          echo "--- public re-download" | tee -a proof/verify.txt
+          verify proof/pub/velora-$TAG.apk
+          cmp $APK proof/pub/velora-$TAG.apk && echo "published asset identical to draft asset" | tee -a proof/verify.txt
+          cat proof/pub/sums.txt | tee -a proof/verify.txt
+      - name: Publish evidence
+        if: always()
+        run: |
+          git config user.email ci@velora.local; git config user.name velora-ci
+          EV=$(mktemp -d); git worktree add --detach "$EV"
+          git -C "$EV" checkout --orphan ci-evidence/publish1517-${{ github.run_id }}
+          git -C "$EV" rm -rf . >/dev/null 2>&1 || true
+          rm -f proof/draft/*.apk proof/pub/*.apk
+          cp -r proof "$EV/" 2>/dev/null || true
+          git -C "$EV" add -A; git -C "$EV" commit -m "publish1517 evidence"
+          git -C "$EV" push origin HEAD:ci-evidence/publish1517-${{ github.run_id }}
