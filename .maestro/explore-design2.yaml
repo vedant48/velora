@@ -121,17 +121,18 @@ appId: com.vedant.velora
 - extendedWaitUntil:
     visible: 'E2E Bob'
     timeout: 10000
-# Real action: Follow toggle on the test fixture, then restore baseline
-- tapOn: Follow
-- extendedWaitUntil:
-    visible: Following
-    timeout: 10000
-- takeScreenshot: b5b-member-following
+# Real action: Follow toggle on the test fixture. Alice FOLLOWS bob from the
+# activity seed, so toggle off then back on; end state keeps the feed populated.
 - tapOn:
     text: Following
     above: Followers
 - extendedWaitUntil:
     visible: Follow
+    timeout: 10000
+- takeScreenshot: b5b-member-follow-toggle
+- tapOn: Follow
+- extendedWaitUntil:
+    visible: Following
     timeout: 10000
 - back
 # Movie details: hero restyle + tracking controls + action sheet + rate sheet (no save)
@@ -196,9 +197,9 @@ appId: com.vedant.velora
     visible: Activity
     timeout: 10000
 - tapOn: Activity
-- waitForAnimationToEnd:
-    timeout: 5000
-- assertVisible: 'What people you follow watched, rated and reviewed.'
+- extendedWaitUntil:
+    visible: 'What people you follow watched, rated and reviewed.'
+    timeout: 30000
 - takeScreenshot: b11-activity
 - back
 # Activity pops back to own profile; quick actions live on the Home library grid

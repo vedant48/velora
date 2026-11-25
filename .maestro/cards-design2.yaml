@@ -125,22 +125,19 @@ appId: com.vedant.velora
     timeout: 60000
 - tapOn:
     id: season-menu
-- tapOn: 'Season 2'
+- tapOn: 'Season 5'
 - extendedWaitUntil:
-    visible: '18 of 22 episodes'
+    visible: '0 of 9 episodes'
     timeout: 30000
-- scrollUntilVisible:
-    element:
-      text: 'Sweet Caroline'
-    direction: UP
-    timeout: 30000
+# S5E1 'Ogygia' is row 1 (visible without scrolling; the deep-scroll to S2E19
+# proved unreliable in 45567713433). Fully unwatched season, first row.
 - swipe:
     from:
-      text: 'Sweet Caroline'
+      text: 'Ogygia'
     direction: RIGHT
     duration: 600
 - extendedWaitUntil:
-    visible: '19 of 22 episodes'
+    visible: '1 of 9 episodes'
     timeout: 20000
 - takeScreenshot: 10-episode-mark-readback
 - back
@@ -154,8 +151,8 @@ appId: com.vedant.velora
     timeout: 60000
 - tapOn:
     id: season-menu
-- tapOn: 'Season 2'
+- tapOn: 'Season 5'
 - extendedWaitUntil:
-    visible: '19 of 22 episodes'
+    visible: '1 of 9 episodes'
     timeout: 30000
 - takeScreenshot: 12-details-persisted
