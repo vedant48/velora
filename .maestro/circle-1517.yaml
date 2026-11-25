@@ -22,7 +22,7 @@ appId: com.vedant.velora
     timeout: 20000
 - tapOn: 'Breaking Bad'
 - extendedWaitUntil:
-    visible: 'Season three is where.*'
+    visible: 'Season four, the cat.*'
     timeout: 30000
 - assertNotVisible: 'Write a review.*'
 - takeScreenshot: ${P}-c3-series-top
