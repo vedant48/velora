@@ -142,7 +142,7 @@ appId: com.vedant.velora
 - takeScreenshot: 10-episode-mark-readback
 - back
 - extendedWaitUntil:
-    visible: '41 of 88 episodes'
+    visible: '.*41 of 88 episodes'  # list subtitle is composite 'Latest progress S5 · 41 of 88 episodes' - Maestro matches FULL regex
     timeout: 30000
 - takeScreenshot: 11-list-aggregate-updated
 - tapOn: 'Prison Break'
