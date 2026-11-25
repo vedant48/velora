@@ -60,13 +60,6 @@ export class ReviewsService {
       `SELECT r.id, r.user_id, r.media_type, r.tmdb_id, r.season_number, r.rating, r.body,
               r.created_at, r.updated_at, u.username, u.display_name, u.avatar_at
        FROM reviews r JOIN users u ON u.id = r.user_id
-<<<<<<< HEAD
-       WHERE r.media_type = ? AND r.tmdb_id = ?
-         AND (r.user_id = ? OR r.user_id IN (SELECT followee_id FROM follows WHERE follower_id = ?))
-       ORDER BY r.updated_at DESC LIMIT 300`,
-      [mediaType, tmdbId, userId, userId],
-    );
-=======
        WHERE r.media_type = ? AND r.tmdb_id = ? AND (u.is_private = 0 OR r.user_id = ?)
          AND (r.user_id = ? OR r.user_id IN (SELECT followee_id FROM follows WHERE follower_id = ?))
        ORDER BY r.updated_at DESC LIMIT 300`,
@@ -92,7 +85,6 @@ export class ReviewsService {
         username: l.username, display_name: l.display_name, avatar_at: l.avatar_at,
       });
     }
->>>>>>> feat/skeleton-loaders-1517
     // Seasons each person has watched (any episode), for the per-person drawer. Private accounts other than the caller stay hidden.
     const watched =
       mediaType === 'tv'
