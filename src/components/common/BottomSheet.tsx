@@ -27,10 +27,10 @@ export function BottomSheet({ visible, onClose, children, showHandle = false, co
     }), [height, offset, onClose]);
   const moving = useAnimatedStyle(() => ({ transform: [{ translateY: offset.value }] }));
   const handle = <Animated.View accessibilityLabel="Drag sheet to dismiss" style={{paddingTop: 8, paddingBottom: 12}}>
-    <View style={{alignSelf: 'center', width: 44, height: 5, borderRadius: 3, backgroundColor: colors.borderHighlight}} />
+    <View style={{alignSelf: 'center', width: 44, height: 5, borderRadius: 3, backgroundColor: colors.appleSeparator}} />
   </Animated.View>;
   const sheet = <Animated.View onLayout={e => { height.value = e.nativeEvent.layout.height; }} style={[{
-    backgroundColor: colors.cardBackground, borderTopLeftRadius: ui.radius.sheet,
+    backgroundColor: colors.appleCard, borderTopLeftRadius: ui.radius.sheet,
     borderTopRightRadius: ui.radius.sheet, paddingBottom: Math.max(insets.bottom, ui.space.lg),
   }, contentStyle, moving]}>
     {/* Text entry/scrolling keeps native gestures; only its handle drags the sheet. */}

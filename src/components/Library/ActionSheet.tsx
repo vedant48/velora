@@ -30,7 +30,7 @@ export const ActionSheet = memo(function ActionSheet({
   const styles = useThemedStyles(createStyles);
   return (
     <BottomSheet visible={visible} onClose={onClose}>
-          {options.map((opt) => (
+          {options.map((opt, i) => (
             <Pressable
               key={opt.label}
               accessibilityLabel={opt.label}
@@ -38,7 +38,7 @@ export const ActionSheet = memo(function ActionSheet({
                 if (dismissOnSelect) onClose();
                 opt.onPress();
               }}
-              style={({ pressed }) => [styles.option, pressed && styles.optionPressed]}
+              style={({ pressed }) => [styles.option, i > 0 && styles.optionSep, pressed && styles.optionPressed]}
               accessibilityRole="button"
             >
               <Text style={[styles.optionText, opt.destructive && styles.destructiveText]}>
@@ -72,6 +72,10 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     color: colors.textPrimary,
     fontSize: ui.type.body,
     fontWeight: '600',
+  },
+  optionSep: {
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: colors.appleSeparator,
   },
   destructiveText: {
     color: colors.error,

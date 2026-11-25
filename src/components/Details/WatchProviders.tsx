@@ -153,7 +153,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   sheetRoot: { flex: 1, justifyContent: 'flex-end' },
   sheetScrim: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.72)' },
   sheet: {
-    backgroundColor: colors.surface,
+    backgroundColor: colors.appleCard,
     borderTopLeftRadius: 18,
     borderTopRightRadius: 18,
     paddingTop: 10,
