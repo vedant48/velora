@@ -37,7 +37,8 @@ const R_JOIN = `r.user_id = library_items.user_id AND r.media_type = library_ite
 const LIST_ITEM = `SELECT id, media_type, tmdb_id, title, poster_path, backdrop_path, release_date, status,
        COALESCE(rating, CASE WHEN media_type = 'tv' THEN (
          SELECT r.rating FROM reviews r WHERE ${R_JOIN} AND r.season_number > 0 AND r.rating IS NOT NULL
-         ORDER BY r.season_number DESC LIMIT 1) END) AS rating,
+         ORDER BY r.season_number DESC LIMIT 1) END,
+         (SELECT r.rating FROM reviews r WHERE ${R_JOIN} AND r.season_number = 0 AND r.rating IS NOT NULL)) AS rating,
        CASE WHEN media_type = 'tv' AND (SELECT COUNT(*) FROM reviews r WHERE ${R_JOIN} AND r.season_number > 0 AND r.rating IS NOT NULL) > 1
          THEN 1 ELSE 0 END AS more_ratings,
        CASE WHEN EXISTS (SELECT 1 FROM reviews r WHERE ${R_JOIN} AND TRIM(r.body) <> '') THEN 1 ELSE 0 END AS has_review,
