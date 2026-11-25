@@ -7,6 +7,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Linking, Modal, Pressable, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useMovieCreditsQuery, useMovieDetailsQuery, useMovieVideosQuery, useSeasonEpisodesQuery, useSimilarMoviesQuery, useTVCreditsQuery, useTVDetailsQuery, useTVVideosQuery } from '../../api/queries';
+import { useQueryClient } from '@tanstack/react-query';
 import { getSeasonEpisodes } from '../../api/tv';
 import { MediaItem } from '../../api/types';
 import { veloraApi } from '../../api/velora';
@@ -29,6 +30,7 @@ type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 export const DetailsScreen: React.FC = () => {
   const { colors, mode } = useAppTheme();
   const styles = useThemedStyles(createStyles);
+  const queryClient = useQueryClient();
   const insets = useSafeAreaInsets();
   const route = useRoute<DetailsRouteProp>();
   const navigation = useNavigation<NavigationProp>();
@@ -179,10 +181,12 @@ export const DetailsScreen: React.FC = () => {
         // Whole-series scope includes the series-level (season 0) review.
         await veloraApi.deleteReview('tv', initialItem.id, 0).catch(() => undefined);
       }
+      // Watch state changed on the server: no consumer may serve the old progress.
+      queryClient.invalidateQueries({ queryKey: ['epProgress', initialItem.id] });
       setStatsRefreshKey((k) => k + 1);
       return true;
     },
-    [availableSeasons, selectedSeason, episodes, initialItem.id, initialItem.poster_path, title, totalEpisodes],
+    [availableSeasons, selectedSeason, episodes, initialItem.id, initialItem.poster_path, title, totalEpisodes, queryClient],
   );
 
   // Trailer: official YouTube trailer/teaser if one exists (never implies in-app playback)

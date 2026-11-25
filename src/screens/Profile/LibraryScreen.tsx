@@ -290,7 +290,7 @@ export const LibraryScreen: React.FC = () => {
 
   // Mock's Time watched / Top genre tiles: lazily aggregated real metadata with explicit
   // coverage; each tile stays hidden until its data is meaningful (see useInsightsMeta).
-  const meta = useInsightsMeta(allItems, tab === 'insights', apiReady);
+  const meta = useInsightsMeta(allItems, tab === 'insights', apiReady, user?.id);
 
   // Owner rule (25 Nov, with Must reference video): profile details scroll away with the grid;
   // only the Want/Watched/Series/Insights tabs and the filter icon stay pinned at the top.
@@ -420,7 +420,7 @@ export const LibraryScreen: React.FC = () => {
                     <View style={styles.insightTile}>
                       <Text style={styles.insightTileLabel}>Top genre</Text>
                       <Text style={styles.insightTileValue}>{meta.topGenre.name}</Text>
-                      <Text style={styles.insightTileSub}>most common known · {meta.topGenre.known} of {meta.topGenre.total} titles</Text>
+                      <Text style={styles.insightTileSub}>top primary genre · {meta.topGenre.known} of {meta.topGenre.total} tracked titles</Text>
                     </View>
                   )}
                 </View>
