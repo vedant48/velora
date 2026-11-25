@@ -1,0 +1,46 @@
+name: Update path smoke 1.5.10 -> 1.5.11
+on:
+  push:
+    branches: [test/update-path-1511]
+    paths: [.ci/updatepath]
+permissions:
+  contents: write
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download published APKs from GitHub Releases
+        run: |
+          mkdir -p dl proof
+          curl -sL -o dl/velora-v1.5.10.apk "https://github.com/vedant48/velora/releases/download/v1.5.10/velora-v1.5.10.apk"
+          curl -sL -o dl/velora-v1.5.11.apk "https://github.com/vedant48/velora/releases/download/v1.5.11/velora-v1.5.11.apk"
+          ls -la dl
+          echo "18eaa207cb6d7083b9609a9cef1a14137298f818ebe69028c7facdc799ece65f  dl/velora-v1.5.10.apk" | sha256sum -c -
+          echo "ff6a4aa0ea936a20c830c785d135492a5443e32949ba2f850eeae809e509f0cc  dl/velora-v1.5.11.apk" | sha256sum -c -
+      - name: Enable emulator acceleration
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules && sudo udevadm trigger --name-match=kvm
+      - uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          target: google_apis
+          arch: x86_64
+          profile: pixel_2
+          ram-size: 3072
+          disable-animations: false
+          emulator-options: -no-window -gpu swiftshader -no-snapshot -noaudio -no-boot-anim
+          script: bash scripts/update-path.sh
+      - name: Publish evidence
+        if: always()
+        run: |
+          git config user.email ci@velora.local; git config user.name velora-ci
+          EV=$(mktemp -d); git worktree add --detach "$EV"
+          git -C "$EV" checkout --orphan ci-evidence/update1511-${{ github.run_id }}
+          git -C "$EV" rm -rf . >/dev/null 2>&1 || true
+          cp -r proof "$EV/" 2>/dev/null || true
+          printf 'run_id=%s\ncommit=%s\n' "${{ github.run_id }}" "$GITHUB_SHA" > "$EV/META.txt"
+          git -C "$EV" add -A; git -C "$EV" commit -m "update path evidence"
+          git -C "$EV" push origin HEAD:ci-evidence/update1511-${{ github.run_id }}
