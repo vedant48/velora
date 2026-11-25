@@ -9,6 +9,7 @@ import { LibraryItem, veloraApi } from '../../api/velora';
 import { TVCollections } from '../../components/Collections/TVCollections';
 import { CollectionsRail } from '../../components/Collections/CollectionsRail';
 import { HeroBanner } from '../../components/Home/HeroBanner';
+import { WideCardRail } from '../../components/Home/WideCardRail';
 import { TrailersRail } from '../../components/Home/TrailersRail';
 import { WatchNextRail } from '../../components/Home/WatchNextRail';
 import { MovieCarousel } from '../../components/MovieCarousel/MovieCarousel';
@@ -59,17 +60,21 @@ export function ExploreScreen({ kind }: { kind: 'movies' | 'tv' | 'all' }) {
   return <View style={{ flex: 1, backgroundColor: colors.background, paddingTop: insets.top }}>
     <ViewportContext.Provider value={{ offset, height: viewportHeight }}><ScrollView onScroll={e => setOffset(Math.floor(e.nativeEvent.contentOffset.y / 160) * 160)} scrollEventThrottle={100} contentContainerStyle={{ paddingBottom: insets.bottom + 88 }} showsVerticalScrollIndicator={false} refreshControl={<RefreshControl refreshing={trending.isRefetching || television.isRefetching} onRefresh={() => { void trending.refetch(); void television.refetch(); void nowPlaying.refetch(); void upcoming.refetch(); void streaming.refetch(); if (seed) void recommended.refetch(); }} tintColor={colors.primary} />}>
       <Text accessibilityRole="header" style={[styles.title, { color: colors.appleText }]}>{kind === 'tv' ? 'TV Shows' : kind === 'movies' ? 'Movies' : 'Explore All'}</Text>
-      {kind !== 'all' && heroItem && (
+      {heroItem && (
         <HeroBanner
           item={heroItem}
-          eyebrow={kind === 'tv' ? 'Series pick for you' : 'Trending now'}
+          eyebrow={kind === 'tv' ? 'Series pick for you' : kind === 'all' ? 'Featured' : 'Trending now'}
           tracked={tracked[`${heroItem.media_type ?? 'movie'}:${heroItem.id}`]}
           onDetails={open}
           onWant={addToWant}
         />
       )}
       {kind !== 'tv' && <>
-        <LazySection>{rail(seed ? 'For you' : 'Trending movies', forYou)}</LazySection>
+        {kind === 'all' ? (
+          <LazySection height={240}><WideCardRail title="Trending this week" items={trending.data ?? []} onItemPress={open} /></LazySection>
+        ) : (
+          <LazySection>{rail(seed ? 'For you' : 'Trending movies', forYou)}</LazySection>
+        )}
         <LazySection height={230}><TrailersRail items={nowPlaying.data ?? []} onItemPress={open} /></LazySection>
         <LazySection>{rail('Available for streaming', streaming)}</LazySection>
         <LazySection>{rail('In Theaters Now', nowPlaying)}</LazySection>

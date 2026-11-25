@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { genreNames } from '../../api/genres';
 import { MediaItem } from '../../api/types';
 import { CachedImage as Image } from '../../experience/CachedImage';
 import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
@@ -21,6 +22,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ item, eyebrow, tracked, 
   const { colors } = useAppTheme();
   const styles = useThemedStyles(createStyles);
   const year = (item.release_date ?? '').slice(0, 4);
+  const genres = genreNames(item.genre_ids, item.media_type === 'tv' ? 'tv' : 'movie');
   const uri = item.backdrop_path ? `${TMDB_BACKDROP}${item.backdrop_path}` : item.poster_path ? `${TMDB_BACKDROP}${item.poster_path}` : null;
   const inLibrary = !!tracked;
   return (
@@ -32,9 +34,10 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ item, eyebrow, tracked, 
         <Text style={styles.title} numberOfLines={2}>{item.title}</Text>
         <View style={styles.metaRow}>
           {!!year && <Text style={styles.meta}>{year}</Text>}
+          {!!genres && <Text style={styles.meta}>{`${year ? ' · ' : ''}${genres}`}</Text>}
           {item.vote_average > 0 && (
             <>
-              {!!year && <Text style={styles.meta}> · </Text>}
+              {(!!year || !!genres) && <Text style={styles.meta}> · </Text>}
               <Ionicons name="star" size={12} color={colors.appleAmber} />
               <Text style={styles.meta}> {item.vote_average.toFixed(1)}</Text>
             </>

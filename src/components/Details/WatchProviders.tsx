@@ -86,13 +86,13 @@ export const WatchProviders = memo(({ id, isMovie }: WatchProvidersProps) => {
         accessibilityLabel="Watch online: show all providers"
       >
         <View style={styles.playCircle}>
-          <Ionicons name="play" size={13} color={colors.textPrimary} />
+          <Ionicons name="play" size={13} color={colors.primary} />
         </View>
         <Text style={styles.rowTitle}>Watch online</Text>
         <View style={styles.rowSpacer} />
         <View style={styles.logoRow}>
           {providers.slice(0, 4).map(({ provider }) => (
-            <ProviderLogo key={provider.provider_id} provider={provider} size={26} />
+            <ProviderLogo key={provider.provider_id} provider={provider} size={22} />
           ))}
         </View>
       </Pressable>
@@ -122,9 +122,8 @@ export const WatchProviders = memo(({ id, isMovie }: WatchProvidersProps) => {
 
 const createStyles = (colors: AppColors) => StyleSheet.create({
   container: {
-    marginTop: metrics.spacingLg,
-    marginBottom: metrics.spacingMd,
-    paddingHorizontal: metrics.screenHorizontalPadding,
+    marginTop: 0,
+    marginBottom: 0,
   },
   row: {
     flexDirection: 'row',
@@ -135,7 +134,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     width: 30,
     height: 30,
     borderRadius: 15,
-    backgroundColor: colors.surfaceLight,
+    backgroundColor: 'rgba(229,9,20,0.18)',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,

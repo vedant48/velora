@@ -268,10 +268,9 @@ export const LibraryScreen: React.FC = () => {
       : null;
     const dist = ratingDistribution(rated.map(r => r.rating));
     const maxDist = Math.max(1, ...dist);
-    // Apple redesign tiles use real data only: "This year" counts titles whose last
-    // library update is in the current year (no separate watch-date field exists).
+    // "This year" counts real rating events dated this year (review created_at).
     const year = new Date().getFullYear();
-    const thisYear = allItems.filter((i) => i.status === 'watched' && new Date(i.updated_at).getFullYear() === year).length;
+    const thisYear = rated.filter((r) => new Date(r.created_at).getFullYear() === year).length;
     // Recent activity rows come from actual ratings (title resolved from the library).
     const activity = rated
       .slice()
@@ -395,7 +394,7 @@ export const LibraryScreen: React.FC = () => {
                   <View style={styles.insightTile}>
                     <Text style={styles.insightTileLabel}>This year</Text>
                     <Text style={styles.insightTileValue}>{insights.thisYear}</Text>
-                    <Text style={styles.insightTileSub}>titles watched</Text>
+                    <Text style={styles.insightTileSub}>titles rated</Text>
                   </View>
                   <View style={styles.insightTile}>
                     <Text style={styles.insightTileLabel}>Movies watched</Text>

@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { CachedImage as Image } from '../../experience/CachedImage';
+import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Linking, Pressable, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -268,13 +269,33 @@ export const DetailsScreen: React.FC = () => {
         : 'Watched'
     : null;
 
+  // Apple redesign: backdrop hero + grouped stats card (approved gallery direction)
+  const backdropUrl = getImageUrl(
+    (details as any)?.backdrop_path || initialItem.backdrop_path || null,
+    'backdrop'
+  );
+  const year = releaseDate ? String(releaseDate).slice(0, 4) : '';
+  const runtimeMinutes =
+    Number((details as any)?.runtime ?? (details as any)?.episode_run_time?.[0] ?? 0) || 0;
+  const runtimeText =
+    runtimeMinutes > 0 ? `${Math.floor(runtimeMinutes / 60)}h ${runtimeMinutes % 60}m` : '';
+  const metaLine = [isMovie ? year : airRange ?? '', runtimeText].filter(Boolean).join(' · ');
+  const genresText = (details?.genres ?? []).map((g) => g.name).join(' · ');
+  const statCells: { value: string; label: string; accent?: boolean }[] = [
+    ...(tmdbRating > 0 ? [{ value: tmdbRating.toFixed(1), label: 'TMDB', accent: true }] : []),
+    { value: String(titleStats?.want ?? '-'), label: 'Want' },
+    {
+      value: String(isMovie ? titleStats?.watched ?? '-' : titleStats?.watching ?? '-'),
+      label: isMovie ? 'Watched' : 'Watching',
+    },
+    { value: String(titleStats?.reviews ?? '-'), label: 'Reviews' },
+  ];
+
   return (
     <View style={styles.root}>
       <StatusBar barStyle={mode === 'dark' ? 'light-content' : 'dark-content'} translucent backgroundColor="transparent" />
 
-      {/* Opaque top bar: back + collapse. Content scrolls under it
-          without showing through, and the scroll inset below keeps the
-          first content clear of the buttons. */}
+      {/* Floating back + collapse circles over the hero (approved mock). */}
       <View
         style={[
           styles.floatingHeader,
@@ -287,7 +308,7 @@ export const DetailsScreen: React.FC = () => {
           hitSlop={8}
           accessibilityLabel="Go back"
         >
-          <Ionicons name="arrow-back" size={20} color={colors.textTertiary} />
+          <Ionicons name="arrow-back" size={20} color="#FFF" />
         </Pressable>
 
         <Pressable
@@ -296,64 +317,80 @@ export const DetailsScreen: React.FC = () => {
           hitSlop={8}
           accessibilityLabel="Close details"
         >
-          <Ionicons name="chevron-down" size={22} color={colors.textTertiary} />
+          <Ionicons name="chevron-down" size={22} color="#FFF" />
         </Pressable>
       </View>
 
       <ScrollView
         style={styles.container}
-        contentContainerStyle={[
-          styles.scrollContent,
-          { paddingTop: Math.max(insets.top, 12) + 46 },
-        ]}
+        contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {/* Centered portrait poster with trailer play (Must reference) */}
-        <View style={styles.posterSection}>
-          <View style={styles.posterWrap}>
+        {/* Apple redesign: full-bleed backdrop hero fading into the page */}
+        <View style={styles.hero}>
+          {backdropUrl ? (
             <Image
-              source={posterUrl ? { uri: posterUrl } : undefined}
-              style={styles.poster}
+              source={{ uri: backdropUrl }}
+              style={StyleSheet.absoluteFill}
               contentFit="cover"
               priority="high"
               transition={IMAGE_CONFIG.transition}
               cachePolicy={IMAGE_CONFIG.cachePolicy}
               placeholder={IMAGE_CONFIG.placeholder}
             />
-            {trailerUrl && (
-              <Pressable
-                onPress={openTrailer}
-                style={styles.playButton}
-                accessibilityLabel="Play trailer on YouTube"
-                accessibilityRole="button"
-              >
-                <Ionicons name="play" size={30} color="#FFF" style={{ marginLeft: 3 }} />
-              </Pressable>
-            )}
-            {statusBadge && (
-              <View style={styles.statusBadge}>
-                <Text style={styles.statusBadgeText}>{statusBadge}</Text>
-              </View>
-            )}
-          </View>
+          ) : null}
+          <LinearGradient
+            colors={['rgba(0,0,0,0.2)', 'rgba(0,0,0,0.45)', colors.background]}
+            locations={[0, 0.55, 1]}
+            style={StyleSheet.absoluteFill}
+            pointerEvents="none"
+          />
         </View>
 
         {/* Content Section */}
         <View style={styles.mainInfo}>
-          {/* Title */}
-          <Text style={styles.title}>{title}</Text>
-
-          {/* Date / air range + ended badge */}
-          <View style={styles.dateRow}>
-            {isMovie && releaseDate ? (
-              <Text style={styles.dateText}>{formatDateLong(releaseDate)}</Text>
-            ) : null}
-            {isTV && airRange ? <Text style={styles.dateText}>{airRange}</Text> : null}
-            {endedBadge ? (
-              <View style={styles.endedPill}>
-                <Text style={styles.endedPillText}>{endedBadge}</Text>
-              </View>
-            ) : null}
+          {/* Poster + title/meta overlapping the hero bottom (approved mock detailhead) */}
+          <View style={styles.detailHead}>
+            <View style={styles.posterWrap}>
+              <Image
+                source={posterUrl ? { uri: posterUrl } : undefined}
+                style={styles.poster}
+                contentFit="cover"
+                priority="high"
+                transition={IMAGE_CONFIG.transition}
+                cachePolicy={IMAGE_CONFIG.cachePolicy}
+                placeholder={IMAGE_CONFIG.placeholder}
+              />
+              {trailerUrl && (
+                <Pressable
+                  onPress={openTrailer}
+                  style={styles.playButton}
+                  accessibilityLabel="Play trailer on YouTube"
+                  accessibilityRole="button"
+                >
+                  <Ionicons name="play" size={16} color="#FFF" style={{ marginLeft: 2 }} />
+                </Pressable>
+              )}
+              {statusBadge && (
+                <View style={styles.statusBadge}>
+                  <Text style={styles.statusBadgeText}>{statusBadge}</Text>
+                </View>
+              )}
+            </View>
+            <View style={styles.detailTitleCol}>
+              <Text style={styles.title}>{title}</Text>
+              {metaLine ? <Text style={styles.metaLineText}>{metaLine}</Text> : null}
+              {genresText ? (
+                <Text style={styles.genresLineText} numberOfLines={2}>
+                  {genresText}
+                </Text>
+              ) : null}
+              {endedBadge ? (
+                <View style={styles.endedPill}>
+                  <Text style={styles.endedPillText}>{endedBadge}</Text>
+                </View>
+              ) : null}
+            </View>
           </View>
 
           {/* Must-style tracking controls (pills / blue status bar + sheets) */}
@@ -371,29 +408,21 @@ export const DetailsScreen: React.FC = () => {
             onMarkAllUnwatched={isTV ? () => markAllSeasons(false) : undefined}
           />
 
-          {/* Stats row: rating + platform counts */}
+          {/* Apple redesign: grouped stats card (real TMDB + platform counts) */}
           <View style={styles.statsRow}>
-            {tmdbRating > 0 && (
-              <View style={styles.statCell}>
-                <Ionicons name="analytics" size={15} color={colors.accentCyan} />
-                <Text style={styles.statValue}>{tmdbRating.toFixed(1)}</Text>
-                <Text style={styles.statLabel}>TMDB</Text>
+            {statCells.map((cell, i) => (
+              <View key={cell.label} style={[styles.statCell, i > 0 && styles.statCellDivider]}>
+                {cell.accent ? (
+                  <View style={styles.statValueRow}>
+                    <Ionicons name="star" size={13} color="#FF9F0A" />
+                    <Text style={[styles.statValue, styles.statValueAccent]}>{cell.value}</Text>
+                  </View>
+                ) : (
+                  <Text style={styles.statValue}>{cell.value}</Text>
+                )}
+                <Text style={styles.statLabel}>{cell.label}</Text>
               </View>
-            )}
-            <View style={styles.statCell}>
-              <Text style={styles.statValue}>{titleStats?.want ?? '-'}</Text>
-              <Text style={styles.statLabel}>Want</Text>
-            </View>
-            <View style={styles.statCell}>
-              <Text style={styles.statValue}>
-                {isMovie ? titleStats?.watched ?? '-' : titleStats?.watching ?? '-'}
-              </Text>
-              <Text style={styles.statLabel}>{isMovie ? 'Watched' : 'Watching'}</Text>
-            </View>
-            <View style={styles.statCell}>
-              <Text style={styles.statValue}>{titleStats?.reviews ?? '-'}</Text>
-              <Text style={styles.statLabel}>Reviews</Text>
-            </View>
+            ))}
           </View>
 
           {/* Where to Watch (series: right under stats, per reference) */}
@@ -404,8 +433,6 @@ export const DetailsScreen: React.FC = () => {
           <Text style={styles.overviewText}>
             {overview || 'No overview available for this title.'}
           </Text>
-
-          {!!details?.genres?.length && <View style={styles.genreRow}>{details.genres.map(g => <View key={g.id} style={styles.genrePill}><Text style={styles.genreText}>{g.name}</Text></View>)}</View>}
 
           {/* Seasons & Episodes for TV Series */}
           {isTV && (
@@ -557,6 +584,9 @@ export const DetailsScreen: React.FC = () => {
                 title="More Like This"
                 data={similarMoviesQuery.data}
                 onItemPress={handleSimilarItemPress}
+                minimal
+                cardWidth={104}
+                cardHeight={156}
               />
             </View>
           )}
@@ -608,43 +638,59 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: colors.background,
   },
   circleButton: {
     width: 38,
     height: 38,
     borderRadius: 19,
-    backgroundColor: colors.surface,
+    backgroundColor: 'rgba(28,28,32,0.55)',
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 0.5,
-    borderColor: colors.border,
   },
-  posterSection: {
-    alignItems: 'center',
-    paddingTop: 12,
-    paddingBottom: 4,
-    backgroundColor: colors.background,
+  hero: {
+    height: 250,
+    backgroundColor: colors.cardBackground,
+  },
+  detailHead: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    gap: 14,
+    marginTop: -72,
+    marginBottom: 2,
+  },
+  detailTitleCol: {
+    flex: 1,
+    gap: 4,
+    paddingBottom: 2,
+  },
+  metaLineText: {
+    color: colors.appleText2,
+    fontSize: 13,
+    fontWeight: '500',
+  },
+  genresLineText: {
+    color: colors.appleText3,
+    fontSize: 13,
   },
   posterWrap: {
-    width: 218,
-    aspectRatio: 2 / 3,
+    width: 96,
+    height: 144,
     position: 'relative',
-    shadowColor: '#000', shadowOpacity: 0.18, shadowRadius: 16, shadowOffset: { width: 0, height: 10 }, elevation: 10,
+    shadowColor: '#000', shadowOpacity: 0.3, shadowRadius: 12, shadowOffset: { width: 0, height: 6 }, elevation: 8,
   },
   poster: {
-    width: 218,
-    aspectRatio: 2 / 3,
-    borderRadius: 3,
+    width: 96,
+    height: 144,
+    borderRadius: 12,
     backgroundColor: colors.cardBackground,
   },
   playButton: {
     position: 'absolute',
-    bottom: 12,
-    right: 12,
-    width: 38,
-    height: 38,
-    borderRadius: 19,
+    bottom: 8,
+    right: 8,
+    width: 30,
+    height: 30,
+    borderRadius: 15,
     backgroundColor: 'rgba(30, 30, 36, 0.85)',
     alignItems: 'center',
     justifyContent: 'center',
@@ -668,15 +714,15 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     fontWeight: '800',
   },
   mainInfo: {
-    marginTop: 24,
+    marginTop: 0,
     paddingHorizontal: metrics.screenHorizontalPadding,
     gap: 12,
   },
   title: {
-    fontSize: 18,
-    fontWeight: '800',
+    fontSize: 22,
+    fontWeight: '700',
     color: colors.textPrimary,
-    letterSpacing: -0.3,
+    letterSpacing: -0.4,
   },
   dateRow: {
     flexDirection: 'row',
@@ -704,31 +750,42 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-evenly',
-    paddingVertical: 10,
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderColor: colors.border,
+    backgroundColor: colors.appleCard,
+    borderRadius: 14,
+    paddingVertical: 12,
   },
   statCell: {
+    flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
     gap: 3,
   },
+  statCellDivider: {
+    borderLeftWidth: StyleSheet.hairlineWidth,
+    borderColor: colors.appleSeparator,
+  },
+  statValueRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
   statValue: {
     color: colors.textPrimary,
-    fontSize: 15,
-    fontWeight: '800',
+    fontSize: 17,
+    fontWeight: '700',
+  },
+  statValueAccent: {
+    color: '#FF9F0A',
   },
   statLabel: {
-    color: colors.textSecondary,
-    fontSize: 13,
-    fontWeight: '600',
+    color: colors.appleText2,
+    fontSize: 12,
   },
   sectionHeading: {
-    fontSize: 16,
-    fontWeight: '700',
+    fontSize: 17,
+    fontWeight: '600',
     color: colors.textPrimary,
-    marginTop: 10,
+    marginTop: 14,
     marginBottom: 2,
   },
   overviewText: {
@@ -744,18 +801,16 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     gap: 12,
   },
   castCard: {
-    width: 80,
+    width: 66,
     alignItems: 'center',
   },
   actorAvatar: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
+    width: 54,
+    height: 54,
+    borderRadius: 27,
     backgroundColor: colors.surfaceLight,
     overflow: 'hidden',
     marginBottom: 6,
-    borderWidth: 1,
-    borderColor: colors.border,
   },
   avatarPlaceholder: {
     flex: 1,
@@ -765,14 +820,14 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   },
   actorName: {
     color: colors.textPrimary,
-    fontSize: 11,
+    fontSize: 12,
     fontWeight: '600',
     textAlign: 'center',
     width: '100%',
   },
   characterName: {
-    color: colors.textTertiary,
-    fontSize: 10,
+    color: colors.appleText2,
+    fontSize: 11,
     textAlign: 'center',
     width: '100%',
   },
