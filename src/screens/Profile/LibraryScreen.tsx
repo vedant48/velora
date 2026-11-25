@@ -540,7 +540,8 @@ export const LibraryScreen: React.FC = () => {
     <View style={styles.root}>
       {/* Static opaque spacer owns the status-bar strip: list content can never render behind it. */}
       <View style={{ height: insets.top, backgroundColor: colors.background }} />
-      <View style={{ flex: 1 }} onLayout={(e) => setPageH(e.nativeEvent.layout.height)}>
+      {/* overflow hidden: the collapsing overlay translates above this container's top edge; without clipping it paints over the status-bar spacer (v1.5.13 regression: stats behind the status bar). */}
+      <View style={{ flex: 1, overflow: 'hidden' }} onLayout={(e) => setPageH(e.nativeEvent.layout.height)}>
       <ContentPager index={TABS.findIndex(t => t.key === tab)} onIndexChange={onPageChange} enabled={!sortSheetVisible && !menuVisible && !quickItem}>
           {TABS.map(({ key: pageTab }, pageIdx) => <View key={pageTab} style={{ flex: 1 }}>
             <AnimatedFlashList
