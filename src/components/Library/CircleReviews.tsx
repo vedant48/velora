@@ -144,7 +144,7 @@ export const CircleReviews = memo(function CircleReviews({ mediaType, tmdbId, re
             <Text style={styles.sheetName} numberOfLines={1}>{openPerson.display_name || openPerson.username}</Text>
           </View>
         )}
-        <ScrollView style={styles.sheetScroll} contentContainerStyle={styles.sheetContent}>
+        <ScrollView key={openUserId ?? 'none'} style={styles.sheetScroll} contentContainerStyle={styles.sheetContent}>
           {personRows.map(({ season, review: r }) => (
             <View key={season} style={styles.sheetRow}>
               <View style={styles.sheetRowTop}>
@@ -200,7 +200,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   sheetHeader: { flexDirection: 'row', alignItems: 'center', gap: ui.space.md, paddingHorizontal: ui.space.lg, paddingBottom: ui.space.md },
   sheetName: { flex: 1, color: colors.textPrimary, fontSize: ui.type.heading, fontWeight: '800' },
   sheetScroll: { maxHeight: ui.component.circleReviews.sheetMaxHeight },
-  sheetContent: { paddingHorizontal: ui.space.lg, gap: ui.space.lg, paddingBottom: ui.space.lg },
+  sheetContent: { paddingHorizontal: ui.space.lg, paddingTop: ui.space.sm, gap: ui.space.lg, paddingBottom: ui.space.lg },
   sheetRow: { gap: ui.space.sm },
   sheetRowTop: { flexDirection: 'row', alignItems: 'center', gap: ui.space.md },
   sheetSeason: { color: colors.textSecondary, fontSize: ui.type.body, fontWeight: '700' },
