@@ -46,6 +46,13 @@ appId: com.vedant.velora
 - takeScreenshot: s4-appearance-sheet
 - tapOn: Cancel
 - scrollUntilVisible:
+    element: Export your data
+    direction: DOWN
+    timeout: 20000
+- tapOn: Export your data
+- takeScreenshot: s4b-export-sheet
+- tapOn: Cancel
+- scrollUntilVisible:
     element: Check for updates
     direction: DOWN
     timeout: 20000
