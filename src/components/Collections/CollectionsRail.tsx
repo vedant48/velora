@@ -98,6 +98,7 @@ export const CollectionsRail = memo(function CollectionsRail({ onPressCollection
           return (
             <Pressable
               key={c.id}
+              testID={`collection-card-${c.id}`}
               onPress={() => onPressCollection(c.id, c.name)}
               style={({ pressed }) => [styles.card, pressed && { opacity: 0.85 }]}
               accessibilityRole="button"

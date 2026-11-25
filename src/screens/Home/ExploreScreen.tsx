@@ -1,7 +1,7 @@
 import { LazySection, ViewportContext } from '../../experience/LazySection';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import React, { useCallback, useEffect, useState } from 'react';
-import { RefreshControl, ScrollView, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
+import { RefreshControl, ScrollView, View, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useMovieRecommendationsQuery, useNowPlayingMoviesQuery, useStreamingMoviesQuery, useTrendingMoviesQuery, useTrendingTVQuery, useUpcomingMoviesQuery } from '../../api/queries';
 import { MediaItem } from '../../api/types';
@@ -56,10 +56,9 @@ export function ExploreScreen({ kind }: { kind: 'movies' | 'tv' | 'all' }) {
   const collections = <CollectionsRail onPressCollection={(collectionId, collectionName) => navigation.navigate('Collection', { collectionId, collectionName })} />;
   const forYou = seed ? recommended : trending;
   const heroItem = kind === 'tv' ? television.data?.[0] : forYou.data?.[0];
-  const rail = (title: string, query: typeof trending) => <MovieCarousel title={title} data={query.data} isLoading={query.isLoading} isError={query.isError} onRetry={query.refetch} onItemPress={open} cardWidth={124} cardHeight={186} minimal trackingStatus={tracked} />;
+  const rail = (title: string, query: typeof trending) => <MovieCarousel title={title} data={query.data} isLoading={query.isLoading} isError={query.isError} onRetry={query.refetch} onItemPress={open} cardWidth={116} cardHeight={174} minimal trackingStatus={tracked} />;
   return <View style={{ flex: 1, backgroundColor: colors.background, paddingTop: insets.top }}>
     <ViewportContext.Provider value={{ offset, height: viewportHeight }}><ScrollView onScroll={e => setOffset(Math.floor(e.nativeEvent.contentOffset.y / 160) * 160)} scrollEventThrottle={100} contentContainerStyle={{ paddingBottom: insets.bottom + 88 }} showsVerticalScrollIndicator={false} refreshControl={<RefreshControl refreshing={trending.isRefetching || television.isRefetching} onRefresh={() => { void trending.refetch(); void television.refetch(); void nowPlaying.refetch(); void upcoming.refetch(); void streaming.refetch(); if (seed) void recommended.refetch(); }} tintColor={colors.primary} />}>
-      <Text accessibilityRole="header" style={[styles.title, { color: colors.appleText }]}>{kind === 'tv' ? 'TV Shows' : kind === 'movies' ? 'Movies' : 'Explore All'}</Text>
       {heroItem && (
         <HeroBanner
           item={heroItem}
@@ -92,4 +91,3 @@ export function ExploreScreen({ kind }: { kind: 'movies' | 'tv' | 'all' }) {
 export const MoviesExploreScreen = () => <ExploreScreen kind="movies" />;
 export const TVExploreScreen = () => <ExploreScreen kind="tv" />;
 export const AllExploreScreen = () => <ExploreScreen kind="all" />;
-const styles = StyleSheet.create({ title: { fontSize: 34, fontWeight: '700', letterSpacing: 0.3, marginHorizontal: 20, marginTop: 4, marginBottom: 12 } });

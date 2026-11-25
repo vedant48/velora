@@ -4,9 +4,10 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { CachedImage as Image } from '../../experience/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Linking, Pressable, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
+import { Linking, Modal, Pressable, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useMovieCreditsQuery, useMovieDetailsQuery, useMovieVideosQuery, useSeasonEpisodesQuery, useSimilarMoviesQuery, useTVCreditsQuery, useTVDetailsQuery, useTVVideosQuery } from '../../api/queries';
+import { useQueryClient } from '@tanstack/react-query';
 import { getSeasonEpisodes } from '../../api/tv';
 import { MediaItem } from '../../api/types';
 import { veloraApi } from '../../api/velora';
@@ -29,6 +30,7 @@ type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 export const DetailsScreen: React.FC = () => {
   const { colors, mode } = useAppTheme();
   const styles = useThemedStyles(createStyles);
+  const queryClient = useQueryClient();
   const insets = useSafeAreaInsets();
   const route = useRoute<DetailsRouteProp>();
   const navigation = useNavigation<NavigationProp>();
@@ -39,6 +41,7 @@ export const DetailsScreen: React.FC = () => {
   const isTV = !isMovie;
 
   const [selectedSeason, setSelectedSeason] = useState(1);
+  const [seasonPickerOpen, setSeasonPickerOpen] = useState(false);
   const [selectedPersonId, setSelectedPersonId] = useState<number | null>(null);
   const [isPersonModalVisible, setIsPersonModalVisible] = useState(false);
   const [statsRefreshKey, setStatsRefreshKey] = useState(0);
@@ -178,10 +181,12 @@ export const DetailsScreen: React.FC = () => {
         // Whole-series scope includes the series-level (season 0) review.
         await veloraApi.deleteReview('tv', initialItem.id, 0).catch(() => undefined);
       }
+      // Watch state changed on the server: no consumer may serve the old progress.
+      queryClient.invalidateQueries({ queryKey: ['epProgress', initialItem.id] });
       setStatsRefreshKey((k) => k + 1);
       return true;
     },
-    [availableSeasons, selectedSeason, episodes, initialItem.id, initialItem.poster_path, title, totalEpisodes],
+    [availableSeasons, selectedSeason, episodes, initialItem.id, initialItem.poster_path, title, totalEpisodes, queryClient],
   );
 
   // Trailer: official YouTube trailer/teaser if one exists (never implies in-app playback)
@@ -279,7 +284,25 @@ export const DetailsScreen: React.FC = () => {
     Number((details as any)?.runtime ?? (details as any)?.episode_run_time?.[0] ?? 0) || 0;
   const runtimeText =
     runtimeMinutes > 0 ? `${Math.floor(runtimeMinutes / 60)}h ${runtimeMinutes % 60}m` : '';
-  const metaLine = [isMovie ? year : airRange ?? '', runtimeText].filter(Boolean).join(' · ');
+  // Content rating from the enriched details query (IN first, US fallback; never invented)
+  const certification = useMemo(() => {
+    if (!details) return null;
+    if (isMovie) {
+      const results = (details as any).release_dates?.results ?? [];
+      const pick = (cc: string) =>
+        results
+          .find((r: any) => r.iso_3166_1 === cc)
+          ?.release_dates?.map((d: any) => String(d.certification ?? '').trim())
+          .find(Boolean);
+      return pick('IN') ?? pick('US') ?? null;
+    }
+    const results = (details as any).content_ratings?.results ?? [];
+    const pick = (cc: string) => results.find((r: any) => r.iso_3166_1 === cc)?.rating;
+    return pick('IN') ?? pick('US') ?? null;
+  }, [details, isMovie]);
+  const metaLine = [isMovie ? year : airRange ?? '', runtimeText, certification]
+    .filter(Boolean)
+    .join(' · ');
   const genresText = (details?.genres ?? []).map((g) => g.name).join(' · ');
   const statCells: { value: string; label: string; accent?: boolean }[] = [
     ...(tmdbRating > 0 ? [{ value: tmdbRating.toFixed(1), label: 'TMDB', accent: true }] : []),
@@ -381,9 +404,21 @@ export const DetailsScreen: React.FC = () => {
               <Text style={styles.title}>{title}</Text>
               {metaLine ? <Text style={styles.metaLineText}>{metaLine}</Text> : null}
               {genresText ? (
-                <Text style={styles.genresLineText} numberOfLines={2}>
-                  {genresText}
-                </Text>
+                <View style={styles.genresRow}>
+                  {(details?.genres ?? []).map((g, i) => (
+                    <Pressable
+                      key={g.id}
+                      onPress={() => navigation.push('Genre', { genreId: g.id, genreName: g.name, mediaType: isMovie ? 'movie' : 'tv' })}
+                      accessibilityRole="link"
+                      accessibilityLabel={`${g.name} genre`}
+                      hitSlop={4}
+                    >
+                      <Text style={styles.genresLineText}>
+                        {g.name}{i < (details?.genres?.length ?? 0) - 1 ? ' · ' : ''}
+                      </Text>
+                    </Pressable>
+                  ))}
+                </View>
               ) : null}
               {endedBadge ? (
                 <View style={styles.endedPill}>
@@ -444,35 +479,71 @@ export const DetailsScreen: React.FC = () => {
                 )}
               </View>
 
-              {/* Season Selector Pills with rating badges */}
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.seasonsScroll}
+              {/* Apple redesign: season menu (mock single row) opening a picker sheet;
+                  per-season star ratings are preserved on the picker rows. */}
+              {(() => {
+                const current = availableSeasons.find((s: any) => s.season_number === selectedSeason);
+                const currentRating = mySeasonRatings[selectedSeason];
+                return (
+                  <Pressable
+                    testID="season-menu"
+                    style={styles.seasonMenu}
+                    onPress={() => setSeasonPickerOpen(true)}
+                    accessibilityRole="button"
+                    accessibilityLabel={`Choose season, current ${current?.name || `Season ${selectedSeason}`}`}
+                  >
+                    <Text style={styles.seasonMenuText}>{current?.name || `Season ${selectedSeason}`}</Text>
+                    {currentRating != null && (
+                      <View style={styles.ratingBadge}>
+                        <Ionicons name="star" size={10} color="#FFF" />
+                        <Text style={styles.ratingBadgeText}>{currentRating}</Text>
+                      </View>
+                    )}
+                    <Ionicons name="chevron-expand" size={14} color={colors.appleText2} />
+                  </Pressable>
+                );
+              })()}
+              <Modal
+                visible={seasonPickerOpen}
+                transparent
+                animationType="slide"
+                onRequestClose={() => setSeasonPickerOpen(false)}
               >
-                {availableSeasons.map((s: any) => {
-                  const isSelected = selectedSeason === s.season_number;
-                  const rating = mySeasonRatings[s.season_number];
-                  return (
-                    <Pressable
-                      key={s.id || s.season_number}
-                      onPress={() => setSelectedSeason(s.season_number)}
-                      style={[styles.seasonPill, isSelected && styles.seasonPillActive]}
-                      hitSlop={6}
-                    >
-                      <Text style={[styles.seasonPillText, isSelected && styles.seasonPillTextActive]}>
-                        {s.name || `Season ${s.season_number}`}
-                      </Text>
-                      {rating != null && (
-                        <View style={styles.ratingBadge}>
-                          <Ionicons name="star" size={10} color="#FFF" />
-                          <Text style={styles.ratingBadgeText}>{rating}</Text>
-                        </View>
-                      )}
-                    </Pressable>
-                  );
-                })}
-              </ScrollView>
+                <View style={styles.seasonSheetRoot}>
+                  <Pressable style={styles.seasonSheetScrim} accessibilityLabel="Close season picker" onPress={() => setSeasonPickerOpen(false)} />
+                  <View style={styles.seasonSheet}>
+                    <View style={styles.seasonSheetGrabber} />
+                    <ScrollView bounces={false}>
+                      {availableSeasons.map((s: any, i: number) => {
+                        const isSelected = selectedSeason === s.season_number;
+                        const rating = mySeasonRatings[s.season_number];
+                        return (
+                          <Pressable
+                            key={s.id || s.season_number}
+                            onPress={() => {
+                              setSelectedSeason(s.season_number);
+                              setSeasonPickerOpen(false);
+                            }}
+                            style={[styles.seasonSheetRow, i > 0 && styles.seasonSheetRowSep]}
+                            accessibilityRole="button"
+                            accessibilityLabel={s.name || `Season ${s.season_number}`}
+                          >
+                            <Text style={styles.seasonSheetRowText}>{s.name || `Season ${s.season_number}`}</Text>
+                            {rating != null && (
+                              <View style={styles.ratingBadge}>
+                                <Ionicons name="star" size={10} color="#FFF" />
+                                <Text style={styles.ratingBadgeText}>{rating}</Text>
+                              </View>
+                            )}
+                            <View style={{ flex: 1 }} />
+                            {isSelected && <Ionicons name="checkmark" size={18} color={colors.primary} />}
+                          </Pressable>
+                        );
+                      })}
+                    </ScrollView>
+                  </View>
+                </View>
+              </Modal>
 
               <EpisodeChecklist
                 seriesId={initialItem.id}
@@ -523,10 +594,10 @@ export const DetailsScreen: React.FC = () => {
                           </View>
                         )}
                       </View>
-                      <Text style={styles.actorName} numberOfLines={1}>
+                      <Text style={styles.actorName} numberOfLines={2}>
                         {member.name}
                       </Text>
-                      <Text style={styles.characterName} numberOfLines={1}>
+                      <Text style={styles.characterName} numberOfLines={2}>
                         {member.job}
                       </Text>
                     </Pressable>
@@ -557,10 +628,10 @@ export const DetailsScreen: React.FC = () => {
                           </View>
                         )}
                       </View>
-                      <Text style={styles.actorName} numberOfLines={1}>
+                      <Text style={styles.actorName} numberOfLines={2}>
                         {actor.name}
                       </Text>
-                      <Text style={styles.characterName} numberOfLines={1}>
+                      <Text style={styles.characterName} numberOfLines={2}>
                         {actor.character}
                       </Text>
                     </Pressable>
@@ -671,6 +742,10 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   genresLineText: {
     color: colors.appleText3,
     fontSize: 13,
+  },
+  genresRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
   posterWrap: {
     width: 96,
@@ -801,13 +876,13 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     gap: 12,
   },
   castCard: {
-    width: 66,
+    width: 84,
     alignItems: 'center',
   },
   actorAvatar: {
-    width: 54,
-    height: 54,
-    borderRadius: 27,
+    width: 64,
+    height: 64,
+    borderRadius: 32,
     backgroundColor: colors.surfaceLight,
     overflow: 'hidden',
     marginBottom: 6,
@@ -852,6 +927,51 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   seasonsScroll: {
     paddingVertical: 10,
     gap: 8,
+  },
+  seasonMenu: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    alignSelf: 'flex-start',
+    paddingVertical: 8,
+  },
+  seasonMenuText: {
+    color: colors.textPrimary,
+    fontSize: 15,
+    fontWeight: '600',
+  },
+  seasonSheetRoot: { flex: 1, justifyContent: 'flex-end' },
+  seasonSheetScrim: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.72)' },
+  seasonSheet: {
+    backgroundColor: colors.appleCard,
+    borderTopLeftRadius: 18,
+    borderTopRightRadius: 18,
+    paddingTop: 10,
+    paddingBottom: 34,
+    maxHeight: '60%',
+  },
+  seasonSheetGrabber: {
+    alignSelf: 'center',
+    width: 36,
+    height: 5,
+    borderRadius: 3,
+    backgroundColor: colors.appleSeparator,
+    marginBottom: 6,
+  },
+  seasonSheetRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 13,
+  },
+  seasonSheetRowSep: {
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: colors.appleSeparator,
+  },
+  seasonSheetRowText: {
+    color: colors.textPrimary,
+    fontSize: 16,
   },
   seasonPill: {
     flexDirection: 'row',

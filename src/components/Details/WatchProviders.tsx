@@ -128,7 +128,11 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 10,
+    // Apple redesign: grouped card like the gallery's Watch online row (was bare page bg).
+    backgroundColor: colors.appleCard,
+    borderRadius: 14,
+    paddingVertical: 12,
+    paddingHorizontal: 14,
   },
   playCircle: {
     width: 30,

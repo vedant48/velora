@@ -276,7 +276,7 @@ export const AccountScreen: React.FC = () => {
 
       <Text style={styles.section}>Your data</Text>
       <View style={styles.group}>
-        <Pressable onPress={() => navigation.navigate('ImportMust')} style={styles.setrow} disabled={busy !== null} accessibilityRole="button">
+        <Pressable testID="settings-import-must" onPress={() => navigation.navigate('ImportMust')} style={styles.setrow} disabled={busy !== null} accessibilityRole="button">
           <Ionicons name="cloud-upload-outline" size={18} color={colors.textPrimary} />
           <Text style={styles.setrowLabel}>Import from Must</Text>
           <View style={{ flex: 1 }} />

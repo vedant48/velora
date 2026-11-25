@@ -65,7 +65,7 @@ export async function getTVDetails(
   seriesId: number,
   signal?: AbortSignal
 ): Promise<TVDetails> {
-  return proxyGet<TVDetails>(`/v1/tmdb/3/tv/${seriesId}`, { signal });
+  return proxyGet<TVDetails>(`/v1/tmdb/3/tv/${seriesId}?append_to_response=content_ratings`, { signal });
 }
 
 export async function getTVCredits(

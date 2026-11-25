@@ -1,5 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useQueryClient } from '@tanstack/react-query';
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
@@ -48,6 +49,7 @@ export const EpisodeChecklist = memo(function EpisodeChecklist({
 }: EpisodeChecklistProps) {
   const { colors } = useAppTheme();
   const styles = useThemedStyles(createStyles);
+  const queryClient = useQueryClient();
   const [watchedSet, setWatchedSet] = useState<Set<string>>(new Set());
   const [busy, setBusy] = useState(false);
   const [showHint, setShowHint] = useState(false);
@@ -127,6 +129,8 @@ export const EpisodeChecklist = memo(function EpisodeChecklist({
           posterPath,
         });
         setWatchedSet((prev) => new Set(prev).add(`${ep.season_number}:${ep.episode_number}`));
+        // Watch state changed on the server: no consumer may serve the old progress.
+        queryClient.invalidateQueries({ queryKey: ['epProgress', seriesId] });
         onChanged?.();
       } catch {
         // keep state
@@ -135,7 +139,7 @@ export const EpisodeChecklist = memo(function EpisodeChecklist({
       }
       swipeRefs.current.get(ep.episode_number)?.close();
     },
-    [signedIn, busy, seriesId, title, posterPath, dismissHint, onChanged],
+    [signedIn, busy, seriesId, title, posterPath, dismissHint, onChanged, queryClient],
   );
 
   const setWholeSeason = useCallback(
@@ -154,6 +158,7 @@ export const EpisodeChecklist = memo(function EpisodeChecklist({
           await veloraApi.deleteReview('tv', seriesId, seasonNumber).catch(() => undefined);
           setSeasonReview(null);
         }
+        queryClient.invalidateQueries({ queryKey: ['epProgress', seriesId] });
         setWatchedSet((prev) => {
           const next = new Set(prev);
           for (const e of episodes) {
@@ -170,7 +175,7 @@ export const EpisodeChecklist = memo(function EpisodeChecklist({
         setBusy(false);
       }
     },
-    [signedIn, busy, seriesId, seasonNumber, episodes, title, posterPath, onChanged],
+    [signedIn, busy, seriesId, seasonNumber, episodes, title, posterPath, onChanged, queryClient],
   );
 
   const renderLeftActions = useCallback(

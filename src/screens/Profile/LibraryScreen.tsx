@@ -3,7 +3,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { FlashList } from '@shopify/flash-list';
 import React, { memo, useCallback, useMemo, useRef, useState } from 'react';
-import { Alert, Animated, Image, Modal, Pressable, RefreshControl, Share, StyleSheet, Switch, Text, View } from 'react-native';
+import { Alert, Modal, Pressable, RefreshControl, Share, StyleSheet, Switch, Text, View } from 'react-native';
 import { ContentPager } from '../../experience/ContentPager';
 import { endedCompleteLast, itemInTab, LibraryTab } from './libraryTabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -15,8 +15,10 @@ import { ActionSheet } from '../../components/Library/ActionSheet';
 import { LibraryCard } from '../../components/Library/LibraryCard';
 import { LibraryQuickAction } from '../../components/Library/LibraryQuickAction';
 import { isEndedComplete, seriesProgress } from '../../components/Library/seriesProgress';
+import { useInsightsMeta } from './useInsightsMeta';
 import { CachedImage } from '../../experience/CachedImage';
-import { useQueries } from '@tanstack/react-query';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useQueries, useQuery } from '@tanstack/react-query';
 import { getTVDetails } from '../../api/tv';
 import { GC_TIME, STALE_TIME, useTVDetailsQuery } from '../../api/queries';
 import { checkForUpdate, downloadAndInstall } from '../../services/updates';
@@ -66,26 +68,17 @@ export const LibraryScreen: React.FC = () => {
   const [tab, setTab] = useState<TabKey>('want');
   const [sort, setSort] = useState<SortKey>('recent');
   const [sortSheetVisible, setSortSheetVisible] = useState(false);
-  // Collapsing overlay header (owner reference video, 25 Nov): initial order is
-  // app-icon bar, then profile details, then the tab row. On scroll the icon bar
-  // AND the profile details scroll away; only tabs + filter pin at the top.
-  const scrollY = useRef(new Animated.Value(0)).current;
-  const pageOffsets = useRef<Partial<Record<TabKey, number>>>({});
-  const [collapseH, setCollapseH] = useState(0);
+  // Collapsing header v3 (scroll-flicker repair ported from fix/library-collapse-flicker
+  // b60d00d): the icon bar + profile live INSIDE each page's list as its ListHeaderComponent,
+  // so they scroll away natively with the content - no JS-driven animated height on the
+  // scroll path (the v1.5.10 clip-window overlay flickered on real devices: useNativeDriver:
+  // false height updates arrived in bursts). The tab row + filter is data row 0 with
+  // stickyHeaderIndices=[0], so it pins natively once scrolled to. A static opaque spacer
+  // above the list owns the status-bar strip. Each page list keeps its own scroll offset,
+  // so tab switches preserve position with no scroll syncing.
   const [pinnedH, setPinnedH] = useState(0);
-  const collapseRange = Math.max(collapseH, 1);
-  // Clip-window collapse (owner report, 25 Nov): the icon bar + profile live in a window
-  // whose height animates collapseH -> 0 with overflow hidden, bottom-anchored so content
-  // exits upward. A static opaque spacer owns the status-bar strip, so scrolled-away content
-  // can never render behind the status bar, and the window clamps to exactly 0 so no
-  // measurement drift can leave a gap above the pinned tabs.
-  const clipH = useMemo(
-    () => scrollY.interpolate({ inputRange: [0, collapseRange], outputRange: [collapseH, 0], extrapolate: 'clamp' }),
-    [scrollY, collapseRange, collapseH],
-  );
-  const syncScrollTo = useCallback((key: TabKey) => { scrollY.setValue(pageOffsets.current[key] ?? 0); }, [scrollY]);
-  const selectTab = useCallback((next: TabKey) => { setSortSheetVisible(false); syncScrollTo(next); setTab(next); }, [syncScrollTo]);
-  const onPageChange = useCallback((index: number) => { syncScrollTo(TABS[index].key); setTab(TABS[index].key); }, [syncScrollTo]);
+  const selectTab = useCallback((next: TabKey) => { setSortSheetVisible(false); setTab(next); }, []);
+  const onPageChange = useCallback((index: number) => { setTab(TABS[index].key); }, []);
 
   const [items, setItems] = useState<LibraryItem[]>([]);
   const [allItems, setAllItems] = useState<LibraryItem[]>([]);
@@ -233,31 +226,26 @@ export const LibraryScreen: React.FC = () => {
     Share.share({ message: `Follow me on Velora: @${user.username}` }).catch(() => undefined);
   }, [user?.username, refreshKey]);
 
-  const keyExtractor = useCallback((i: LibraryItem) => i.id, []);
-  const renderItem = useCallback(
-    ({ item }: { item: LibraryItem }) => (
-      <View style={styles.gridCell}>
-        <LibraryCard item={item} onPress={openItem} onLongPress={i => i.media_type === 'movie' && i.status === 'want' ? setQuickItem(i) : removeItem(i)} />
-      </View>
-    ),
-    [openItem, removeItem, styles],
-  );
-
-  // Apple redesign: the Series tab is a grouped list card with per-series progress bars.
-  const renderSeriesItem = useCallback(
-    ({ item, index }: { item: LibraryItem; index: number }) => (
-      <SeriesRow
-        item={item}
-        first={index === 0}
-        last={index === itemsByTab.series.length - 1}
-        onPress={openItem}
-        onLongPress={i => setQuickItem(i)}
-      />
-    ),
-    [openItem, itemsByTab.series.length],
-  );
-  const renderSeriesSep = useCallback(() => <View style={styles.seriesSep} />, [styles]);
-
+  // Sticky-header rows: row 0 of every page's data is the tab strip (pins natively);
+  // loading/error/empty are single full-width rows after it.
+  type RowItem = LibraryItem | { __row: 'tabs' | 'loader' | 'error' | 'empty'; id: string };
+  const ROW_TABS: RowItem = { __row: 'tabs', id: '__tabs' };
+  const ROW_LOADER: RowItem = { __row: 'loader', id: '__loader' };
+  const ROW_ERROR: RowItem = { __row: 'error', id: '__error' };
+  const ROW_EMPTY: RowItem = { __row: 'empty', id: '__empty' };
+  const rowsByTab = useMemo(() => {
+    const out: Partial<Record<TabKey, RowItem[]>> = {};
+    for (const t of TABS) {
+      if (t.key === 'insights') out[t.key] = [ROW_TABS];
+      else if (loading) out[t.key] = [ROW_TABS, ROW_LOADER];
+      else if (loadError) out[t.key] = [ROW_TABS, ROW_ERROR];
+      else if (itemsByTab[t.key].length === 0) out[t.key] = [ROW_TABS, ROW_EMPTY];
+      else out[t.key] = [ROW_TABS, ...itemsByTab[t.key]];
+    }
+    return out;
+  }, [itemsByTab, loading, loadError]);
+  const keyExtractor = useCallback((i: RowItem) => ('__row' in i ? i.id : i.id), []);
+  const getItemType = useCallback((i: RowItem) => ('__row' in i ? i.__row : 'card'), []);
   const insights = useMemo(() => {
     const watchedMovies = allItems.filter((i) => i.media_type === 'movie' && i.status === 'watched');
     const series = allItems.filter((i) => itemInTab(i, 'series'));
@@ -266,7 +254,9 @@ export const LibraryScreen: React.FC = () => {
     const avg = rated.length
       ? (rated.reduce((s, r) => s + (r.rating ?? 0), 0) / rated.length).toFixed(1)
       : null;
-    const dist = ratingDistribution(rated.map(r => r.rating));
+    // Real scale is 1-10; bin 0 (only exact-zero ratings, impossible on this scale)
+    // is dropped so the chart labels run 1..10, not 1..11.
+    const dist = ratingDistribution(rated.map(r => r.rating)).slice(1);
     const maxDist = Math.max(1, ...dist);
     // "This year" counts real rating events dated this year (review created_at).
     const year = new Date().getFullYear();
@@ -286,6 +276,10 @@ export const LibraryScreen: React.FC = () => {
       });
     return { watchedMovies: watchedMovies.length, series: series.length, episodes, avg, dist, maxDist, ratedCount: rated.length, thisYear, activity };
   }, [allItems, myReviews]);
+
+  // Mock's Time watched / Top genre tiles: lazily aggregated real metadata with explicit
+  // coverage; each tile stays hidden until its data is meaningful (see useInsightsMeta).
+  const meta = useInsightsMeta(allItems, tab === 'insights', apiReady, user?.id);
 
   // Owner rule (25 Nov, with Must reference video): profile details scroll away with the grid;
   // only the Want/Watched/Series/Insights tabs and the filter icon stay pinned at the top.
@@ -353,6 +347,75 @@ export const LibraryScreen: React.FC = () => {
     [tab, selectTab, appliedFilters, appliedSort, sortSheetVisible, colors, styles],
   );
 
+  // Owner rule (25 Nov): no VELORA text; brand tile on the left, settings + overflow on the right.
+  // Initial order per page: tile bar, then profile details, then the sticky tab row.
+  const listTopHeader = useMemo(
+    () => (
+      <>
+        <View style={styles.topRow}>
+          <View style={styles.brandTile} accessibilityLabel="Velora" accessibilityRole="image">
+            <LinearGradient colors={['#E50914', '#8f050d']} start={{ x: 0.25, y: 0.07 }} end={{ x: 0.75, y: 0.93 }} style={styles.brandTileGradient}>
+              <Text style={styles.brandTileV}>V</Text>
+            </LinearGradient>
+          </View>
+          <View style={styles.topActions}>
+            <Pressable onPress={() => navigation.navigate('Account')} style={styles.circleButton} accessibilityLabel="Settings"><Ionicons name="settings-outline" size={17} color={colors.appleText} /></Pressable>
+            <Pressable onPress={() => setMenuVisible(true)} style={styles.circleButton} accessibilityLabel="More profile actions"><Ionicons name="ellipsis-horizontal" size={18} color={colors.appleText} /></Pressable>
+          </View>
+        </View>
+        <View style={{ paddingHorizontal: ui.component.profileHeader.horizontalPadding }}>{profileHeader}</View>
+      </>
+    ),
+    [profileHeader, navigation, colors, styles],
+  );
+
+  const renderMetaRow = useCallback(
+    (item: RowItem & { __row: string }) => {
+      if (item.__row === 'tabs') return (
+        <View onLayout={(e) => setPinnedH(e.nativeEvent.layout.height)} style={styles.stickyTabs}>
+          <View style={{ paddingHorizontal: ui.component.libraryTabs.horizontalPadding, paddingTop: ui.component.libraryTabs.topPadding }}>{tabsHeader}</View>
+        </View>
+      );
+      if (item.__row === 'loader') return <AppLoader style={{ marginTop: ui.space.xxl }} />;
+      if (item.__row === 'error') return <Pressable onPress={() => setRefreshKey(k => k + 1)} accessibilityRole="button"><Text style={styles.emptyText}>Could not load your library. Tap to retry.</Text></Pressable>;
+      return <Text style={styles.emptyText}>Nothing here yet. Rate and track from any title page.</Text>;
+    },
+    [styles, tabsHeader],
+  );
+  const renderItem = useCallback(
+    ({ item }: { item: RowItem }) => {
+      if ('__row' in item) return renderMetaRow(item);
+      return (
+        <View style={styles.gridCell}>
+          <LibraryCard item={item} onPress={openItem} onLongPress={i => i.media_type === 'movie' && i.status === 'want' ? setQuickItem(i) : removeItem(i)} />
+        </View>
+      );
+    },
+    [openItem, removeItem, styles, renderMetaRow],
+  );
+
+  // Apple redesign: the Series tab is a grouped list card with per-series progress bars.
+  // Data row 0 is the sticky tab strip, so the series position is index - 1.
+  const renderSeriesItem = useCallback(
+    ({ item, index }: { item: RowItem; index: number }) => {
+      if ('__row' in item) return renderMetaRow(item);
+      return (
+        <SeriesRow
+          item={item}
+          first={index === 1}
+          last={index - 1 === itemsByTab.series.length - 1}
+          onPress={openItem}
+          onLongPress={i => setQuickItem(i)}
+        />
+      );
+    },
+    [openItem, itemsByTab.series.length, renderMetaRow],
+  );
+  const renderSeriesSep = useCallback(
+    ({ leadingItem }: { leadingItem?: RowItem }) => (leadingItem && '__row' in leadingItem ? null : <View style={styles.seriesSep} />),
+    [styles],
+  );
+
   if (!apiReady || !user) {
     return (
       <View style={styles.emptyRoot}>
@@ -372,23 +435,26 @@ export const LibraryScreen: React.FC = () => {
 
   return (
     <View style={styles.root}>
+      {/* Static opaque spacer owns the status-bar strip: list content can never render behind it. */}
+      <View style={{ height: insets.top, backgroundColor: colors.background }} />
       <View style={{ flex: 1 }}>
       <ContentPager index={TABS.findIndex(t => t.key === tab)} onIndexChange={onPageChange} enabled={!sortSheetVisible && !menuVisible && !quickItem}>
           {TABS.map(({ key: pageTab }) => <View key={pageTab} style={{ flex: 1 }}>
             <FlashList
               testID={`library-page-${pageTab}`}
               maintainVisibleContentPosition={{ disabled: true }}
-              data={pageTab === 'insights' || loading || loadError ? [] : itemsByTab[pageTab]}
+              data={rowsByTab[pageTab]}
               keyExtractor={keyExtractor} renderItem={pageTab === 'series' ? renderSeriesItem : renderItem} numColumns={pageTab === 'series' ? 1 : 2}
+              getItemType={getItemType}
+              overrideItemLayout={(layout: { span?: number }, item: RowItem) => { if ('__row' in item) layout.span = pageTab === 'series' ? 1 : 2; }}
               ItemSeparatorComponent={pageTab === 'series' ? renderSeriesSep : undefined}
+              stickyHeaderIndices={[0]}
               drawDistance={280}
-              onScroll={pageTab === tab
-                ? Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], { useNativeDriver: false, listener: (e: any) => { pageOffsets.current[pageTab] = e.nativeEvent.contentOffset.y; } })
-                : (e: any) => { pageOffsets.current[pageTab] = e.nativeEvent.contentOffset.y; }}
-              scrollEventThrottle={16}
               scrollEnabled={!sortSheetVisible}
-              refreshControl={<RefreshControl refreshing={refreshing && tab === pageTab} onRefresh={refreshProfile} colors={['#000000']} tintColor="#000000" progressBackgroundColor="#FFFFFF" progressViewOffset={insets.top + collapseH + pinnedH} />}
-              ListHeaderComponent={pageTab === 'insights' && insights ? (
+              refreshControl={<RefreshControl refreshing={refreshing && tab === pageTab} onRefresh={refreshProfile} colors={['#000000']} tintColor="#000000" progressBackgroundColor="#FFFFFF" progressViewOffset={pinnedH} />}
+              ListHeaderComponent={<>
+                {listTopHeader}
+                {pageTab === 'insights' && insights ? (
               <View style={styles.insights}>
                 <View style={styles.insightGrid}>
                   <View style={styles.insightTile}>
@@ -396,22 +462,34 @@ export const LibraryScreen: React.FC = () => {
                     <Text style={styles.insightTileValue}>{insights.thisYear}</Text>
                     <Text style={styles.insightTileSub}>titles rated</Text>
                   </View>
-                  <View style={styles.insightTile}>
-                    <Text style={styles.insightTileLabel}>Movies watched</Text>
-                    <Text style={styles.insightTileValue}>{insights.watchedMovies}</Text>
-                  </View>
-                  <View style={styles.insightTile}>
-                    <Text style={styles.insightTileLabel}>Series tracked</Text>
-                    <Text style={styles.insightTileValue}>{insights.series}</Text>
-                  </View>
+                  {meta.timeWatched && (
+                    <View style={styles.insightTile}>
+                      <Text style={styles.insightTileLabel}>Time watched</Text>
+                      <Text style={styles.insightTileValue}>{formatMinutes(meta.timeWatched.minutes)}</Text>
+                      <Text style={styles.insightTileSub}>
+                        known runtime for {meta.timeWatched.moviesKnown}/{meta.timeWatched.moviesTotal} movies
+                        {meta.timeWatched.epsTotal > 0 ? ` · ${meta.timeWatched.epsKnown}/${meta.timeWatched.epsTotal} episodes` : ''}
+                      </Text>
+                    </View>
+                  )}
                   <View style={styles.insightTile}>
                     <Text style={styles.insightTileLabel}>Average rating</Text>
                     <Text style={styles.insightTileValue}>{insights.avg ?? '-'}</Text>
                     <Text style={styles.insightTileSub}>{insights.ratedCount} rated titles & seasons</Text>
                   </View>
+                  {meta.topGenre && (
+                    <View style={styles.insightTile}>
+                      <Text style={styles.insightTileLabel}>Top genre</Text>
+                      <Text style={styles.insightTileValue}>{meta.topGenre.name}</Text>
+                      <Text style={styles.insightTileSub}>top primary genre · {meta.topGenre.known} of {meta.topGenre.total} tracked titles</Text>
+                    </View>
+                  )}
                 </View>
                 <View style={styles.chartCard}>
                   <Text style={styles.chartTitle}>Your ratings</Text>
+                  {insights.ratedCount === 0 ? (
+                    <Text style={styles.chartEmpty}>No ratings yet. Rate a title or season and your 1-10 distribution shows here.</Text>
+                  ) : (
                   <View style={styles.chart}>
                     {insights.dist.map((count, v) => (
                       <View key={v} style={styles.chartCol}>
@@ -420,6 +498,7 @@ export const LibraryScreen: React.FC = () => {
                       </View>
                     ))}
                   </View>
+                  )}
                 </View>
                 {insights.activity.length > 0 && (
                   <View style={styles.chartCard}>
@@ -436,60 +515,36 @@ export const LibraryScreen: React.FC = () => {
                 )}
               </View>
             ) : null}
-              contentContainerStyle={[styles.listContent, { paddingTop: insets.top + collapseH + pinnedH + ui.component.libraryGrid.topPadding }]}
-              ListEmptyComponent={pageTab === 'insights' ? null : loading ? <AppLoader style={{ marginTop: ui.space.xxl }} /> : loadError ? <Pressable onPress={() => setRefreshKey(k => k + 1)} accessibilityRole="button"><Text style={styles.emptyText}>Could not load your library. Tap to retry.</Text></Pressable> : <Text style={styles.emptyText}>Nothing here yet. Rate and track from any title page.</Text>}
+              </>}
+              contentContainerStyle={styles.listContent}
             />
           </View>)}
       </ContentPager>
       </View>
-      <Animated.View style={[styles.headerOverlay, { backgroundColor: colors.background }]}>
-        <View style={{ height: insets.top }} />
-        <Animated.View style={{ height: collapseH === 0 ? undefined : clipH, overflow: 'hidden', justifyContent: 'flex-end' }}>
-          <View onLayout={(e) => setCollapseH(e.nativeEvent.layout.height)}>
-      {/* Owner rule (25 Nov): no VELORA text; app icon only on the left, settings + overflow on the right. */}
-            <View style={styles.topRow}>
-              <Image source={require('../../../assets/icon.png')} style={styles.brandIcon} accessibilityLabel="Velora" />
-              <View style={styles.topActions}>
-                <Pressable onPress={() => navigation.navigate('Account')} style={styles.circleButton} accessibilityLabel="Settings"><Ionicons name="settings-outline" size={17} color={colors.appleText} /></Pressable>
-                <Pressable onPress={() => setMenuVisible(true)} style={styles.circleButton} accessibilityLabel="More profile actions"><Ionicons name="ellipsis-horizontal" size={18} color={colors.appleText} /></Pressable>
-              </View>
-            </View>
-
-            <View style={{ paddingHorizontal: ui.component.profileHeader.horizontalPadding }}>{profileHeader}</View>
-          </View>
-        </Animated.View>
-          <View onLayout={(e) => setPinnedH(e.nativeEvent.layout.height)}>
-            <View style={{ paddingHorizontal: ui.component.libraryTabs.horizontalPadding, paddingTop: ui.component.libraryTabs.topPadding }}>{tabsHeader}</View>
-          </View>
-      </Animated.View>
 
       {/* Sort & filter: iOS-style bottom sheet - sort radios, hide switches, Apply (approved gallery design). */}
       <Modal visible={sortSheetVisible && tab !== 'insights'} transparent animationType="fade" onRequestClose={() => setSortSheetVisible(false)}>
         <Pressable accessibilityLabel="Dismiss filters without applying" style={styles.sheetScrim} onPress={() => setSortSheetVisible(false)} />
         <View style={[styles.sheet, { paddingBottom: insets.bottom + 14 }]}>
           <View style={styles.sheetGrabber} />
-          <Text style={styles.sheetHeading}>Sort by</Text>
-          <View style={styles.sheetCard}>
+          <Text style={styles.sheetTitle}>Sort & filter</Text>
+          {/* Gallery style: radio rows with red selection, no section cards. */}
             {([
-              ['recent', 'Date added'], ['release', 'Release date'], ['title', 'Title A-Z'], ['rating', 'Highest rated'],
+              ['recent', 'Recently added'], ['release', 'Release date'], ['title', 'Title A–Z'], ['rating', 'Your rating'],
             ] as const).map(([key, label], i, arr) => (
               <Pressable key={key} onPress={() => setSort(key)} accessibilityRole="radio" accessibilityState={{ selected: sort === key }} style={[styles.sheetRow, i < arr.length - 1 && styles.sheetRowSep]}>
-                <Text style={[styles.sheetRowText, sort === key && { color: colors.primary }]}>{label}</Text>
-                {sort === key && <Ionicons name="checkmark" size={18} color={colors.primary} />}
+                <View style={[styles.radio, sort === key && styles.radioOn]}>{sort === key && <View style={styles.radioDot} />}</View>
+                <Text style={[styles.sheetRowText, { flex: 1 }]}>{label}</Text>
               </Pressable>
             ))}
-          </View>
-          <Text style={styles.sheetHeading}>Hide</Text>
-          <View style={styles.sheetCard}>
             {([
-              ['Movies', hideMovies, setHideMovies], ['Series', hideSeries, setHideSeries], ['Unreleased', hideUnreleased, setHideUnreleased],
+              ['Hide movies', hideMovies, setHideMovies], ['Hide series', hideSeries, setHideSeries], ['Hide unreleased', hideUnreleased, setHideUnreleased],
             ] as const).map(([label, value, set], i, arr) => (
-              <View key={label} style={[styles.sheetRow, i < arr.length - 1 && styles.sheetRowSep]}>
+              <View key={label} style={[styles.sheetRow, i === 0 && styles.sheetRowSepTop, i < arr.length - 1 && styles.sheetRowSep]}>
                 <Text style={styles.sheetRowText}>{label}</Text>
                 <Switch value={value} onValueChange={() => set(v => !v)} trackColor={{ false: 'rgba(120,120,128,0.32)', true: colors.appleGreen }} thumbColor="#FFFFFF" ios_backgroundColor="rgba(120,120,128,0.32)" />
               </View>
             ))}
-          </View>
           <Pressable accessibilityLabel="Apply filters" onPress={() => { setAppliedFilters({ hideMovies, hideSeries, hideUnreleased }); setAppliedSort(sort); setSortSheetVisible(false); }} style={styles.sheetApply}>
             <Text style={styles.sheetApplyText}>Apply</Text>
           </Pressable>
@@ -526,6 +581,14 @@ export const LibraryScreen: React.FC = () => {
 
 const TMDB_IMG = 'https://image.tmdb.org/t/p/w342';
 
+// "96h" / "7h 24m" / "45m" for the Time watched tile.
+function formatMinutes(total: number): string {
+  const h = Math.floor(total / 60);
+  const m = total % 60;
+  if (h === 0) return `${m}m`;
+  return m === 0 ? `${h}h` : `${h}h ${m}m`;
+}
+
 // "2h ago" style relative time for the insights activity rows.
 function timeAgo(iso: string): string {
   const then = new Date(iso).getTime();
@@ -557,9 +620,24 @@ const SeriesRow = memo(function SeriesRow({ item, first, last, onPress, onLongPr
   const prog = seriesProgress(item);
   const { data: tmdb } = useTVDetailsQuery(item.tmdb_id, !!prog && prog.left === 0);
   const ended = isEndedComplete(prog, tmdb);
+  const { apiReady } = useAuth();
+  // Current-season label: the latest season with recorded watched progress (a fact
+  // from the progress endpoint, not an inferred "next unwatched" guess). Lazy + cached.
+  const { data: epProgress } = useQuery({
+    queryKey: ['epProgress', item.tmdb_id],
+    queryFn: () => veloraApi.getEpisodeProgress(item.tmdb_id),
+    staleTime: STALE_TIME,
+    gcTime: GC_TIME,
+    enabled: apiReady && item.total_episodes > 0,
+  });
+  const currentSeason = useMemo(() => {
+    const watched = epProgress?.watched ?? [];
+    if (watched.length === 0) return null;
+    return Math.max(...watched.map((w) => w.season));
+  }, [epProgress]);
   const uri = item.poster_path ? `${TMDB_IMG}${item.poster_path}` : null;
   return (
-    <Pressable accessibilityRole="button" accessibilityLabel={item.title} onPress={() => onPress(item)} onLongPress={onLongPress ? () => onLongPress(item) : undefined}
+    <Pressable accessibilityRole="button" accessibilityLabel={`${item.title}${prog ? `, ${prog.watched} of ${prog.total} episodes` : ''}${ended ? ', Ended, all episodes watched' : ''}`} onPress={() => onPress(item)} onLongPress={onLongPress ? () => onLongPress(item) : undefined}
       style={[styles.seriesRow, first && styles.seriesRowFirst, last && styles.seriesRowLast]}>
       {uri ? (
         <CachedImage source={{ uri }} style={styles.seriesPoster} contentFit="cover" transition={150} recyclingKey={uri} />
@@ -569,7 +647,7 @@ const SeriesRow = memo(function SeriesRow({ item, first, last, onPress, onLongPr
       <View style={styles.seriesMeta}>
         <Text style={styles.seriesTitle} numberOfLines={1}>{item.title}</Text>
         <Text style={styles.seriesLine}>
-          {prog ? `${prog.watched} of ${prog.total} episodes${ended ? ' · Done' : ''}` : ''}
+          {prog ? `${currentSeason ? `Latest progress S${currentSeason} · ` : ''}${prog.watched} of ${prog.total} episodes${ended ? ' · Done' : ''}` : ''}
           {item.rating !== null && <Text style={{ color: colors.appleAmber }}>{`  ★ ${item.rating}`}</Text>}
         </Text>
         {prog && <View style={styles.seriesProgress}><View style={[styles.seriesProgressFill, { width: `${Math.round(prog.fraction * 100)}%` }]} /></View>}
@@ -591,22 +669,24 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     backgroundColor: colors.appleFill,
   },
   brand: { fontSize: 9, letterSpacing: 2, color: colors.primary, fontWeight: '700' },
-  brandIcon: {
-    width: ui.component.topRow.brandIconSize,
-    height: ui.component.topRow.brandIconSize,
-    borderRadius: ui.component.topRow.brandIconRadius,
-    marginLeft: ui.component.topRow.brandIconMarginLeft,
-    shadowColor: colors.primary,
-    shadowOpacity: 0.3,
-    shadowRadius: 10,
+  brandTile: {
+    width: 34,
+    height: 34,
+    borderRadius: 9,
+    marginLeft: 20,
+    shadowColor: '#E50914',
     shadowOffset: { width: 0, height: 3 },
-    elevation: 3,
+    shadowRadius: 10,
+    shadowOpacity: 0.3,
+    elevation: 6,
   },
+  brandTileGradient: { flex: 1, borderRadius: 9, alignItems: 'center', justifyContent: 'center' },
+  brandTileV: { color: '#FFFFFF', fontSize: 19, fontWeight: '800' },
+  stickyTabs: { backgroundColor: colors.background, marginHorizontal: -ui.component.libraryGrid.horizontalPadding, paddingHorizontal: ui.component.libraryGrid.horizontalPadding },
   topActions: { flexDirection: 'row', alignItems: 'center', gap: ui.space.md },
   photoViewerBackdrop: { flex: 1, backgroundColor: 'rgba(0,0,0,0.92)', alignItems: 'center', justifyContent: 'center' },
   photoViewerClose: { position: 'absolute', right: 16, width: 36, height: 36, borderRadius: 18, backgroundColor: 'rgba(28,28,32,0.6)', alignItems: 'center', justifyContent: 'center' },
   root: { flex: 1, backgroundColor: colors.background },
-  headerOverlay: { position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10, elevation: 10 },
   listContent: { paddingHorizontal: ui.component.libraryGrid.horizontalPadding, paddingTop: ui.component.libraryGrid.topPadding, paddingBottom: ui.component.libraryGrid.bottomPadding },
   gridCell: { flex: 1 / 2, padding: ui.component.libraryGrid.cellPadding },
   header: { gap: 0, paddingBottom: ui.space.md, paddingHorizontal: ui.component.libraryHeader.innerHorizontalPadding },
@@ -678,10 +758,13 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     paddingTop: 8,
   },
   sheetGrabber: { width: 36, height: 5, borderRadius: 2.5, backgroundColor: 'rgba(120,120,128,0.5)', alignSelf: 'center', marginBottom: 10 },
-  sheetHeading: { fontSize: 13, fontWeight: '600', color: colors.appleText2, marginTop: 4, marginBottom: 6, marginLeft: 4 },
-  sheetCard: { backgroundColor: 'rgba(120,120,128,0.16)', borderRadius: 12 },
-  sheetRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 14, paddingVertical: 11 },
+  sheetTitle: { fontSize: 17, fontWeight: '700', color: colors.appleText, textAlign: 'center', marginBottom: 10 },
+  radio: { width: 22, height: 22, borderRadius: 11, borderWidth: 2, borderColor: colors.appleText3, alignItems: 'center', justifyContent: 'center', marginRight: 12 },
+  radioOn: { borderColor: colors.primary },
+  radioDot: { width: 12, height: 12, borderRadius: 6, backgroundColor: colors.primary },
+  sheetRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 14, paddingVertical: 13 },
   sheetRowSep: { borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.appleSeparator },
+  sheetRowSepTop: { borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.appleSeparator },
   sheetRowText: { fontSize: 15, color: colors.appleText },
   sheetApply: { marginTop: 12, backgroundColor: colors.primary, borderRadius: 12, alignItems: 'center', paddingVertical: 12 },
   sheetApplyText: { fontSize: 16, fontWeight: '600', color: '#fff' },
@@ -727,6 +810,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     padding: 14,
   },
   chartTitle: { fontSize: 15, fontWeight: '600', color: colors.appleText },
+  chartEmpty: { fontSize: 13, color: colors.appleText3, textAlign: 'center', paddingVertical: 28 },
   chart: { flexDirection: 'row', alignItems: 'flex-end', gap: 6, height: 110, paddingTop: 10 },
   chartCol: { flex: 1, alignItems: 'center', gap: 4, height: '100%', justifyContent: 'flex-end' },
   chartBar: { width: '100%', borderTopLeftRadius: 3, borderTopRightRadius: 3, backgroundColor: colors.appleRedSoft },
