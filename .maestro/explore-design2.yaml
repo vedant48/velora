@@ -51,7 +51,7 @@ appId: com.vedant.velora
 # Search: iOS field + movie results
 - tapOn: 'Search'
 - extendedWaitUntil:
-    visible: 'Search movies, TV shows, actors...'
+    visible: 'Movies, series, people…'
     timeout: 20000
 - assertVisible: 'Movies, series, people…'
 - tapOn: 'Movies, series, people…'
