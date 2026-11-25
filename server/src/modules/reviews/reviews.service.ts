@@ -60,11 +60,31 @@ export class ReviewsService {
       `SELECT r.id, r.user_id, r.media_type, r.tmdb_id, r.season_number, r.rating, r.body,
               r.created_at, r.updated_at, u.username, u.display_name, u.avatar_at
        FROM reviews r JOIN users u ON u.id = r.user_id
-       WHERE r.media_type = ? AND r.tmdb_id = ?
+       WHERE r.media_type = ? AND r.tmdb_id = ? AND (u.is_private = 0 OR r.user_id = ?)
          AND (r.user_id = ? OR r.user_id IN (SELECT followee_id FROM follows WHERE follower_id = ?))
        ORDER BY r.updated_at DESC LIMIT 300`,
-      [mediaType, tmdbId, userId, userId],
+      [mediaType, tmdbId, userId, userId, userId],
     );
+    // Many ratings (e.g. imported movies) live only on library_items. Add them as rating-only title rows
+    // when the person has no rated review row for the title, so the rating row and cards stay complete.
+    const libRatings = await this.db.all(
+      `SELECT l.user_id, l.rating, l.updated_at, l.added_at, u.username, u.display_name, u.avatar_at
+       FROM library_items l JOIN users u ON u.id = l.user_id
+       WHERE l.media_type = ? AND l.tmdb_id = ? AND l.rating IS NOT NULL AND (u.is_private = 0 OR l.user_id = ?)
+         AND (l.user_id = ? OR l.user_id IN (SELECT followee_id FROM follows WHERE follower_id = ?))`,
+      [mediaType, tmdbId, userId, userId, userId],
+    );
+    for (const l of libRatings as any[]) {
+      const own = (reviews as any[]).find((r) => r.user_id === l.user_id && r.season_number === 0);
+      if (own && own.rating != null) continue; // the review row's rating wins
+      if (own) { own.rating = l.rating; continue; }
+      // For a series, the title-level rating only counts when no season rating exists (client rule).
+      (reviews as any[]).push({
+        id: `lib-${l.user_id}`, user_id: l.user_id, media_type: mediaType, tmdb_id: tmdbId, season_number: 0,
+        rating: l.rating, body: '', created_at: l.added_at, updated_at: l.updated_at,
+        username: l.username, display_name: l.display_name, avatar_at: l.avatar_at,
+      });
+    }
     // Seasons each person has watched (any episode), for the per-person drawer. Private accounts other than the caller stay hidden.
     const watched =
       mediaType === 'tv'
