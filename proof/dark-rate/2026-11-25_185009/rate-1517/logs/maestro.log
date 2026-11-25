@@ -1,0 +1,137 @@
+18:50:17.296 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Define variables RUNNING
+18:50:17.300 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Define variables COMPLETED
+18:50:17.301 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Apply configuration RUNNING
+18:50:17.301 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Apply configuration COMPLETED
+18:50:17.301 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run login-design2.yaml RUNNING
+18:50:17.302 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Apply configuration RUNNING
+18:50:17.303 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Apply configuration COMPLETED
+18:50:17.303 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Launch app "com.vedant.velora" RUNNING
+18:50:17.820 [DEBUG] maestro.Maestro.setPermissionInternal: Failed to set permission com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE for app com.vedant.velora: shell command failed (exit -1): 
+Exception occurred while executing 'grant':
+java.lang.IllegalArgumentException: Unknown permission com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE
+	at com.android.server.permission.access.permission.PermissionService.setRuntimePermissionGranted(PermissionService.kt:911)
+	at com.android.server.permission.access.permission.PermissionService.access$setRuntimePermissionGranted(PermissionService.kt:108)
+	at com.android.server.permission.access.permission.PermissionService.setRuntimePermissionGranted(PermissionService.kt:809)
+	at com.android.server.permission.access.permission.PermissionService.setRuntimePermissionGranted$default(PermissionService.kt:714)
+	at com.android.server.permission.access.permission.PermissionService.grantRuntimePermission(PermissionService.kt:676)
+	at com.android.server.pm.permission.PermissionManagerService.grantRuntimePermission(PermissionManagerService.java:585)
+	at android.permission.PermissionManager.grantRuntimePermissionInternal(PermissionManager.java:679)
+	at android.permission.PermissionManager.grantRuntimePermission(PermissionManager.java:642)
+	at com.android.server.pm.PackageManagerShellCommand.runGrantRevokePermission(PackageManagerShellCommand.java:2690)
+	at com.android.server.pm.PackageManagerShellCommand.onCommand(PackageManagerShellCommand.java:316)
+	at com.android.modules.utils.BasicShellCommandHandler.exec(BasicShellCommandHandler.java:97)
+	at android.os.ShellCommand.exec(ShellCommand.java:38)
+	at com.android.server.pm.PackageManagerService$IPackageManagerImpl.onShellCommand(PackageManagerService.java:6561)
+	at android.os.Binder.shellCommand(Binder.java:1230)
+	at android.os.Binder.onTransact(Binder.java:1043)
+	at android.content.pm.IPackageManager$Stub.onTransact(IPackageManager.java:4620)
+	at com.android.server.pm.PackageManagerService$IPackageManagerImpl.onTransact(PackageManagerService.java:6545)
+	at android.os.Binder.execTransactInternal(Binder.java:1505)
+	at android.os.Binder.execTransact(Binder.java:1444)
+
+18:50:17.822 [ INFO] maestro.Maestro.launchApp$lambda$6: Launching app com.vedant.velora
+18:50:17.823 [ INFO] maestro.Maestro.launchApp$lambda$6: Stopping com.vedant.velora app during launch
+18:50:18.382 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Launch app "com.vedant.velora" COMPLETED
+18:50:18.383 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when "Log in / Sign up" is visible RUNNING
+18:50:25.580 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandSkipped: null
+18:50:25.581 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when "Log in / Sign up" is visible SKIPPED
+18:50:25.581 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "E2E Alice.*" is visible RUNNING
+18:50:25.694 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "E2E Alice.*" is visible COMPLETED
+18:50:25.695 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run login-design2.yaml COMPLETED
+18:50:25.695 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on point (15%, 34%) RUNNING
+18:50:25.728 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (108, 544) using hierarchy based logic for wait
+18:50:26.221 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on point (15%, 34%) COMPLETED
+18:50:26.222 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "The Odyssey.*" is visible RUNNING
+18:50:26.359 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "The Odyssey.*" is visible COMPLETED
+18:50:26.359 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Take screenshot ${P}-r0-want-before RUNNING
+18:50:27.155 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+18:50:27.157 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+18:50:27.675 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Take screenshot ${P}-r0-want-before COMPLETED
+18:50:27.676 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "The Odyssey.*" RUNNING
+18:50:27.834 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=The Odyssey, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=true, bounds=[40,1122][348,1584], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.Button, important-for-accessibility=true, error=}, children=[TreeNode(attributes={text=, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[40,1122][348,1584], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.view.ViewGroup, important-for-accessibility=false, error=}, children=[TreeNode(attributes={text=, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[40,1122][348,1584], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.LinearLayout, important-for-accessibility=false, error=}, children=[TreeNode(attributes={text=, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[40,1122][348,1584], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.FrameLayout, important-for-accessibility=false, error=}, children=[TreeNode(attributes={text=, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[40,1122][348,1584], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.ImageView, important-for-accessibility=false, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false)], clickable=false, enabled=true, focused=false, checked=false, selected=false)], clickable=false, enabled=true, focused=false, checked=false, selected=false)], clickable=false, enabled=true, focused=false, checked=false, selected=false)], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=40, y=1122, width=308, height=462))
+18:50:29.140 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+18:50:29.141 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (194, 1353) using hierarchy based logic for wait
+18:50:31.996 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+18:50:31.996 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "The Odyssey.*" COMPLETED
+18:50:31.997 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "Want, options" is visible RUNNING
+18:50:32.120 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "Want, options" is visible COMPLETED
+18:50:32.121 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "Want, options" RUNNING
+18:50:32.273 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=Want, options, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=true, bounds=[32,680][580,769], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.Button, important-for-accessibility=true, error=}, children=[TreeNode(attributes={text=, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[249,707][281,741], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.TextView, important-for-accessibility=true, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false), TreeNode(attributes={text=Want, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[293,704][362,745], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.TextView, important-for-accessibility=true, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false)], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=32, y=680, width=548, height=89))
+18:50:33.497 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+18:50:33.499 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (306, 724) using hierarchy based logic for wait
+18:50:35.013 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+18:50:35.014 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "Want, options" COMPLETED
+18:50:35.014 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "Move to Watched" RUNNING
+18:50:35.080 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=Move to Watched, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[251,1379][469,1417], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.TextView, important-for-accessibility=true, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=251, y=1379, width=218, height=38))
+18:50:36.305 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+18:50:36.306 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (360, 1398) using hierarchy based logic for wait
+18:50:37.439 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+18:50:37.439 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "Move to Watched" COMPLETED
+18:50:37.439 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "Rate 7 out of 10" RUNNING
+18:50:37.547 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=Rate 7 out of 10, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=true, bounds=[528,1168][616,1256], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.view.ViewGroup, important-for-accessibility=true, error=}, children=[TreeNode(attributes={text=7, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[562,1190][581,1233], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.TextView, important-for-accessibility=true, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false)], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=528, y=1168, width=88, height=88))
+18:50:38.742 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+18:50:38.743 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (572, 1212) using hierarchy based logic for wait
+18:50:39.874 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+18:50:39.874 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "Rate 7 out of 10" COMPLETED
+18:50:39.874 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Take screenshot ${P}-r1-rate-sheet RUNNING
+18:50:39.883 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+18:50:39.884 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+18:50:40.082 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Take screenshot ${P}-r1-rate-sheet COMPLETED
+18:50:40.083 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "Save review" RUNNING
+18:50:40.195 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=Save review, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=true, bounds=[32,1457][688,1552], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.Button, important-for-accessibility=true, error=}, children=[TreeNode(attributes={text=Save, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[325,1483][395,1526], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.TextView, important-for-accessibility=true, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false)], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=32, y=1457, width=656, height=95))
+18:50:41.659 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+18:50:41.660 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (360, 1504) using hierarchy based logic for wait
+18:50:43.376 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+18:50:43.376 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "Save review" COMPLETED
+18:50:43.377 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "Watched, options" is visible RUNNING
+18:50:43.496 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "Watched, options" is visible COMPLETED
+18:50:43.496 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Take screenshot ${P}-r2-details-watched RUNNING
+18:50:43.500 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+18:50:43.501 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+18:50:43.806 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Take screenshot ${P}-r2-details-watched COMPLETED
+18:50:43.806 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Press back RUNNING
+18:50:43.807 [ INFO] maestro.Maestro.backPress: Pressing back
+18:50:45.890 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Press back COMPLETED
+18:50:45.891 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on point (34%, 34%) RUNNING
+18:50:45.931 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (244, 544) using hierarchy based logic for wait
+18:50:48.297 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+18:50:48.297 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on point (34%, 34%) COMPLETED
+18:50:48.297 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "The Odyssey.*" is visible RUNNING
+18:50:48.430 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "The Odyssey.*" is visible COMPLETED
+18:50:48.431 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Take screenshot ${P}-r3-watched-tab-badge RUNNING
+18:50:48.434 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+18:50:48.435 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+18:50:48.635 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Take screenshot ${P}-r3-watched-tab-badge COMPLETED
+18:50:48.635 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "The Odyssey.*" RUNNING
+18:50:48.727 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=The Odyssey, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=true, bounds=[40,636][348,1098], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.Button, important-for-accessibility=true, error=}, children=[TreeNode(attributes={text=, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[40,636][348,1098], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.view.ViewGroup, important-for-accessibility=false, error=}, children=[TreeNode(attributes={text=, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[40,636][348,1098], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.LinearLayout, important-for-accessibility=false, error=}, children=[TreeNode(attributes={text=, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[40,636][348,1098], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.FrameLayout, important-for-accessibility=false, error=}, children=[TreeNode(attributes={text=, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[40,636][348,1098], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.ImageView, important-for-accessibility=false, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false)], clickable=false, enabled=true, focused=false, checked=false, selected=false)], clickable=false, enabled=true, focused=false, checked=false, selected=false), TreeNode(attributes={text=, accessibilityText=Your rating 7, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[266,648][336,697], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.view.ViewGroup, important-for-accessibility=true, error=}, children=[TreeNode(attributes={text=, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[280,660][302,684], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.TextView, important-for-accessibility=true, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false), TreeNode(attributes={text=7, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[308,656][322,689], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.TextView, important-for-accessibility=true, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false)], clickable=false, enabled=true, focused=false, checked=false, selected=false)], clickable=false, enabled=true, focused=false, checked=false, selected=false)], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=40, y=636, width=308, height=462))
+18:50:49.970 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+18:50:49.971 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (194, 867) using hierarchy based logic for wait
+18:50:51.428 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+18:50:51.429 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "The Odyssey.*" COMPLETED
+18:50:51.429 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "Watched, options" is visible RUNNING
+18:50:51.553 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "Watched, options" is visible COMPLETED
+18:50:51.553 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "Watched, options" RUNNING
+18:50:51.681 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=Watched, options, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=true, bounds=[32,680][580,769], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.Button, important-for-accessibility=true, error=}, children=[TreeNode(attributes={text=, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[225,707][257,741], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.TextView, important-for-accessibility=true, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false), TreeNode(attributes={text=Watched, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[269,704][387,745], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.TextView, important-for-accessibility=true, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false)], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=32, y=680, width=548, height=89))
+18:50:52.927 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+18:50:52.928 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (306, 724) using hierarchy based logic for wait
+18:50:54.045 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+18:50:54.046 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "Watched, options" COMPLETED
+18:50:54.046 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "Move to Want" RUNNING
+18:50:54.150 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=Move to Want, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[273,1165][446,1203], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.TextView, important-for-accessibility=true, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=273, y=1165, width=173, height=38))
+18:50:55.324 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+18:50:55.325 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (359, 1184) using hierarchy based logic for wait
+18:50:56.615 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+18:50:56.615 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "Move to Want" COMPLETED
+18:50:56.615 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "Want, options" is visible RUNNING
+18:50:56.730 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "Want, options" is visible COMPLETED
+18:50:56.731 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Press back RUNNING
+18:50:56.731 [ INFO] maestro.Maestro.backPress: Pressing back
+18:50:57.759 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Press back COMPLETED
+18:50:57.759 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on point (15%, 34%) RUNNING
+18:50:57.802 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (108, 544) using hierarchy based logic for wait
+18:50:59.397 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+18:50:59.397 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on point (15%, 34%) COMPLETED
+18:50:59.398 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Take screenshot ${P}-r4-want-after-reset RUNNING
+18:50:59.403 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+18:50:59.403 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+18:50:59.997 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Take screenshot ${P}-r4-want-after-reset COMPLETED
