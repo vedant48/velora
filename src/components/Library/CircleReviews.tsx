@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { memo, useEffect, useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { MediaType, Review, veloraApi } from '../../api/velora';
+import { MediaType, Review, veloraApi, WatchedSeason } from '../../api/velora';
 import { useAuth } from '../../state/AuthContext';
 import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
 import { ui } from '../../theme/ui';
@@ -31,18 +31,23 @@ export const CircleReviews = memo(function CircleReviews({ mediaType, tmdbId, re
   const styles = useThemedStyles(createStyles);
   const { user, apiReady } = useAuth();
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [watched, setWatched] = useState<WatchedSeason[]>([]);
   const [openUserId, setOpenUserId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user || !apiReady) {
       setReviews([]);
+      setWatched([]);
       return;
     }
     let cancelled = false;
     veloraApi
       .getCircleReviews(mediaType, tmdbId)
-      .then(({ reviews: list }) => {
-        if (!cancelled) setReviews(list);
+      .then((res) => {
+        const list = res.reviews;
+        if (cancelled) return;
+        setReviews(list);
+        setWatched(res.watched ?? []);
       })
       .catch(() => undefined);
     return () => {
@@ -58,25 +63,37 @@ export const CircleReviews = memo(function CircleReviews({ mediaType, tmdbId, re
 
   const ratings = useMemo(() => {
     const byUser = new Map<string, Review>();
+    const when = (r: Review) => String(r.rated_at ?? r.updated_at);
     for (const r of reviews) {
       if (r.rating == null) continue;
       const cur = byUser.get(r.user_id);
-      // Last rated season wins; the whole-title rating (season 0) only counts when no season is rated.
-      if (!cur || r.season_number > cur.season_number) byUser.set(r.user_id, r);
+      if (!cur) {
+        byUser.set(r.user_id, r);
+        continue;
+      }
+      // A season rating beats the whole-title rating; among seasons the most recently rated wins.
+      if (cur.season_number === 0 && r.season_number > 0) byUser.set(r.user_id, r);
+      else if (cur.season_number > 0 && r.season_number === 0) continue;
+      else if (when(r) > when(cur) || (when(r) === when(cur) && r.season_number > cur.season_number)) byUser.set(r.user_id, r);
     }
     const mine = user?.id;
     return [...byUser.values()].sort(
-      (a, b) => Number(b.user_id === mine) - Number(a.user_id === mine) || String(b.updated_at).localeCompare(String(a.updated_at)),
+      (a, b) => Number(b.user_id === mine) - Number(a.user_id === mine) || String(b.rated_at ?? b.updated_at).localeCompare(String(a.rated_at ?? a.updated_at)),
     );
   }, [reviews, user?.id]);
 
   // One person's rating and review for every season they rated or wrote about, latest season first.
   const personRows = useMemo(() => {
     if (!openUserId) return [];
-    return reviews
-      .filter((r) => r.user_id === openUserId && (r.rating != null || !!r.body?.trim()))
-      .sort((a, b) => (b.season_number === 0 ? -1 : b.season_number) - (a.season_number === 0 ? -1 : a.season_number));
-  }, [reviews, openUserId]);
+    const mine = reviews.filter((r) => r.user_id === openUserId);
+    const bySeason = new Map<number, Review>(mine.map((r) => [r.season_number, r]));
+    const seasons = new Set<number>(mine.filter((r) => r.rating != null || !!r.body?.trim()).map((r) => r.season_number));
+    if (mediaType === 'tv') for (const w of watched) if (w.user_id === openUserId) seasons.add(w.season_number);
+    return [...seasons]
+      .sort((a, b) => (b === 0 ? -1 : b) - (a === 0 ? -1 : a))
+      .map((n) => ({ season: n, review: bySeason.get(n) ?? null }));
+  }, [reviews, watched, openUserId, mediaType]);
+  const openPerson = useMemo(() => reviews.find((r) => r.user_id === openUserId) ?? null, [reviews, openUserId]);
 
   if (cards.length === 0 && ratings.length === 0) return null;
 
@@ -128,25 +145,29 @@ export const CircleReviews = memo(function CircleReviews({ mediaType, tmdbId, re
         </ScrollView>
       )}
       <BottomSheet visible={openUserId !== null} onClose={() => setOpenUserId(null)} showHandle>
-        {personRows[0] && (
+        {openPerson && (
           <View style={styles.sheetHeader}>
-            <Avatar user={author(personRows[0])} size={44} />
-            <Text style={styles.sheetName} numberOfLines={1}>{personRows[0].display_name || personRows[0].username}</Text>
+            <Avatar user={author(openPerson)} size={44} />
+            <Text style={styles.sheetName} numberOfLines={1}>{openPerson.display_name || openPerson.username}</Text>
           </View>
         )}
         <ScrollView style={styles.sheetScroll} contentContainerStyle={styles.sheetContent}>
-          {personRows.map((r) => (
-            <View key={r.id} style={styles.sheetRow}>
+          {personRows.map(({ season, review: r }) => (
+            <View key={season} style={styles.sheetRow}>
               <View style={styles.sheetRowTop}>
-                <Text style={styles.sheetSeason}>{mediaType === 'tv' && r.season_number > 0 ? `Season ${r.season_number}` : mediaType === 'tv' ? 'Whole series' : 'Rating'}</Text>
-                {r.rating != null && (
+                <Text style={styles.sheetSeason}>{mediaType === 'tv' && season > 0 ? `Season ${season}` : mediaType === 'tv' ? 'Whole series' : 'Rating'}</Text>
+                {r?.rating != null && (
                   <View style={styles.badge}>
                     <Ionicons name="star" size={9} color={colors.textSecondary} />
                     <Text style={styles.badgeText}>{r.rating}</Text>
                   </View>
                 )}
               </View>
-              {!!r.body?.trim() && <Text style={styles.body}>{r.body}</Text>}
+              {!!r?.body?.trim() ? (
+                <Text style={styles.body}>{r.body}</Text>
+              ) : (
+                <Text style={styles.muted}>{r?.rating != null ? 'No written review.' : 'Watched. No rating or review.'}</Text>
+              )}
             </View>
           ))}
         </ScrollView>
@@ -190,5 +211,6 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   sheetRow: { gap: ui.space.sm },
   sheetRowTop: { flexDirection: 'row', alignItems: 'center', gap: ui.space.md },
   sheetSeason: { color: colors.textSecondary, fontSize: ui.type.body, fontWeight: '700' },
+  muted: { color: colors.textMuted, fontSize: ui.type.body },
   badgeText: { color: colors.textPrimary, fontSize: ui.type.label, fontWeight: '800' },
 });

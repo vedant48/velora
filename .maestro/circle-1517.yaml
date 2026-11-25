@@ -44,3 +44,9 @@ appId: com.vedant.velora
     visible: 'Season 2'
     timeout: 15000
 - takeScreenshot: c6-drawer-alice
+- back
+- tapOn: 'E2E Bob ratings'
+- extendedWaitUntil:
+    visible: 'Season 4'
+    timeout: 15000
+- takeScreenshot: c7-drawer-bob

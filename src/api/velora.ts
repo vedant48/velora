@@ -62,6 +62,14 @@ export interface Review {
   display_name?: string;
   /** Photo revision marker of the author; null or missing when they have no photo. */
   avatar_at?: string | null;
+  /** When the rating last changed (not text edits); null for unrated rows. */
+  rated_at?: string | null;
+}
+
+export interface WatchedSeason {
+  user_id: string;
+  season_number: number;
+  episodes: number;
 }
 
 export interface ActivityEvent {
@@ -270,7 +278,7 @@ export const veloraApi = {
   getReviews: (mediaType: MediaType, tmdbId: number, season?: number) =>
     call<{ reviews: Review[] }>(`/reviews/${mediaType}/${tmdbId}${season !== undefined ? `?season=${season}` : ''}`),
   getCircleReviews: (mediaType: MediaType, tmdbId: number) =>
-    call<{ reviews: Review[] }>(`/reviews/${mediaType}/${tmdbId}/circle`),
+    call<{ reviews: Review[]; watched: WatchedSeason[] }>(`/reviews/${mediaType}/${tmdbId}/circle`),
   deleteReview: (mediaType: MediaType, tmdbId: number, season = 0) =>
     call<{ removed: boolean }>(`/reviews/${mediaType}/${tmdbId}?season=${season}`, { method: 'DELETE' }),
 
