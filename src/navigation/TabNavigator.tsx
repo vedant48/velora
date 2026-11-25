@@ -1,5 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { BlurView } from 'expo-blur';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -15,7 +16,7 @@ import { AppColors, useAppTheme, useThemedStyles } from '../theme/ThemeContext';
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
 export const TabNavigator: React.FC = () => {
-  const { colors } = useAppTheme();
+  const { colors, mode } = useAppTheme();
   const styles = useThemedStyles(createStyles);
   const insets = useSafeAreaInsets();
 
@@ -23,12 +24,14 @@ export const TabNavigator: React.FC = () => {
     <Tab.Navigator initialRouteName="ProfileTab"
       screenOptions={({ route }) => ({
         headerShown: false,
+        // Apple redesign: frosted iOS tab bar (blur + hairline).
+        tabBarBackground: () => <BlurView intensity={60} tint={mode === 'dark' ? 'dark' : 'light'} style={StyleSheet.absoluteFill} />,
         tabBarStyle: {
           position: 'absolute',
           bottom: 0,
           left: 0,
           right: 0,
-          backgroundColor: colors.appleTabBar,
+          backgroundColor: mode === 'dark' ? 'rgba(20,20,22,0.6)' : 'rgba(249,249,249,0.6)',
           borderTopColor: colors.appleSeparator,
           borderTopWidth: StyleSheet.hairlineWidth,
           height: 60 + Math.max(insets.bottom - 6, 0),

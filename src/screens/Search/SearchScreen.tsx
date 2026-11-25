@@ -184,6 +184,8 @@ export const SearchScreen: React.FC = () => {
       {/* Search Header Input */}
       <View style={styles.header}>
         <Pressable onPress={() => navigation.navigate('MainTabs', { screen: 'ProfileTab' })} accessibilityRole="button" accessibilityLabel="Back to library" style={{ paddingVertical: 6, alignSelf: 'flex-start' }}><Ionicons name="arrow-back" size={20} color={colors.textSecondary} /></Pressable>
+        {/* Apple redesign: iOS large title + filled rounded search field */}
+        <Text style={styles.largeTitle}>Search</Text>
         <View style={styles.searchBar}>
           <Ionicons name="search" size={20} color={colors.textSecondary} style={styles.searchIcon} />
           <TextInput
@@ -342,15 +344,21 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     paddingHorizontal: metrics.screenHorizontalPadding,
     paddingBottom: 12,
   },
+  largeTitle: {
+    fontSize: 34,
+    fontWeight: '700',
+    letterSpacing: 0.3,
+    color: colors.appleText,
+    marginTop: 2,
+    marginBottom: 12,
+  },
   searchBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.surface,
+    backgroundColor: colors.appleFill,
     borderRadius: 10,
     paddingHorizontal: 12,
-    height: 46,
-    borderWidth: 1,
-    borderColor: colors.border,
+    height: 36,
   },
   searchIcon: {
     marginRight: 8,
@@ -373,7 +381,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     paddingVertical: 6,
     paddingHorizontal: 16,
     borderRadius: 20,
-    backgroundColor: colors.surfaceLight,
+    backgroundColor: colors.appleFill,
   },
   filterChipActive: {
     backgroundColor: colors.surfaceLight,

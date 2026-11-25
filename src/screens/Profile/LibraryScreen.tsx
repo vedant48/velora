@@ -268,7 +268,24 @@ export const LibraryScreen: React.FC = () => {
       : null;
     const dist = ratingDistribution(rated.map(r => r.rating));
     const maxDist = Math.max(1, ...dist);
-    return { watchedMovies: watchedMovies.length, series: series.length, episodes, avg, dist, maxDist, ratedCount: rated.length };
+    // Apple redesign tiles use real data only: "This year" counts titles whose last
+    // library update is in the current year (no separate watch-date field exists).
+    const year = new Date().getFullYear();
+    const thisYear = allItems.filter((i) => i.status === 'watched' && new Date(i.updated_at).getFullYear() === year).length;
+    // Recent activity rows come from actual ratings (title resolved from the library).
+    const activity = rated
+      .slice()
+      .sort((a, b) => b.created_at.localeCompare(a.created_at))
+      .slice(0, 3)
+      .map((r) => {
+        const item = allItems.find((i) => i.media_type === r.media_type && i.tmdb_id === r.tmdb_id);
+        return {
+          id: r.id,
+          text: `Rated ${item?.title ?? 'a title'}${r.season_number ? ` S${r.season_number}` : ''}`,
+          sub: `${r.rating} / 10 · ${timeAgo(r.created_at)}`,
+        };
+      });
+    return { watchedMovies: watchedMovies.length, series: series.length, episodes, avg, dist, maxDist, ratedCount: rated.length, thisYear, activity };
   }, [allItems, myReviews]);
 
   // Owner rule (25 Nov, with Must reference video): profile details scroll away with the grid;
@@ -376,16 +393,17 @@ export const LibraryScreen: React.FC = () => {
               <View style={styles.insights}>
                 <View style={styles.insightGrid}>
                   <View style={styles.insightTile}>
+                    <Text style={styles.insightTileLabel}>This year</Text>
+                    <Text style={styles.insightTileValue}>{insights.thisYear}</Text>
+                    <Text style={styles.insightTileSub}>titles watched</Text>
+                  </View>
+                  <View style={styles.insightTile}>
                     <Text style={styles.insightTileLabel}>Movies watched</Text>
                     <Text style={styles.insightTileValue}>{insights.watchedMovies}</Text>
                   </View>
                   <View style={styles.insightTile}>
                     <Text style={styles.insightTileLabel}>Series tracked</Text>
                     <Text style={styles.insightTileValue}>{insights.series}</Text>
-                  </View>
-                  <View style={styles.insightTile}>
-                    <Text style={styles.insightTileLabel}>Episodes</Text>
-                    <Text style={styles.insightTileValue}>{insights.episodes}</Text>
                   </View>
                   <View style={styles.insightTile}>
                     <Text style={styles.insightTileLabel}>Average rating</Text>
@@ -404,6 +422,19 @@ export const LibraryScreen: React.FC = () => {
                     ))}
                   </View>
                 </View>
+                {insights.activity.length > 0 && (
+                  <View style={styles.chartCard}>
+                    {insights.activity.map((a, i) => (
+                      <View key={a.id} style={[styles.actRow, i < insights.activity.length - 1 && styles.actRowSep]}>
+                        <Ionicons name="star" size={17} color={colors.appleAmber} />
+                        <View style={{ flex: 1 }}>
+                          <Text style={styles.actTitle}>{a.text}</Text>
+                          <Text style={styles.actSub}>{a.sub}</Text>
+                        </View>
+                      </View>
+                    ))}
+                  </View>
+                )}
               </View>
             ) : null}
               contentContainerStyle={[styles.listContent, { paddingTop: insets.top + collapseH + pinnedH + ui.component.libraryGrid.topPadding }]}
@@ -486,6 +517,19 @@ export const LibraryScreen: React.FC = () => {
 };
 
 const TMDB_IMG = 'https://image.tmdb.org/t/p/w342';
+
+// "2h ago" style relative time for the insights activity rows.
+function timeAgo(iso: string): string {
+  const then = new Date(iso).getTime();
+  if (isNaN(then)) return '';
+  const mins = Math.max(1, Math.round((Date.now() - then) / 60000));
+  if (mins < 60) return `${mins}m ago`;
+  const hours = Math.round(mins / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.round(hours / 24);
+  if (days < 7) return `${days}d ago`;
+  return `${Math.round(days / 7)}w ago`;
+}
 
 const Stat = memo(function Stat({ label, value }: { label: string; value?: number | string }) {
   const { colors } = useAppTheme();
@@ -679,6 +723,10 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   chartBar: { width: '100%', borderTopLeftRadius: 3, borderTopRightRadius: 3, backgroundColor: colors.appleRedSoft },
   chartBarPeak: { backgroundColor: colors.primary },
   chartLabel: { fontSize: 10, color: colors.appleText3 },
+  actRow: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 11 },
+  actRowSep: { borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.appleSeparator },
+  actTitle: { fontSize: 14, fontWeight: '600', color: colors.appleText },
+  actSub: { fontSize: 12, color: colors.appleText2, marginTop: 1 },
   emptyRoot: {
     flex: 1,
     alignItems: 'center',

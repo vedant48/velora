@@ -78,6 +78,7 @@ export const MovieCarousel: React.FC<MovieCarouselProps> = React.memo(
           <MovieCard
             item={item}
             minimal={minimal}
+            showTitle={minimal}
             trackingStatus={trackingStatus?.[`${item.media_type ?? 'movie'}:${item.id}`]}
             onPress={onItemPress}
             width={cardWidth}
