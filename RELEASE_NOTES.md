@@ -1,8 +1,7 @@
 ## Profile header fixes
 
-- Swiping between Want, Watched, Series and Insights now moves only the list. The profile, stats and tabs stay put.
-- Your name always stays on one line.
-- "Member since" has its own line and is fully visible.
-- The top-left logo is the original Velora V again.
+- Scrolling the profile no longer slides the stats behind the phone's status bar. The header is now cut cleanly at the top edge.
+- Switching to Series (or any tab) after collapsing the header no longer leaves a blank gap under the tabs.
+- Still in: header and tabs stay put when you swipe between tabs, one-line name, full "Member since" line, original Velora V logo.
 
 No change to your account or library; update in place.
