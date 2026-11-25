@@ -13,7 +13,7 @@ import { MediaItem } from '../../api/types';
 import { veloraApi } from '../../api/velora';
 import { WatchProviders } from '../../components/Details/WatchProviders';
 import { EpisodeChecklist } from '../../components/Library/EpisodeChecklist';
-import { ReviewsSection } from '../../components/Library/ReviewsSection';
+import { CircleReviews } from '../../components/Library/CircleReviews';
 import { TrackingControls } from '../../components/Library/TrackingControls';
 import { MovieCarousel } from '../../components/MovieCarousel/MovieCarousel';
 import { PersonModal } from '../../components/Person/PersonModal';
@@ -467,6 +467,9 @@ export const DetailsScreen: React.FC = () => {
           {/* Where to Watch (series: right under stats, per reference) */}
           <WatchProviders id={initialItem.id} isMovie={isMovie} />
 
+          {/* Reviews and ratings from me and the people I follow */}
+          <CircleReviews mediaType={isMovie ? 'movie' : 'tv'} tmdbId={initialItem.id} refreshSignal={`${lib.item?.updated_at ?? ""}-${statsRefreshKey}`} />
+
           {/* Synopsis */}
           <Text style={styles.sectionHeading}>Overview</Text>
           <Text style={styles.overviewText}>
@@ -645,12 +648,7 @@ export const DetailsScreen: React.FC = () => {
             </View>
           )}
 
-          {/* Reviews (whole title) */}
-          <ReviewsSection
-            mediaType={isMovie ? 'movie' : 'tv'}
-            tmdbId={initialItem.id}
-            seasonNumber={0}
-          />
+          {/* The old "Reviews / Write a review" box is removed (ReviewsSection.tsx is kept, unused). */}
 
           {/* Similar Titles Carousel */}
           {similarMoviesQuery.data && similarMoviesQuery.data.length > 0 && (
