@@ -509,6 +509,15 @@ export const LibraryScreen: React.FC = () => {
         <Pressable accessibilityLabel="Close profile photo" style={styles.photoViewerBackdrop} onPress={() => setPhotoViewerVisible(false)}>
           <Avatar user={user} size={300} />
         </Pressable>
+        <Pressable
+          accessibilityLabel="Close photo"
+          accessibilityRole="button"
+          onPress={() => setPhotoViewerVisible(false)}
+          style={[styles.photoViewerClose, { top: insets.top + 12 }]}
+          hitSlop={8}
+        >
+          <Ionicons name="close" size={20} color="#FFF" />
+        </Pressable>
       </Modal>
 
     </View>
@@ -595,6 +604,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   },
   topActions: { flexDirection: 'row', alignItems: 'center', gap: ui.space.md },
   photoViewerBackdrop: { flex: 1, backgroundColor: 'rgba(0,0,0,0.92)', alignItems: 'center', justifyContent: 'center' },
+  photoViewerClose: { position: 'absolute', right: 16, width: 36, height: 36, borderRadius: 18, backgroundColor: 'rgba(28,28,32,0.6)', alignItems: 'center', justifyContent: 'center' },
   root: { flex: 1, backgroundColor: colors.background },
   headerOverlay: { position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10, elevation: 10 },
   listContent: { paddingHorizontal: ui.component.libraryGrid.horizontalPadding, paddingTop: ui.component.libraryGrid.topPadding, paddingBottom: ui.component.libraryGrid.bottomPadding },

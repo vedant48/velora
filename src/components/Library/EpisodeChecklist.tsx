@@ -195,17 +195,28 @@ export const EpisodeChecklist = memo(function EpisodeChecklist({
         <Text style={styles.emptyText}>No episodes available for this season.</Text>
       ) : (
         <View>
+          {/* Apple redesign: season progress card (real per-episode progress) */}
+          <View style={styles.progCard}>
+            <View style={styles.progHead}>
+              <Text style={styles.progTitle}>Season {seasonNumber}</Text>
+              <Text style={styles.progSub}>{watchedCount} of {episodes.length} episodes</Text>
+            </View>
+            <View style={styles.progTrack}>
+              <View style={[styles.progFill, { width: `${episodes.length ? Math.round((watchedCount / episodes.length) * 100) : 0}%` }]} />
+            </View>
+          </View>
+          <View style={styles.listCard}>
           {episodes.map((ep, index) => {
             const key = `${ep.season_number}:${ep.episode_number}`;
             const isWatched = watchedSet.has(key);
             const row = (
               <View style={styles.row}>
-                <Text style={styles.epNumber}>{ep.episode_number}</Text>
                 {isWatched ? (
-                  <Ionicons name="checkmark" size={17} color={colors.trackBlue} style={styles.epMark} />
+                  <Ionicons name="checkmark-circle" size={24} color={colors.appleBlue} style={styles.epMark} />
                 ) : (
-                  <View style={styles.epDot} />
+                  <Ionicons name="ellipse-outline" size={24} color={colors.appleText3} style={styles.epMark} />
                 )}
+                <Text style={styles.epNumber}>{ep.episode_number}</Text>
                 <View style={styles.epTextWrap}>
                   <Text style={styles.epTitle} numberOfLines={1}>
                     {ep.name}
@@ -221,7 +232,7 @@ export const EpisodeChecklist = memo(function EpisodeChecklist({
               <View key={ep.id || ep.episode_number}>
                 {hint && (
                   <Pressable style={styles.hint} onPress={dismissHint}>
-                    <Ionicons name="swap-horizontal" size={14} color={colors.trackBlue} />
+                    <Ionicons name="swap-horizontal" size={14} color={colors.appleBlue} />
                     <Text style={styles.hintText}>Swipe right to mark watched</Text>
                   </Pressable>
                 )}
@@ -244,6 +255,7 @@ export const EpisodeChecklist = memo(function EpisodeChecklist({
               </View>
             );
           })}
+          </View>
 
           {/* Season-level footer */}
           <View style={styles.footer}>
@@ -326,14 +338,15 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 15,
-    backgroundColor: colors.background,
+    paddingVertical: 11,
+    paddingHorizontal: 12,
   },
   epNumber: {
-    width: 26,
-    color: colors.textSecondary,
-    fontSize: ui.type.body,
+    width: 22,
+    color: colors.appleText2,
+    fontSize: 14,
     fontWeight: '600',
+    marginLeft: 10,
   },
   epMark: { marginRight: 2 },
   epDot: {
@@ -356,10 +369,28 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   },
   divider: {
     height: StyleSheet.hairlineWidth,
-    backgroundColor: colors.surfaceLight,
+    backgroundColor: colors.appleSeparator,
+    marginLeft: 58,
+  },
+  progCard: {
+    backgroundColor: colors.appleCard,
+    borderRadius: 14,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    marginBottom: 10,
+  },
+  progHead: { flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between' },
+  progTitle: { color: colors.textPrimary, fontSize: 15, fontWeight: '600' },
+  progSub: { color: colors.appleText2, fontSize: 12 },
+  progTrack: { height: 6, borderRadius: 3, backgroundColor: colors.appleFill, marginTop: 10, overflow: 'hidden' },
+  progFill: { height: 6, borderRadius: 3, backgroundColor: colors.appleBlue },
+  listCard: {
+    backgroundColor: colors.appleCard,
+    borderRadius: 14,
+    overflow: 'hidden',
   },
   swipeAction: {
-    backgroundColor: colors.trackBlue,
+    backgroundColor: colors.appleBlue,
     justifyContent: 'center',
     alignItems: 'flex-start',
     paddingHorizontal: 20,
@@ -369,7 +400,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     alignItems: 'center',
     gap: 6,
     alignSelf: 'flex-start',
-    backgroundColor: 'rgba(46, 123, 246, 0.14)',
+    backgroundColor: 'rgba(10, 132, 255, 0.14)',
     borderRadius: 8,
     paddingHorizontal: 10,
     paddingVertical: 6,
