@@ -205,6 +205,13 @@ appId: com.vedant.velora
 # Activity pops back to own profile; quick actions live on the Home library grid
 - tapOn: Home
 - extendedWaitUntil:
+    visible:
+      id: library-tab-want
+    timeout: 20000
+# F1 is alice's Want MOVIE - the Series tab (default) can't show it; cards proves this route green
+- tapOn:
+    id: library-tab-want
+- extendedWaitUntil:
     visible: F1
     timeout: 20000
 # Quick actions sheet via long-press (batch7 header + icons)
