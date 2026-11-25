@@ -6,6 +6,12 @@ appId: com.vedant.velora
 # Navigation reopen alone is NOT accepted as persistence evidence.
 - assertVisible:
     id: library-tab-series
+# Fresh login lands on the WANT tab (movie grid) - activate Series first (cards does the same)
+- tapOn:
+    id: library-tab-series
+- extendedWaitUntil:
+    visible: 'Prison Break'
+    timeout: 30000
 - tapOn: 'Prison Break'
 - extendedWaitUntil:
     visible: '22 of 22 episodes'
@@ -36,6 +42,9 @@ appId: com.vedant.velora
     visible:
       id: library-tab-series
     timeout: 60000
+# Relaunch resets to the default tab - activate Series before the aggregate readback
+- tapOn:
+    id: library-tab-series
 - extendedWaitUntil:
     visible: '.*41 of 88 episodes'
     timeout: 30000
