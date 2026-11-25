@@ -15,6 +15,7 @@ import { ActionSheet } from '../../components/Library/ActionSheet';
 import { LibraryCard } from '../../components/Library/LibraryCard';
 import { LibraryQuickAction } from '../../components/Library/LibraryQuickAction';
 import { isEndedComplete, seriesProgress } from '../../components/Library/seriesProgress';
+import { useInsightsMeta } from './useInsightsMeta';
 import { CachedImage } from '../../experience/CachedImage';
 import { useQueries, useQuery } from '@tanstack/react-query';
 import { getTVDetails } from '../../api/tv';
@@ -287,6 +288,10 @@ export const LibraryScreen: React.FC = () => {
     return { watchedMovies: watchedMovies.length, series: series.length, episodes, avg, dist, maxDist, ratedCount: rated.length, thisYear, activity };
   }, [allItems, myReviews]);
 
+  // Mock's Time watched / Top genre tiles: lazily aggregated real metadata with explicit
+  // coverage; each tile stays hidden until its data is meaningful (see useInsightsMeta).
+  const meta = useInsightsMeta(allItems, tab === 'insights', apiReady);
+
   // Owner rule (25 Nov, with Must reference video): profile details scroll away with the grid;
   // only the Want/Watched/Series/Insights tabs and the filter icon stay pinned at the top.
   // So the identity/stats block lives in each page's list header and the tab row stays fixed.
@@ -396,19 +401,28 @@ export const LibraryScreen: React.FC = () => {
                     <Text style={styles.insightTileValue}>{insights.thisYear}</Text>
                     <Text style={styles.insightTileSub}>titles rated</Text>
                   </View>
-                  <View style={styles.insightTile}>
-                    <Text style={styles.insightTileLabel}>Movies watched</Text>
-                    <Text style={styles.insightTileValue}>{insights.watchedMovies}</Text>
-                  </View>
-                  <View style={styles.insightTile}>
-                    <Text style={styles.insightTileLabel}>Series tracked</Text>
-                    <Text style={styles.insightTileValue}>{insights.series}</Text>
-                  </View>
+                  {meta.timeWatched && (
+                    <View style={styles.insightTile}>
+                      <Text style={styles.insightTileLabel}>Time watched</Text>
+                      <Text style={styles.insightTileValue}>{formatMinutes(meta.timeWatched.minutes)}</Text>
+                      <Text style={styles.insightTileSub}>
+                        known runtime for {meta.timeWatched.moviesKnown}/{meta.timeWatched.moviesTotal} movies
+                        {meta.timeWatched.epsTotal > 0 ? ` · ${meta.timeWatched.epsKnown}/${meta.timeWatched.epsTotal} episodes` : ''}
+                      </Text>
+                    </View>
+                  )}
                   <View style={styles.insightTile}>
                     <Text style={styles.insightTileLabel}>Average rating</Text>
                     <Text style={styles.insightTileValue}>{insights.avg ?? '-'}</Text>
                     <Text style={styles.insightTileSub}>{insights.ratedCount} rated titles & seasons</Text>
                   </View>
+                  {meta.topGenre && (
+                    <View style={styles.insightTile}>
+                      <Text style={styles.insightTileLabel}>Top genre</Text>
+                      <Text style={styles.insightTileValue}>{meta.topGenre.name}</Text>
+                      <Text style={styles.insightTileSub}>most common known · {meta.topGenre.known} of {meta.topGenre.total} titles</Text>
+                    </View>
+                  )}
                 </View>
                 <View style={styles.chartCard}>
                   <Text style={styles.chartTitle}>Your ratings</Text>
@@ -526,6 +540,14 @@ export const LibraryScreen: React.FC = () => {
 
 const TMDB_IMG = 'https://image.tmdb.org/t/p/w342';
 
+// "96h" / "7h 24m" / "45m" for the Time watched tile.
+function formatMinutes(total: number): string {
+  const h = Math.floor(total / 60);
+  const m = total % 60;
+  if (h === 0) return `${m}m`;
+  return m === 0 ? `${h}h` : `${h}h ${m}m`;
+}
+
 // "2h ago" style relative time for the insights activity rows.
 function timeAgo(iso: string): string {
   const then = new Date(iso).getTime();
@@ -584,7 +606,7 @@ const SeriesRow = memo(function SeriesRow({ item, first, last, onPress, onLongPr
       <View style={styles.seriesMeta}>
         <Text style={styles.seriesTitle} numberOfLines={1}>{item.title}</Text>
         <Text style={styles.seriesLine}>
-          {prog ? `${currentSeason ? `S${currentSeason} · ` : ''}${prog.watched} of ${prog.total} episodes${ended ? ' · Done' : ''}` : ''}
+          {prog ? `${currentSeason ? `Latest progress S${currentSeason} · ` : ''}${prog.watched} of ${prog.total} episodes${ended ? ' · Done' : ''}` : ''}
           {item.rating !== null && <Text style={{ color: colors.appleAmber }}>{`  ★ ${item.rating}`}</Text>}
         </Text>
         {prog && <View style={styles.seriesProgress}><View style={[styles.seriesProgressFill, { width: `${Math.round(prog.fraction * 100)}%` }]} /></View>}
