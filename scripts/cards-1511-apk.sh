@@ -18,20 +18,19 @@ adb logcat -d -t 1000 > proof/logcat.txt || true
 # Tab-switch motion on the same saved fixed APK (recorded like the flicker runs)
 adb shell pm clear com.vedant.velora
 maestro test .maestro/flicker-login-1511.yaml || status=1
-adb shell screenrecord --time-limit 70 --size 720x1480 /sdcard/flicker-tabs.mp4 &
+adb shell screenrecord --time-limit 55 --size 720x1480 /sdcard/flicker-tabs.mp4 &
 REC_PID=$!
 sleep 2
 maestro test --format junit --output proof/ui-tabs.xml --test-output-dir proof/maestro-tabs .maestro/flicker-tabs-1511.yaml || status=1
 sleep 1
-kill -INT $REC_PID 2>/dev/null || true
-# Wait until screenrecord finalizes (moov written): file size stable across 4s, max ~40s
-for i in $(seq 1 10); do
+# SIGINT through 'adb shell' does not reliably reach device-side screenrecord.
+# Stop it on the device, then let adb return; screenrecord writes moov on clean exit.
+adb shell pkill -INT screenrecord 2>/dev/null || true
+for i in $(seq 1 15); do
   sleep 2
-  S1=$(adb shell stat -c %s /sdcard/flicker-tabs.mp4 2>/dev/null | tr -d '\r')
-  sleep 2
-  S2=$(adb shell stat -c %s /sdcard/flicker-tabs.mp4 2>/dev/null | tr -d '\r')
-  if [ -n "$S1" ] && [ "$S1" = "$S2" ]; then break; fi
+  adb shell pgrep screenrecord >/dev/null 2>&1 || break
 done
+wait $REC_PID 2>/dev/null || true
 adb pull /sdcard/flicker-tabs.mp4 proof/flicker-tabs.mp4 || true
 adb shell rm -f /sdcard/flicker-tabs.mp4 || true
 # Fail loudly if the recording has no moov atom (truncated pull = unusable evidence)
