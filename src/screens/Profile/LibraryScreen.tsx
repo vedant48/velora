@@ -387,7 +387,7 @@ export const LibraryScreen: React.FC = () => {
       </View>
       <Animated.View style={[styles.headerOverlay, { backgroundColor: colors.background }]}>
         <View style={{ height: insets.top }} />
-        <Animated.View style={{ height: clipH, overflow: 'hidden', justifyContent: 'flex-end' }}>
+        <Animated.View style={{ height: collapseH === 0 ? undefined : clipH, overflow: 'hidden', justifyContent: 'flex-end' }}>
           <View onLayout={(e) => setCollapseH(e.nativeEvent.layout.height)}>
       {/* Owner rule (25 Nov): no VELORA text; app icon only on the left, settings + overflow on the right. */}
             <View style={styles.topRow}>
