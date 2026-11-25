@@ -1,7 +1,8 @@
-## Profile header fixes
+## One settings icon
 
-- Scrolling the profile no longer slides the stats behind the phone's status bar. The header is now cut cleanly at the top edge.
-- Switching to Series (or any tab) after collapsing the header no longer leaves a blank gap under the tabs.
-- Still in: header and tabs stay put when you swipe between tabs, one-line name, full "Member since" line, original Velora V logo.
+- The gear and the three-dot button on your profile are now one settings icon.
+- Settings opens the new grouped screen and now holds everything both buttons had: Share profile, Activity, Check for updates (shows your version) and Log out, next to Appearance, Private account, Import from Must, Export and About.
+- Appearance is now a row that opens a System / Light / Dark picker.
+- Still in: header cut at the status bar, no blank gap on tab switch, one-line name, "Member since" line, original Velora V logo.
 
 No change to your account or library; update in place.

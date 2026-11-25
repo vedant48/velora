@@ -3,7 +3,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { FlashList } from '@shopify/flash-list';
 import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Alert, Image, Modal, Pressable, RefreshControl, Share, StyleSheet, Switch, Text, View } from 'react-native';
+import { Alert, Image, Modal, Pressable, RefreshControl, StyleSheet, Switch, Text, View } from 'react-native';
 import { ContentPager } from '../../experience/ContentPager';
 import { endedCompleteLast, itemInTab, LibraryTab } from './libraryTabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -11,7 +11,6 @@ import { LibraryItem, Review, UserStats, veloraApi } from '../../api/velora';
 import { AppButton } from '../../components/common/AppButton';
 import { AppLoader } from '../../components/common/AppLoader';
 import { Avatar } from '../../components/Avatar';
-import { ActionSheet } from '../../components/Library/ActionSheet';
 import { LibraryCard } from '../../components/Library/LibraryCard';
 import { LibraryQuickAction } from '../../components/Library/LibraryQuickAction';
 import { isEndedComplete, seriesProgress } from '../../components/Library/seriesProgress';
@@ -21,7 +20,6 @@ import Animated, { runOnJS, useAnimatedScrollHandler, useAnimatedStyle, useShare
 import { useQueries, useQuery } from '@tanstack/react-query';
 import { getTVDetails } from '../../api/tv';
 import { GC_TIME, STALE_TIME, useTVDetailsQuery } from '../../api/queries';
-import { checkForUpdate, downloadAndInstall } from '../../services/updates';
 import { useAuth } from '../../state/AuthContext';
 import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
 import { ui } from '../../theme/ui';
@@ -47,7 +45,6 @@ export const LibraryScreen: React.FC = () => {
   const insets = useSafeAreaInsets();
   const [appliedFilters, setAppliedFilters] = useState({ hideMovies: false, hideSeries: false, hideUnreleased: false });
   const [appliedSort, setAppliedSort] = useState<SortKey>('recent');
-  const [menuVisible, setMenuVisible] = useState(false);
   const [quickItem, setQuickItem] = useState<LibraryItem | null>(null);
   const [photoViewerVisible, setPhotoViewerVisible] = useState(false);
   const [hideMovies, setHideMovies] = useState(false);
@@ -152,42 +149,6 @@ export const LibraryScreen: React.FC = () => {
   const [loadError, setLoadError] = useState(false);
   const [loading, setLoading] = useState(true);
   const loadedUsername = useRef<string | null>(null);
-  const [updateProgress, setUpdateProgress] = useState<number | null>(null);
-
-  const handleUpdateCheck = useCallback(async () => {
-    if (updateProgress !== null) return;
-    try {
-      const info = await checkForUpdate();
-      if (!info) {
-        Alert.alert('Update check failed', 'Could not reach the update server. Try again later.');
-        return;
-      }
-      if (!info.isNewer) {
-        Alert.alert('Velora is up to date', `You are on the latest version (${info.currentVersion}).`);
-        return;
-      }
-      const notes = info.notes ? info.notes.slice(0, 300) : 'A new version is available.';
-      Alert.alert(`Update available: v${info.latestVersion}`, notes, [
-        { text: 'Later', style: 'cancel' },
-        {
-          text: 'Download & install',
-          onPress: () => {
-            setUpdateProgress(0);
-            void downloadAndInstall(info, setUpdateProgress).then((r) => {
-              setUpdateProgress(null);
-              if (!r.ok) {
-                Alert.alert('Update failed', r.error ?? 'Something went wrong');
-              } else {
-                Alert.alert('Ready to install', 'Android will ask you to confirm the update.');
-              }
-            });
-          },
-        },
-      ]);
-    } catch {
-      Alert.alert('Update check failed', 'Could not reach the update server. Try again later.');
-    }
-  }, [updateProgress]);
 
   useFocusEffect(useCallback(() => {
     if (!user || !apiReady) return;
@@ -286,11 +247,6 @@ export const LibraryScreen: React.FC = () => {
       },
     ]);
   }, []);
-
-  const shareProfile = useCallback(() => {
-    if (!user) return;
-    Share.share({ message: `Follow me on Velora: @${user.username}` }).catch(() => undefined);
-  }, [user?.username, refreshKey]);
 
   // Sticky-header rows: row 0 of every page's data is the tab strip (pins natively);
   // loading/error/empty are single full-width rows after it.
@@ -415,7 +371,7 @@ export const LibraryScreen: React.FC = () => {
     [tab, selectTab, appliedFilters, appliedSort, sortSheetVisible, colors, styles],
   );
 
-  // Owner rule (25 Nov): no VELORA text; brand tile on the left, settings + overflow on the right.
+  // Owner rule (25 Nov): no VELORA text; brand tile on the left, one settings icon on the right (the old overflow actions live in Settings).
   // Initial order per page: tile bar, then profile details, then the sticky tab row.
   const listTopHeader = useMemo(
     () => (
@@ -423,8 +379,7 @@ export const LibraryScreen: React.FC = () => {
         <View style={styles.topRow}>
           <Image source={BRAND_V} style={styles.brandTile} resizeMode="contain" accessibilityLabel="Velora" />
           <View style={styles.topActions}>
-            <Pressable onPress={() => navigation.navigate('Account')} style={styles.circleButton} accessibilityLabel="Settings"><Ionicons name="settings-outline" size={17} color={colors.appleText} /></Pressable>
-            <Pressable onPress={() => setMenuVisible(true)} style={styles.circleButton} accessibilityLabel="More profile actions"><Ionicons name="ellipsis-horizontal" size={18} color={colors.appleText} /></Pressable>
+            <Pressable onPress={() => navigation.navigate('Account')} style={styles.circleButton} accessibilityLabel="Settings"><Ionicons name="settings-outline" size={18} color={colors.appleText} /></Pressable>
           </View>
         </View>
         <View style={{ paddingHorizontal: ui.component.profileHeader.horizontalPadding }}>{profileHeader}</View>
@@ -564,7 +519,7 @@ export const LibraryScreen: React.FC = () => {
       <View style={{ height: insets.top, backgroundColor: colors.background }} />
       {/* overflow hidden: the collapsing overlay translates above this container's top edge; without clipping it paints over the status-bar spacer (v1.5.13 regression: stats behind the status bar). */}
       <View style={{ flex: 1, overflow: 'hidden' }} onLayout={(e) => setPageH(e.nativeEvent.layout.height)}>
-      <ContentPager index={TABS.findIndex(t => t.key === tab)} onIndexChange={onPageChange} enabled={!sortSheetVisible && !menuVisible && !quickItem}>
+      <ContentPager index={TABS.findIndex(t => t.key === tab)} onIndexChange={onPageChange} enabled={!sortSheetVisible && !quickItem}>
           {TABS.map(({ key: pageTab }, pageIdx) => <View key={pageTab} style={{ flex: 1 }}>
             <AnimatedFlashList
               ref={(r: unknown) => { listRefs.current[pageIdx] = r as never; }}
@@ -623,12 +578,6 @@ export const LibraryScreen: React.FC = () => {
         </View>
       </Modal>
 
-      <ActionSheet visible={menuVisible} onClose={() => setMenuVisible(false)} options={[
-        { label: 'Share profile', onPress: shareProfile },
-        { label: 'Activity', onPress: () => navigation.navigate('Activity') },
-        { label: updateProgress === null ? 'Check for update' : `Downloading ${Math.round(updateProgress * 100)}%`, onPress: handleUpdateCheck },
-        { label: 'Log out', onPress: () => Alert.alert('Log out?', undefined, [{ text: 'Cancel', style: 'cancel' }, { text: 'Log out', style: 'destructive', onPress: () => void logout() }]) },
-      ]} />
       {quickItem && <LibraryQuickAction item={quickItem} onClose={() => setQuickItem(null)} onChanged={() => setRefreshKey(k => k + 1)} />}
 
       {/* Enlarged profile photo (owner rule, 25 Nov: tap the avatar, it opens big). Tap anywhere to close. */}

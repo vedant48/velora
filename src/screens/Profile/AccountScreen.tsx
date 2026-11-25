@@ -5,15 +5,28 @@ import * as ImageManipulator from 'expo-image-manipulator';
 import * as ImagePicker from 'expo-image-picker';
 import * as Sharing from 'expo-sharing';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Alert, Image, Linking, Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
+import Constants from 'expo-constants';
+import { Alert, Image, Linking, Pressable, ScrollView, Share, StyleSheet, Switch, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { veloraApi } from '../../api/velora';
 import { AppButton } from '../../components/common/AppButton';
+import { ActionSheet } from '../../components/Library/ActionSheet';
 import { AppTextField } from '../../components/common/AppTextField';
 import { Avatar } from '../../components/Avatar';
 import { useAuth } from '../../state/AuthContext';
 import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
 import { ui } from '../../theme/ui';
+import { useUpdateCheck } from './useUpdateCheck';
+
+/** Rounded grey icon tile at the start of a settings row (matches the approved settings mock). */
+const IconTile: React.FC<{ name: React.ComponentProps<typeof Ionicons>['name'] }> = ({ name }) => {
+  const { colors } = useAppTheme();
+  return (
+    <View style={{ width: 34, height: 34, borderRadius: 9, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.appleFill }}>
+      <Ionicons name={name} size={18} color={colors.textPrimary} />
+    </View>
+  );
+};
 
 /** Account settings: profile edit, privacy, data export, account deletion. */
 export const AccountScreen: React.FC = () => {
@@ -29,6 +42,10 @@ export const AccountScreen: React.FC = () => {
   const [saving, setSaving] = useState(false);
   const [busy, setBusy] = useState<string | null>(null);
   const [photoBusy, setPhotoBusy] = useState(false);
+  const [themeSheet, setThemeSheet] = useState(false);
+  const [exportSheet, setExportSheet] = useState(false);
+  const update = useUpdateCheck();
+  const version = Constants.expoConfig?.version ?? '';
 
   const changePhoto = useCallback(async () => {
     if (photoBusy) return;
@@ -143,6 +160,11 @@ export const AccountScreen: React.FC = () => {
     }
   }, [busy]);
 
+  const shareProfile = useCallback(() => {
+    if (!user) return;
+    Share.share({ message: `Follow me on Velora: @${user.username}` }).catch(() => undefined);
+  }, [user]);
+
   const deleteAccount = useCallback(() => {
     Alert.alert(
       'Delete account?',
@@ -209,7 +231,7 @@ export const AccountScreen: React.FC = () => {
           </>
         ) : null}
       </View>
-      <Text style={styles.section}>Profile</Text>
+      <View style={{ height: 22 }} />
       <View style={styles.group}>
         <View style={styles.fieldRow}>
           <Text style={styles.fieldLabel}>Name</Text>
@@ -245,61 +267,67 @@ export const AccountScreen: React.FC = () => {
       </View>
       <AppButton title="Save profile" onPress={saveProfile} loading={saving} />
 
-      <Text style={styles.section}>Appearance</Text>
-      <View style={[styles.group, { padding: 10 }]}>
-        <View accessibilityRole="radiogroup" accessibilityLabel="Appearance" style={{ flexDirection: 'row', gap: ui.space.sm }}>
-        {(['system', 'light', 'dark'] as const).map(choice => (
-          <Pressable key={choice} accessibilityRole="radio" accessibilityLabel={`${choice[0].toUpperCase()}${choice.slice(1)} theme`}
-            accessibilityState={{ checked: preference === choice }} aria-checked={preference === choice}
-            onPress={() => setPreference(choice).catch(() => Alert.alert('Theme not saved', 'Try again. Your previous choice is unchanged.'))}
-            style={[styles.themeChoice, preference === choice && { borderColor: colors.primary, backgroundColor: colors.surfaceLight }]}>
-            <Text style={{ color: colors.textPrimary, fontWeight: preference === choice ? '700' : '400' }}>{choice[0].toUpperCase() + choice.slice(1)}</Text>
-          </Pressable>
-        ))}
-        </View>
-      </View>
-      <Text style={[styles.rowHint, { marginTop: ui.space.sm }]}>System follows your device appearance.</Text>
-
-      <Text style={styles.section}>Privacy</Text>
+      <View style={{ height: 22 }} />
       <View style={styles.group}>
+        <Pressable accessibilityRole="button" accessibilityLabel="Appearance" onPress={() => setThemeSheet(true)} style={styles.setrow}>
+          <IconTile name="contrast-outline" />
+          <Text style={styles.setrowLabel}>Appearance</Text>
+          <View style={{ flex: 1 }} />
+          <Text style={styles.detail}>{preference[0].toUpperCase() + preference.slice(1)}</Text>
+          <Ionicons name="chevron-forward" size={16} color={colors.appleText3} />
+        </Pressable>
+        <View style={styles.sep} />
         <View style={styles.setrow}>
+          <IconTile name="eye-off-outline" />
           <View style={{ flex: 1 }}>
             <Text style={styles.setrowLabel}>Private account</Text>
-            <Text style={styles.rowHint}>
-              Other members can find your profile, but only you can see your library and stats.
-            </Text>
+            <Text style={styles.rowHint}>Other members can find your profile, but only you can see your library and stats.</Text>
           </View>
-          <Switch
-            value={isPrivate}
-            onValueChange={togglePrivate}
-            trackColor={{ false: colors.appleFill, true: '#30D158' }}
-            thumbColor="#fff"
-          />
+          <Switch value={isPrivate} onValueChange={togglePrivate} trackColor={{ false: colors.appleFill, true: '#30D158' }} thumbColor="#fff" />
         </View>
       </View>
 
-      <Text style={styles.section}>Your data</Text>
-      <View style={styles.group}>
+      <View style={[styles.group, { marginTop: 22 }]}>
         <Pressable testID="settings-import-must" onPress={() => navigation.navigate('ImportMust')} style={styles.setrow} disabled={busy !== null} accessibilityRole="button">
-          <Ionicons name="cloud-upload-outline" size={18} color={colors.textPrimary} />
+          <IconTile name="cloud-upload-outline" />
           <Text style={styles.setrowLabel}>Import from Must</Text>
           <View style={{ flex: 1 }} />
           <Ionicons name="chevron-forward" size={16} color={colors.appleText3} />
         </Pressable>
         <View style={styles.sep} />
-        <Pressable onPress={() => exportData('velora')} style={styles.setrow} disabled={busy !== null} accessibilityRole="button">
-          <Ionicons name="download-outline" size={18} color={colors.textPrimary} />
-          <Text style={styles.setrowLabel}>{busy === 'velora' ? 'Preparing...' : 'Export library (JSON)'}</Text>
+        <Pressable accessibilityRole="button" accessibilityLabel="Export your data" onPress={() => setExportSheet(true)} style={styles.setrow} disabled={busy !== null}>
+          <IconTile name="document-outline" />
+          <Text style={styles.setrowLabel}>{busy ? 'Preparing...' : 'Export your data'}</Text>
+          <View style={{ flex: 1 }} />
+          <Ionicons name="chevron-forward" size={16} color={colors.appleText3} />
         </Pressable>
         <View style={styles.sep} />
-        <Pressable onPress={() => exportData('simkl')} style={styles.setrow} disabled={busy !== null} accessibilityRole="button">
-          <Ionicons name="download-outline" size={18} color={colors.textPrimary} />
-          <Text style={styles.setrowLabel}>{busy === 'simkl' ? 'Preparing...' : 'Export library (SIMKL CSV)'}</Text>
+        <Pressable accessibilityRole="button" accessibilityLabel="Check for updates" onPress={update.run} style={styles.setrow}>
+          <IconTile name="refresh-outline" />
+          <Text style={styles.setrowLabel}>Check for updates</Text>
+          <View style={{ flex: 1 }} />
+          <Text style={styles.detail}>{update.progress === null ? `v${version}` : `Downloading ${Math.round(update.progress * 100)}%`}</Text>
+          <Ionicons name="chevron-forward" size={16} color={colors.appleText3} />
         </Pressable>
       </View>
 
-      <Text style={styles.section}>About & Credits</Text>
-      <View style={{ padding: ui.space.lg, borderRadius: 14, backgroundColor: colors.appleCard, gap: ui.space.md }}>
+      <View style={[styles.group, { marginTop: 22 }]}>
+        <Pressable accessibilityRole="button" accessibilityLabel="Share profile" onPress={shareProfile} style={styles.setrow}>
+          <IconTile name="share-outline" />
+          <Text style={styles.setrowLabel}>Share profile</Text>
+          <View style={{ flex: 1 }} />
+          <Ionicons name="chevron-forward" size={16} color={colors.appleText3} />
+        </Pressable>
+        <View style={styles.sep} />
+        <Pressable accessibilityRole="button" accessibilityLabel="Activity" onPress={() => navigation.navigate('Activity')} style={styles.setrow}>
+          <IconTile name="pulse-outline" />
+          <Text style={styles.setrowLabel}>Activity</Text>
+          <View style={{ flex: 1 }} />
+          <Ionicons name="chevron-forward" size={16} color={colors.appleText3} />
+        </Pressable>
+      </View>
+
+      <View style={{ marginTop: 22, padding: ui.space.lg, borderRadius: 14, backgroundColor: colors.appleCard, gap: ui.space.md }}>
         <Text style={{ fontSize: ui.type.heading, fontWeight: '700', color: colors.textPrimary }}>Velora</Text>
         <Text style={styles.rowHint}>Track movies and TV series, reviews and episode progress.</Text>
         <Pressable accessibilityRole="link" accessibilityLabel="The Movie Database" onPress={() => Linking.openURL('https://www.themoviedb.org')}>
@@ -308,8 +336,7 @@ export const AccountScreen: React.FC = () => {
         <Text style={{ fontSize: 13, lineHeight: 19, color: colors.textPrimary }}>This product uses the TMDB API but is not endorsed or certified by TMDB.</Text>
       </View>
 
-      <Text style={styles.section}>Danger zone</Text>
-      <View style={styles.group}>
+      <View style={[styles.group, { marginTop: 22 }]}>
         <Pressable
           onPress={() => Alert.alert('Log out?', undefined, [{ text: 'Cancel', style: 'cancel' }, { text: 'Log out', style: 'destructive', onPress: () => void logout() }])}
           style={styles.setrow}
@@ -319,13 +346,20 @@ export const AccountScreen: React.FC = () => {
         </Pressable>
         <View style={styles.sep} />
         <Pressable onPress={deleteAccount} style={styles.setrow} accessibilityRole="button">
-          <Ionicons name="trash-outline" size={17} color={colors.error} />
           <Text style={[styles.setrowLabel, { color: colors.error }]}>Delete account</Text>
         </Pressable>
       </View>
 
       {/* Gallery settings mock footnote: factual attribution to the app owner, a routine design decision within the approved gallery. */}
       <Text style={styles.footnote}>Velora for Android · made by Vedant</Text>
+      <ActionSheet visible={exportSheet} onClose={() => setExportSheet(false)} options={[
+        { label: 'Velora library (JSON)', onPress: () => void exportData('velora') },
+        { label: 'SIMKL (CSV)', onPress: () => void exportData('simkl') },
+      ]} />
+      <ActionSheet visible={themeSheet} onClose={() => setThemeSheet(false)} options={(['system', 'light', 'dark'] as const).map(choice => ({
+        label: `${choice[0].toUpperCase()}${choice.slice(1)}${preference === choice ? '  ✓' : ''}`,
+        onPress: () => { setPreference(choice).catch(() => Alert.alert('Theme not saved', 'Try again. Your previous choice is unchanged.')); },
+      }))} />
     </ScrollView>
   );
 };
@@ -337,6 +371,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   readonly: { color: colors.textSecondary, paddingVertical: ui.space.md, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.border },
   root: { flex: 1, backgroundColor: colors.background },
   largeTitle: { fontSize: 34, fontWeight: '700', letterSpacing: 0.3, color: colors.appleText, marginBottom: 14 },
+  detail: { fontSize: 16, color: colors.appleText2 },
   footnote: { textAlign: 'center', color: colors.appleText2, fontSize: 13, marginTop: 28 },
   back: {
     width: 38,
