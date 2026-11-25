@@ -1,0 +1,74 @@
+--------- beginning of main
+11-25 01:45:29.486 I/adbd    (  435): host-17: connection terminated: write failed
+11-25 01:45:29.487 I/adbd    (  435): host-17: offline
+11-25 01:45:29.487 I/adbd    (  435): destroying transport host-17
+11-25 01:45:29.488 I/adbd    (  435): BlockingConnectionAdapter(host-17): stopping
+11-25 01:45:29.489 I/adbd    (  435): host-17: read failed: Success
+11-25 01:45:29.490 I/adbd    (  435): BlockingConnectionAdapter(host-17): stopped
+11-25 01:45:29.495 I/adbd    (  435): BlockingConnectionAdapter(host-17): destructing
+11-25 01:45:29.495 I/adbd    (  435): BlockingConnectionAdapter(host-17): already stopped
+11-25 01:45:29.735 I/MPEG4Writer( 4491): setStartTimestampUs: 150306997
+11-25 01:45:29.735 I/MPEG4Writer( 4491): setStartTimestampUs: 150306997
+11-25 01:45:29.735 V/MediaWriter( 4491): Track event err/info msg:101, trackId:1, type:1000,val:-1011
+11-25 01:45:29.736 I/MPEG4Writer( 4491): Received total/0-length (3/0) buffers and encoded 3 frames. - Video
+11-25 01:45:29.736 D/MPEG4Writer( 4491): reset()
+11-25 01:45:29.736 D/MPEG4Writer( 4491): Video track stopping. Stop source
+11-25 01:45:29.736 D/MPEG4Writer( 4491): Video track source stopping
+11-25 01:45:29.736 D/MPEG4Writer( 4491): Video track source stopped
+11-25 01:45:29.736 D/MPEG4Writer( 4491): Video track stopped. Status:0. Stop source
+11-25 01:45:29.827 V/MediaWriter( 4491): Track event err/info msg:101, trackId:3, type:1000,val:-1011
+11-25 01:45:29.827 V/MediaWriter( 4491): Track event err/info msg:101, trackId:2, type:1000,val:-1011
+11-25 01:45:29.827 W/MPEG4Writer( 4491): 0-duration samples found: 1
+11-25 01:45:29.827 I/MPEG4Writer( 4491): Received total/0-length (1/0) buffers and encoded 1 frames. - Metadata
+11-25 01:45:29.827 W/MPEG4Writer( 4491): 0-duration samples found: 1
+11-25 01:45:29.827 I/MPEG4Writer( 4491): Received total/0-length (1/0) buffers and encoded 1 frames. - Metadata
+11-25 01:45:29.827 D/MPEG4Writer( 4491): Metadata track stopping. Stop source
+11-25 01:45:29.827 D/MPEG4Writer( 4491): Metadata track source stopping
+11-25 01:45:29.827 D/MPEG4Writer( 4491): Metadata track source stopped
+11-25 01:45:29.828 D/MPEG4Writer( 4491): Metadata track stopped. Status:0. Stop source
+11-25 01:45:29.828 D/MPEG4Writer( 4491): Metadata track stopping. Stop source
+11-25 01:45:29.828 D/MPEG4Writer( 4491): Metadata track source stopping
+11-25 01:45:29.828 D/MPEG4Writer( 4491): Metadata track source stopped
+11-25 01:45:29.828 D/MPEG4Writer( 4491): Metadata track stopped. Status:0. Stop source
+11-25 01:45:29.828 D/MPEG4Writer( 4491): Duration from tracks range is [0, 14061521] us
+11-25 01:45:29.828 D/MPEG4Writer( 4491): 0 chunks are written in the last batch
+11-25 01:45:29.829 D/MPEG4Writer( 4491): WriterThread stopped. Status:0
+11-25 01:45:29.829 I/MPEG4Writer( 4491): Adjust the moov start time from 150306997 us -> 150306997 us
+11-25 01:45:29.829 I/MPEG4Writer( 4491): MOOV atom was written to the file
+11-25 01:45:29.829 D/MPEG4Writer( 4491): release()
+11-25 01:45:29.829 D/MPEG4Writer( 4491): ftruncate mPreAllocateFileEndOffset:93014 mOffset:1667 mMdatEndOffset:89962 diff:3052
+11-25 01:45:29.832 D/MPEG4Writer( 4491): final fsync() takes 2 ms, file size 89962
+11-25 01:45:29.833 D/MPEG4Writer( 4491): MP4WtrCtrlHlpLooper stopped
+11-25 01:45:29.833 D/MPEG4Writer( 4491): Top 5 write durations(microseconds): #1:4 #2:7 #3:8 #4:9 #5:91187
+11-25 01:45:29.842 I/hw-BpHwBinder( 4491): onLastStrongRef automatically unlinking death recipients
+11-25 01:45:29.842 I/hw-BpHwBinder(  494): onLastStrongRef automatically unlinking death recipients
+11-25 01:45:29.842 I/hw-BpHwBinder(  494): onLastStrongRef automatically unlinking death recipients
+11-25 01:45:29.852 I/BpBinder( 4491): onLastStrongRef automatically unlinking death recipients: 
+11-25 01:45:29.879 I/ActivityManager(  553): Broadcasting: Intent { act=android.intent.action.MEDIA_SCANNER_SCAN_FILE dat=file:///... flg=0x400000 }
+--------- beginning of system
+11-25 01:45:29.880 I/ActivityManager(  553): Enqueued broadcast Intent { act=android.intent.action.MEDIA_SCANNER_SCAN_FILE dat=file:///... flg=0x400000 }: 0
+11-25 01:45:29.882 W/JobInfo (  553): Job 'com.google.android.providers.media.module/com.android.providers.media.MediaService#-300' has a deadline with no functional constraints. The deadline won't improve job execution latency. Consider removing the deadline.
+11-25 01:45:29.886 I/ActivityManager(  553): Broadcast completed: result=0
+11-25 01:45:29.888 D/ScreenRecord( 4491): success
+11-25 01:45:29.890 I/MediaProvider( 1530): Begin Intent { act=android.intent.action.MEDIA_SCANNER_SCAN_FILE dat=file:///... flg=0x1400010 cmp=com.google.android.providers.media.module/com.android.providers.media.MediaService }
+11-25 01:45:29.891 I/BpBinder( 4491): onLastStrongRef automatically unlinking death recipients: 
+11-25 01:45:29.893 I/BpBinder( 4491): onLastStrongRef automatically unlinking death recipients: 
+11-25 01:45:29.896 D/BufferPoolAccessor2.0(  494): Destruction - bufferpool2 0x73c4ec42bed8 cached: 0/0M, 0/0% in use; allocs: 3, 33% recycled; transfers: 3, 33% unfetched
+11-25 01:45:29.928 I/adbd    (  435): host-18: read thread spawning
+11-25 01:45:29.929 I/adbd    (  435): host-18: already offline
+11-25 01:45:29.929 I/adbd    (  435): authentication not required
+11-25 01:45:29.929 I/adbd    (  435): host-18: write thread spawning
+11-25 01:45:30.049 I/MediaProvider( 1530): End Intent { act=android.intent.action.MEDIA_SCANNER_SCAN_FILE dat=file:///... flg=0x1400010 cmp=com.google.android.providers.media.module/com.android.providers.media.MediaService }
+11-25 01:45:30.073 D/WM-SystemJobScheduler( 1530): Scheduling work ID 72982fea-3ef2-4927-9405-eb6d9ff75b50Job ID 4
+11-25 01:45:30.074 D/WM-GreedyScheduler( 1530): Ignoring {WorkSpec: 4e9fac13-27b4-47d6-a7f0-a216b68429bc}. Requires device idle.
+11-25 01:45:30.074 D/WM-GreedyScheduler( 1530): Ignoring {WorkSpec: 2bf77ebb-943b-48b2-8183-b72027cb7e6c}. Requires device idle.
+11-25 01:45:30.086 D/OomAdjuster(  553): Not killing cached processes
+11-25 01:45:30.087 I/NetworkScheduler.Stats( 1190): Task com.google.android.gms/com.google.android.gms.ipa.base.IpaGcmTaskService started execution. cause:9 exec_start_elapsed_seconds: 165 [CONTEXT service_id=218 ]
+11-25 01:45:30.093 I/NetworkScheduler.Stats( 1190): Task com.google.android.gms/com.google.android.gms.ipa.base.IpaGcmTaskService finished executing. cause:9 result: 1 elapsed_millis: 12 uptime_millis: 12 exec_start_elapsed_seconds: 165 [CONTEXT service_id=218 ]
+11-25 01:45:30.176 I/netd    (  354): tetherGetStats() -> {[]} <0.41ms>
+11-25 01:45:30.185 I/NetworkScheduler.Stats( 1190): Task com.google.android.gms/com.google.android.gms.tapandpay.gcmtask.TapAndPayGcmTaskService started execution. cause:5 exec_start_elapsed_seconds: 165 [CONTEXT service_id=218 ]
+11-25 01:45:30.187 I/.gms.persistent( 1190): Background concurrent mark compact GC freed 20MB AllocSpace bytes, 13(276KB) LOS objects, 49% free, 20MB/40MB, paused 1.229ms,2.532ms total 115.316ms
+11-25 01:45:30.206 I/TelephonySpamChimeraSer( 1320): Running Telephony Spam Chimera Service [CONTEXT service_id=150 ]
+11-25 01:45:30.207 I/NetworkScheduler.Stats( 1190): Task com.google.android.gms/com.google.android.gms.telephonyspam.sync.SpamListSyncTaskService started execution. cause:5 exec_start_elapsed_seconds: 165 [CONTEXT service_id=218 ]
+11-25 01:45:30.208 I/NetworkScheduler.Stats( 1190): Task com.google.android.gms/com.google.android.gms.tapandpay.gcmtask.TapAndPayGcmTaskService finished executing. cause:5 result: 1 elapsed_millis: 39 uptime_millis: 39 exec_start_elapsed_seconds: 165 [CONTEXT service_id=218 ]
+11-25 01:45:30.214 I/NetworkScheduler.Stats( 1190): Task com.google.android.gms/com.google.android.gms.telephonyspam.sync.SpamListSyncTaskService finished executing. cause:5 result: 2 elapsed_millis: 18 uptime_millis: 18 exec_start_elapsed_seconds: 165 [CONTEXT service_id=218 ]
