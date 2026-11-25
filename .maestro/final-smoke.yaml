@@ -1,0 +1,44 @@
+appId: com.vedant.velora
+---
+- launchApp:
+    clearState: false
+- extendedWaitUntil:
+    visible: ".*"
+    timeout: 20000
+- takeScreenshot: s1-launch
+- tapOn: "Movies"
+- waitForAnimationToEnd:
+    timeout: 6000
+- takeScreenshot: s2-movies
+- tapOn:
+    point: "30%,40%"
+- waitForAnimationToEnd:
+    timeout: 8000
+- takeScreenshot: s3-movie-details
+- scroll
+- takeScreenshot: s4-movie-details-scrolled
+- back
+- tapOn: "Series"
+- waitForAnimationToEnd:
+    timeout: 6000
+- takeScreenshot: s5-series
+- tapOn:
+    point: "30%,40%"
+- waitForAnimationToEnd:
+    timeout: 8000
+- takeScreenshot: s6-series-details
+- scroll
+- takeScreenshot: s7-series-details-scrolled
+- back
+- tapOn: "Search"
+- waitForAnimationToEnd:
+    timeout: 4000
+- takeScreenshot: s8-search
+- tapOn: "Explore"
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: s9-explore
+- tapOn: "Home"
+- waitForAnimationToEnd:
+    timeout: 4000
+- takeScreenshot: s10-home
