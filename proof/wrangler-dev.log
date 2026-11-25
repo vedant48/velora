@@ -1,0 +1,46 @@
+
+ ⛅️ wrangler 4.166.0 (update available 4.168.0)
+───────────────────────────────────────────────
+
+Cloudflare collects anonymous telemetry about your usage of Wrangler. Learn more at https://github.com/cloudflare/workers-sdk/tree/main/packages/wrangler/telemetry.md
+[custom build] Running: npm run build
+[custom build] 
+[custom build] > velora-api@0.1.0 build
+[custom build] > tsc -p tsconfig.build.json && node build.mjs
+[custom build] 
+[custom build] 
+[custom build] bundle ok
+[custom build] 
+Using secrets defined in .dev.vars
+Your Worker has access to the following bindings:
+Binding                          Resource                  Mode
+env.DB (velora-db)               D1 Database               local
+env.JWT_SECRET ("(hidden)")      Environment Variable      local
+
+⎔ Starting local server...
+[wrangler:info] Ready on http://127.0.0.1:8787
+[wrangler:info] GET /api/health 200 unknown (1024ms)
+[wrangler:info] GET /api/health 200 unknown (5ms)
+[wrangler:info] POST /api/auth/signup 201 unknown (50ms)
+[wrangler:info] POST /api/auth/signup 201 unknown (21ms)
+[wrangler:info] PUT /api/users/me/avatar 200 unknown (11ms)
+[wrangler:info] GET /api/users/e2e_alice/avatar 200 unknown (12ms)
+[wrangler:info] GET /api/users/e2e_alice/avatar 401 unknown (5ms)
+[wrangler:info] PUT /api/library/movie/1003596 200 unknown (12ms)
+[wrangler:info] PUT /api/library/movie/1281331 200 unknown (12ms)
+[wrangler:info] PUT /api/library/movie/1765072 200 unknown (8ms)
+[wrangler:info] PUT /api/library/movie/1195803 200 unknown (8ms)
+[wrangler:info] PUT /api/library/movie/1300968 200 unknown (19ms)
+[wrangler:info] PUT /api/library/movie/1611767 200 unknown (10ms)
+[wrangler:info] PUT /api/library/movie/1538497 200 unknown (8ms)
+[wrangler:info] PUT /api/library/movie/1368337 200 unknown (11ms)
+[wrangler:info] PUT /api/library/movie/969681 200 unknown (9ms)
+[wrangler:info] PUT /api/library/movie/1595124 200 unknown (9ms)
+[wrangler:info] PUT /api/library/movie/1496696 200 unknown (11ms)
+[wrangler:info] PUT /api/library/movie/1170608 200 unknown (8ms)
+[wrangler:info] PUT /api/library/tv/2288 200 unknown (8ms)
+[wrangler:info] PUT /api/library/tv/71446 200 unknown (11ms)
+[wrangler:info] PUT /api/library/tv/94997 200 unknown (8ms)
+[wrangler:info] PUT /api/library/tv/1396 200 unknown (8ms)
+[wrangler:info] PUT /api/library/tv/70523 200 unknown (10ms)
+[wrangler:info] PUT /api/library/movie/911430 200 unknown (9ms)
