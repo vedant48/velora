@@ -7,12 +7,12 @@ appId: com.vedant.velora
     visible: 'Best racing movie in years.*'
     timeout: 30000
 - assertNotVisible: 'Write a review.*'
-- takeScreenshot: c1-movie-top
+- takeScreenshot: ${P}-c1-movie-top
 - swipe:
     start: 50%, 70%
     end: 50%, 40%
     duration: 500
-- takeScreenshot: c2-movie-scrolled
+- takeScreenshot: ${P}-c2-movie-scrolled
 - back
 - tapOn: Series
 - tapOn: 'Breaking Bad'
@@ -20,17 +20,17 @@ appId: com.vedant.velora
     visible: 'Season three is where.*'
     timeout: 30000
 - assertNotVisible: 'Write a review.*'
-- takeScreenshot: c3-series-top
+- takeScreenshot: ${P}-c3-series-top
 - swipe:
     start: 85%, 60%
     end: 15%, 60%
     duration: 400
-- takeScreenshot: c4-series-cards-scrolled
+- takeScreenshot: ${P}-c4-series-cards-scrolled
 - swipe:
     start: 50%, 75%
     end: 50%, 35%
     duration: 500
-- takeScreenshot: c5-series-scrolled
+- takeScreenshot: ${P}-c5-series-scrolled
 - swipe:
     start: 50%, 30%
     end: 50%, 90%
@@ -43,10 +43,10 @@ appId: com.vedant.velora
 - extendedWaitUntil:
     visible: 'Season 2'
     timeout: 15000
-- takeScreenshot: c6-drawer-alice
+- takeScreenshot: ${P}-c6-drawer-alice
 - back
 - tapOn: 'E2E Bob ratings'
 - extendedWaitUntil:
     visible: 'Season 4'
     timeout: 15000
-- takeScreenshot: c7-drawer-bob
+- takeScreenshot: ${P}-c7-drawer-bob

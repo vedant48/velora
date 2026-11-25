@@ -7,16 +7,20 @@ adb install candidate/app-release.apk
 adb shell wm size 720x1600
 adb shell wm density 320
 python3 scripts/emulator-ready.py || true
-adb shell cmd uimode night yes
 export PATH="$PATH:$HOME/.maestro/bin"
-adb shell screenrecord --time-limit 180 --bit-rate 6000000 /sdcard/h.mp4 > proof/record.log 2>&1 &
-rec=$!
 status=0
-maestro test --format junit --output proof/ui.xml --test-output-dir proof/maestroH .maestro/circle-1517.yaml || status=1
-adb shell pkill -INT screenrecord || true
-wait "$rec" || true
-sleep 2
-adb pull /sdcard/h.mp4 proof/h.mp4 || true
+run() { maestro test --format junit --output "proof/$1.xml" --test-output-dir "proof/$1" -e P="$2" ".maestro/$3.yaml" || status=1; }
+adb shell cmd uimode night yes
+run dark-circle dark circle-1517
+nohup node scripts/e2e-delay-proxy-skeleton.cjs > proof/delay.log 2>&1 &
+sleep 1
+adb reverse tcp:8787 tcp:8788
+run dark-skeleton dark skeleton-1517
+adb reverse tcp:8787 tcp:8787
+adb shell cmd uimode night no
+run light-circle light circle-1517
+adb reverse tcp:8787 tcp:8788
+run light-skeleton light skeleton-1517
 adb exec-out screencap -p > proof/final-screen.png || true
 adb logcat -d -t 800 > proof/logcat.txt || true
 exit $status

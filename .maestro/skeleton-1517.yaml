@@ -1,0 +1,15 @@
+appId: com.vedant.velora
+---
+- launchApp
+- takeScreenshot: ${P}-k1-launch
+- tapOn: Series
+- takeScreenshot: ${P}-k2-series
+- tapOn:
+    point: 90%, 5%
+- tapOn: Activity
+- takeScreenshot: ${P}-k3-activity
+- back
+- back
+- tapOn: Want
+- tapOn: F1
+- takeScreenshot: ${P}-k4-details

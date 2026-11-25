@@ -23,6 +23,7 @@ import { GC_TIME, STALE_TIME, useTVDetailsQuery } from '../../api/queries';
 import { useAuth } from '../../state/AuthContext';
 import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
 import { ui } from '../../theme/ui';
+import { PosterGridSkeleton } from '../../components/Skeleton/ContentSkeletons';
 
 type TabKey = LibraryTab;
 type SortKey = 'recent' | 'release' | 'title' | 'rating';
@@ -456,7 +457,7 @@ export const LibraryScreen: React.FC = () => {
     (item: RowItem & { __row: string }) => {
       if (item.__row === 'tabs') return <View style={{ height: tabsH }} />;
       if (item.__row === 'insights') return insightsBody;
-      if (item.__row === 'loader') return <AppLoader style={{ marginTop: ui.space.xxl }} />;
+      if (item.__row === 'loader') return <PosterGridSkeleton />;
       if (item.__row === 'error') return <Pressable onPress={() => setRefreshKey(k => k + 1)} accessibilityRole="button"><Text style={styles.emptyText}>Could not load your library. Tap to retry.</Text></Pressable>;
       return <Text style={styles.emptyText}>Nothing here yet. Rate and track from any title page.</Text>;
     },

@@ -15,6 +15,7 @@ import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContex
 import { ui } from '../../theme/ui';
 import { getImageUrl } from '../../utils/image';
 import { Avatar } from '../../components/Avatar';
+import { PosterGridSkeleton, ProfileSkeleton } from '../../components/Skeleton/ContentSkeletons';
 
 type Nav = NativeStackNavigationProp<RootStackParamList, 'UserProfile'>;
 type Rt = RouteProp<RootStackParamList, 'UserProfile'>;
@@ -74,8 +75,8 @@ export const UserProfileScreen: React.FC = () => {
 
   if (profileQuery.isLoading) {
     return (
-      <View style={[styles.root, styles.center, { paddingTop: insets.top }]}>
-        <AppLoader />
+      <View style={[styles.root, { paddingTop: insets.top }]}>
+        <ProfileSkeleton />
       </View>
     );
   }
@@ -197,7 +198,7 @@ export const UserProfileScreen: React.FC = () => {
 
       {!isPrivate && !!stats && <Text style={styles.sectionTitle}>Watched recently</Text>}
       {isPrivate || !stats ? null : libraryQuery.isLoading ? (
-        <AppLoader />
+        <PosterGridSkeleton count={3} />
       ) : watched.length === 0 ? (
         <Text style={styles.emptyText}>Nothing watched yet.</Text>
       ) : (

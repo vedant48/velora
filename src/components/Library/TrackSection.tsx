@@ -9,6 +9,7 @@ import { EpisodeTracker } from './EpisodeTracker';
 import { RatingPicker } from './RatingPicker';
 import { StatusPicker } from './StatusPicker';
 import { ui } from '../../theme/ui';
+import { PillRowSkeleton } from '../Skeleton/ContentSkeletons';
 
 interface TrackSectionProps {
   mediaType: MediaType;
@@ -120,7 +121,7 @@ export const TrackSection = memo(function TrackSection({
         {saving && <AppLoader size="small" />}
       </View>
       {loading ? (
-        <AppLoader style={{ marginVertical: ui.space.md }} />
+        <PillRowSkeleton />
       ) : (
         <>
           <StatusPicker status={item?.status ?? null} onChange={(status) => save({ status: status ?? undefined })} />

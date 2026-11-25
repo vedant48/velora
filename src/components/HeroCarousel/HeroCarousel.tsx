@@ -11,6 +11,7 @@ import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContex
 import { AppLoader } from '../common/AppLoader';
 import { HeroPagination } from './HeroPagination';
 import { HeroSlide } from './HeroSlide';
+import { HeroSkeleton } from '../Skeleton/HeroSkeleton';
 
 interface HeroCarouselProps {
   items: MediaItem[];
@@ -142,7 +143,7 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = React.memo(
     }, [isLoading, items.length, autoplayIntervalMs]);
 
     if (isLoading) {
-      return <View style={[styles.container, { justifyContent: 'center' }]}><AppLoader /></View>;
+      return <HeroSkeleton />;
     }
 
     if (!items || items.length === 0) {
