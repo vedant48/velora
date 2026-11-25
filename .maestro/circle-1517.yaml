@@ -14,7 +14,11 @@ appId: com.vedant.velora
     duration: 500
 - takeScreenshot: ${P}-c2-movie-scrolled
 - back
-- tapOn: Series
+- tapOn:
+    point: 53%, 34%
+- scrollUntilVisible:
+    element: 'Breaking Bad'
+    timeout: 20000
 - tapOn: 'Breaking Bad'
 - extendedWaitUntil:
     visible: 'Season three is where.*'

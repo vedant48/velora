@@ -6,6 +6,9 @@ appId: com.vedant.velora
 - takeScreenshot: ${P}-k2-series
 - tapOn:
     point: 90%, 5%
+- scrollUntilVisible:
+    element: Activity
+    timeout: 15000
 - tapOn: Activity
 - takeScreenshot: ${P}-k3-activity
 - back
