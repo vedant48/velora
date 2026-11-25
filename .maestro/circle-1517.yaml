@@ -31,3 +31,16 @@ appId: com.vedant.velora
     end: 50%, 35%
     duration: 500
 - takeScreenshot: c5-series-scrolled
+- swipe:
+    start: 50%, 30%
+    end: 50%, 90%
+    duration: 400
+- swipe:
+    start: 50%, 30%
+    end: 50%, 90%
+    duration: 400
+- tapOn: 'E2E Alice ratings'
+- extendedWaitUntil:
+    visible: 'Season 2'
+    timeout: 15000
+- takeScreenshot: c6-drawer-alice
