@@ -1,0 +1,410 @@
+--------- beginning of main
+11-25 20:17:11.441  5193  5215 W unknown:BridgelessReact: ReactHost{0}.startSurface(surfaceId = 0): Execute
+11-25 20:17:11.445  5193  5193 W unknown:BridgelessReact: ReactHost{0}.ReactContext.onHostResume()
+--------- beginning of kernel
+11-25 20:17:11.578     0     0 I servicemanager: Caller(pid=5193,uid=10209,sid=u:r:untrusted_app:s0:c209,c256,c512,c768) Could not find android.hardware.graphics.allocator.IAllocator/default in the VINTF manifest. No alternative instances declared in VINTF.
+11-25 20:17:11.445  5193  5193 W unknown:BridgelessReact: ReactHost{0}.getOrCreateReactInstanceTask(): Executing ReactInstanceEventListeners
+11-25 20:17:11.446   151   151 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.mapper@4.0::IMapper/default in either framework or device VINTF manifest.
+11-25 20:17:11.446  5193  5210 I Gralloc4: mapper 4.x is not supported
+11-25 20:17:11.478  5193  5216 D nativeloader: Load /data/app/~~5sGYg1p1vXVeR3du6HAE0Q==/com.vedant.velora-uI_BQKn_QgxRaaLk73AGvA==/lib/x86_64/libworklets.so using ns clns-7 from class loader (caller=/data/app/~~5sGYg1p1vXVeR3du6HAE0Q==/com.vedant.velora-uI_BQKn_QgxRaaLk73AGvA==/base.apk!classes2.dex): ok
+11-25 20:17:11.498  5193  5216 D nativeloader: Load /data/app/~~5sGYg1p1vXVeR3du6HAE0Q==/com.vedant.velora-uI_BQKn_QgxRaaLk73AGvA==/lib/x86_64/libreanimated.so using ns clns-7 from class loader (caller=/data/app/~~5sGYg1p1vXVeR3du6HAE0Q==/com.vedant.velora-uI_BQKn_QgxRaaLk73AGvA==/base.apk!classes2.dex): ok
+11-25 20:17:11.528  5193  5216 D nativeloader: Load /data/app/~~5sGYg1p1vXVeR3du6HAE0Q==/com.vedant.velora-uI_BQKn_QgxRaaLk73AGvA==/lib/x86_64/libexpo-modules-core.so using ns clns-7 from class loader (caller=/data/app/~~5sGYg1p1vXVeR3du6HAE0Q==/com.vedant.velora-uI_BQKn_QgxRaaLk73AGvA==/base.apk!classes2.dex): ok
+11-25 20:17:11.532  5193  5216 D nativeloader: Load /data/app/~~5sGYg1p1vXVeR3du6HAE0Q==/com.vedant.velora-uI_BQKn_QgxRaaLk73AGvA==/lib/x86_64/libreact_codegen_rnscreens.so using ns clns-7 from class loader (caller=/data/app/~~5sGYg1p1vXVeR3du6HAE0Q==/com.vedant.velora-uI_BQKn_QgxRaaLk73AGvA==/base.apk!classes2.dex): ok
+11-25 20:17:11.532  5193  5216 D jni_lib_merge: Entering merged library JNI_OnLoad.
+11-25 20:17:11.532  5193  5216 D jni_lib_merge: Preparing 13 pre-merged libs (including stub)
+11-25 20:17:11.532  5193  5216 D jni_lib_merge: Preparing to register libfabricjni_so.  onload_func: 0x73a700b63010
+11-25 20:17:11.532  5193  5216 D jni_lib_merge: Preparing to register libreact_devsupportjni_so.  onload_func: 0x73a700c48b70
+11-25 20:17:11.532  5193  5216 D jni_lib_merge: Preparing to register libreact_featureflagsjni_so.  onload_func: 0x73a700c5b6a0
+11-25 20:17:11.532  5193  5216 D jni_lib_merge: Preparing to register libreact_newarchdefaults_so.  onload_func: 0x73a700c97680
+11-25 20:17:11.532  5193  5216 D jni_lib_merge: Preparing to register libreact_tracingjni_so.  onload_func: 0x73a700da0170
+11-25 20:17:11.532  5193  5216 D jni_lib_merge: Preparing to register libreactnativeblob_so.  onload_func: 0x73a700da54d0
+11-25 20:17:11.532  5193  5216 D jni_lib_merge: Preparing to register libreactnativejni_so.  onload_func: 0x73a700db19d0
+11-25 20:17:11.532  5193  5216 D jni_lib_merge: Preparing to register libreactnativejni_common_so.  onload_func: 0x73a700db4840
+11-25 20:17:11.532  5193  5216 D jni_lib_merge: Preparing to register librninstance_so.  onload_func: 0x73a700ddc960
+11-25 20:17:11.532  5193  5216 D jni_lib_merge: Preparing to register libturbomodulejsijni_so.  onload_func: 0x73a700e8b4c0
+11-25 20:17:11.532  5193  5216 D jni_lib_merge: Preparing to register libuimanagerjni_so.  onload_func: 0x73a700e92420
+11-25 20:17:11.532  5193  5216 D jni_lib_merge: Preparing to register libyoga_so.  onload_func: 0x73a700e99b20
+11-25 20:17:11.532  5193  5216 D jni_lib_merge: About to register 12 actual methods.
+11-25 20:17:11.536  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.ScreenFooterManager
+11-25 20:17:11.536  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.uimanager.LayoutShadowNode
+11-25 20:17:11.537  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class expo.modules.kotlin.views.GroupViewManagerWrapper
+11-25 20:17:11.537  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.ScreenContainerViewManager
+11-25 20:17:11.537  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.ModalScreenViewManager
+11-25 20:17:11.538  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.th3rdwave.safeareacontext.SafeAreaViewManager
+11-25 20:17:11.538  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.th3rdwave.safeareacontext.SafeAreaViewShadowNode
+11-25 20:17:11.538  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.safearea.SafeAreaViewManager
+11-25 20:17:11.538  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.ScreenViewManager
+11-25 20:17:11.538  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class expo.modules.kotlin.views.SimpleViewManagerWrapper
+11-25 20:17:11.538  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.reanimated.view.REASharedTransitionBoundaryManager
+11-25 20:17:11.539  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.ScreenStackViewManager
+11-25 20:17:11.539  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.gamma.stack.header.config.StackHeaderConfigViewManager
+11-25 20:17:11.539  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.th3rdwave.safeareacontext.SafeAreaProviderManager
+11-25 20:17:11.539  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.SearchBarManager
+11-25 20:17:11.539  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.gamma.tabs.host.TabsHostViewManager
+11-25 20:17:11.539  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.gamma.stack.header.subview.StackHeaderSubviewViewManager
+11-25 20:17:11.539  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.nitrogooglesignin.GoogleSignInButtonViewManager
+11-25 20:17:11.539  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.nitrogooglesignin.GoogleSignInButtonShadowNode
+11-25 20:17:11.539  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.gamma.scrollviewmarker.ScrollViewMarkerViewManager
+11-25 20:17:11.539  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.ScreenStackHeaderConfigViewManager
+11-25 20:17:11.540  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.gamma.modals.formsheet.FormSheetContentWrapperViewManager
+11-25 20:17:11.540  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.ScreenContentWrapperManager
+11-25 20:17:11.540  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.gamma.stack.host.StackHostViewManager
+11-25 20:17:11.540  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.ScreenStackHeaderSubviewManager
+11-25 20:17:11.540  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.gamma.stack.screen.StackScreenViewManager
+11-25 20:17:11.540  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.gamma.modals.formsheet.FormSheetHostViewManager
+11-25 20:17:11.540  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.rnscreens.gamma.tabs.screen.TabsScreenViewManager
+11-25 20:17:11.551  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.gesturehandler.react.RNGestureHandlerButtonViewManager
+11-25 20:17:11.552  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.safeareaview.ReactSafeAreaViewManager
+11-25 20:17:11.552  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.modal.ReactModalHostManager
+11-25 20:17:11.553  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.progressbar.ReactProgressBarViewManager
+11-25 20:17:11.553  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.scroll.ReactHorizontalScrollViewManager
+11-25 20:17:11.554  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.image.ReactImageManager
+11-25 20:17:11.555  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.text.ReactTextViewManager
+11-25 20:17:11.556  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.scroll.ReactHorizontalScrollContainerViewManager
+11-25 20:17:11.557  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.unimplementedview.ReactUnimplementedViewManager
+11-25 20:17:11.557  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.scroll.ReactScrollViewManager
+11-25 20:17:11.558  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.view.ReactViewManager
+11-25 20:17:11.559  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.drawer.ReactDrawerLayoutManager
+11-25 20:17:11.560  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.switchview.ReactSwitchManager
+11-25 20:17:11.560  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.swiperefresh.SwipeRefreshLayoutManager
+11-25 20:17:11.561  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.textinput.ReactTextInputManager
+11-25 20:17:11.562  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.text.SelectableTextViewManager
+11-25 20:17:11.563  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.swmansion.gesturehandler.react.RNGestureHandlerRootViewManager
+11-25 20:17:11.564  5193  5216 W unknown:ViewManagerPropertyUpdater: Could not find generated setter for class com.facebook.react.views.virtual.view.ReactVirtualViewManager
+11-25 20:17:11.575  5193  5216 W BridgelessReactContext: [WARNING] Bridgeless doesn't support CatalystInstance. Accessing an API that's not part of the new architecture is not encouraged usage.
+11-25 20:17:11.577  5193  5216 I ExpoModulesCore: ✅ JSI interop was installed
+11-25 20:17:11.578  5193  5216 I ExpoModulesCore: ✅ Constants were exported
+11-25 20:17:11.587  5193  5216 D nativeloader: Load /data/app/~~5sGYg1p1vXVeR3du6HAE0Q==/com.vedant.velora-uI_BQKn_QgxRaaLk73AGvA==/lib/x86_64/librnscreens.so using ns clns-7 from class loader (caller=/data/app/~~5sGYg1p1vXVeR3du6HAE0Q==/com.vedant.velora-uI_BQKn_QgxRaaLk73AGvA==/base.apk!classes2.dex): ok
+11-25 20:17:11.599  5193  5216 I ReactNativeJS: Running "main"
+11-25 20:17:11.601  5193  5216 D nativeloader: Load /data/app/~~5sGYg1p1vXVeR3du6HAE0Q==/com.vedant.velora-uI_BQKn_QgxRaaLk73AGvA==/lib/x86_64/libgesturehandler.so using ns clns-7 from class loader (caller=/data/app/~~5sGYg1p1vXVeR3du6HAE0Q==/com.vedant.velora-uI_BQKn_QgxRaaLk73AGvA==/base.apk!classes2.dex): ok
+11-25 20:17:11.601  5193  5216 D jni_lib_merge: Entering merged library JNI_OnLoad.
+11-25 20:17:11.601  5193  5216 D jni_lib_merge: Preparing 13 pre-merged libs (including stub)
+11-25 20:17:11.601  5193  5216 D jni_lib_merge: Preparing to register libfabricjni_so.  onload_func: 0x73a700b63010
+11-25 20:17:11.601  5193  5216 D jni_lib_merge: Preparing to register libreact_devsupportjni_so.  onload_func: 0x73a700c48b70
+11-25 20:17:11.601  5193  5216 D jni_lib_merge: Preparing to register libreact_featureflagsjni_so.  onload_func: 0x73a700c5b6a0
+11-25 20:17:11.601  5193  5216 D jni_lib_merge: Preparing to register libreact_newarchdefaults_so.  onload_func: 0x73a700c97680
+11-25 20:17:11.601  5193  5216 D jni_lib_merge: Preparing to register libreact_tracingjni_so.  onload_func: 0x73a700da0170
+11-25 20:17:11.601  5193  5216 D jni_lib_merge: Preparing to register libreactnativeblob_so.  onload_func: 0x73a700da54d0
+11-25 20:17:11.601  5193  5216 D jni_lib_merge: Preparing to register libreactnativejni_so.  onload_func: 0x73a700db19d0
+11-25 20:17:11.601  5193  5216 D jni_lib_merge: Preparing to register libreactnativejni_common_so.  onload_func: 0x73a700db4840
+11-25 20:17:11.601  5193  5216 D jni_lib_merge: Preparing to register librninstance_so.  onload_func: 0x73a700ddc960
+11-25 20:17:11.601  5193  5216 D jni_lib_merge: Preparing to register libturbomodulejsijni_so.  onload_func: 0x73a700e8b4c0
+11-25 20:17:11.601  5193  5216 D jni_lib_merge: Preparing to register libuimanagerjni_so.  onload_func: 0x73a700e92420
+11-25 20:17:11.601  5193  5216 D jni_lib_merge: Preparing to register libyoga_so.  onload_func: 0x73a700e99b20
+11-25 20:17:11.601  5193  5216 D jni_lib_merge: About to register 12 actual methods.
+11-25 20:17:11.608  5193  5193 I ReactNative: [GESTURE HANDLER] Initialize gesture handler for root view com.facebook.react.runtime.ReactSurfaceView{b040153 V.E...... ......ID 0,0-720,1600 #1}
+11-25 20:17:11.646  5193  5217 W unknown:ReactNative: StatusBarModule: Ignored status bar change, current activity is edge-to-edge.
+11-25 20:17:11.646  5193  5217 W unknown:ReactNative: StatusBarModule: Ignored status bar change, current activity is edge-to-edge.
+11-25 20:17:11.658  5193  5228 I WebViewFactory: Loading com.google.android.webview version 124.0.6367.219 (code 636771938)
+11-25 20:17:11.660   567  1165 D ConnectivityService: requestNetwork for uid/pid:10209/5193 activeRequest: null callbackRequest: 147 [NetworkRequest [ REQUEST id=148, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10209 RequestorUid: 10209 RequestorPkg: com.vedant.velora UnderlyingNetworks: Null] ]] callback flags: 0 order: 2147483647 isUidTracked: false
+11-25 20:17:11.661   567   831 D OemPaidWifiNetworkFactory: got request NetworkRequest [ REQUEST id=148, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10209 RequestorUid: 10209 RequestorPkg: com.vedant.velora UnderlyingNetworks: Null] ]
+11-25 20:17:11.661   567   831 D MultiInternetWifiNetworkFactory: got request NetworkRequest [ REQUEST id=148, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10209 RequestorUid: 10209 RequestorPkg: com.vedant.velora UnderlyingNetworks: Null] ]
+11-25 20:17:11.661   567   831 D WifiNetworkFactory: got request NetworkRequest [ REQUEST id=148, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10209 RequestorUid: 10209 RequestorPkg: com.vedant.velora UnderlyingNetworks: Null] ]
+11-25 20:17:11.661   567   831 D UntrustedWifiNetworkFactory: got request NetworkRequest [ REQUEST id=148, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10209 RequestorUid: 10209 RequestorPkg: com.vedant.velora UnderlyingNetworks: Null] ]
+11-25 20:17:11.661   567   838 D ConnectivityService: NetReassign [148 : null → 100] [c 1] [a 0] [i 0]
+--------- beginning of system
+11-25 20:17:11.663  5193  5228 V ResourcesManager: The following library key has been added: ResourcesKey{ mHash=51d4161 mResDir=null mSplitDirs=[] mOverlayDirs=[/product/overlay/NavigationBarModeGestural/NavigationBarModeGesturalOverlay.apk,/data/resource-cache/com.android.systemui-neutral-n9Ig.frro,/data/resource-cache/com.android.systemui-accent-ISgg.frro,/data/resource-cache/com.android.systemui-dynamic-E90N.frro] mLibDirs=[/data/app/~~xYdK4bPyqaAzdakjO3c8Bg==/com.google.android.webview-N0yKdrBu_qL5R0rn-H8xzg==/WebViewGoogle.apk,/data/app/~~goK_62VDz_m4zfLvlhfftA==/com.google.android.trichromelibrary_636771938-YKh9kkpsmHR7aTl04AOzRg==/TrichromeLibrary.apk,/system_ext/framework/androidx.window.extensions.jar] mDisplayId=0 mOverrideConfig=v35 mCompatInfo={420dpi always-compat} mLoaders=[]}
+11-25 20:17:11.668  5193  5228 W ziparchive: Unable to open '/data/app/~~goK_62VDz_m4zfLvlhfftA==/com.google.android.trichromelibrary_636771938-YKh9kkpsmHR7aTl04AOzRg==/TrichromeLibrary.dm': No such file or directory
+11-25 20:17:11.670  5193  5228 W ziparchive: Unable to open '/data/app/~~goK_62VDz_m4zfLvlhfftA==/com.google.android.trichromelibrary_636771938-YKh9kkpsmHR7aTl04AOzRg==/TrichromeLibrary.dm': No such file or directory
+11-25 20:17:11.670  5193  5228 W m.vedant.velora: Entry not found
+11-25 20:17:11.670  5193  5228 D nativeloader: Configuring clns-8 for other apk /data/app/~~goK_62VDz_m4zfLvlhfftA==/com.google.android.trichromelibrary_636771938-YKh9kkpsmHR7aTl04AOzRg==/TrichromeLibrary.apk. target_sdk_version=34, uses_libraries=ALL, library_path=/data/app/~~xYdK4bPyqaAzdakjO3c8Bg==/com.google.android.webview-N0yKdrBu_qL5R0rn-H8xzg==/lib/x86_64:/data/app/~~xYdK4bPyqaAzdakjO3c8Bg==/com.google.android.webview-N0yKdrBu_qL5R0rn-H8xzg==/WebViewGoogle.apk!/lib/x86_64:/data/app/~~goK_62VDz_m4zfLvlhfftA==/com.google.android.trichromelibrary_636771938-YKh9kkpsmHR7aTl04AOzRg==/TrichromeLibrary.apk!/lib/x86_64, permitted_path=/data:/mnt/expand
+11-25 20:17:11.672  5193  5228 D ApplicationLoaders: Returning zygote-cached class loader: /system_ext/framework/androidx.window.extensions.jar
+11-25 20:17:11.690  5193  5228 D nativeloader: Configuring clns-9 for other apk /data/app/~~xYdK4bPyqaAzdakjO3c8Bg==/com.google.android.webview-N0yKdrBu_qL5R0rn-H8xzg==/WebViewGoogle.apk. target_sdk_version=34, uses_libraries=, library_path=/data/app/~~xYdK4bPyqaAzdakjO3c8Bg==/com.google.android.webview-N0yKdrBu_qL5R0rn-H8xzg==/lib/x86_64:/data/app/~~xYdK4bPyqaAzdakjO3c8Bg==/com.google.android.webview-N0yKdrBu_qL5R0rn-H8xzg==/WebViewGoogle.apk!/lib/x86_64:/data/app/~~goK_62VDz_m4zfLvlhfftA==/com.google.android.trichromelibrary_636771938-YKh9kkpsmHR7aTl04AOzRg==/TrichromeLibrary.apk!/lib/x86_64, permitted_path=/data:/mnt/expand
+11-25 20:17:11.713  5193  5228 I cr_WVCFactoryProvider: Loaded version=124.0.6367.219 minSdkVersion=29 isBundle=false multiprocess=true packageId=2
+11-25 20:17:11.714  5193  5231 D nativeloader: Load /data/app/~~5sGYg1p1vXVeR3du6HAE0Q==/com.vedant.velora-uI_BQKn_QgxRaaLk73AGvA==/lib/x86_64/libavif_android.so using ns clns-7 from class loader (caller=/data/app/~~5sGYg1p1vXVeR3du6HAE0Q==/com.vedant.velora-uI_BQKn_QgxRaaLk73AGvA==/base.apk!classes3.dex): ok
+11-25 20:17:11.715  5193  5228 D nativeloader: Load /data/app/~~goK_62VDz_m4zfLvlhfftA==/com.google.android.trichromelibrary_636771938-YKh9kkpsmHR7aTl04AOzRg==/TrichromeLibrary.apk!/lib/x86_64/libmonochrome_64.so using ns clns-9 from class loader (caller=/data/app/~~xYdK4bPyqaAzdakjO3c8Bg==/com.google.android.webview-N0yKdrBu_qL5R0rn-H8xzg==/WebViewGoogle.apk): ok
+11-25 20:17:11.716  5193  5228 D nativeloader: Load /system/lib64/libwebviewchromium_plat_support.so using ns clns-9 from class loader (caller=/data/app/~~xYdK4bPyqaAzdakjO3c8Bg==/com.google.android.webview-N0yKdrBu_qL5R0rn-H8xzg==/WebViewGoogle.apk): ok
+11-25 20:17:11.718  5193  5228 I cr_LibraryLoader: Successfully loaded native library
+11-25 20:17:11.718  5193  5228 I cr_CachingUmaRecorder: Flushed 6 samples from 6 histograms, 0 samples were dropped.
+11-25 20:17:11.719  5193  5234 I chromium: [INFO:variations_seed_loader.cc(66)] Failed to open file for reading.: No such file or directory (2)
+11-25 20:17:11.719  5193  5234 I cr_VariationsUtils: Failed reading seed file "/data/user/0/com.vedant.velora/app_webview/variations_seed_new"
+11-25 20:17:11.724  5193  5228 D TrafficStats: tagSocket(124) with statsTag=0xffffffff, statsUid=-1
+11-25 20:17:11.740  5193  5193 D Glide   : Finished loading BitmapDrawable from RESOURCE_DISK_CACHE for android.resource://com.vedant.velora/2131230843 with size [640x640] in 68.31909399999999 ms
+11-25 20:17:11.765  5193  5193 D Glide   : Finished loading BitmapDrawable from RESOURCE_DISK_CACHE for android.resource://com.vedant.velora/2131230844 with size [1024x1024] in 92.527013 ms
+11-25 20:17:11.790  5193  5193 W unknown:WrappingUtils: Don't know how to round that drawable: com.facebook.react.views.image.ReactImageDownloadListener$EmptyDrawable@f3eaf9b
+11-25 20:17:11.794  5193  5244 D nativeloader: Load /data/app/~~5sGYg1p1vXVeR3du6HAE0Q==/com.vedant.velora-uI_BQKn_QgxRaaLk73AGvA==/lib/x86_64/libimagepipeline.so using ns clns-7 from class loader (caller=/data/app/~~5sGYg1p1vXVeR3du6HAE0Q==/com.vedant.velora-uI_BQKn_QgxRaaLk73AGvA==/base.apk!classes2.dex): ok
+11-25 20:17:11.809  5193  5241 D TrafficStats: tagSocket(126) with statsTag=0xffffffff, statsUid=-1
+11-25 20:17:11.810  5193  5242 D TrafficStats: tagSocket(130) with statsTag=0xffffffff, statsUid=-1
+11-25 20:17:11.816  5193  5246 D nativeloader: Load /data/app/~~5sGYg1p1vXVeR3du6HAE0Q==/com.vedant.velora-uI_BQKn_QgxRaaLk73AGvA==/lib/x86_64/libnative-imagetranscoder.so using ns clns-7 from class loader (caller=/data/app/~~5sGYg1p1vXVeR3du6HAE0Q==/com.vedant.velora-uI_BQKn_QgxRaaLk73AGvA==/base.apk!classes2.dex): ok
+11-25 20:17:11.952  1232  1767 I FontLog : Received query Noto Color Emoji Compat, URI content://com.google.android.gms.fonts [CONTEXT service_id=132 ]
+11-25 20:17:11.952  1232  1767 I FontLog : Query [emojicompat-emoji-font] resolved to {Noto Color Emoji Compat, wdth 100.0, wght 400, ital 0.0, bestEffort false} [CONTEXT service_id=132 ]
+11-25 20:17:11.954   567   588 I ActivityTaskManager: Displayed com.vedant.velora/.MainActivity for user 0: +1s390ms
+11-25 20:17:11.955  1232  1767 I FontLog : Fetch {Noto Color Emoji Compat, wdth 100.0, wght 400, ital 0.0, bestEffort false} end status Status{statusCode=SUCCESS, resolution=null} [CONTEXT service_id=132 ]
+11-25 20:17:11.956  1232  1767 I FontLog : Pulling font file for id = 13, cache size = 7 [CONTEXT service_id=132 ]
+11-25 20:17:11.962  1232  1767 I FontLog : Pulling font file for id = 13, cache size = 7 [CONTEXT service_id=132 ]
+11-25 20:17:11.971  1163  1163 D BaseDepthController: setSurface:
+11-25 20:17:11.971  1163  1163 D BaseDepthController: 	mWaitingOnSurfaceValidity: false
+11-25 20:17:11.971  1163  1163 D BaseDepthController: 	mSurface: null
+11-25 20:17:11.972  1163  1163 D BaseDepthController: mSurface is null and mCurrentBlur is: 0
+11-25 20:17:11.972  1163  1163 D StateManager: goToState - fromState: Normal, toState: Normal, partial trace:
+11-25 20:17:11.972  1163  1163 D StateManager: 	at com.android.launcher3.statemanager.StateManager.moveToRestState(go/retraceme 31f9979659277bb965985aff1272c33e3c3c9e755b77166d20a2465454178f2c:4)
+11-25 20:17:11.972  1163  1163 D StateManager: 	at com.android.launcher3.statemanager.StateManager.moveToRestState(go/retraceme 31f9979659277bb965985aff1272c33e3c3c9e755b77166d20a2465454178f2c:1)
+11-25 20:17:11.972  1163  1163 D StateManager: 	at com.android.launcher3.statemanager.StatefulActivity.onStop(go/retraceme 31f9979659277bb965985aff1272c33e3c3c9e755b77166d20a2465454178f2c:34)
+11-25 20:17:11.973  1163  1163 D StatsLog: LAUNCHER_ONSTOP
+11-25 20:17:11.986   567   585 I AppWidgetServiceImpl: setAppWidgetHidden() 0
+11-25 20:17:11.987  1163  1163 D StatsLog: LAUNCHER_GOOGLE_SEARCH_RESTORE_LIST_SIZE_AFTER_ACTIVITY_RESTART
+11-25 20:17:11.989  1163  1934 D OneSearchSuggestProvider: Shut down the binder channel
+11-25 20:17:11.989  1163  2232 I IPCThreadState: oneway function results for code 2 on binder at 0x73a8907c5410 will be dropped but finished with status UNKNOWN_TRANSACTION
+11-25 20:17:12.037  5193  5193 D SplashScreenView: Building from parcel drawable: android.graphics.drawable.BitmapDrawable@cbe4ea3
+11-25 20:17:12.037   364   415 I netd    : tetherGetStats() -> {[]} <0.39ms>
+11-25 20:17:12.038  5193  5193 D SplashScreenView: Build android.window.SplashScreenView{25e6559 V.E...... ......ID 0,0-0,0}
+11-25 20:17:12.038  5193  5193 D SplashScreenView: Icon: view: androidx.appcompat.widget.AppCompatImageView{e8751e V.ED..... ......I. 0,0-0,0 #1020504 android:id/splashscreen_icon_view} drawable: android.graphics.drawable.BitmapDrawable@cbe4ea3 size: 384
+11-25 20:17:12.038  5193  5193 D SplashScreenView: Branding: view: android.view.View{9dd31ff G.ED..... ......I. 0,0-0,0 #1020503 android:id/splashscreen_branding_view} drawable: null size w: 0 h: 0
+11-25 20:17:12.043   567   693 I ImeTracker: com.vedant.velora:29d2cea7: onRequestHide at ORIGIN_SERVER reason HIDE_UNSPECIFIED_WINDOW fromUser false
+11-25 20:17:12.043   567   693 I ImeTracker: com.vedant.velora:29d2cea7: onCancelled at PHASE_SERVER_SHOULD_HIDE
+11-25 20:17:12.048  1378  1378 I GoogleInputMethodService: GoogleInputMethodService.onFinishInput():3157 
+11-25 20:17:12.050  1378  1378 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2248 repeatCheckTimes = 0, locked = false
+11-25 20:17:12.050  1378  1378 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1986 onStartInput(EditorInfo{EditorInfo{packageName=com.vedant.velora, inputType=0, inputTypeString=NULL, enableLearning=false, autoCorrection=false, autoComplete=false, imeOptions=0, privateImeOptions=null, actionName=UNSPECIFIED, actionLabel=null, initialSelStart=-1, initialSelEnd=-1, initialCapsMode=0, label=null, fieldId=0, fieldName=null, extras=null, hintText=null, hintLocales=[]}}, false)
+11-25 20:17:12.050  1378  1378 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2248 repeatCheckTimes = 1, locked = false
+11-25 20:17:12.050  1378  1378 I AndroidIME: InputBundleManager.loadActiveInputBundleId():450 loadActiveInputBundleId: und-Latn-x-password, password
+11-25 20:17:12.050   567  1792 W PackageConfigPersister: App-specific configuration not found for packageName: com.vedant.velora and userId: 0
+11-25 20:17:12.121   918  1012 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ViewRootImpl$$ExternalSyntheticLambda11@bedad0e
+11-25 20:17:12.131   567  1165 W InputManager-JNI: Input channel object 'bccfb2b Splash Screen com.vedant.velora (client)' was disposed without first being removed with the input manager!
+11-25 20:17:12.132   567   585 W WindowManager: Failed looking up window session=Session{a02ca5a 918:u0a10181} callers=com.android.server.wm.WindowManagerService.windowForClientLocked:6311 com.android.server.wm.Session.setOnBackInvokedCallbackInfo:1020 android.view.IWindowSession$Stub.onTransact:1199 
+11-25 20:17:12.132   567   585 I WindowManager: setOnBackInvokedCallback(): No window state for package:com.android.systemui
+11-25 20:17:12.482  5193  5193 D SplashScreenView: remove starting view
+11-25 20:17:12.859  5256  5256 W BpBinder: Linking to death on android.gui.ISurfaceComposer but there are no threads (yet?) listening to incoming transactions. See ProcessState::startThreadPool and ProcessState::setThreadPoolMaxThreadCount. Generally you should setup the binder threadpool before other initialization steps.
+11-25 20:17:12.860  5256  5256 W ProcessState: Extra binder thread started, but 0 threads requested. Do not use *startThreadPool when zero threads are requested.
+11-25 20:17:12.910   151   151 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.mapper@4.0::IMapper/default in either framework or device VINTF manifest.
+11-25 20:17:12.910  5256  5257 I Gralloc4: mapper 4.x is not supported
+11-25 20:17:13.035     0     0 I servicemanager: Caller(pid=5256,uid=2000,sid=u:r:shell:s0) Could not find android.hardware.graphics.allocator.IAllocator/default in the VINTF manifest. No alternative instances declared in VINTF.
+11-25 20:17:13.046  5193  5210 D EGL_emulation: app_time_stats: avg=24.72ms min=5.79ms max=175.91ms count=38
+11-25 20:17:13.687  5193  5217 W unknown:ReactNative: StatusBarModule: Ignored status bar change, current activity is edge-to-edge.
+11-25 20:17:13.782   567   673 D ActivityManager: freezing 2913 com.google.android.rkpdapp
+11-25 20:17:13.786   567   838 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET, states=14
+11-25 20:17:13.786   567   838 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET6, states=14
+11-25 20:17:13.786   567   838 D InetDiagMessage: Destroyed live tcp sockets for uids={10205} in 4ms
+11-25 20:17:14.048  5193  5210 D EGL_emulation: app_time_stats: avg=21.50ms min=5.90ms max=267.55ms count=38
+11-25 20:17:14.276  5261  5261 W BpBinder: Linking to death on android.gui.ISurfaceComposer but there are no threads (yet?) listening to incoming transactions. See ProcessState::startThreadPool and ProcessState::setThreadPoolMaxThreadCount. Generally you should setup the binder threadpool before other initialization steps.
+11-25 20:17:14.276  5261  5261 W ProcessState: Extra binder thread started, but 0 threads requested. Do not use *startThreadPool when zero threads are requested.
+11-25 20:17:14.309   151   151 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.mapper@4.0::IMapper/default in either framework or device VINTF manifest.
+11-25 20:17:14.444     0     0 I servicemanager: Caller(pid=5261,uid=2000,sid=u:r:shell:s0) Could not find android.hardware.graphics.allocator.IAllocator/default in the VINTF manifest. No alternative instances declared in VINTF.
+11-25 20:17:14.312  5261  5262 I Gralloc4: mapper 4.x is not supported
+11-25 20:17:14.406   567  2579 E TaskPersister: File error accessing recents directory (directory doesn't exist?).
+11-25 20:17:14.576   567   838 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET, states=14
+11-25 20:17:14.583   567   838 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET6, states=14
+11-25 20:17:14.583   567   838 D InetDiagMessage: Destroyed live tcp sockets for uids={10145} in 7ms
+11-25 20:17:14.584   567   838 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET, states=14
+11-25 20:17:14.584   567   838 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET6, states=14
+11-25 20:17:14.584   567   838 D InetDiagMessage: Destroyed live tcp sockets for uids={20145} in 1ms
+11-25 20:17:14.755   567   838 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET, states=14
+11-25 20:17:14.757   567   838 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET6, states=14
+11-25 20:17:14.757   567   838 D InetDiagMessage: Destroyed live tcp sockets for uids={10142} in 3ms
+11-25 20:17:14.758   567   838 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET, states=14
+11-25 20:17:14.758   567   838 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET6, states=14
+11-25 20:17:14.758   567   838 D InetDiagMessage: Destroyed live tcp sockets for uids={20142} in 0ms
+11-25 20:17:14.765  1703  1703 V ContactsProvider: Scheduled notifyChange started.
+11-25 20:17:14.767   567  1511 D OomAdjuster: Not killing cached processes
+11-25 20:17:14.790   364   415 I netd    : tetherGetStats() -> {[]} <0.31ms>
+11-25 20:17:14.846  1232  4764 I NetworkScheduler.Stats: Task com.google.android.gms/com.google.android.gms.icing.proxy.IcingInternalCorporaUpdateService started execution. cause:9 exec_start_elapsed_seconds: 182 [CONTEXT service_id=218 ]
+11-25 20:17:14.852  1232  4764 I NetworkScheduler.Stats: Task com.google.android.gms/com.google.android.gms.icing.proxy.IcingInternalCorporaUpdateService finished executing. cause:9 result: 1 elapsed_millis: 13 uptime_millis: 13 exec_start_elapsed_seconds: 182 [CONTEXT service_id=218 ]
+11-25 20:17:15.054  5193  5210 D EGL_emulation: app_time_stats: avg=15.16ms min=5.90ms max=27.25ms count=51
+11-25 20:17:15.435   920   941 W ssioncontroller: ApkAssets: Deleting an ApkAssets object '<empty> and /system/framework/framework-res.apk' with 1 weak references
+11-25 20:17:15.656  5266  5266 W BpBinder: Linking to death on android.gui.ISurfaceComposer but there are no threads (yet?) listening to incoming transactions. See ProcessState::startThreadPool and ProcessState::setThreadPoolMaxThreadCount. Generally you should setup the binder threadpool before other initialization steps.
+11-25 20:17:15.656  5266  5266 W ProcessState: Extra binder thread started, but 0 threads requested. Do not use *startThreadPool when zero threads are requested.
+11-25 20:17:15.670   151   151 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.mapper@4.0::IMapper/default in either framework or device VINTF manifest.
+11-25 20:17:15.670  5266  5267 I Gralloc4: mapper 4.x is not supported
+11-25 20:17:15.802     0     0 I servicemanager: Caller(pid=5266,uid=2000,sid=u:r:shell:s0) Could not find android.hardware.graphics.allocator.IAllocator/default in the VINTF manifest. No alternative instances declared in VINTF.
+11-25 20:17:16.072  5193  5210 D EGL_emulation: app_time_stats: avg=15.02ms min=4.82ms max=34.97ms count=52
+11-25 20:17:16.818  5193  5268 D ProfileInstaller: Skipping profile installation for com.vedant.velora
+11-25 20:17:16.949  5193  5220 W NativeResponse: Invalid state - currentState[2] validStates[0]
+11-25 20:17:16.971  5193  5193 D Glide   : Finished loading BitmapDrawable from MEMORY_CACHE for BlurhashModel(uri=blurhash:/L67_%7D%23WB00of~qofWBof00of~qof, width=16, height=16) with size [16x16] in 0.043535 ms
+11-25 20:17:16.972  5193  5193 D Glide   : Finished loading BitmapDrawable from MEMORY_CACHE for BlurhashModel(uri=blurhash:/L67_%7D%23WB00of~qofWBof00of~qof, width=16, height=16) with size [16x16] in 0.028992999999999998 ms
+11-25 20:17:16.972  5193  5193 D Glide   : Finished loading BitmapDrawable from MEMORY_CACHE for BlurhashModel(uri=blurhash:/L67_%7D%23WB00of~qofWBof00of~qof, width=16, height=16) with size [16x16] in 0.029514 ms
+11-25 20:17:16.972  5193  5193 D Glide   : Finished loading BitmapDrawable from MEMORY_CACHE for BlurhashModel(uri=blurhash:/L67_%7D%23WB00of~qofWBof00of~qof, width=16, height=16) with size [16x16] in 0.025658 ms
+11-25 20:17:16.972  5193  5193 D Glide   : Finished loading BitmapDrawable from MEMORY_CACHE for BlurhashModel(uri=blurhash:/L67_%7D%23WB00of~qofWBof00of~qof, width=16, height=16) with size [16x16] in 0.040139999999999995 ms
+11-25 20:17:16.973  5193  5193 D Glide   : Finished loading BitmapDrawable from MEMORY_CACHE for BlurhashModel(uri=blurhash:/L67_%7D%23WB00of~qofWBof00of~qof, width=16, height=16) with size [16x16] in 0.034151 ms
+11-25 20:17:16.973  5193  5193 D Glide   : Finished loading BitmapDrawable from MEMORY_CACHE for BlurhashModel(uri=blurhash:/L67_%7D%23WB00of~qofWBof00of~qof, width=16, height=16) with size [16x16] in 0.032719 ms
+11-25 20:17:16.995  5193  5193 D Glide   : Finished loading BitmapDrawable from MEMORY_CACHE for BlurhashModel(uri=blurhash:/L67_%7D%23WB00of~qofWBof00of~qof, width=16, height=16) with size [16x16] in 0.034711 ms
+11-25 20:17:16.996  5193  5193 D Glide   : Finished loading BitmapDrawable from MEMORY_CACHE for BlurhashModel(uri=blurhash:/L67_%7D%23WB00of~qofWBof00of~qof, width=16, height=16) with size [16x16] in 0.026328999999999998 ms
+11-25 20:17:16.996  5193  5193 D Glide   : Finished loading BitmapDrawable from MEMORY_CACHE for BlurhashModel(uri=blurhash:/L67_%7D%23WB00of~qofWBof00of~qof, width=16, height=16) with size [16x16] in 0.026098 ms
+11-25 20:17:17.026  5271  5271 W BpBinder: Linking to death on android.gui.ISurfaceComposer but there are no threads (yet?) listening to incoming transactions. See ProcessState::startThreadPool and ProcessState::setThreadPoolMaxThreadCount. Generally you should setup the binder threadpool before other initialization steps.
+11-25 20:17:17.027  5271  5271 W ProcessState: Extra binder thread started, but 0 threads requested. Do not use *startThreadPool when zero threads are requested.
+11-25 20:17:17.081  5193  5210 D EGL_emulation: app_time_stats: avg=15.69ms min=6.12ms max=130.59ms count=46
+11-25 20:17:17.097  5193  5193 D Glide   : Finished loading BitmapDrawable from RESOURCE_DISK_CACHE for BlurhashModel(uri=blurhash:/L67_%7D%23WB00of~qofWBof00of~qof, width=16, height=16) with size [16x16] in 139.587593 ms
+11-25 20:17:17.097   151   151 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.mapper@4.0::IMapper/default in either framework or device VINTF manifest.
+11-25 20:17:17.097  5271  5272 I Gralloc4: mapper 4.x is not supported
+11-25 20:17:17.225     0     0 I servicemanager: Caller(pid=5271,uid=2000,sid=u:r:shell:s0) Could not find android.hardware.graphics.allocator.IAllocator/default in the VINTF manifest. No alternative instances declared in VINTF.
+11-25 20:17:17.100  5193  5193 D Glide   : Finished loading BitmapDrawable from RESOURCE_DISK_CACHE for BlurhashModel(uri=blurhash:/L67_%7D%23WB00of~qofWBof00of~qof, width=16, height=16) with size [16x16] in 129.841465 ms
+11-25 20:17:17.100  5193  5193 D Glide   : Finished loading BitmapDrawable from DATA_DISK_CACHE for https://image.tmdb.org/t/p/w342/9PXZIUsSDh4alB80jheWX4fhZmy.jpg with size [640x960] in 142.77162199999998 ms
+11-25 20:17:17.106  5193  5193 D Glide   : Finished loading BitmapDrawable from DATA_DISK_CACHE for https://image.tmdb.org/t/p/w342/alsb3UC17kxIcytLWvwkmL0STgU.jpg with size [308x462] in 135.585848 ms
+11-25 20:17:17.107  5193  5193 D Glide   : Finished loading BitmapDrawable from DATA_DISK_CACHE for https://image.tmdb.org/t/p/w342/iHJhSfqFpDMOyeMc6h6BOeHxse2.jpg with size [308x462] in 135.503546 ms
+11-25 20:17:17.107  5193  5193 D Glide   : Finished loading BitmapDrawable from DATA_DISK_CACHE for https://image.tmdb.org/t/p/w342/yykeYKbDBM9eUMJUucaaDo2mi1p.jpg with size [308x462] in 135.58906199999998 ms
+11-25 20:17:17.107  5193  5193 D Glide   : Finished loading BitmapDrawable from DATA_DISK_CACHE for https://image.tmdb.org/t/p/w342/6FcBZOKvyrLCKGCyBG0ySCR4okt.jpg with size [308x462] in 135.456095 ms
+11-25 20:17:17.131  5193  5193 D Glide   : Finished loading BitmapDrawable from DATA_DISK_CACHE for https://image.tmdb.org/t/p/w342/vWbEuI3LuFOGYZIxESLAmwFwtvr.jpg with size [308x462] in 159.019915 ms
+11-25 20:17:17.143  5193  5193 D Glide   : Finished loading BitmapDrawable from DATA_DISK_CACHE for https://image.tmdb.org/t/p/w342/5ffVOGY3x3Sn3jovzvycJeizpks.jpg with size [308x462] in 170.239441 ms
+11-25 20:17:17.143  5193  5193 D Glide   : Finished loading BitmapDrawable from DATA_DISK_CACHE for https://image.tmdb.org/t/p/w342/5rhTDKUhPYvpdQIijFIs5VoWsON.jpg with size [308x462] in 170.608839 ms
+11-25 20:17:17.147  5193  5193 D Glide   : Finished loading BitmapDrawable from DATA_DISK_CACHE for https://image.tmdb.org/t/p/w342/bjiS5ipwxb9JFy3XRRN4OAilSeX.jpg with size [308x462] in 173.655484 ms
+11-25 20:17:17.147  5193  5193 D Glide   : Finished loading BitmapDrawable from DATA_DISK_CACHE for https://image.tmdb.org/t/p/w342/1zqWkLwC1zLBBBtIWzmkmWeMWnT.jpg with size [308x462] in 151.72195 ms
+11-25 20:17:17.147  5193  5193 D Glide   : Finished loading BitmapDrawable from DATA_DISK_CACHE for https://image.tmdb.org/t/p/w342/zbT4sxoCEeFWlQG4SC5X9Q8v6PC.jpg with size [308x462] in 151.62033 ms
+11-25 20:17:17.148  5193  5193 D Glide   : Finished loading BitmapDrawable from DATA_DISK_CACHE for https://image.tmdb.org/t/p/w342/atI81xXKNVah7PJFBo3aXqQKtnG.jpg with size [308x462] in 151.510247 ms
+11-25 20:17:17.291  5193  5200 W m.vedant.velora: Missing inline cache for void expo.modules.image.ExpoImageViewWrapper.onResourceReady$lambda$5(expo.modules.image.ExpoImageViewWrapper, boolean, expo.modules.image.ImageViewWrapperTarget, android.graphics.drawable.Drawable)
+11-25 20:17:17.291  5193  5200 W m.vedant.velora: Missing inline cache for void expo.modules.image.ExpoImageViewWrapper.onResourceReady$lambda$5(expo.modules.image.ExpoImageViewWrapper, boolean, expo.modules.image.ImageViewWrapperTarget, android.graphics.drawable.Drawable)
+11-25 20:17:17.292  5193  5200 W m.vedant.velora: Missing inline cache for void expo.modules.image.ExpoImageViewWrapper.onResourceReady$lambda$5(expo.modules.image.ExpoImageViewWrapper, boolean, expo.modules.image.ImageViewWrapperTarget, android.graphics.drawable.Drawable)
+11-25 20:17:18.023   364   415 I netd    : tetherGetStats() -> {[]} <0.31ms>
+11-25 20:17:18.316  1406  1406 D BoundBrokerSvc: onUnbind: Intent { act=com.google.android.gms.auth.cryptauth.cryptauthservice.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.GmsBoundBrokerService }
+11-25 20:17:18.318  5277  5277 W BpBinder: Linking to death on android.gui.ISurfaceComposer but there are no threads (yet?) listening to incoming transactions. See ProcessState::startThreadPool and ProcessState::setThreadPoolMaxThreadCount. Generally you should setup the binder threadpool before other initialization steps.
+11-25 20:17:18.318  5277  5277 W ProcessState: Extra binder thread started, but 0 threads requested. Do not use *startThreadPool when zero threads are requested.
+11-25 20:17:18.328   151   151 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.mapper@4.0::IMapper/default in either framework or device VINTF manifest.
+11-25 20:17:18.328  5277  5278 I Gralloc4: mapper 4.x is not supported
+11-25 20:17:18.466     0     0 I servicemanager: Caller(pid=5277,uid=2000,sid=u:r:shell:s0) Could not find android.hardware.graphics.allocator.IAllocator/default in the VINTF manifest. No alternative instances declared in VINTF.
+11-25 20:17:19.001  1406  1406 D BoundBrokerSvc: onUnbind: Intent { act=com.google.android.gms.feedback.internal.IFeedbackService dat=chimera-action:/... cmp=com.google.android.gms/.chimera.GmsBoundBrokerService }
+11-25 20:17:19.340     0     0 I logd    : start watching /data/system/packages.list ...
+11-25 20:17:19.341     0     0 I logd    : ReadPackageList, total packages: 217
+11-25 20:17:19.257   567   600 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 20:17:19.257   567   600 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 20:17:19.272  1406  1406 D BoundBrokerSvc: onUnbind: Intent { act=com.google.android.gms.ocr.service.internal.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.GmsInternalApiService }
+11-25 20:17:19.403  1406  1406 D BoundBrokerSvc: onUnbind: Intent { act=com.google.android.gms.pay.service.BIND dat=chimera-action:/... cmp=com.google.android.gms/.chimera.GmsApiService }
+11-25 20:17:19.432   567   907 W FileUtils: Failed to chmod(AtomicFile[/data/system_de/0/system/game-manager-service.xml]): android.system.ErrnoException: chmod failed: ENOENT (No such file or directory)
+11-25 20:17:19.562   567   673 D ActivityManager: freezing 2675 com.android.chrome
+11-25 20:17:19.563   567   673 D ActivityManager: freezing 1666 android.process.media
+11-25 20:17:19.564   567   838 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET, states=14
+11-25 20:17:19.564   567   838 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET6, states=14
+11-25 20:17:19.564   567   838 D InetDiagMessage: Destroyed live tcp sockets for uids={10145} in 0ms
+11-25 20:17:19.564   567   838 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET, states=14
+11-25 20:17:19.565   567   838 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET6, states=14
+11-25 20:17:19.565   567   838 D InetDiagMessage: Destroyed live tcp sockets for uids={10095} in 1ms
+11-25 20:17:19.569   567   673 D ActivityManager: freezing 2475 com.google.android.documentsui
+11-25 20:17:19.570   567   838 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET, states=14
+11-25 20:17:19.571   567   838 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET6, states=14
+11-25 20:17:19.571   567   838 D InetDiagMessage: Destroyed live tcp sockets for uids={10096} in 1ms
+11-25 20:17:19.630  5281  5281 W BpBinder: Linking to death on android.gui.ISurfaceComposer but there are no threads (yet?) listening to incoming transactions. See ProcessState::startThreadPool and ProcessState::setThreadPoolMaxThreadCount. Generally you should setup the binder threadpool before other initialization steps.
+11-25 20:17:19.630  5281  5281 W ProcessState: Extra binder thread started, but 0 threads requested. Do not use *startThreadPool when zero threads are requested.
+11-25 20:17:19.640   151   151 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.mapper@4.0::IMapper/default in either framework or device VINTF manifest.
+11-25 20:17:19.641  5281  5282 I Gralloc4: mapper 4.x is not supported
+11-25 20:17:19.778     0     0 I servicemanager: Caller(pid=5281,uid=2000,sid=u:r:shell:s0) Could not find android.hardware.graphics.allocator.IAllocator/default in the VINTF manifest. No alternative instances declared in VINTF.
+11-25 20:17:19.971   176  4813 I keystore2: system/security/keystore2/watchdog/src/lib.rs:319 - Watchdog thread idle -> terminating. Have a great day.
+11-25 20:17:19.998   567  1754 D OomAdjuster: Not killing cached processes
+11-25 20:17:20.007  1406  1406 D BoundBrokerSvc: onUnbind: Intent { act=com.google.android.mdd.service.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.GmsBoundBrokerService }
+11-25 20:17:20.487  1406  1406 D BoundBrokerSvc: onUnbind: Intent { act=com.google.android.gms.audit.service.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.GmsBoundBrokerService }
+11-25 20:17:20.827   364   415 I netd    : tetherGetStats() -> {[]} <0.28ms>
+11-25 20:17:20.937  5285  5285 W BpBinder: Linking to death on android.gui.ISurfaceComposer but there are no threads (yet?) listening to incoming transactions. See ProcessState::startThreadPool and ProcessState::setThreadPoolMaxThreadCount. Generally you should setup the binder threadpool before other initialization steps.
+11-25 20:17:20.937  5285  5285 W ProcessState: Extra binder thread started, but 0 threads requested. Do not use *startThreadPool when zero threads are requested.
+11-25 20:17:20.946   151   151 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.mapper@4.0::IMapper/default in either framework or device VINTF manifest.
+11-25 20:17:20.946  5285  5286 I Gralloc4: mapper 4.x is not supported
+11-25 20:17:21.083     0     0 I servicemanager: Caller(pid=5285,uid=2000,sid=u:r:shell:s0) Could not find android.hardware.graphics.allocator.IAllocator/default in the VINTF manifest. No alternative instances declared in VINTF.
+11-25 20:17:22.016     0     0 W healthd : battery l=100 v=5000 t=25.0 h=2 st=2 c=900000 fc=3000000 cc=10 chg=a
+11-25 20:17:22.003   567   673 D ActivityManager: freezing 1576 com.google.android.googlequicksearchbox:search
+11-25 20:17:22.004   567   673 D ActivityManager: freezing 3906 com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0
+11-25 20:17:22.077   567   838 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET, states=14
+11-25 20:17:22.077   567   838 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET6, states=14
+11-25 20:17:22.077   567   838 D InetDiagMessage: Destroyed live tcp sockets for uids={99000} in 0ms
+11-25 20:17:22.243  5290  5290 W BpBinder: Linking to death on android.gui.ISurfaceComposer but there are no threads (yet?) listening to incoming transactions. See ProcessState::startThreadPool and ProcessState::setThreadPoolMaxThreadCount. Generally you should setup the binder threadpool before other initialization steps.
+11-25 20:17:22.243  5290  5290 W ProcessState: Extra binder thread started, but 0 threads requested. Do not use *startThreadPool when zero threads are requested.
+11-25 20:17:22.254   151   151 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.mapper@4.0::IMapper/default in either framework or device VINTF manifest.
+11-25 20:17:22.254  5290  5291 I Gralloc4: mapper 4.x is not supported
+11-25 20:17:22.392     0     0 I servicemanager: Caller(pid=5290,uid=2000,sid=u:r:shell:s0) Could not find android.hardware.graphics.allocator.IAllocator/default in the VINTF manifest. No alternative instances declared in VINTF.
+11-25 20:17:23.056  3090  3090 I BugleDataModel: ActionExecutorImpl: Starting ActionService
+11-25 20:17:23.058  3090  3090 I BugleDataModel: ActionExecutorImpl: ACTION_EXECUTE_QUEUED_CountryCodeDetectorAction
+11-25 20:17:23.058  3090  3167 I BugleDataModel: ExecuteActionRunnable: running action CountryCodeDetectorAction
+11-25 20:17:23.058  3090  3090 I BugleDataModel: ActionExecutorImpl: ACTION_EXECUTE_QUEUED_SelfParticipantsRefreshAction
+11-25 20:17:23.059  3090  3167 I BugleDataModel: ActionExecutorImpl: ACTION_BACKGROUND_QUEUED_CountryCodeDetectorAction
+11-25 20:17:23.060  3090  3167 I BugleDataModel: ExecuteActionRunnable: running action SelfParticipantsRefreshAction
+11-25 20:17:23.061  3090  3167 I BugleDataModel: ActionExecutorImpl: ACTION_BACKGROUND_QUEUED_SelfParticipantsRefreshAction
+11-25 20:17:23.061  3090  5293 I Bugle   : CountryCodeDetector: updateSmsNetworkCountry from default subscription network country. detected country: us
+11-25 20:17:23.061  3090  5293 I BugleDataModel: ActionExecutorImpl: ACTION_RESPONSE_QUEUED_CountryCodeDetectorAction
+11-25 20:17:23.063  3090  5293 I BugleDataModel: ParticipantRefresh: ContactContentObserver created
+11-25 20:17:23.063  3090  5293 I BugleDataModel: ParticipantFullRefresh: Start participant refresh. refreshMode: SELF_ONLY
+11-25 20:17:23.064  3090  5293 I BugleDataModel: SubscriptionsTracker#refreshSelfParticipantList([1])
+11-25 20:17:23.067  3090  5293 I BugleDataModel: SubscriptionsTracker: insertSelfParticipant. participantId: 2, selfParticipantId: 2, subId: 1
+11-25 20:17:23.069  3090  5293 I Bugle   : getRawTelephonyPhoneNumber redacted-pii[12-chars] [CONTEXT sub_id=1 ]
+11-25 20:17:23.069  3090  5293 I Bugle   : SubscriptionUtils.getCanonicalForSelf: self=redacted-pii[12-chars], country=US [CONTEXT sub_id=1 ]
+11-25 20:17:23.071  3090  5293 I Bugle   : CountryCodeDetector: updateSmsNetworkCountry from default subscription network country. detected country: us
+11-25 20:17:23.073  3090  5293 I Bugle   : getRawTelephonyPhoneNumber redacted-pii[12-chars] [CONTEXT sub_id=1 ]
+11-25 20:17:23.075  3090  5293 I Bugle   : getRawTelephonyPhoneNumber redacted-pii[12-chars] [CONTEXT sub_id=1 ]
+11-25 20:17:23.075  3090  5293 I Bugle   : SubscriptionUtils.getCanonicalForSelf: self=redacted-pii[12-chars], country=US [CONTEXT sub_id=1 ]
+11-25 20:17:23.077  3090  5293 I Bugle   : getRawTelephonyPhoneNumber redacted-pii[12-chars] [CONTEXT sub_id=1 ]
+11-25 20:17:23.081  3090  5293 I BugleDataModel: SubscriptionsTracker bindToTrackingMap bound participants: [ParticipantId=1 subId=-1, ParticipantId=2 subId=1]
+11-25 20:17:23.083  3090  5293 I Bugle   : getRawTelephonyPhoneNumber redacted-pii[12-chars] [CONTEXT sub_id=1 ]
+11-25 20:17:23.083  3090  5293 I Bugle   : SubscriptionUtils.getCanonicalForSelf: self=redacted-pii[12-chars], country=US [CONTEXT sub_id=1 ]
+11-25 20:17:23.092  3090  5293 I BugleDataModel: ParticipantRefresh: No match contact, clear contact info
+11-25 20:17:23.095  3090  5293 I Bugle   : getRawTelephonyPhoneNumber redacted-pii[12-chars] [CONTEXT sub_id=1 ]
+11-25 20:17:23.095  3090  5293 I Bugle   : SubscriptionUtils.getCanonicalForSelf: self=redacted-pii[12-chars], country=US [CONTEXT sub_id=1 ]
+11-25 20:17:23.099  3090  5293 I BugleDataModel: ParticipantRefresh: No match contact, clear contact info
+11-25 20:17:23.100  3090  5293 I BugleDataModel: ParticipantFullRefresh: Number of participants refreshed: 2
+11-25 20:17:23.102  3090  5293 I BugleDataModel: ActionExecutorImpl: ACTION_RESPONSE_QUEUED_SelfParticipantsRefreshAction
+11-25 20:17:23.102  3090  3167 I BugleDataModel: ActionExecutorImpl: Stopping ActionService
+11-25 20:17:23.104  3090  3167 I Bugle   : getRawTelephonyPhoneNumber redacted-pii[12-chars] [CONTEXT sub_id=1 ]
+11-25 20:17:23.105  3090  3167 I Bugle   : SubscriptionUtils.getCanonicalForSelf: self=redacted-pii[12-chars], country=US [CONTEXT sub_id=1 ]
+11-25 20:17:23.107  3090  3167 I BugleSelfIdentity: Create new MyIdentity ada35b49-f5a6-4bc1-bbe9-cde076c73906, existing identities on SIM 0 [CONTEXT sub_id=1 ]
+11-25 20:17:23.552  5297  5297 W BpBinder: Linking to death on android.gui.ISurfaceComposer but there are no threads (yet?) listening to incoming transactions. See ProcessState::startThreadPool and ProcessState::setThreadPoolMaxThreadCount. Generally you should setup the binder threadpool before other initialization steps.
+11-25 20:17:23.552  5297  5297 W ProcessState: Extra binder thread started, but 0 threads requested. Do not use *startThreadPool when zero threads are requested.
+11-25 20:17:23.560   151   151 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.mapper@4.0::IMapper/default in either framework or device VINTF manifest.
+11-25 20:17:23.560  5297  5298 I Gralloc4: mapper 4.x is not supported
+11-25 20:17:23.696     0     0 I servicemanager: Caller(pid=5297,uid=2000,sid=u:r:shell:s0) Could not find android.hardware.graphics.allocator.IAllocator/default in the VINTF manifest. No alternative instances declared in VINTF.
+11-25 20:17:23.807   364   415 I netd    : tetherGetStats() -> {[]} <0.28ms>
+11-25 20:17:23.814   443   443 W adbd    : timeout expired while flushing socket, closing
+11-25 20:17:23.825   443   443 W adbd    : timeout expired while flushing socket, closing
+11-25 20:17:23.825   443   443 W adbd    : timeout expired while flushing socket, closing
+11-25 20:17:23.995  5193  5203 W m.vedant.velora: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~xYdK4bPyqaAzdakjO3c8Bg==/com.google.android.webview-N0yKdrBu_qL5R0rn-H8xzg==/WebViewGoogle.apk' with 2 weak references
+11-25 20:17:23.995  5193  5203 W System  : A resource failed to call release. 
+11-25 20:17:24.864  5301  5301 W BpBinder: Linking to death on android.gui.ISurfaceComposer but there are no threads (yet?) listening to incoming transactions. See ProcessState::startThreadPool and ProcessState::setThreadPoolMaxThreadCount. Generally you should setup the binder threadpool before other initialization steps.
+11-25 20:17:24.864  5301  5301 W ProcessState: Extra binder thread started, but 0 threads requested. Do not use *startThreadPool when zero threads are requested.
+11-25 20:17:24.872   151   151 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.mapper@4.0::IMapper/default in either framework or device VINTF manifest.
+11-25 20:17:24.872  5301  5302 I Gralloc4: mapper 4.x is not supported
+11-25 20:17:25.009     0     0 I servicemanager: Caller(pid=5301,uid=2000,sid=u:r:shell:s0) Could not find android.hardware.graphics.allocator.IAllocator/default in the VINTF manifest. No alternative instances declared in VINTF.
+11-25 20:17:25.103  3090  3090 I BugleDataModel: ActionExecutorImpl: Starting ActionService
+11-25 20:17:25.106   567  1754 D OomAdjuster: Not killing cached processes
+11-25 20:17:25.108  3090  3090 I BugleDataModel: ActionExecutorImpl: ACTION_EXECUTE_QUEUED_GenericWorkerQueueAction
+11-25 20:17:25.109  3090  3167 I BugleDataModel: ExecuteActionRunnable: running action GenericWorkerQueueAction
+11-25 20:17:25.110  3090  3167 I BugleDataModel: ActionExecutorImpl: ACTION_BACKGROUND_QUEUED_GenericWorkerQueueAction
+11-25 20:17:25.113  3090  5293 I BugleJobs: GenericWorkerQueueAction: Work found
+11-25 20:17:25.116  3090  3167 I BugleJobs: GenericWorkerQueueAction: Rescheduling immediately to continue processing since we didn't yet reach the end.
+11-25 20:17:25.116  3090  3167 W JobInfo : Job 'com.google.android.apps.messaging/.shared.datamodel.action.execution.ActionJobService#302' has a deadline with no functional constraints. The deadline won't improve job execution latency. Consider removing the deadline.
+11-25 20:17:25.117   567  1754 W JobInfo : Job 'com.google.android.apps.messaging/.shared.datamodel.action.execution.ActionJobService#302' has a deadline with no functional constraints. The deadline won't improve job execution latency. Consider removing the deadline.
+11-25 20:17:25.118  3090  5293 I BugleDataModel: ActionExecutorImpl: ACTION_RESPONSE_QUEUED_GenericWorkerQueueAction
+11-25 20:17:25.119  3090  3167 I BugleDataModel: ActionExecutorImpl: Stopping ActionService
+11-25 20:17:25.124  3090  3090 I BugleDataModel: ActionExecutorImpl: Starting ActionService
+11-25 20:17:25.127   364   415 I netd    : tetherGetStats() -> {[]} <0.49ms>
+11-25 20:17:25.127   567   831 D WifiConfigStore: Writing to stores completed in 5 ms.
+11-25 20:17:25.128  3090  3090 I BugleDataModel: ActionExecutorImpl: ACTION_EXECUTE_QUEUED_GenericWorkerQueueAction
+11-25 20:17:25.128  3090  3167 I BugleDataModel: ExecuteActionRunnable: running action GenericWorkerQueueAction
+11-25 20:17:25.129  3090  3167 I BugleDataModel: ActionExecutorImpl: ACTION_BACKGROUND_QUEUED_GenericWorkerQueueAction
+11-25 20:17:25.130  3090  5294 I BugleJobs: GenericWorkerQueueAction: Bailing early, no work found, no failed work found
+11-25 20:17:25.132  3090  5294 I BugleDataModel: ActionExecutorImpl: ACTION_RESPONSE_QUEUED_GenericWorkerQueueAction
+11-25 20:17:25.133  3090  5293 I BugleDataModel: ActionExecutorImpl: Stopping ActionService
+11-25 20:17:25.149  3090  3097 I .apps.messaging: Compiler allocated 5704KB to compile java.lang.Object aflc.d()
+11-25 20:17:25.406   567   673 D ActivityManager: freezing 920 com.google.android.permissioncontroller
+11-25 20:17:25.407   567   838 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET, states=14
+11-25 20:17:25.407   567   838 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET6, states=14
+11-25 20:17:25.407   567   838 D InetDiagMessage: Destroyed live tcp sockets for uids={10202} in 1ms
+11-25 20:17:25.490   567  1754 D WifiNl80211Manager: Scan result ready event
+11-25 20:17:25.490   567  1754 D WifiNative: Scan result ready event
+11-25 20:17:25.492   567   831 I HalDevMgr: bestIfaceCreationProposal is null, requestIface=STA, existingIface=[name=wlan0 type=STA]
+11-25 20:17:25.583   567  1754 W AppOps  : Noting op not finished: uid 10144 pkg com.google.android.gms code 113 startTime of in progress event=1795637819757
+11-25 20:17:25.586   567  1165 W AppOps  : Noting op not finished: uid 10144 pkg com.google.android.gms code 113 startTime of in progress event=1795637819757
+11-25 20:17:25.587   567  1754 W AppOps  : Noting op not finished: uid 10144 pkg com.google.android.gms code 79 startTime of in progress event=1795637825198
+11-25 20:17:25.588  1232  2260 I ActivityScheduler: nextTriggerTime: 428458, in 235300ms, detectorType: 39, FULL_TYPE alarmWindowMillis: 30000
+11-25 20:17:26.191  5307  5307 W BpBinder: Linking to death on android.gui.ISurfaceComposer but there are no threads (yet?) listening to incoming transactions. See ProcessState::startThreadPool and ProcessState::setThreadPoolMaxThreadCount. Generally you should setup the binder threadpool before other initialization steps.
+11-25 20:17:26.191  5307  5307 W ProcessState: Extra binder thread started, but 0 threads requested. Do not use *startThreadPool when zero threads are requested.
+11-25 20:17:26.201   151   151 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.mapper@4.0::IMapper/default in either framework or device VINTF manifest.
+11-25 20:17:26.202  5307  5308 I Gralloc4: mapper 4.x is not supported
+11-25 20:17:26.339     0     0 I servicemanager: Caller(pid=5307,uid=2000,sid=u:r:shell:s0) Could not find android.hardware.graphics.allocator.IAllocator/default in the VINTF manifest. No alternative instances declared in VINTF.
+11-25 20:17:27.504  5311  5311 W BpBinder: Linking to death on android.gui.ISurfaceComposer but there are no threads (yet?) listening to incoming transactions. See ProcessState::startThreadPool and ProcessState::setThreadPoolMaxThreadCount. Generally you should setup the binder threadpool before other initialization steps.
+11-25 20:17:27.504  5311  5311 W ProcessState: Extra binder thread started, but 0 threads requested. Do not use *startThreadPool when zero threads are requested.
+11-25 20:17:27.515   151   151 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.mapper@4.0::IMapper/default in either framework or device VINTF manifest.
+11-25 20:17:27.515  5311  5312 I Gralloc4: mapper 4.x is not supported
+11-25 20:17:27.652     0     0 I servicemanager: Caller(pid=5311,uid=2000,sid=u:r:shell:s0) Could not find android.hardware.graphics.allocator.IAllocator/default in the VINTF manifest. No alternative instances declared in VINTF.
+11-25 20:17:28.348   567   838 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 20:17:28.348   567   838 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 20:17:28.348   567   838 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 20:17:28.349  1232  2019 I ChimeraSrvcProxy: NullBinder for android.net.action.RECOMMEND_NETWORKS triggering remote TransactionTooLargeException due to Service without Chimera impl
+11-25 20:17:28.349  1232  2019 W .gms.persistent: Large reply transaction of 1056768 bytes, interface descriptor , code 1
+11-25 20:17:28.350  3332  3436 I BugleRcsEngine: handleMessage processing message:[NOTIFY_UPTIME_IGNORE_STATE_CHANGED] with [non-null]:RcsEngineImpl reference [CONTEXT log_prefix="RcsEngineImpl[DUAL_REG]:[e678ddd6-6d08]>Handler" thread_id=69 ]
+11-25 20:17:28.351  3332  3373 I BugleRcsEngine: Connected state: [1], networkType: [WIFI] [CONTEXT thread_id=62 ]
+11-25 20:17:28.353  3332  3436 I BugleRcsEngine: No RCS Configuration was found in Bugle for simID: redacted-pii:sim_id[chars:20,last3:897] [CONTEXT log_prefix="ProvisioningEngineDataRetriever" thread_id=69 ]
+11-25 20:17:28.367   364   415 I netd    : tetherGetStats() -> {[]} <0.30ms>
+11-25 20:17:28.822  5315  5315 W BpBinder: Linking to death on android.gui.ISurfaceComposer but there are no threads (yet?) listening to incoming transactions. See ProcessState::startThreadPool and ProcessState::setThreadPoolMaxThreadCount. Generally you should setup the binder threadpool before other initialization steps.
+11-25 20:17:28.822  5315  5315 W ProcessState: Extra binder thread started, but 0 threads requested. Do not use *startThreadPool when zero threads are requested.
+11-25 20:17:28.832   151   151 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.mapper@4.0::IMapper/default in either framework or device VINTF manifest.
+11-25 20:17:28.833  5315  5316 I Gralloc4: mapper 4.x is not supported
+11-25 20:17:28.970     0     0 I servicemanager: Caller(pid=5315,uid=2000,sid=u:r:shell:s0) Could not find android.hardware.graphics.allocator.IAllocator/default in the VINTF manifest. No alternative instances declared in VINTF.
+11-25 20:17:32.589   567  1742 D OomAdjuster: Not killing cached processes
+11-25 20:17:34.917  1406  5317 I ChimeraPrvdrProxy: Shutting down chimera ContentProvider com.google.android.gms.reminders.provider.RemindersChimeraProvider
+11-25 20:17:35.795   364   415 I netd    : tetherGetStats() -> {[]} <0.30ms>
+11-25 20:17:39.471   567   666 D OomAdjuster: Not killing cached processes
+11-25 20:17:42.130  5320  5320 W BpBinder: Linking to death on android.gui.ISurfaceComposer but there are no threads (yet?) listening to incoming transactions. See ProcessState::startThreadPool and ProcessState::setThreadPoolMaxThreadCount. Generally you should setup the binder threadpool before other initialization steps.
+11-25 20:17:42.131  5320  5320 W ProcessState: Extra binder thread started, but 0 threads requested. Do not use *startThreadPool when zero threads are requested.
+11-25 20:17:42.275     0     0 I servicemanager: Caller(pid=5320,uid=2000,sid=u:r:shell:s0) Could not find android.hardware.graphics.allocator.IAllocator/default in the VINTF manifest. No alternative instances declared in VINTF.
+11-25 20:17:42.138   151   151 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.mapper@4.0::IMapper/default in either framework or device VINTF manifest.
+11-25 20:17:42.138  5320  5321 I Gralloc4: mapper 4.x is not supported
