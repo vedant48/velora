@@ -4,10 +4,11 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { CachedImage as Image } from '../../experience/CachedImage';
 import React, { useCallback, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, Share, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { veloraApi } from '../../api/velora';
 import { AppLoader } from '../../components/common/AppLoader';
+import { ActionSheet } from '../../components/Library/ActionSheet';
 import { RootStackParamList } from '../../navigation/types';
 import { useAuth } from '../../state/AuthContext';
 import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
@@ -28,6 +29,12 @@ export const UserProfileScreen: React.FC = () => {
   const { user: me } = useAuth();
   const queryClient = useQueryClient();
   const [followBusy, setFollowBusy] = useState(false);
+  const [menuVisible, setMenuVisible] = useState(false);
+
+  // Real user-triggered share, same pattern as the own-profile share action.
+  const shareProfile = useCallback(() => {
+    Share.share({ message: `Follow @${username} on Velora` }).catch(() => undefined);
+  }, [username]);
 
   const isSelf = me?.username === username;
 
@@ -87,20 +94,29 @@ export const UserProfileScreen: React.FC = () => {
   const { user, stats, isFollowing, isPrivate } = profileQuery.data;
   const match = matchQuery.data;
   const watched = libraryQuery.data?.items ?? [];
+  const joinedYear = joinedYearOf(user.createdAt);
 
   return (
     <ScrollView
       style={styles.root}
       contentContainerStyle={{ paddingTop: insets.top + 8, paddingBottom: 40, paddingHorizontal: 20 }}
     >
-      <Pressable onPress={() => navigation.goBack()} style={styles.back} accessibilityLabel="Back">
-        <Ionicons name="arrow-back" size={22} color={colors.textPrimary} />
-      </Pressable>
+      {/* Gallery member mock: centered screen title between back and overflow circles. The
+          overflow exposes only real actions (share), never inert decoration. */}
+      <View style={styles.navRow}>
+        <Pressable onPress={() => navigation.goBack()} style={styles.circleButton} accessibilityLabel="Back" accessibilityRole="button" hitSlop={6}>
+          <Ionicons name="arrow-back" size={20} color={colors.textPrimary} />
+        </Pressable>
+        <Text style={styles.navTitle} numberOfLines={1}>Member</Text>
+        <Pressable onPress={() => setMenuVisible(true)} style={styles.circleButton} accessibilityLabel="More actions" accessibilityRole="button" hitSlop={6}>
+          <Ionicons name="ellipsis-horizontal" size={18} color={colors.textPrimary} />
+        </Pressable>
+      </View>
 
       <View style={styles.header}>
-        <Avatar user={user} size={72} />
+        <Avatar user={user} size={88} />
         <Text style={styles.name}>{user.displayName}</Text>
-        <Text style={styles.username}>@{user.username}</Text>
+        <Text style={styles.username}>@{user.username}{joinedYear ? ` · Joined ${joinedYear}` : ''}</Text>
         {!!user.bio && <Text style={styles.bio}>{user.bio}</Text>}
 
         {!isSelf && me && (
@@ -135,23 +151,47 @@ export const UserProfileScreen: React.FC = () => {
             <Text style={[styles.matchText, { color: colors.textSecondary }]}>Private account</Text>
           </View>
         ) : (
-        <View style={styles.statsRow}>
-          {(
-            [
-              ['Watched', stats.watched],
-              ['Want', stats.want],
-              ['Watching', stats.watching],
-              ['Reviews', stats.reviews],
-              ['Followers', stats.followers],
-              ['Following', stats.following],
-            ] as const
-          ).map(([label, value]) => (
-            <View key={label} style={styles.stat}>
-              <Text style={styles.statValue}>{value}</Text>
-              <Text style={styles.statLabel}>{label}</Text>
-            </View>
-          ))}
+        <View style={styles.statCard}>
+          {/* Mock stats card: Place/Want/Watched/Series, matching the own-profile card. Place
+              renders only when the API returns a real rank for this member; followers/following
+              counts stay available on their own row below so no real stat is hidden. */}
+          {typeof stats.rank === 'number' && stats.rank > 0 && (
+            <>
+              <View style={styles.stat}>
+                <Text style={styles.statValue}>#{stats.rank}</Text>
+                <Text style={styles.statLabel}>Place</Text>
+              </View>
+              <View style={styles.statSep} />
+            </>
+          )}
+          <View style={styles.stat}>
+            <Text style={styles.statValue}>{stats.want}</Text>
+            <Text style={styles.statLabel}>Want</Text>
+          </View>
+          <View style={styles.statSep} />
+          <View style={styles.stat}>
+            <Text style={styles.statValue}>{stats.watched}</Text>
+            <Text style={styles.statLabel}>Watched</Text>
+          </View>
+          <View style={styles.statSep} />
+          <View style={styles.stat}>
+            <Text style={styles.statValue}>{stats.series}</Text>
+            <Text style={styles.statLabel}>Series</Text>
+          </View>
         </View>
+        )}
+        {!isPrivate && !!stats && (
+          <View style={styles.statCard}>
+            <View style={styles.stat}>
+              <Text style={styles.statValue}>{stats.followers}</Text>
+              <Text style={styles.statLabel}>Followers</Text>
+            </View>
+            <View style={styles.statSep} />
+            <View style={styles.stat}>
+              <Text style={styles.statValue}>{stats.following}</Text>
+              <Text style={styles.statLabel}>Following</Text>
+            </View>
+          </View>
         )}
       </View>
 
@@ -170,17 +210,24 @@ export const UserProfileScreen: React.FC = () => {
                 contentFit="cover"
                 transition={120}
               />
-              {item.rating != null && (
-                <Text style={styles.rating}>
-                  <Ionicons name="star" size={10} color={colors.accentAmber} /> {item.rating}/10
-                </Text>
-              )}
             </View>
           ))}
         </View>
       )}
+
+      <ActionSheet
+        visible={menuVisible}
+        onClose={() => setMenuVisible(false)}
+        options={[{ label: 'Share profile', icon: 'share-social-outline', onPress: shareProfile }]}
+      />
     </ScrollView>
   );
+};
+
+const joinedYearOf = (iso?: string): string => {
+  if (!iso) return '';
+  const d = new Date(iso);
+  return isNaN(d.getTime()) ? '' : String(d.getFullYear());
 };
 
 const createStyles = (colors: AppColors) => StyleSheet.create({
@@ -197,17 +244,17 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     marginBottom: ui.space.sm,
   },
   backButtonAlt: { paddingHorizontal: 18, paddingVertical: 10, borderRadius: 10, backgroundColor: colors.surface },
-  header: { alignItems: 'center', gap: 6, paddingBottom: 18 },
-  avatar: {
-    width: 72,
-    height: 72,
-    borderRadius: 36,
-    backgroundColor: colors.surfaceLight,
+  navRow: { flexDirection: 'row', alignItems: 'center', marginBottom: ui.space.sm },
+  navTitle: { flex: 1, textAlign: 'center', fontSize: 17, fontWeight: '700', color: colors.textPrimary },
+  circleButton: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: ui.space.xs,
+    backgroundColor: colors.surface,
   },
-  avatarText: { fontSize: 30, fontWeight: '900', color: colors.primary },
+  header: { alignItems: 'center', gap: 6, paddingBottom: 18 },
   name: { fontSize: ui.type.screenTitle, fontWeight: '800', color: colors.textPrimary },
   username: { fontSize: 13, color: colors.textSecondary },
   bio: { fontSize: 13, color: colors.textSecondary, textAlign: 'center', marginTop: ui.space.xs },
@@ -245,24 +292,24 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   },
   matchText: { color: colors.primary, fontWeight: '800', fontSize: 13 },
   hint: { marginTop: ui.space.sm, fontSize: ui.type.label, color: colors.textMuted },
-  statsRow: {
+  statCard: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    gap: 14,
+    alignItems: 'center',
+    alignSelf: 'stretch',
+    justifyContent: 'space-evenly',
     marginTop: 14,
     backgroundColor: colors.appleCard,
     borderRadius: 14,
     paddingVertical: ui.space.md,
     paddingHorizontal: ui.space.sm,
   },
+  statSep: { width: StyleSheet.hairlineWidth, alignSelf: 'stretch', backgroundColor: colors.surfaceBorder },
   stat: { alignItems: 'center', minWidth: 52 },
   statValue: { fontSize: 17, fontWeight: '700', color: colors.textPrimary },
   statLabel: { fontSize: 10, color: colors.appleText2, marginTop: 2 },
-  sectionTitle: { fontSize: 17, fontWeight: '600', color: colors.textPrimary, marginBottom: 10 },
+  sectionTitle: { fontSize: 17, fontWeight: '600', color: colors.textPrimary, marginTop: 18, marginBottom: 10 },
   emptyText: { fontSize: 13, color: colors.textMuted },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: ui.space.sm },
-  cell: { width: '23%' },
-  poster: { width: '100%', aspectRatio: 2 / 3, borderRadius: 8 },
-  rating: { fontSize: 10, color: colors.textSecondary, marginTop: 3 },
+  cell: { width: '48.5%' },
+  poster: { width: '100%', aspectRatio: 2 / 3, borderRadius: 12 },
 });
