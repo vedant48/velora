@@ -3,7 +3,14 @@
 # path against the checked-out tree BEFORE any expensive build. Exits 1 on any miss.
 set -uo pipefail
 fail=0
-check() { if [ -f "$1" ]; then echo "OK   $1"; else echo "MISS $1"; fail=1; fi; }
+check() {
+  if [ -f "$1" ]; then echo "OK   $1"; return; fi
+  # Runner scripts cd into server/ before node scripts/...; resolve that form too.
+  case "$1" in scripts/*)
+    if [ -f "server/$1" ]; then echo "OK   server/$1"; return; fi ;;
+  esac
+  echo "MISS $1"; fail=1
+}
 scan() { grep -oE '((server/)?scripts|\.maestro)/[A-Za-z0-9._/-]+\.(sh|py|mjs|yaml)' "$1" 2>/dev/null | sort -u; }
 for root in "$@"; do
   check "$root"
