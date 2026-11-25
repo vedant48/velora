@@ -14,6 +14,27 @@ appId: com.vedant.velora
     end: 50%, 40%
     duration: 500
 - takeScreenshot: ${P}-c2-movie-scrolled
+- swipe:
+    start: 50%, 75%
+    end: 50%, 30%
+    duration: 500
+- swipe:
+    start: 50%, 75%
+    end: 50%, 30%
+    duration: 500
+- takeScreenshot: ${P}-c2b-movie-deep-scroll
+- swipe:
+    start: 50%, 30%
+    end: 50%, 90%
+    duration: 400
+- swipe:
+    start: 50%, 30%
+    end: 50%, 90%
+    duration: 400
+- swipe:
+    start: 50%, 30%
+    end: 50%, 90%
+    duration: 400
 - back
 - tapOn:
     point: 53%, 34%
