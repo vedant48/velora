@@ -1,17 +1,13 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import * as FileSystem from 'expo-file-system/legacy';
-import * as ImageManipulator from 'expo-image-manipulator';
-import * as ImagePicker from 'expo-image-picker';
 import * as Sharing from 'expo-sharing';
 import React, { useCallback, useEffect, useState } from 'react';
 import Constants from 'expo-constants';
-import { Alert, Image, Linking, Pressable, ScrollView, Share, StyleSheet, Switch, Text, View } from 'react-native';
+import { Alert, Pressable, ScrollView, Share, StyleSheet, Switch, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { veloraApi } from '../../api/velora';
-import { AppButton } from '../../components/common/AppButton';
 import { ActionSheet } from '../../components/Library/ActionSheet';
-import { AppTextField } from '../../components/common/AppTextField';
 import { Avatar } from '../../components/Avatar';
 import { useAuth } from '../../state/AuthContext';
 import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
@@ -34,67 +30,14 @@ export const AccountScreen: React.FC = () => {
   const styles = useThemedStyles(createStyles);
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<any>();
-  const { user, logout, refresh } = useAuth();
+  const { user, logout } = useAuth();
 
-  const [displayName, setDisplayName] = useState(user?.displayName ?? '');
-  const [bio, setBio] = useState(user?.bio ?? '');
   const [isPrivate, setIsPrivate] = useState(false);
-  const [saving, setSaving] = useState(false);
   const [busy, setBusy] = useState<string | null>(null);
-  const [photoBusy, setPhotoBusy] = useState(false);
   const [themeSheet, setThemeSheet] = useState(false);
   const [exportSheet, setExportSheet] = useState(false);
   const update = useUpdateCheck();
   const version = Constants.expoConfig?.version ?? '';
-
-  const changePhoto = useCallback(async () => {
-    if (photoBusy) return;
-    try {
-      const perm = await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (!perm.granted) {
-        Alert.alert('Photos access needed', 'Allow photo access to choose a profile picture.');
-        return;
-      }
-      const picked = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ['images'],
-        allowsEditing: true,
-        aspect: [1, 1],
-        quality: 1,
-      });
-      const asset = picked.assets?.[0];
-      if (picked.canceled || !asset) return;
-      setPhotoBusy(true);
-      const prepared = await ImageManipulator.manipulateAsync(
-        asset.uri,
-        [{ resize: { width: 256 } }],
-        { compress: 0.8, format: ImageManipulator.SaveFormat.JPEG },
-      );
-      await veloraApi.uploadAvatar(prepared.uri);
-      await refresh();
-    } catch (e: any) {
-      Alert.alert('Upload failed', e?.message ?? 'Try again later.');
-    } finally {
-      setPhotoBusy(false);
-    }
-  }, [photoBusy, refresh]);
-
-  const removePhoto = useCallback(() => {
-    Alert.alert('Remove photo', 'Remove your profile photo?', [
-      { text: 'Cancel', style: 'cancel' },
-      {
-        text: 'Remove',
-        style: 'destructive',
-        onPress: () => {
-          setPhotoBusy(true);
-          veloraApi
-            .removeAvatar()
-            .then(() => refresh())
-            .catch((e: any) => Alert.alert('Could not remove photo', e?.message ?? 'Try again later.'))
-            .finally(() => setPhotoBusy(false));
-        },
-      },
-    ]);
-  }, [refresh]);
 
   useEffect(() => {
     if (!user) return;
@@ -103,20 +46,6 @@ export const AccountScreen: React.FC = () => {
       .then((r) => setIsPrivate(r.isPrivate ?? false))
       .catch(() => undefined);
   }, [user]);
-
-  const saveProfile = useCallback(async () => {
-    if (saving) return;
-    setSaving(true);
-    try {
-      await veloraApi.updateMe({ displayName: displayName.trim(), bio: bio.trim() });
-      await refresh();
-      Alert.alert('Saved', 'Your profile was updated.');
-    } catch (e: any) {
-      Alert.alert('Could not save', e?.message ?? 'Try again later.');
-    } finally {
-      setSaving(false);
-    }
-  }, [saving, displayName, bio, refresh]);
 
   const togglePrivate = useCallback(
     async (value: boolean) => {
@@ -194,10 +123,8 @@ export const AccountScreen: React.FC = () => {
   }, [logout]);
 
   return (
-    <ScrollView
-      style={styles.root}
-      contentContainerStyle={{ paddingTop: insets.top + 8, paddingBottom: 40, paddingHorizontal: 20 }}
-    >
+    <View style={[styles.root, { paddingTop: insets.top }]}>
+    <ScrollView contentContainerStyle={{ paddingTop: 8, paddingBottom: 40, paddingHorizontal: 20 }}>
       {/* Gallery settings mock: iOS large title. The back circle stays (functional difference
           from the mock, which omits it) so the pushed screen keeps its exit. */}
       <Pressable accessibilityRole="button" accessibilityLabel="Back" onPress={() => navigation.goBack()} style={styles.back} hitSlop={6}>
@@ -205,70 +132,17 @@ export const AccountScreen: React.FC = () => {
       </Pressable>
       <Text style={styles.largeTitle}>Settings</Text>
 
-      {/* Apple redesign: iOS grouped settings - identity + photo actions */}
-      <View style={styles.group}>
+      <Pressable accessibilityRole="button" accessibilityLabel="Edit profile" onPress={() => navigation.navigate('EditProfile')} style={styles.group}>
         <View style={styles.profileRow}>
-          {user ? (
-            <>
-              <Avatar user={user} size={52} />
-              <View style={styles.profileMeta}>
-                <Text style={styles.profileName}>{user.displayName || user.username}</Text>
-                <Text style={styles.profileSub}>@{user.username}</Text>
-              </View>
-            </>
-          ) : null}
+          {user ? <Avatar user={user} size={52} /> : null}
+          <View style={styles.profileMeta}>
+            <Text style={styles.profileName}>{user?.displayName || user?.username}</Text>
+            <Text style={styles.profileSub}>@{user?.username}</Text>
+          </View>
+          <Ionicons name="chevron-forward" size={16} color={colors.appleText3} />
         </View>
-        <View style={styles.sep} />
-        <Pressable accessibilityRole="button" accessibilityLabel="Change profile photo" onPress={changePhoto} disabled={photoBusy} style={styles.setrow}>
-          <Text style={styles.setrowLabel}>{photoBusy ? 'Uploading...' : 'Change photo'}</Text>
-        </Pressable>
-        {user?.avatarAt ? (
-          <>
-            <View style={styles.sep} />
-            <Pressable accessibilityRole="button" accessibilityLabel="Remove profile photo" onPress={removePhoto} disabled={photoBusy} style={styles.setrow}>
-              <Text style={styles.setrowLabel}>Remove photo</Text>
-            </Pressable>
-          </>
-        ) : null}
-      </View>
-      <View style={{ height: 22 }} />
-      <View style={styles.group}>
-        <View style={styles.fieldRow}>
-          <Text style={styles.fieldLabel}>Name</Text>
-          <AppTextField
-            accessibilityLabel="Display name"
-            value={displayName}
-            onChangeText={setDisplayName}
-            placeholder="Display name"
-            placeholderTextColor={colors.appleText3}
-            style={styles.fieldInput}
-            maxLength={50}
-          />
-        </View>
-        <View style={styles.sep} />
-        <View style={styles.fieldRow}>
-          <Text style={styles.fieldLabel}>Username</Text>
-          <Text style={styles.fieldValue}>{user?.username}</Text>
-        </View>
-        <View style={styles.sep} />
-        <View style={[styles.fieldRow, { alignItems: 'flex-start' }]}>
-          <Text style={styles.fieldLabel}>Bio</Text>
-          <AppTextField
-            accessibilityLabel="Bio"
-            value={bio}
-            onChangeText={setBio}
-            placeholder="Bio"
-            placeholderTextColor={colors.appleText3}
-            style={[styles.fieldInput, styles.bioInput]}
-            maxLength={300}
-            multiline
-          />
-        </View>
-      </View>
-      <AppButton title="Save profile" onPress={saveProfile} loading={saving} />
-
-      <View style={{ height: 22 }} />
-      <View style={styles.group}>
+      </Pressable>
+      <View style={[styles.group, { marginTop: 22 }]}>
         <Pressable accessibilityRole="button" accessibilityLabel="Appearance" onPress={() => setThemeSheet(true)} style={styles.setrow}>
           <IconTile name="contrast-outline" />
           <Text style={styles.setrowLabel}>Appearance</Text>
@@ -327,13 +201,12 @@ export const AccountScreen: React.FC = () => {
         </Pressable>
       </View>
 
-      <View style={{ marginTop: 22, padding: ui.space.lg, borderRadius: 14, backgroundColor: colors.appleCard, gap: ui.space.md }}>
-        <Text style={{ fontSize: ui.type.heading, fontWeight: '700', color: colors.textPrimary }}>Velora</Text>
-        <Text style={styles.rowHint}>Track movies and TV series, reviews and episode progress.</Text>
-        <Pressable accessibilityRole="link" accessibilityLabel="The Movie Database" onPress={() => Linking.openURL('https://www.themoviedb.org')}>
-          <Image source={require('../../../assets/credits/tmdb-logo.png')} resizeMode="contain" style={{ width: 110, height: 45, alignSelf: 'flex-start' }} />
+      <View style={[styles.group, { marginTop: 22 }]}>
+        <Pressable accessibilityRole="button" accessibilityLabel="About and credits" onPress={() => navigation.navigate('About')} style={styles.setrow}>
+          <Text style={styles.setrowLabel}>About & Credits</Text>
+          <View style={{ flex: 1 }} />
+          <Ionicons name="chevron-forward" size={16} color={colors.appleText3} />
         </Pressable>
-        <Text style={{ fontSize: 13, lineHeight: 19, color: colors.textPrimary }}>This product uses the TMDB API but is not endorsed or certified by TMDB.</Text>
       </View>
 
       <View style={[styles.group, { marginTop: 22 }]}>
@@ -361,6 +234,7 @@ export const AccountScreen: React.FC = () => {
         onPress: () => { setPreference(choice).catch(() => Alert.alert('Theme not saved', 'Try again. Your previous choice is unchanged.')); },
       }))} />
     </ScrollView>
+    </View>
   );
 };
 

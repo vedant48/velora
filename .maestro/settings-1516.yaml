@@ -15,11 +15,6 @@ appId: com.vedant.velora
 - takeScreenshot: p2-home-collapsed
 - tapOn: Series
 - takeScreenshot: p3-series-after-collapse
-- swipe:
-    start: 85%, 60%
-    end: 15%, 60%
-    duration: 300
-- takeScreenshot: p4-swipe-tab
 - tapOn: Want
 - swipe:
     start: 50%, 25%
@@ -40,13 +35,13 @@ appId: com.vedant.velora
 - takeScreenshot: p5-expanded
 - tapOn:
     point: 90%, 5%
-- assertVisible: 'Save profile'
+- assertVisible: 'Appearance'
 - takeScreenshot: s1-settings-top
 - swipe:
     start: 50%, 80%
-    end: 50%, 25%
-    duration: 500
-- takeScreenshot: s2-settings-mid
+    end: 50%, 55%
+    duration: 800
+- takeScreenshot: s2-settings-partial-scroll
 - swipe:
     start: 50%, 80%
     end: 50%, 20%
@@ -67,24 +62,34 @@ appId: com.vedant.velora
 - takeScreenshot: s4b-export-sheet
 - tapOn: Cancel
 - scrollUntilVisible:
-    element: Check for updates
+    element: 'About & Credits'
     direction: DOWN
     timeout: 20000
-- tapOn: Check for updates
-- extendedWaitUntil:
-    visible: '.*(update|Update|Velora is up to date).*'
-    timeout: 20000
-- takeScreenshot: s5-update-check
-- tapOn:
-    text: OK
-    optional: true
+- tapOn: 'About & Credits'
+- assertVisible: 'This product uses the TMDB API.*'
+- takeScreenshot: s5-about
+- back
 - scrollUntilVisible:
     element: Activity
-    direction: DOWN
+    direction: UP
     timeout: 20000
 - tapOn: Activity
 - takeScreenshot: s6-activity-opens
 - back
+- scrollUntilVisible:
+    element: 'Edit profile'
+    direction: UP
+    timeout: 20000
+- tapOn: 'Edit profile'
+- assertVisible: 'Save profile'
+- takeScreenshot: s7-edit-profile
+- swipe:
+    start: 50%, 80%
+    end: 50%, 50%
+    duration: 600
+- takeScreenshot: s7b-edit-profile-scrolled
+- back
+- assertVisible: 'Appearance'
 - back
 - assertVisible: 'Member since.*'
-- takeScreenshot: s7-back-home
+- takeScreenshot: s8-back-home

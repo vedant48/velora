@@ -12,7 +12,7 @@ export PATH="$PATH:$HOME/.maestro/bin"
 adb shell screenrecord --time-limit 180 --bit-rate 6000000 /sdcard/h.mp4 > proof/record.log 2>&1 &
 rec=$!
 status=0
-maestro test --format junit --output proof/ui.xml --test-output-dir proof/maestroH .maestro/settings-1515.yaml || status=1
+maestro test --format junit --output proof/ui.xml --test-output-dir proof/maestroH .maestro/settings-1516.yaml || status=1
 adb shell pkill -INT screenrecord || true
 wait "$rec" || true
 sleep 2
