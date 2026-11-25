@@ -34,6 +34,18 @@ that debt, and to migrate what you touch.
 
 - `src/screens/Profile/` (~104 hardcoded values) and `src/components/Library/` (~72). Adjacent blocks there use horizontal padding 10, 15 and 20; converging those to the scale is intended, keep visuals otherwise unchanged.
 
+## Token layers
+
+Structure borrowed from the Apple HIG token skill model (reference:
+skills.sh `jordancoin/ios-skills-collection/ios-design-tokens` - iOS values not adopted,
+structure only). Keep three layers when adding tokens:
+
+1. Base values - the raw scale (`ui.space.md = 12`).
+2. Purpose aliases - what the value means (`spacing.screenPadding = ui.space.lg`).
+3. Component tokens - what a component uses (`card.padding = spacing.screenPadding`).
+
+New tokens go in at the right layer; components reference component tokens, not raw values.
+
 ## Long-term direction (agreed with owner, not yet scheduled)
 
 One scale: make `ui.ts` canonical, alias then remove `metrics.spacing*`, codemod literals
