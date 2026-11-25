@@ -1,0 +1,69 @@
+04:12:58.402 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Define variables RUNNING
+04:12:58.405 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Define variables COMPLETED
+04:12:58.406 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Apply configuration RUNNING
+04:12:58.406 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Apply configuration COMPLETED
+04:12:58.407 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Launch app "com.vedant.velora" RUNNING
+04:12:58.782 [DEBUG] maestro.Maestro.setPermissionInternal: Failed to set permission com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE for app com.vedant.velora: shell command failed (exit -1): 
+Exception occurred while executing 'grant':
+java.lang.IllegalArgumentException: Unknown permission com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE
+	at com.android.server.permission.access.permission.PermissionService.setRuntimePermissionGranted(PermissionService.kt:911)
+	at com.android.server.permission.access.permission.PermissionService.access$setRuntimePermissionGranted(PermissionService.kt:108)
+	at com.android.server.permission.access.permission.PermissionService.setRuntimePermissionGranted(PermissionService.kt:809)
+	at com.android.server.permission.access.permission.PermissionService.setRuntimePermissionGranted$default(PermissionService.kt:714)
+	at com.android.server.permission.access.permission.PermissionService.grantRuntimePermission(PermissionService.kt:676)
+	at com.android.server.pm.permission.PermissionManagerService.grantRuntimePermission(PermissionManagerService.java:585)
+	at android.permission.PermissionManager.grantRuntimePermissionInternal(PermissionManager.java:679)
+	at android.permission.PermissionManager.grantRuntimePermission(PermissionManager.java:642)
+	at com.android.server.pm.PackageManagerShellCommand.runGrantRevokePermission(PackageManagerShellCommand.java:2690)
+	at com.android.server.pm.PackageManagerShellCommand.onCommand(PackageManagerShellCommand.java:316)
+	at com.android.modules.utils.BasicShellCommandHandler.exec(BasicShellCommandHandler.java:97)
+	at android.os.ShellCommand.exec(ShellCommand.java:38)
+	at com.android.server.pm.PackageManagerService$IPackageManagerImpl.onShellCommand(PackageManagerService.java:6561)
+	at android.os.Binder.shellCommand(Binder.java:1230)
+	at android.os.Binder.onTransact(Binder.java:1043)
+	at android.content.pm.IPackageManager$Stub.onTransact(IPackageManager.java:4620)
+	at com.android.server.pm.PackageManagerService$IPackageManagerImpl.onTransact(PackageManagerService.java:6545)
+	at android.os.Binder.execTransactInternal(Binder.java:1505)
+	at android.os.Binder.execTransact(Binder.java:1444)
+
+04:12:58.784 [ INFO] maestro.Maestro.launchApp$lambda$6: Launching app com.vedant.velora
+04:12:58.784 [ INFO] maestro.Maestro.launchApp$lambda$6: Stopping com.vedant.velora app during launch
+04:12:59.145 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Launch app "com.vedant.velora" COMPLETED
+04:12:59.146 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run login-design2.yaml when "Log in / Sign up" is visible RUNNING
+04:13:00.660 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Apply configuration RUNNING
+04:13:00.661 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Apply configuration COMPLETED
+04:13:00.661 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Launch app "com.vedant.velora" RUNNING
+04:13:01.607 [DEBUG] maestro.Maestro.setPermissionInternal: Failed to set permission com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE for app com.vedant.velora: shell command failed (exit -1): 
+Exception occurred while executing 'grant':
+java.lang.IllegalArgumentException: Unknown permission com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE
+	at com.android.server.permission.access.permission.PermissionService.setRuntimePermissionGranted(PermissionService.kt:911)
+	at com.android.server.permission.access.permission.PermissionService.access$setRuntimePermissionGranted(PermissionService.kt:108)
+	at com.android.server.permission.access.permission.PermissionService.setRuntimePermissionGranted(PermissionService.kt:809)
+	at com.android.server.permission.access.permission.PermissionService.setRuntimePermissionGranted$default(PermissionService.kt:714)
+	at com.android.server.permission.access.permission.PermissionService.grantRuntimePermission(PermissionService.kt:676)
+	at com.android.server.pm.permission.PermissionManagerService.grantRuntimePermission(PermissionManagerService.java:585)
+	at android.permission.PermissionManager.grantRuntimePermissionInternal(PermissionManager.java:679)
+	at android.permission.PermissionManager.grantRuntimePermission(PermissionManager.java:642)
+	at com.android.server.pm.PackageManagerShellCommand.runGrantRevokePermission(PackageManagerShellCommand.java:2690)
+	at com.android.server.pm.PackageManagerShellCommand.onCommand(PackageManagerShellCommand.java:316)
+	at com.android.modules.utils.BasicShellCommandHandler.exec(BasicShellCommandHandler.java:97)
+	at android.os.ShellCommand.exec(ShellCommand.java:38)
+	at com.android.server.pm.PackageManagerService$IPackageManagerImpl.onShellCommand(PackageManagerService.java:6561)
+	at android.os.Binder.shellCommand(Binder.java:1230)
+	at android.os.Binder.onTransact(Binder.java:1043)
+	at android.content.pm.IPackageManager$Stub.onTransact(IPackageManager.java:4620)
+	at com.android.server.pm.PackageManagerService$IPackageManagerImpl.onTransact(PackageManagerService.java:6545)
+	at android.os.Binder.execTransactInternal(Binder.java:1505)
+	at android.os.Binder.execTransact(Binder.java:1444)
+
+04:13:01.610 [ INFO] maestro.Maestro.launchApp$lambda$6: Launching app com.vedant.velora
+04:13:01.611 [ INFO] maestro.Maestro.launchApp$lambda$6: Stopping com.vedant.velora app during launch
+04:13:01.841 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Launch app "com.vedant.velora" COMPLETED
+04:13:01.842 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "Log in / Sign up" RUNNING
+04:13:19.131 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+04:13:19.133 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+04:13:19.567 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "Log in / Sign up" FAILED
+04:13:19.568 [ERROR] maestro.orchestra.Orchestra.executeCommands: [Command execution] CommandFailed: Element not found: Text matching regex: Log in / Sign up
+04:13:19.569 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+04:13:19.569 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+04:13:19.995 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run login-design2.yaml when "Log in / Sign up" is visible FAILED
