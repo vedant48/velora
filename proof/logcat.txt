@@ -1,0 +1,873 @@
+--------- beginning of main
+11-25 12:16:02.872   564   620 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 12:16:02.872   564   620 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 12:16:02.872   564   620 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 12:16:02.872   564   620 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 12:16:02.872   564   620 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 12:16:02.872   564   620 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 12:16:02.872   564   620 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 12:16:02.872   564   620 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 12:16:02.872   564   620 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 12:16:02.872   564   620 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 12:16:02.873   564   620 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 12:16:02.873   564   620 W IPCThreadState: Sending oneway calls to frozen process.
+--------- beginning of system
+11-25 12:16:02.877   564   690 I InputMethodManagerService: Input method uninstalled, disabling: ComponentInfo{dev.mobile.maestro/dev.mobile.maestro.input.MaestroInputMethodService}
+11-25 12:16:02.878   564   694 V StorageManagerService: Package dev.mobile.maestro does not have legacy storage
+11-25 12:16:02.880   564   863 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_REMOVED on user 0
+11-25 12:16:02.882   564   863 I AppWidgetServiceImpl: calling removeHostsAndProvidersForPackageLocked() because package removed permanently. extras=Bundle[{android.intent.extra.REMOVED_FOR_ALL_USERS=true, android.intent.extra.DONT_KILL_APP=false, android.intent.extra.UID=10210, android.intent.extra.SYSTEM_UPDATE_UNINSTALL=false, android.intent.extra.USER_INITIATED=true, android.intent.extra.DATA_REMOVED=true, android.intent.extra.user_handle=0}] isReplacing=false isArchival=false
+11-25 12:16:02.882   564   863 I AppWidgetServiceImpl: removeHostsAndProvidersForPackageLocked() pkg=dev.mobile.maestro userId=0
+11-25 12:16:02.883   564   842 E AppOps  : attributionTag VCN not declared in manifest of android
+11-25 12:16:02.890  1084  1084 D CarrierSvcBindHelper: onPackageRemoved: dev.mobile.maestro
+11-25 12:16:02.893  1084  1084 D CarrierSvcBindHelper: No carrier app for: 0
+11-25 12:16:02.900  1475  1899 I A       : Successfully initialized all components
+11-25 12:16:02.900   564   564 D ActivityManager: sync unfroze 4347 com.android.settings for 10
+11-25 12:16:02.905   564   564 D ActivityManager: sync unfroze 2916 com.android.dynsystem:dynsystem for 10
+11-25 12:16:02.905   564   564 D ActivityManager: sync unfroze 2881 com.android.dynsystem for 10
+11-25 12:16:02.906   564   564 D ActivityManager: sync unfroze 1650 com.android.keychain for 10
+11-25 12:16:02.907   564   564 D ActivityManager: sync unfroze 1904 com.android.localtransport for 10
+11-25 12:16:02.909   564   829 W WifiService: Couldn't get PackageInfo for package:dev.mobile.maestro
+11-25 12:16:02.921   564   829 D WifiService: Remove settings for package:dev.mobile.maestro
+11-25 12:16:02.929   564   665 I RollbackManager: broadcast=ACTION_PACKAGE_FULLY_REMOVED pkg=dev.mobile.maestro
+11-25 12:16:02.929   564   879 D ShortcutService: received package broadcast intent: Intent { act=android.intent.action.PACKAGE_REMOVED dat=package: flg=0x4000010 (has extras) }
+11-25 12:16:02.929   564   879 D ShortcutService: removing package: dev.mobile.maestro userId0
+11-25 12:16:02.929   564   879 D ShortcutService: handlePackageRemoved: dev.mobile.maestro user=0
+11-25 12:16:02.934   564   829 D WifiConfigManager: Remove all networks for app ApplicationInfo{3d82373 dev.mobile.maestro}
+11-25 12:16:02.942  1475  1899 I INV.SystemUI: setUiHints: finished successfully
+11-25 12:16:02.944   564   620 I AppsFilter: interaction: PackageSetting{1d5c905 com.android.microdroid.empty_payload/10189} -> PackageSetting{913dee7 dev.mobile.maestro.test/10211} BLOCKED
+11-25 12:16:02.948   361   408 I netd    : tetherGetStats() -> {[]} <1.16ms>
+11-25 12:16:02.951   564   596 D ActivityManager: sync unfroze 2528 com.google.android.documentsui for 3
+11-25 12:16:02.961   564   829 I PasspointManager: No app ops listener found for dev.mobile.maestro
+11-25 12:16:02.963   361   408 I netd    : bandwidthSetGlobalAlert(2097152) <0.11ms>
+11-25 12:16:02.969  2528  2528 I ProvidersCache: Updating roots due to change on user 0at content://com.android.providers.media.documents/root
+11-25 12:16:02.988  2528  2536 W oid.documentsui: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/MtpService/MtpService.apk' with 1 weak references
+11-25 12:16:02.989  2528  2536 W oid.documentsui: ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.mediaprovider/priv-app/MediaProviderGoogle@350820300/MediaProviderGoogle.apk' with 1 weak references
+11-25 12:16:02.989  2528  2536 W oid.documentsui: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/ExternalStorageProvider/ExternalStorageProvider.apk' with 1 weak references
+11-25 12:16:02.993  2528  2536 W oid.documentsui: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/DownloadProvider/DownloadProvider.apk' with 1 weak references
+11-25 12:16:03.001   175   184 I keystore2: system/security/keystore2/src/maintenance.rs:341 - clearNamespace(r#APP, nspace=10211)
+--------- beginning of kernel
+11-25 12:16:03.186     0     0 I logd    : start watching /data/system/packages.list ...
+11-25 12:16:03.007   564   829 W WifiService: Couldn't get PackageInfo for package:dev.mobile.maestro
+11-25 12:16:03.007   564   829 D WifiService: Remove settings for package:dev.mobile.maestro
+11-25 12:16:03.007   564   829 D WifiConfigManager: Remove all networks for app ApplicationInfo{48a7cde dev.mobile.maestro}
+11-25 12:16:03.007   564   829 I PasspointManager: No app ops listener found for dev.mobile.maestro
+11-25 12:16:03.008  1441  1441 W MediaProvider: WorkProfileOwnerApps cache is empty
+11-25 12:16:03.008  1441  1441 D PickerSyncLockManager: Trying to acquire lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@5bf5151[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+11-25 12:16:03.008  1441  1441 D CloseableReentrantLock: Successfully acquired lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@5bf5151[Locked by thread main]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+11-25 12:16:03.008  1441  1441 D CloseableReentrantLock: Successfully released lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@5bf5151[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+11-25 12:16:03.189     0     0 I logd    : ReadPackageList, total packages: 217
+11-25 12:16:03.009  2528  2528 I ProvidersCache: Updating roots due to change on user 0at content://com.android.externalstorage.documents/
+11-25 12:16:03.009   564  1971 W JobInfo : Job 'com.google.android.providers.media.module/com.android.providers.media.MediaService#-300' has a deadline with no functional constraints. The deadline won't improve job execution latency. Consider removing the deadline.
+11-25 12:16:03.011  2528  2528 I ProvidersCache: Updating roots due to change on user 0at content://com.android.providers.media.documents/root
+11-25 12:16:03.012  1084  1084 E SmsApplication: com.google.android.apps.messaging lost android:read_cell_broadcasts:  (fixing)
+11-25 12:16:03.014   564   673 I RoleService: Granting default roles...
+11-25 12:16:03.014   564  1833 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 10134, code = READ_CELL_BROADCASTS, mode = allow, callingUid = 1001, oldMode = allow
+11-25 12:16:03.206     0     0 I binder  : 5282:2528 dead process or thread
+11-25 12:16:03.208     0     0 I binder  : 2528:5282 transaction call to 2308:0 failed 423495/29202/0, size 336-16 line 3977
+11-25 12:16:03.215     0     0 I binder  : 1827:564 dead process or thread
+11-25 12:16:03.016   564   596 D ActivityManager: sync unfroze 2566 com.android.chrome for 3
+11-25 12:16:03.016   564  1057 W Role    : Default holder doesn't have required signing certificate: com.google.android.retaildemo:6547c73dee150c103980bfdffe55cc9a011d785dd694a5f99afd8205bcaf1f80
+11-25 12:16:03.017   564  1057 E RoleControllerServiceImpl: Default/fallback role holder package doesn't qualify for the role, package: com.google.android.gms.supervision, role: android.app.role.SYSTEM_SUPERVISION
+11-25 12:16:03.021   564  1020 W ActivityManager: Unable to start service Intent { cmp=com.google.android.apps.tachyon/.clientapi.ClientApiService } U=0: not found
+11-25 12:16:03.026   564   596 I ActivityManager: Force stopping dev.mobile.maestro.test appid=10211 user=-1: deletePackageX
+11-25 12:16:03.028   564  1057 W Role    : Default holder doesn't have required signing certificate: com.google.android.apps.work.clouddpc:23962F4B43B9857638EA66F4D419518EAE282491ACDA4B94707BD59003C45E58
+11-25 12:16:03.029  2528  5282 W IPCThreadState: Transaction failed because process frozen.
+11-25 12:16:03.029  2528  5282 E IPCThreadState: Binder transaction failure. id: 423495, BR_*: 29202, error: 0 (Success)
+11-25 12:16:03.029  2528  5282 E JavaBinder: !!! FAILED BINDER TRANSACTION !!!  (parcel size = 336)
+11-25 12:16:03.029   564  1827 W ActivityManager: pid 2528 com.google.android.documentsui sent binder code 1 with flags 2 to frozen apps and got error -2147483646
+11-25 12:16:03.031  2528  5282 I ActivityThread: Removing dead content provider:android.content.ContentProviderProxy@3695aac
+11-25 12:16:03.035  1084  1084 E CellBroadcastUtils: getDefaultCellBroadcastReceiverPackageName: no package found
+11-25 12:16:03.035   564  1763 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_SMS, mode = allow, callingUid = 1001, oldMode = allow
+11-25 12:16:03.221     0     0 I binder  : 564:1827 transaction call to 2308:0 failed 423521/29202/0, size 0-0 line 3977
+11-25 12:16:03.036   564  1763 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_SMS, mode = allow, callingUid = 1001, oldMode = allow
+11-25 12:16:03.036   564  1763 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_WAP_PUSH, mode = allow, callingUid = 1001, oldMode = allow
+11-25 12:16:03.036   564  1763 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = SEND_SMS, mode = allow, callingUid = 1001, oldMode = allow
+11-25 12:16:03.037   564  1763 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_CELL_BROADCASTS, mode = allow, callingUid = 1001, oldMode = allow
+11-25 12:16:03.049   564  1827 W IPCThreadState: Transaction failed because process frozen.
+11-25 12:16:03.049   564  1827 E IPCThreadState: Binder transaction failure. id: 423521, BR_*: 29202, error: 0 (Success)
+11-25 12:16:03.049   564  1827 I ActivityManager: Process com.android.externalstorage (pid 2308) early provider death
+11-25 12:16:03.049   564  1827 I ActivityManager: Process com.android.externalstorage (pid 2308) has died: cch+99 CEM 
+11-25 12:16:03.050   564   585 D DisplayManagerService: Drop pending events for gone uid 10104
+11-25 12:16:03.051   564   879 D ShortcutService: Saving package item com.google.android.as to /data/system_ce/0/shortcut_service/launchers/com.google.android.as0.xml
+11-25 12:16:03.061  2528  5282 W ProvidersCache: Failed to load some roots from com.android.externalstorage.documents
+11-25 12:16:03.061  2528  5282 W ProvidersCache: android.os.DeadObjectException: Transaction failed on small parcel; remote process probably died, but this could also be caused by running out of binder buffer space
+11-25 12:16:03.061  2528  5282 W ProvidersCache: 	at android.os.BinderProxy.transactNative(Native Method)
+11-25 12:16:03.061  2528  5282 W ProvidersCache: 	at android.os.BinderProxy.transact(BinderProxy.java:586)
+11-25 12:16:03.061  2528  5282 W ProvidersCache: 	at android.content.ContentProviderProxy.query(ContentProviderNative.java:493)
+11-25 12:16:03.061  2528  5282 W ProvidersCache: 	at android.content.ContentProviderClient.query(ContentProviderClient.java:196)
+11-25 12:16:03.061  2528  5282 W ProvidersCache: 	at android.content.ContentProviderClient.query(ContentProviderClient.java:178)
+11-25 12:16:03.061  2528  5282 W ProvidersCache: 	at android.content.ContentProviderClient.query(ContentProviderClient.java:168)
+11-25 12:16:03.061  2528  5282 W ProvidersCache: 	at com.android.documentsui.roots.ProvidersCache.loadRootsForAuthority(ProvidersCache.java:366)
+11-25 12:16:03.061  2528  5282 W ProvidersCache: 	at com.android.documentsui.roots.ProvidersCache.-$$Nest$mloadRootsForAuthority(ProvidersCache.java:0)
+11-25 12:16:03.061  2528  5282 W ProvidersCache: 	at com.android.documentsui.roots.ProvidersCache$MultiProviderUpdateTask.handleDocumentsProvider(ProvidersCache.java:647)
+11-25 12:16:03.061  2528  5282 W ProvidersCache: 	at com.android.documentsui.roots.ProvidersCache$MultiProviderUpdateTask.startSingleProviderUpdateTask(ProvidersCache.java:623)
+11-25 12:16:03.061  2528  5282 W ProvidersCache: 	at com.android.documentsui.roots.ProvidersCache$MultiProviderUpdateTask.lambda$doInBackground$0(ProvidersCache.java:569)
+11-25 12:16:03.061  2528  5282 W ProvidersCache: 	at com.android.documentsui.roots.ProvidersCache$MultiProviderUpdateTask.$r8$lambda$mnJpmgdZARm40VapREkQeOExLF8(ProvidersCache.java:0)
+11-25 12:16:03.061  2528  5282 W ProvidersCache: 	at com.android.documentsui.roots.ProvidersCache$MultiProviderUpdateTask$$ExternalSyntheticLambda0.run(R8$$SyntheticClass:0)
+11-25 12:16:03.061  2528  5282 W ProvidersCache: 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+11-25 12:16:03.061  2528  5282 W ProvidersCache: 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+11-25 12:16:03.061  2528  5282 W ProvidersCache: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-25 12:16:03.061  2528  5282 W ProvidersCache: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-25 12:16:03.061  2528  5282 W ProvidersCache: 	at java.lang.Thread.run(Thread.java:1012)
+11-25 12:16:03.062   564   564 I Telecom : CarModeTracker: Package dev.mobile.maestro is not tracked.: SSH.oR@AP4🔒
+11-25 12:16:03.072   564   620 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
+11-25 12:16:03.072   564   620 D PackageManager: Clear ephemeral installer activity
+11-25 12:16:03.074   564  2565 E TaskPersister: File error accessing recents directory (directory doesn't exist?).
+11-25 12:16:03.075   367   367 I Zygote  : Process 2308 exited due to signal 9 (Killed)
+11-25 12:16:03.079   564   879 D ShortcutService: Saving package item com.google.android.apps.nexuslauncher to /data/system_ce/0/shortcut_service/launchers/com.google.android.apps.nexuslauncher0.xml
+11-25 12:16:03.082   564   586 I DropBoxManagerService: add tag=system_server_strictmode isTagEnabled=true flags=0x2
+11-25 12:16:03.082   564   564 I Telecom : InCallController: updateCarModeForConnections: car mode apps: : SSH.oR@AP4🔒
+11-25 12:16:03.082   564   586 I DropBoxManagerService: add tag=system_server_strictmode isTagEnabled=true flags=0x2
+11-25 12:16:03.082   564   586 I DropBoxManagerService: add tag=system_server_strictmode isTagEnabled=true flags=0x2
+11-25 12:16:03.082   564   586 I DropBoxManagerService: add tag=system_server_strictmode isTagEnabled=true flags=0x2
+11-25 12:16:03.084  1573  2988 I IPCThreadState: oneway function results for code 2 on binder at 0x7b75b8800070 will be dropped but finished with status UNKNOWN_TRANSACTION
+11-25 12:16:03.084   564   564 I Telecom : InCallController: update carmode current:UserHandle{0} parent:null: SSH.oR@AP4🔒
+11-25 12:16:03.086   564   586 I DropBoxManagerService: add tag=system_server_strictmode isTagEnabled=true flags=0x2
+11-25 12:16:03.087   564   586 I DropBoxManagerService: add tag=system_server_strictmode isTagEnabled=true flags=0x2
+11-25 12:16:03.087   564   586 I DropBoxManagerService: add tag=system_server_strictmode isTagEnabled=true flags=0x2
+11-25 12:16:03.087   564   586 I DropBoxManagerService: add tag=system_server_strictmode isTagEnabled=true flags=0x2
+11-25 12:16:03.087   564   586 I DropBoxManagerService: add tag=system_server_strictmode isTagEnabled=true flags=0x2
+11-25 12:16:03.093   564   598 I libprocessgroup: Removed cgroup /sys/fs/cgroup/uid_10104/pid_2308
+11-25 12:16:03.094   564   564 W Looper  : Slow delivery took 203ms main h=android.app.ActivityThread$H c=android.app.LoadedApk$ReceiverDispatcher$Args$$ExternalSyntheticLambda0@9d49c76 m=0
+11-25 12:16:03.094   564   620 I ActivityManager: Force stopping dev.mobile.maestro.test appid=10211 user=0: pkg removed
+11-25 12:16:03.098   564   912 I HealthFirstGrantTimeMan: State for user: 0 has not been restored and validated.
+11-25 12:16:03.098  1650  5281 W KeyChain: Creating new DB.
+11-25 12:16:03.108   564   620 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 12:16:03.109   564   620 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 12:16:03.110   564   620 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 12:16:03.110   564   620 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 12:16:03.110   564   620 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 12:16:03.110  1650  5281 W KeyChain: Existing alias: com.android.server.locksettings.recoverablekeystore/application/0/10143/com.google.android.gms.auth.folsom/v1/1795608857706/3ECCC2AE34E54C522C7C444B7F240B0B
+11-25 12:16:03.110   564   620 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 12:16:03.111  1650  5281 W KeyChain: Marking as selectable: com.android.server.locksettings.recoverablekeystore/application/0/10143/com.google.android.gms.auth.folsom/v1/1795608857706/3ECCC2AE34E54C522C7C444B7F240B0B
+11-25 12:16:03.111   564   620 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 12:16:03.111   564   620 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 12:16:03.111   564   620 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 12:16:03.111   564   620 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 12:16:03.111   564   620 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 12:16:03.111   564   620 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 12:16:03.111   564   620 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 12:16:03.111   564   620 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 12:16:03.113   564   620 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 12:16:03.113   564   620 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 12:16:03.113   564   620 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 12:16:03.113   564   620 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 12:16:03.113   564   620 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 12:16:03.113   564   620 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 12:16:03.113  1650  5281 W KeyChain: Existing alias: com.android.server.locksettings.recoverablekeystore/platform/0/1001000/decrypt
+11-25 12:16:03.114   564   620 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 12:16:03.114   564   620 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 12:16:03.114   564   620 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 12:16:03.114   564   620 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 12:16:03.114   564   620 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 12:16:03.114   564   620 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 12:16:03.114   564   620 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 12:16:03.114  1650  5281 W KeyChain: Marking as selectable: com.android.server.locksettings.recoverablekeystore/platform/0/1001000/decrypt
+11-25 12:16:03.114   564   620 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 12:16:03.114  1650  5281 W KeyChain: Existing alias: com.android.server.locksettings.recoverablekeystore/platform/0/1001000/encrypt
+11-25 12:16:03.114   564   620 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 12:16:03.114  1650  5281 W KeyChain: Marking as selectable: com.android.server.locksettings.recoverablekeystore/platform/0/1001000/encrypt
+11-25 12:16:03.115   564   564 I ConditionProviders: Disallowing condition provider dev.mobile.maestro (userSet: true)
+11-25 12:16:03.117   564   694 V StorageManagerService: Package dev.mobile.maestro.test does not have legacy storage
+11-25 12:16:03.118   564   564 W Looper  : Drained
+11-25 12:16:03.121   564   863 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_REMOVED on user 0
+11-25 12:16:03.121   564   863 I AppWidgetServiceImpl: calling removeHostsAndProvidersForPackageLocked() because package removed permanently. extras=Bundle[{android.intent.extra.REMOVED_FOR_ALL_USERS=true, android.intent.extra.DONT_KILL_APP=false, android.intent.extra.UID=10211, android.intent.extra.SYSTEM_UPDATE_UNINSTALL=false, android.intent.extra.USER_INITIATED=true, android.intent.extra.DATA_REMOVED=true, android.intent.extra.user_handle=0}] isReplacing=false isArchival=false
+11-25 12:16:03.121   564   863 I AppWidgetServiceImpl: removeHostsAndProvidersForPackageLocked() pkg=dev.mobile.maestro.test userId=0
+11-25 12:16:03.123   564   829 W WifiService: Couldn't get PackageInfo for package:dev.mobile.maestro.test
+11-25 12:16:03.123   564   829 D WifiService: Remove settings for package:dev.mobile.maestro.test
+11-25 12:16:03.123   564   829 D WifiConfigManager: Remove all networks for app ApplicationInfo{c78f7b2 dev.mobile.maestro.test}
+11-25 12:16:03.124   564   829 I PasspointManager: No app ops listener found for dev.mobile.maestro.test
+11-25 12:16:03.124   564   564 I Telecom : CarModeTracker: Package dev.mobile.maestro.test is not tracked.: SSH.oR@AQE🔒
+11-25 12:16:03.124   564   564 I Telecom : InCallController: updateCarModeForConnections: car mode apps: : SSH.oR@AQE🔒
+11-25 12:16:03.124   564   564 I Telecom : InCallController: update carmode current:UserHandle{0} parent:null: SSH.oR@AQE🔒
+11-25 12:16:03.125   564   842 E AppOps  : attributionTag VCN not declared in manifest of android
+11-25 12:16:03.125   564   564 I ConditionProviders: Disallowing condition provider dev.mobile.maestro.test (userSet: true)
+11-25 12:16:03.129   564  1971 D CompatChangeReporter: Compat change id reported: 311208629; UID 1000; state: ENABLED
+11-25 12:16:03.130   428   456 I AF::TrackHandle: opChanged OP_PLAY_AUDIO callback received for 
+11-25 12:16:03.132   428   456 I AF::TrackHandle: opChanged OP_PLAY_AUDIO callback received for 
+11-25 12:16:03.137   564   912 W GrantTimeSerializer: /data/system_ce/0/healthconnect/health-permissions-first-grant-times.xml not found
+11-25 12:16:03.139   428   456 I AF::TrackHandle: opChanged OP_PLAY_AUDIO callback received for 
+11-25 12:16:03.139   428   456 I AF::TrackHandle: opChanged OP_PLAY_AUDIO callback received for 
+11-25 12:16:03.139   428   861 I AF::TrackHandle: opChanged OP_PLAY_AUDIO callback received for 
+11-25 12:16:03.139   428   861 I AF::TrackHandle: opChanged OP_PLAY_AUDIO callback received for 
+11-25 12:16:03.139   428   861 I AF::TrackHandle: opChanged OP_PLAY_AUDIO callback received for 
+11-25 12:16:03.139   428   861 I AF::TrackHandle: opChanged OP_PLAY_AUDIO callback received for 
+11-25 12:16:03.139   428   861 I AF::TrackHandle: opChanged OP_PLAY_AUDIO callback received for 
+11-25 12:16:03.139   428   861 I AF::TrackHandle: opChanged OP_PLAY_AUDIO callback received for 
+11-25 12:16:03.139   428   861 I AF::TrackHandle: opChanged OP_PLAY_AUDIO callback received for 
+11-25 12:16:03.139   428   861 I AF::TrackHandle: opChanged OP_PLAY_AUDIO callback received for 
+11-25 12:16:03.140   428   861 I AF::TrackHandle: opChanged OP_PLAY_AUDIO callback received for 
+11-25 12:16:03.140   428   861 I AF::TrackHandle: opChanged OP_PLAY_AUDIO callback received for 
+11-25 12:16:03.140   428   861 I AF::TrackHandle: opChanged OP_PLAY_AUDIO callback received for 
+11-25 12:16:03.140   428   861 I AF::TrackHandle: opChanged OP_PLAY_AUDIO callback received for 
+11-25 12:16:03.150   564  1057 E RoleControllerServiceImpl: Default/fallback role holder package doesn't qualify for the role, package: com.google.android.gms, role: android.app.role.WALLET
+11-25 12:16:03.151   428   456 I AF::TrackHandle: opChanged OP_PLAY_AUDIO callback received for 
+11-25 12:16:03.151   428   456 I AF::TrackHandle: opChanged OP_PLAY_AUDIO callback received for 
+11-25 12:16:03.151   428   456 I AF::TrackHandle: opChanged OP_PLAY_AUDIO callback received for 
+11-25 12:16:03.152   428   456 I AF::TrackHandle: opChanged OP_PLAY_AUDIO callback received for 
+11-25 12:16:03.152   428   456 I AF::TrackHandle: opChanged OP_PLAY_AUDIO callback received for 
+11-25 12:16:03.152   428   456 I AF::TrackHandle: opChanged OP_PLAY_AUDIO callback received for 
+11-25 12:16:03.152   428   456 I AF::TrackHandle: opChanged OP_PLAY_AUDIO callback received for 
+11-25 12:16:03.152   428   456 I AF::TrackHandle: opChanged OP_PLAY_AUDIO callback received for 
+11-25 12:16:03.152   428   456 I AF::TrackHandle: opChanged OP_PLAY_AUDIO callback received for 
+11-25 12:16:03.152   428   456 I AF::TrackHandle: opChanged OP_PLAY_AUDIO callback received for 
+11-25 12:16:03.152   428   456 I AF::TrackHandle: opChanged OP_PLAY_AUDIO callback received for 
+11-25 12:16:03.152   428   456 I AF::TrackHandle: opChanged OP_PLAY_AUDIO callback received for 
+11-25 12:16:03.152   428   456 I AF::TrackHandle: opChanged OP_PLAY_AUDIO callback received for 
+11-25 12:16:03.152   428   456 I AF::TrackHandle: opChanged OP_PLAY_AUDIO callback received for 
+11-25 12:16:03.152   428   456 I AF::TrackHandle: opChanged OP_PLAY_AUDIO callback received for 
+11-25 12:16:03.334     0     0 I binder  : undelivered transaction 423227, process died.
+11-25 12:16:03.153   428  3368 I AF::TrackHandle: opChanged OP_PLAY_AUDIO callback received for 
+11-25 12:16:03.155   564  1833 V ActivityManager: Got obituary of 2308:com.android.externalstorage
+11-25 12:16:03.155   564   586 I DropBoxManagerService: add tag=system_server_strictmode isTagEnabled=true flags=0x2
+11-25 12:16:03.156   564   665 I RollbackManager: broadcast=ACTION_PACKAGE_FULLY_REMOVED pkg=dev.mobile.maestro.test
+11-25 12:16:03.156   564   829 W WifiService: Couldn't get PackageInfo for package:dev.mobile.maestro.test
+11-25 12:16:03.156   564   829 D WifiService: Remove settings for package:dev.mobile.maestro.test
+11-25 12:16:03.156   564   829 D WifiConfigManager: Remove all networks for app ApplicationInfo{49681ae dev.mobile.maestro.test}
+11-25 12:16:03.156   564   829 I PasspointManager: No app ops listener found for dev.mobile.maestro.test
+11-25 12:16:03.159   920   920 D ControlsListingControllerImpl: ServiceConfig reloaded, count: 0
+11-25 12:16:03.171  1441  1993 I MediaProvider: Begin Intent { act=android.intent.action.PACKAGE_FULLY_REMOVED dat=package: flg=0x5000010 cmp=com.google.android.providers.media.module/com.android.providers.media.MediaService (has extras) }
+11-25 12:16:03.172  1441  1993 D MediaProvider: Deleted 0 Android/media items belonging to dev.mobile.maestro on /data/user/0/com.google.android.providers.media.module/databases/external.db
+11-25 12:16:03.176   564   595 W MagnificationConnectionManager: requestConnection duplicated request: connect=false, mConnectionState=DISCONNECTED
+11-25 12:16:03.176   564   595 I CredentialManager: updateProvidersWhenPackageRemoved
+11-25 12:16:03.177  1199  1199 D LauncherAppsCallbackImpl: package removed received dev.mobile.maestro
+11-25 12:16:03.177   564   564 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 12:16:03.177   564   564 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 12:16:03.177   564   564 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 12:16:03.177  1441  1993 D MediaGrants: Removed 0 media_grants for 0 user for [dev.mobile.maestro]. Reason: Package orphaned
+11-25 12:16:03.178  1441  1993 I MediaProvider: End Intent { act=android.intent.action.PACKAGE_FULLY_REMOVED dat=package: flg=0x5000010 cmp=com.google.android.providers.media.module/com.android.providers.media.MediaService (has extras) }
+11-25 12:16:03.181  1199  1233 D PackageUpdatedTask: Package updated: mOp=REMOVE packages=[dev.mobile.maestro]
+11-25 12:16:03.181  1199  1233 D PackageUpdatedTask: REMOVE: removing package=dev.mobile.maestro
+11-25 12:16:03.182  1199  1233 D PackageUpdatedTask: OP_REMOVE: removing packages=[dev.mobile.maestro]
+11-25 12:16:03.182  1199  1233 D ModelWriter: removing items from db . Reason: [removed because the corresponding package or component is removed. mOp=3 removedPackages=[dev.mobile.maestro] removedComponents=[]]
+11-25 12:16:03.184   564  1831 V GrammaticalInflectionUtils: AttributionSource: AttributionSource { uid = 10104, packageName = null, attributionTag = null, token = android.os.Binder@e5743fa, deviceId = 0, next = null } does not have READ_SYSTEM_GRAMMATICAL_GENDER permission.
+11-25 12:16:03.184  1439  1439 I AiAiEcho: AppFetcherImplV2 onPackageRemoved dev.mobile.maestro.
+11-25 12:16:03.193  1084  1084 D CarrierSvcBindHelper: onPackageRemoved: dev.mobile.maestro.test
+11-25 12:16:03.193  1084  1084 D CarrierSvcBindHelper: No carrier app for: 0
+11-25 12:16:03.194   361   408 I netd    : tetherGetStats() -> {[]} <0.95ms>
+11-25 12:16:03.195  1439  3921 I AiAiEcho: Settings changed for uri: content://settings/secure/accessibility_enabled
+11-25 12:16:03.197  1439  1684 I AiAiEcho: Predicting[0]:  [CONTEXT sampling_count=5 ]
+11-25 12:16:03.197  1439  1684 I AiAiEcho: EchoTargets: 
+11-25 12:16:03.197  1439  1684 I AiAiEcho: Filtered by AiAi flag check: 
+11-25 12:16:03.197  1439  1684 I AiAiEcho: [CONTEXT ratelimit_period="10 SECONDS" ]
+11-25 12:16:03.197  1439  1684 I AiAiEcho: Ranked targets strategy: SORT, count: 0, ranking metadata:  [CONTEXT ratelimit_period="10 SECONDS" ]
+11-25 12:16:03.197  1439  1684 I AiAiEcho: #remoteViewsTwiddler: feature disabled.
+11-25 12:16:03.197  1439  1684 I AiAiEcho: Predicting[0]:  [CONTEXT sampling_count=5 ]
+11-25 12:16:03.197  1439  1684 I AiAiEcho: EchoTargets: 
+11-25 12:16:03.197  1439  1684 I AiAiEcho: Filtered by AiAi flag check: 
+11-25 12:16:03.197  1439  1684 I AiAiEcho: [CONTEXT ratelimit_period="10 SECONDS" ]
+11-25 12:16:03.197  1439  1684 I AiAiEcho: Ranked targets strategy: SORT, count: 0, ranking metadata:  [CONTEXT ratelimit_period="10 SECONDS" ]
+11-25 12:16:03.197  1439  1684 I AiAiEcho: #remoteViewsTwiddler: feature disabled.
+11-25 12:16:03.197  1439  1684 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface lockscreen with targets# 0 (types=[])
+11-25 12:16:03.197  1439  1684 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface home with targets# 0 (types=[])
+11-25 12:16:03.198   367   367 D Zygote  : Forked child process 5317
+11-25 12:16:03.198   920   920 W PageIndicator: Total number of pages invalid: 0. Assuming 1 page.
+11-25 12:16:03.201   564  1057 E RoleControllerServiceImpl: Default/fallback role holder package doesn't qualify for the role, package: com.google.android.devicelockcontroller, role: android.app.role.SYSTEM_FINANCED_DEVICE_CONTROLLER
+11-25 12:16:03.201   564  1971 E AtomicFile: Failed to rename /data/system/cachequota.xml.new to /data/system/cachequota.xml
+11-25 12:16:03.203   564   597 I ActivityManager: Start proc 5317:com.android.externalstorage/u0a104 for content provider {com.android.externalstorage/com.android.externalstorage.ExternalStorageProvider}
+11-25 12:16:03.207  1199  1199 D SsBaseTemplateCard: No text view can be set up
+11-25 12:16:03.207  1199  1199 D SsBaseTemplateCard: Passed-in item info is null
+11-25 12:16:03.207  1199  1199 D SsBaseTemplateCard: Passed-in item info is null
+11-25 12:16:03.207  1199  1199 D SsBaseTemplateCard: Passed-in item info is null
+11-25 12:16:03.207  1199  1199 I SsBaseTemplateCard: Secondary card pane is null
+11-25 12:16:03.207  1439  1684 I AiAiEcho: [pnb-agg] Reload pnb aggregation on events deleted
+11-25 12:16:03.207  1439  1684 I AiAiEcho: [pnb-agg] pnb aggregation disabled.
+11-25 12:16:03.208   564   879 D ShortcutService: Saving package item com.android.systemui to /data/system_ce/0/shortcut_service/launchers/com.android.systemui0.xml
+11-25 12:16:03.209  5317  5317 I externalstorage: Using CollectorTypeCMC GC.
+11-25 12:16:03.210  5317  5317 W externalstorage: Unexpected CPU variant for x86: x86_64.
+11-25 12:16:03.210  5317  5317 W externalstorage: Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, goldmont-without-sha-xsaves, tremont, kabylake, default
+11-25 12:16:03.213  5317  5317 E externalstorage: Not starting debugger since process cannot load the jdwp agent.
+11-25 12:16:03.215  5317  5317 D nativeloader: Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok
+11-25 12:16:03.226   564   596 D ActivityManager: sync unfroze 925 com.google.android.permissioncontroller for 3
+11-25 12:16:03.229  1573  2428 I PBSessionCacheImpl: (REDACTED) Deleted sessionId[%d] from persistence.
+11-25 12:16:03.242  1573  2292 W A       : (REDACTED) %s task was not run. Callback from Service received after client was disposed.
+11-25 12:16:03.244  1084  1084 E SmsApplication: com.google.android.apps.messaging lost android:read_cell_broadcasts:  (fixing)
+11-25 12:16:03.244   564  1833 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 10134, code = READ_CELL_BROADCASTS, mode = allow, callingUid = 1001, oldMode = allow
+11-25 12:16:03.248   564  1827 I AppWidgetServiceImpl: getInstalledProvidersForProfiles() 0
+11-25 12:16:03.250   564  1827 W ParceledListSlice: Element #25 is 19828 bytes.
+11-25 12:16:03.251   564  1827 W ParceledListSlice: Element #26 is 19864 bytes.
+11-25 12:16:03.251   564  1825 W ParceledListSlice: Element #27 is 19708 bytes.
+11-25 12:16:03.251   564  1825 W ParceledListSlice: Element #28 is 19616 bytes.
+11-25 12:16:03.251   564  1825 W ParceledListSlice: Element #29 is 19728 bytes.
+11-25 12:16:03.252  1439  1870 W PackageManager: Failure retrieving text 0x7f130786 in package com.android.systemui
+11-25 12:16:03.252  1439  1870 W PackageManager: android.content.res.Resources$NotFoundException: String resource ID #0x7f130786
+11-25 12:16:03.252  1439  1870 W PackageManager: 	at android.content.res.Resources.getText(Resources.java:466)
+11-25 12:16:03.252  1439  1870 W PackageManager: 	at android.app.ApplicationPackageManager.getText(ApplicationPackageManager.java:2405)
+11-25 12:16:03.252  1439  1870 W PackageManager: 	at android.appwidget.AppWidgetProviderInfo.loadDescription(AppWidgetProviderInfo.java:484)
+11-25 12:16:03.252  1439  1870 W PackageManager: 	at kml.a(PG:341)
+11-25 12:16:03.252  1439  1870 W PackageManager: 	at kmg.b(PG:82)
+11-25 12:16:03.252  1439  1870 W PackageManager: 	at aaer.g(PG:13)
+11-25 12:16:03.252  1439  1870 W PackageManager: 	at kotlinx.coroutines.DispatchedTask.run(PG:114)
+11-25 12:16:03.252  1439  1870 W PackageManager: 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+11-25 12:16:03.252  1439  1870 W PackageManager: 	at wqm.a(PG:3)
+11-25 12:16:03.252  1439  1870 W PackageManager: 	at wpo.run(PG:21)
+11-25 12:16:03.252  1439  1870 W PackageManager: 	at wqn.run(PG:5)
+11-25 12:16:03.252  1439  1870 W PackageManager: 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+11-25 12:16:03.252  1439  1870 W PackageManager: 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+11-25 12:16:03.252  1439  1870 W PackageManager: 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:307)
+11-25 12:16:03.252  1439  1870 W PackageManager: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-25 12:16:03.252  1439  1870 W PackageManager: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-25 12:16:03.252  1439  1870 W PackageManager: 	at hqv.run(PG:221)
+11-25 12:16:03.252  1439  1870 W PackageManager: 	at java.lang.Thread.run(Thread.java:1012)
+11-25 12:16:03.254  1439  1870 I AiAiEcho: EchoSearch: WidgetFetcherImpl is initialized with [33] widgets [reason=package removed for userId: 0]
+11-25 12:16:03.275  1475  1899 I NgaEntryPointEventSendr: (REDACTED) State changed: %s => %s (%s)
+11-25 12:16:03.285  1573  2292 W SearchServiceCore: Abort, client detached.
+11-25 12:16:03.287   564   596 D ActivityManager: sync unfroze 1790 android.process.media for 3
+11-25 12:16:03.293  1084  1084 E CellBroadcastUtils: getDefaultCellBroadcastReceiverPackageName: no package found
+11-25 12:16:03.293   564  1833 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_SMS, mode = allow, callingUid = 1001, oldMode = allow
+11-25 12:16:03.294   564  1824 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_SMS, mode = allow, callingUid = 1001, oldMode = allow
+11-25 12:16:03.294   564  1020 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_WAP_PUSH, mode = allow, callingUid = 1001, oldMode = allow
+11-25 12:16:03.295   564  1554 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = SEND_SMS, mode = allow, callingUid = 1001, oldMode = allow
+11-25 12:16:03.296   564  1554 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_CELL_BROADCASTS, mode = allow, callingUid = 1001, oldMode = allow
+11-25 12:16:03.299   564   879 D ShortcutService: received package broadcast intent: Intent { act=android.intent.action.PACKAGE_REMOVED dat=package: flg=0x4000010 (has extras) }
+11-25 12:16:03.299   564   879 D ShortcutService: removing package: dev.mobile.maestro.test userId0
+11-25 12:16:03.299   564   879 D ShortcutService: handlePackageRemoved: dev.mobile.maestro.test user=0
+11-25 12:16:03.303  1441  1441 W MediaProvider: WorkProfileOwnerApps cache is empty
+11-25 12:16:03.304  1441  1441 D PickerSyncLockManager: Trying to acquire lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@5bf5151[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+11-25 12:16:03.304  1441  1441 D CloseableReentrantLock: Successfully acquired lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@5bf5151[Locked by thread main]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+11-25 12:16:03.304  1441  1441 D CloseableReentrantLock: Successfully released lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@5bf5151[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+11-25 12:16:03.305  5317  5317 D nativeloader: Configuring clns-shared-7 for other apk /system/priv-app/ExternalStorageProvider/ExternalStorageProvider.apk. target_sdk_version=35, uses_libraries=, library_path=/system/priv-app/ExternalStorageProvider/lib/x86_64:/system/lib64:/system_ext/lib64, permitted_path=/data:/mnt/expand:/data/user/0/com.android.externalstorage:/system/priv-app/ExternalStorageProvider:/system/lib64:/system_ext/lib64
+11-25 12:16:03.306  5317  5317 D CompatChangeReporter: Compat change id reported: 202956589; UID 10104; state: ENABLED
+11-25 12:16:03.309   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.309   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.309   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.309   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.309   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.309   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.309   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.309   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.309   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.309   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.309   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.309   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.309   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.309   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.309   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.309   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.309   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.309   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.309   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.309   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.309   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.309   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.309   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.309   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.309   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.309   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.309   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.309   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.309   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.309   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.309   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.309   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564  1831 W JobInfo : Job 'com.google.android.providers.media.module/com.android.providers.media.MediaService#-300' has a deadline with no functional constraints. The deadline won't improve job execution latency. Consider removing the deadline.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.310   564   912 W HealthConnectPackageInfoUtils: Can't extract requested permissions from the package info.
+11-25 12:16:03.319   361   408 I netd    : tetherGetStats() -> {[]} <0.34ms>
+11-25 12:16:03.325  5317  5317 V GraphicsEnvironment: Currently set values for:
+11-25 12:16:03.325  5317  5317 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
+11-25 12:16:03.325  5317  5317 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
+11-25 12:16:03.326  5317  5317 V GraphicsEnvironment: Global.Settings values are invalid: number of packages: 0, number of values: 0
+11-25 12:16:03.326  5317  5317 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+11-25 12:16:03.347   564  1020 D SafetySourceDataValidat: No cert check requested for package com.google.android.permissioncontroller
+11-25 12:16:03.350   564   648 D OomAdjuster: Not killing cached processes
+11-25 12:16:03.353   564   564 W system_server: Long monitor contention with owner binder:564_14 (1824) at android.app.job.JobWorkItem com.android.server.job.JobServiceContext.doDequeueWork(com.android.server.job.JobServiceContext$JobCallback, int)(JobServiceContext.java:811) waiters=1 in void com.android.server.job.JobSchedulerService$3.onReceive(android.content.Context, android.content.Intent) for 137ms
+11-25 12:16:03.353   564   564 W Looper  : Slow dispatch took 137ms main h=android.app.ActivityThread$H c=android.app.LoadedApk$ReceiverDispatcher$Args$$ExternalSyntheticLambda0@1ebbc8c m=0
+11-25 12:16:03.353   564   663 W system_server: Long monitor contention with owner binder:564_14 (1824) at android.app.job.JobWorkItem com.android.server.job.JobServiceContext.doDequeueWork(com.android.server.job.JobServiceContext$JobCallback, int)(JobServiceContext.java:811) waiters=2 in void com.android.server.job.JobSchedulerService$JobHandler.handleMessage(android.os.Message) for 112ms
+11-25 12:16:03.355  1439  3921 I AiAiEcho: Settings changed for uri: content://settings/secure/credential_service_primary
+11-25 12:16:03.355  1439  3921 I AiAiEcho: Settings changed for uri: content://settings/secure/credential_service
+11-25 12:16:03.360  1439  1684 I AiAiEcho: Predicting[0]:  [CONTEXT sampling_count=5 ]
+11-25 12:16:03.360  1439  1684 I AiAiEcho: EchoTargets: 
+11-25 12:16:03.360  1439  1684 I AiAiEcho: Filtered by AiAi flag check: 
+11-25 12:16:03.360  1439  1684 I AiAiEcho: [CONTEXT ratelimit_period="10 SECONDS" ]
+11-25 12:16:03.360  1439  1684 I AiAiEcho: Ranked targets strategy: SORT, count: 0, ranking metadata:  [CONTEXT ratelimit_period="10 SECONDS" ]
+11-25 12:16:03.360  1439  1684 I AiAiEcho: #remoteViewsTwiddler: feature disabled.
+11-25 12:16:03.360  1439  1684 I AiAiEcho: Predicting[0]:  [CONTEXT sampling_count=5 ]
+11-25 12:16:03.360  1439  1684 I AiAiEcho: EchoTargets: 
+11-25 12:16:03.360  1439  1684 I AiAiEcho: Filtered by AiAi flag check: 
+11-25 12:16:03.360  1439  1684 I AiAiEcho: [CONTEXT ratelimit_period="10 SECONDS" ]
+11-25 12:16:03.360  1439  1684 I AiAiEcho: Ranked targets strategy: SORT, count: 0, ranking metadata:  [CONTEXT ratelimit_period="10 SECONDS" ]
+11-25 12:16:03.360  1439  1684 I AiAiEcho: #remoteViewsTwiddler: feature disabled.
+11-25 12:16:03.360  1439  1684 I AiAiEcho: Predicting[0]:  [CONTEXT sampling_count=5 ]
+11-25 12:16:03.360  1439  1684 I AiAiEcho: EchoTargets: 
+11-25 12:16:03.360  1439  1684 I AiAiEcho: Filtered by AiAi flag check: 
+11-25 12:16:03.360  1439  1684 I AiAiEcho: [CONTEXT ratelimit_period="10 SECONDS" ]
+11-25 12:16:03.363   920   920 D ControlsListingControllerImpl: ServiceConfig reloaded, count: 0
+11-25 12:16:03.366  1441  1993 I MediaProvider: Begin Intent { act=android.intent.action.PACKAGE_FULLY_REMOVED dat=package: flg=0x5000010 cmp=com.google.android.providers.media.module/com.android.providers.media.MediaService (has extras) }
+11-25 12:16:03.368  1441  1993 D MediaProvider: Deleted 0 Android/media items belonging to dev.mobile.maestro.test on /data/user/0/com.google.android.providers.media.module/databases/external.db
+11-25 12:16:03.374  1439  1684 I AiAiEcho: Ranked targets strategy: SORT, count: 0, ranking metadata:  [CONTEXT ratelimit_period="10 SECONDS" ]
+11-25 12:16:03.376  1400  5329 I Blockstore: [DataStoreImpl] Clearing all the restore credential for 1 packages [CONTEXT service_id=258 ]
+11-25 12:16:03.377  1439  1684 I AiAiEcho: #remoteViewsTwiddler: feature disabled.
+11-25 12:16:03.378  1439  1684 I AiAiEcho: Predicting[0]:  [CONTEXT sampling_count=5 ]
+11-25 12:16:03.378  1439  1684 I AiAiEcho: EchoTargets: 
+11-25 12:16:03.378  1439  1684 I AiAiEcho: Filtered by AiAi flag check: 
+11-25 12:16:03.378  1439  1684 I AiAiEcho: [CONTEXT ratelimit_period="10 SECONDS" ]
+11-25 12:16:03.378  1439  1684 I AiAiEcho: Ranked targets strategy: SORT, count: 0, ranking metadata:  [CONTEXT ratelimit_period="10 SECONDS" ]
+11-25 12:16:03.378  1439  1684 I AiAiEcho: #remoteViewsTwiddler: feature disabled.
+11-25 12:16:03.378  1400  5329 W Blockstore: [DataStoreImpl] Does not contain gms package key space. [CONTEXT service_id=258 ]
+11-25 12:16:03.378  1400  5329 I Blockstore: [PackageIntentOperation] Deleted restore credential for package dev.mobile.maestro is successful: true [CONTEXT service_id=258 ]
+11-25 12:16:03.380  1441  1993 D MediaGrants: Removed 0 media_grants for 0 user for [dev.mobile.maestro.test]. Reason: Package orphaned
+11-25 12:16:03.556     0     0 I servicemanager: Caller(pid=564,uid=1000,sid=u:r:system_server:s0) Since 'android.system.virtualizationmaintenance' could not be found trying to start it as a lazy AIDL service. (if it's not configured to be a lazy service, it may be stuck starting or still starting).
+11-25 12:16:03.564     0     0 I init    : starting service 'virtualizationservice'...
+11-25 12:16:03.386  1441  1993 I MediaProvider: End Intent { act=android.intent.action.PACKAGE_FULLY_REMOVED dat=package: flg=0x5000010 cmp=com.google.android.providers.media.module/com.android.providers.media.MediaService (has extras) }
+11-25 12:16:03.572     0     0 I init    : ... started service 'virtualizationservice' has pid 5354
+11-25 12:16:03.576     0     0 I init    : Control message: Processed ctl.interface_start for 'aidl/android.system.virtualizationmaintenance' from pid: 151 (/system/bin/servicemanager)
+11-25 12:16:03.394  1439  1684 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface lockscreen with targets# 0 (types=[])
+11-25 12:16:03.394  1439  1684 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface home with targets# 0 (types=[])
+11-25 12:16:03.394  1439  1684 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface lockscreen with targets# 0 (types=[])
+11-25 12:16:03.394  1439  1684 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface home with targets# 0 (types=[])
+11-25 12:16:03.398   564   576 W system_server: Suspending all threads took: 8.261ms
+11-25 12:16:03.398   920   920 W PageIndicator: Total number of pages invalid: 0. Assuming 1 page.
+11-25 12:16:03.398   920   920 W PageIndicator: Total number of pages invalid: 0. Assuming 1 page.
+11-25 12:16:03.399  1199  1199 D SsBaseTemplateCard: No text view can be set up
+11-25 12:16:03.399  1199  1199 D SsBaseTemplateCard: Passed-in item info is null
+11-25 12:16:03.399  1199  1199 D SsBaseTemplateCard: Passed-in item info is null
+11-25 12:16:03.399  1199  1199 D SsBaseTemplateCard: Passed-in item info is null
+11-25 12:16:03.399  1199  1199 I SsBaseTemplateCard: Secondary card pane is null
+11-25 12:16:03.399  1199  1199 D SsBaseTemplateCard: No text view can be set up
+11-25 12:16:03.399  1199  1199 D SsBaseTemplateCard: Passed-in item info is null
+11-25 12:16:03.399  1199  1199 D SsBaseTemplateCard: Passed-in item info is null
+11-25 12:16:03.399  1199  1199 D SsBaseTemplateCard: Passed-in item info is null
+11-25 12:16:03.399  1199  1199 I SsBaseTemplateCard: Secondary card pane is null
+11-25 12:16:03.400   564   879 D ShortcutService: Saving package item com.google.android.as to /data/system_ce/0/shortcut_service/launchers/com.google.android.as0.xml
+11-25 12:16:03.421   564   879 D ShortcutService: Saving package item com.google.android.apps.nexuslauncher to /data/system_ce/0/shortcut_service/launchers/com.google.android.apps.nexuslauncher0.xml
+11-25 12:16:03.430  1400  5329 I Blockstore: [DataStoreImpl] Clearing all the Blockstore Data for package dev.mobile.maestro [CONTEXT service_id=258 ]
+11-25 12:16:03.430  1400  5329 I Blockstore: [DataStoreImpl] Clearing all the Blockstore Data for 1 packages [CONTEXT service_id=258 ]
+11-25 12:16:03.430  1400  5329 I Blockstore: [DataStoreImpl] Removing Blockstore data for packages [dev.mobile.maestro] [CONTEXT service_id=258 ]
+11-25 12:16:03.433  5317  5317 D ExternalStorage: After updating volumes, found 1 active roots
+11-25 12:16:03.434   564   879 D ShortcutService: Saving package item com.android.systemui to /data/system_ce/0/shortcut_service/launchers/com.android.systemui0.xml
+11-25 12:16:03.444   564   670 D ActivityManager: freezing 2851 com.google.android.rkpdapp
+11-25 12:16:03.445   564   836 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET, states=14
+11-25 12:16:03.445   564   836 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET6, states=14
+11-25 12:16:03.445   564   836 D InetDiagMessage: Destroyed live tcp sockets for uids={10193} in 1ms
+11-25 12:16:03.445  5354  5354 I VirtualizationService: virtualizationservice::maintenance: Failed to find a Secretkeeper instance; skipping secret management
+11-25 12:16:03.446  5354  5354 I AidlLazyServiceRegistrar: Registering service android.system.virtualizationservice
+11-25 12:16:03.447  5354  5354 I VirtualizationService: virtualizationservice: Registered Binder service android.system.virtualizationservice.
+11-25 12:16:03.623     0     0 I servicemanager: Caller(pid=5354,uid=1000,sid=u:r:virtualizationservice:s0) Could not find android.hardware.security.secretkeeper.ISecretkeeper/default in the VINTF manifest. No alternative instances declared in VINTF.
+11-25 12:16:03.631     0     0 I servicemanager: Caller(pid=5354,uid=1000,sid=u:r:virtualizationservice:s0) Could not find android.hardware.security.keymint.IRemotelyProvisionedComponent/avf in the VINTF manifest. VINTF declared instances: default.
+11-25 12:16:03.454  5354  5354 I AidlLazyServiceRegistrar: Registering service android.system.virtualizationmaintenance
+11-25 12:16:03.464  5354  5354 I VirtualizationService: virtualizationservice: Registered Binder service android.system.virtualizationmaintenance.
+11-25 12:16:03.638     0     0 I servicemanager: Notifying android.system.virtualizationmaintenance they do (previously: don't) have clients when service is guaranteed to be in use
+11-25 12:16:03.647     0     0 I BpBinder: onLastStrongRef automatically unlinking death recipients:
+11-25 12:16:03.465  5354  5358 I AidlLazyServiceRegistrar: Process has 1 (of 2 available) client(s) in use after notification android.system.virtualizationmaintenance has clients: 1
+11-25 12:16:03.471   564   576 I system_server: Background concurrent mark compact GC freed 18MB AllocSpace bytes, 42(1176KB) LOS objects, 47% free, 26MB/50MB, paused 10.105ms,2.142ms total 602.689ms
+11-25 12:16:03.482   925   925 D PersistedStoragePackageUninstalledReceiver: Received android.intent.action.PACKAGE_FULLY_REMOVED for dev.mobile.maestro for u0
+11-25 12:16:03.498  5354  5358 I VirtualizationService: virtualizationservice::aidl: ignoring packageRemoved(user_id=0, app_id=10210)
+11-25 12:16:03.499  2528  5314 W oid.documentsui: Long monitor contention with owner pool-17-thread-1 (5310) at void com.android.documentsui.roots.ProvidersCache$MultiProviderUpdateTask.handleDocumentsProvider(android.content.pm.ProviderInfo, com.android.documentsui.base.UserId)(ProvidersCache.java:648) waiters=1 in void com.android.documentsui.roots.ProvidersCache$MultiProviderUpdateTask.handleDocumentsProvider(android.content.pm.ProviderInfo, com.android.documentsui.base.UserId) for 341ms
+11-25 12:16:03.506  2528  5313 W oid.documentsui: Long monitor contention with owner pool-17-thread-1 (5310) at void com.android.documentsui.roots.ProvidersCache$MultiProviderUpdateTask.handleDocumentsProvider(android.content.pm.ProviderInfo, com.android.documentsui.base.UserId)(ProvidersCache.java:648) waiters=2 in void com.android.documentsui.roots.ProvidersCache$MultiProviderUpdateTask.handleDocumentsProvider(android.content.pm.ProviderInfo, com.android.documentsui.base.UserId) for 347ms
+11-25 12:16:03.506  2528  5312 W oid.documentsui: Long monitor contention with owner pool-17-thread-1 (5310) at void com.android.documentsui.roots.ProvidersCache$MultiProviderUpdateTask.handleDocumentsProvider(android.content.pm.ProviderInfo, com.android.documentsui.base.UserId)(ProvidersCache.java:648) waiters=3 in void com.android.documentsui.roots.ProvidersCache$MultiProviderUpdateTask.handleDocumentsProvider(android.content.pm.ProviderInfo, com.android.documentsui.base.UserId) for 348ms
+11-25 12:16:03.508  2528  5311 W oid.documentsui: Long monitor contention with owner pool-17-thread-1 (5310) at void com.android.documentsui.roots.ProvidersCache$MultiProviderUpdateTask.handleDocumentsProvider(android.content.pm.ProviderInfo, com.android.documentsui.base.UserId)(ProvidersCache.java:648) waiters=4 in void com.android.documentsui.roots.ProvidersCache$MultiProviderUpdateTask.handleDocumentsProvider(android.content.pm.ProviderInfo, com.android.documentsui.base.UserId) for 350ms
+11-25 12:16:03.513  1475  1475 I GsaVoiceInteractionSrv: (REDACTED) O received %s
+11-25 12:16:03.515   564   595 W MagnificationConnectionManager: requestConnection duplicated request: connect=false, mConnectionState=DISCONNECTED
+11-25 12:16:03.515   564   564 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 12:16:03.515   564   564 W IPCThreadState: Sending oneway calls to frozen process.
+11-25 12:16:03.519  1230  5333 I ProximityAuth: [RecentAppsMediator] Package removed: (user=UserHandle{0}) dev.mobile.maestro
+11-25 12:16:03.519   564   595 I CredentialManager: updateProvidersWhenPackageRemoved
+11-25 12:16:03.526  1400  3465 W SQLiteLog: (28) double-quoted string literal: "dev.mobile.maestro"
+11-25 12:16:03.527   564  1827 D SafetySourceDataValidat: No cert check requested for package com.google.android.permissioncontroller
+11-25 12:16:03.547  1400  5364 I Icing   : doRemovePackageData dev.mobile.maestro
+11-25 12:16:03.549  1475  1475 I GsaVoiceInteractionSrv: (REDACTED) O received %s
+11-25 12:16:03.557   925   925 D PersistedStoragePackageUninstalledReceiver: Received android.intent.action.PACKAGE_FULLY_REMOVED for dev.mobile.maestro.test for u0
+11-25 12:16:03.558   564   578 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/LatinIMEGooglePrebuilt/LatinIMEGooglePrebuilt.apk' with 1 weak references
+11-25 12:16:03.558   564   578 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/GoogleTTS/GoogleTTS.apk' with 1 weak references
+11-25 12:16:03.558   361   408 I netd    : tetherGetStats() -> {[]} <0.46ms>
+11-25 12:16:03.562   564   578 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/InputDevices/InputDevices.apk' with 1 weak references
+11-25 12:16:03.562   564   578 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/PrebuiltGmsCore/PrebuiltGmsCore.apk' with 1 weak references
+11-25 12:16:03.563   564   578 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/PrebuiltGmail/PrebuiltGmail.apk' with 1 weak references
+11-25 12:16:03.563   564   578 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/Drive/Drive.apk' with 1 weak references
+11-25 12:16:03.563   564   578 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/CalendarGooglePrebuilt/CalendarGooglePrebuilt.apk' with 1 weak references
+11-25 12:16:03.563   564   578 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/Velvet/Velvet.apk' with 1 weak references
+11-25 12:16:03.567   564   578 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/app/AccessibilityMenu/AccessibilityMenu.apk' with 1 weak references
+11-25 12:16:03.567   564   578 W system_server: ApkAssets: Deleting an ApkAssets object '/product/overlay/AccessibilityMenu__sdk_gphone64_x86_64__auto_generated_rro_product.apk' with 1 weak references
+11-25 12:16:03.567   564   578 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/talkback/talkback.apk' with 1 weak references
+11-25 12:16:03.568   564   578 W system_server: ApkAssets: Deleting an ApkAssets object '/vendor/overlay/EmulatorTalkBackOverlay/EmulatorTalkBackOverlay.apk' with 1 weak references
+11-25 12:16:03.577  1573  2292 W SearchServiceCore: Abort, client detached.
+11-25 12:16:03.587  1230  5337 I Fitness : FitCleanupIntentOperation received Intent android.intent.action.PACKAGE_REMOVED [CONTEXT service_id=17 ]
+11-25 12:16:03.594  4091  4120 I MPEG4Writer: setStartTimestampUs: 113574123
+11-25 12:16:03.594  4091  4121 I MPEG4Writer: setStartTimestampUs: 113574123
+11-25 12:16:03.594  4091  4091 D MPEG4Writer: reset()
+11-25 12:16:03.594  4091  4091 D MPEG4Writer: Video track stopping. Stop source
+11-25 12:16:03.594  4091  4091 D MPEG4Writer: Video track source stopping
+11-25 12:16:03.594  4091  4091 D MPEG4Writer: Video track source stopped
+11-25 12:16:03.594  4091  4119 V MediaWriter: Track event err/info msg:101, trackId:1, type:1000,val:-1011
+11-25 12:16:03.594  4091  4119 I MPEG4Writer: Received total/0-length (550/0) buffers and encoded 550 frames. - Video
+11-25 12:16:03.594  4091  4091 D MPEG4Writer: Video track stopped. Status:0. Stop source
+11-25 12:16:03.594  4091  4091 D MPEG4Writer: Metadata track stopping. Stop source
+11-25 12:16:03.594  4091  4091 D MPEG4Writer: Metadata track source stopping
+11-25 12:16:03.594  4091  4091 D MPEG4Writer: Metadata track source stopped
+11-25 12:16:03.594  4091  4120 V MediaWriter: Track event err/info msg:101, trackId:2, type:1000,val:-1011
+11-25 12:16:03.594  4091  4120 W MPEG4Writer: 0-duration samples found: 1
+11-25 12:16:03.594  4091  4120 I MPEG4Writer: Received total/0-length (1/0) buffers and encoded 1 frames. - Metadata
+11-25 12:16:03.594  4091  4091 D MPEG4Writer: Metadata track stopped. Status:0. Stop source
+11-25 12:16:03.594  4091  4091 D MPEG4Writer: Metadata track stopping. Stop source
+11-25 12:16:03.594  4091  4091 D MPEG4Writer: Metadata track source stopping
+11-25 12:16:03.594  4091  4091 D MPEG4Writer: Metadata track source stopped
+11-25 12:16:03.594  4091  4121 V MediaWriter: Track event err/info msg:101, trackId:3, type:1000,val:-1011
+11-25 12:16:03.594  4091  4121 W MPEG4Writer: 0-duration samples found: 1
+11-25 12:16:03.594  4091  4121 I MPEG4Writer: Received total/0-length (1/0) buffers and encoded 1 frames. - Metadata
+11-25 12:16:03.594  4091  4091 D MPEG4Writer: Metadata track stopped. Status:0. Stop source
+11-25 12:16:03.594  4091  4091 D MPEG4Writer: Duration from tracks range is [0, 72893376] us
+11-25 12:16:03.594  4091  4117 D MPEG4Writer: 1 chunks are written in the last batch
+11-25 12:16:03.594  4091  4091 D MPEG4Writer: WriterThread stopped. Status:0
+11-25 12:16:03.595  5354  5358 I VirtualizationService: virtualizationservice::aidl: ignoring packageRemoved(user_id=0, app_id=10211)
+11-25 12:16:03.598  1400  3465 I Blockstore: [DataStoreImpl] Clearing all the restore credential for 1 packages [CONTEXT service_id=258 ]
+11-25 12:16:03.598  1400  3465 W Blockstore: [DataStoreImpl] Does not contain gms package key space. [CONTEXT service_id=258 ]
+11-25 12:16:03.598  1400  3465 I Blockstore: [PackageIntentOperation] Deleted restore credential for package dev.mobile.maestro.test is successful: true [CONTEXT service_id=258 ]
+11-25 12:16:03.599  4091  4091 I MPEG4Writer: Adjust the moov start time from 113574123 us -> 113574123 us
+11-25 12:16:03.599  4091  4091 I MPEG4Writer: The mp4 file will not be streamable.
+11-25 12:16:03.599  4091  4091 I MPEG4Writer: MOOV atom was written to the file
+11-25 12:16:03.599  4091  4091 D MPEG4Writer: release()
+11-25 12:16:03.599  4091  4091 D MPEG4Writer: ftruncate mPreAllocateFileEndOffset:5102867 mOffset:5101445 mMdatEndOffset:5092299 diff:1422
+11-25 12:16:03.601  1475  1481 I hbox:interactor: JIT allocated 54KB for compiled code of java.lang.Object com.google.android.apps.gsa.binaries.velvet.app.arq.r()
+11-25 12:16:03.601  1475  1481 I hbox:interactor: Compiler allocated 5672KB to compile java.lang.Object com.google.android.apps.gsa.binaries.velvet.app.arq.r()
+11-25 12:16:03.603  1400  3465 I Blockstore: [DataStoreImpl] Clearing all the Blockstore Data for package dev.mobile.maestro.test [CONTEXT service_id=258 ]
+11-25 12:16:03.603  1400  3465 I Blockstore: [DataStoreImpl] Clearing all the Blockstore Data for 1 packages [CONTEXT service_id=258 ]
+11-25 12:16:03.603  1400  3465 I Blockstore: [DataStoreImpl] Removing Blockstore data for packages [dev.mobile.maestro.test] [CONTEXT service_id=258 ]
+11-25 12:16:03.609  1199  1199 D LauncherAppsCallbackImpl: package removed received dev.mobile.maestro.test
+11-25 12:16:03.610  1199  1233 D PackageUpdatedTask: Package updated: mOp=REMOVE packages=[dev.mobile.maestro.test]
+11-25 12:16:03.610  1199  1233 D PackageUpdatedTask: REMOVE: removing package=dev.mobile.maestro.test
+11-25 12:16:03.610  1199  1233 D PackageUpdatedTask: OP_REMOVE: removing packages=[dev.mobile.maestro.test]
+11-25 12:16:03.610  1199  1233 D ModelWriter: removing items from db . Reason: [removed because the corresponding package or component is removed. mOp=3 removedPackages=[dev.mobile.maestro.test] removedComponents=[]]
+11-25 12:16:03.611   564   595 I CredentialManager: CredentialManagerServiceImpl constructed for: com.google.android.gms/com.google.android.gms.auth.api.credentials.credman.service.PasswordAndPasskeyService
+11-25 12:16:03.611   564   595 I CredentialManager: newServiceInfoLocked, mInfo null, com.google.android.gms/com.google.android.gms.auth.api.credentials.credman.service.PasswordAndPasskeyService
+11-25 12:16:03.611  1230  5338 I ProximityAuth: [RecentAppsMediator] Package removed: (user=UserHandle{0}) dev.mobile.maestro.test
+11-25 12:16:03.614  1439  1439 I AiAiEcho: AppFetcherImplV2 onPackageRemoved dev.mobile.maestro.test.
+11-25 12:16:03.623  4091  4091 D MPEG4Writer: final fsync() takes 24 ms, file size 5101445
+11-25 12:16:03.624  4091  4091 D MPEG4Writer: MP4WtrCtrlHlpLooper stopped
+11-25 12:16:03.624  4091  4091 D MPEG4Writer: Top 5 write durations(microseconds): #1:7053 #2:23611 #3:202737 #4:203550 #5:205521
+11-25 12:16:03.631  4091  5370 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+11-25 12:16:03.631   504   966 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+11-25 12:16:03.632   504   966 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+11-25 12:16:03.651  4091  4113 I BpBinder: onLastStrongRef automatically unlinking death recipients: 
+11-25 12:16:03.653  1230  5369 I Fitness : FitCleanupIntentOperation received Intent android.intent.action.PACKAGE_REMOVED [CONTEXT service_id=17 ]
+11-25 12:16:03.669  1400  5345 I Icing   : doRemovePackageData dev.mobile.maestro.test
+11-25 12:16:03.673   564  1971 I ActivityManager: Broadcasting: Intent { act=android.intent.action.MEDIA_SCANNER_SCAN_FILE dat=file:///... flg=0x400000 }
+11-25 12:16:03.673   564  1971 I ActivityManager: Enqueued broadcast Intent { act=android.intent.action.MEDIA_SCANNER_SCAN_FILE dat=file:///... flg=0x400000 }: 0
+11-25 12:16:03.679   564  1834 W JobInfo : Job 'com.google.android.providers.media.module/com.android.providers.media.MediaService#-300' has a deadline with no functional constraints. The deadline won't improve job execution latency. Consider removing the deadline.
+11-25 12:16:03.679   564  1825 I AppWidgetServiceImpl: getInstalledProvidersForProfiles() 0
+11-25 12:16:03.685   564  1544 W ParceledListSlice: Element #25 is 19828 bytes.
+11-25 12:16:03.690   564  1544 W ParceledListSlice: Element #26 is 19864 bytes.
+11-25 12:16:03.694  1400  5329 W SQLiteLog: (28) double-quoted string literal: "dev.mobile.maestro.test"
+11-25 12:16:03.695   564  1813 W ParceledListSlice: Element #27 is 19708 bytes.
+11-25 12:16:03.695   564  1813 W ParceledListSlice: Element #28 is 19616 bytes.
+11-25 12:16:03.695   564  1813 W ParceledListSlice: Element #29 is 19728 bytes.
+11-25 12:16:03.696  1439  1870 W PackageManager: Failure retrieving text 0x7f130786 in package com.android.systemui
+11-25 12:16:03.696  1439  1870 W PackageManager: android.content.res.Resources$NotFoundException: String resource ID #0x7f130786
+11-25 12:16:03.696  1439  1870 W PackageManager: 	at android.content.res.Resources.getText(Resources.java:466)
+11-25 12:16:03.696  1439  1870 W PackageManager: 	at android.app.ApplicationPackageManager.getText(ApplicationPackageManager.java:2405)
+11-25 12:16:03.696  1439  1870 W PackageManager: 	at android.appwidget.AppWidgetProviderInfo.loadDescription(AppWidgetProviderInfo.java:484)
+11-25 12:16:03.696  1439  1870 W PackageManager: 	at kml.a(PG:341)
+11-25 12:16:03.696  1439  1870 W PackageManager: 	at kmg.b(PG:82)
+11-25 12:16:03.696  1439  1870 W PackageManager: 	at aaer.g(PG:13)
+11-25 12:16:03.696  1439  1870 W PackageManager: 	at kotlinx.coroutines.DispatchedTask.run(PG:114)
+11-25 12:16:03.696  1439  1870 W PackageManager: 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+11-25 12:16:03.696  1439  1870 W PackageManager: 	at wqm.a(PG:3)
+11-25 12:16:03.696  1439  1870 W PackageManager: 	at wpo.run(PG:21)
+11-25 12:16:03.696  1439  1870 W PackageManager: 	at wqn.run(PG:5)
+11-25 12:16:03.696  1439  1870 W PackageManager: 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+11-25 12:16:03.696  1439  1870 W PackageManager: 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+11-25 12:16:03.696  1439  1870 W PackageManager: 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:307)
+11-25 12:16:03.696  1439  1870 W PackageManager: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-25 12:16:03.696  1439  1870 W PackageManager: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-25 12:16:03.696  1439  1870 W PackageManager: 	at hqv.run(PG:221)
+11-25 12:16:03.696  1439  1870 W PackageManager: 	at java.lang.Thread.run(Thread.java:1012)
+11-25 12:16:03.698  1439  1870 I AiAiEcho: EchoSearch: WidgetFetcherImpl is initialized with [33] widgets [reason=package removed for userId: 0]
+11-25 12:16:03.704  1439  1684 I AiAiEcho: [pnb-agg] Reload pnb aggregation on events deleted
+11-25 12:16:03.704  1439  1684 I AiAiEcho: [pnb-agg] pnb aggregation disabled.
+11-25 12:16:03.706  1400  1400 D BoundBrokerSvc: onBind: Intent { act=com.google.android.gms.feedback.internal.IFeedbackService dat=chimera-action:/... cmp=com.google.android.gms/.chimera.GmsBoundBrokerService }
+11-25 12:16:03.706  1400  1400 D BoundBrokerSvc: Loading bound service for intent: Intent { act=com.google.android.gms.feedback.internal.IFeedbackService dat=chimera-action:/... cmp=com.google.android.gms/.chimera.GmsBoundBrokerService }
+11-25 12:16:03.710   564   584 I ActivityManager: Broadcast completed: result=0
+11-25 12:16:03.711  1441  1993 I MediaProvider: Begin Intent { act=android.intent.action.MEDIA_SCANNER_SCAN_FILE dat=file:///... flg=0x1400010 cmp=com.google.android.providers.media.module/com.android.providers.media.MediaService }
+11-25 12:16:03.713  4091  4091 D ScreenRecord: success
+11-25 12:16:03.714  4091  4091 I BpBinder: onLastStrongRef automatically unlinking death recipients: 
+11-25 12:16:03.715  4091  4091 I BpBinder: onLastStrongRef automatically unlinking death recipients: 
+11-25 12:16:03.716   504   526 D BufferPoolAccessor2.0: Destruction - bufferpool2 0x7c1f7dae1cb8 cached: 0/0M, 0/0% in use; allocs: 550, 100% recycled; transfers: 550, 99% unfetched
+11-25 12:16:03.720  1439  2199 I AiAiTextClassifier: [VisualCortexAdapter]: provideRegistration: Registered Prominent Screen Entities for updates.
+11-25 12:16:03.727  1400  5345 I Icing   : Indexing com.google.android.gms-internal.3p:MobileApplication from com.google.android.gms
+11-25 12:16:03.734  1439  2199 I AiAiTextClassifier: [VisualCortexAdapter]: provideRegistration: Registered Prominent Screen Entities for updates.
+11-25 12:16:03.737  1439  2199 I AiAiTextClassifier: [VisualCortexAdapter]: provideRegistration: Registered Prominent Screen Entities for updates.
+11-25 12:16:03.739  1400  5345 I Icing   : Indexing done com.google.android.gms-internal.3p:MobileApplication
+11-25 12:16:03.742  1439  2199 I AiAiTextClassifier: [VisualCortexAdapter]: provideRegistration: Registered Prominent Screen Entities for updates.
+11-25 12:16:03.746  1439  2199 I AiAiTextClassifier: [VisualCortexAdapter]: provideRegistration: Registered Prominent Screen Entities for updates.
+11-25 12:16:03.749  1439  2199 I AiAiTextClassifier: [VisualCortexAdapter]: provideRegistration: Registered Prominent Screen Entities for updates.
+11-25 12:16:03.856  1441  1993 I MediaProvider: End Intent { act=android.intent.action.MEDIA_SCANNER_SCAN_FILE dat=file:///... flg=0x1400010 cmp=com.google.android.providers.media.module/com.android.providers.media.MediaService }
+11-25 12:16:03.861   920   920 D TileServices: Couldn't find tile for ComponentInfo{com.google.android.apps.wellbeing/com.google.android.apps.wellbeing.focusmode.quicksettings.FocusModeTileService}(0)
+11-25 12:16:03.866  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/YouTube/YouTube.apk' with 1 weak references
+11-25 12:16:03.867  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/overlay/DisplayCutoutEmulationCorner/DisplayCutoutEmulationCornerOverlay.apk' with 1 weak references
+11-25 12:16:03.867  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.extservices/priv-app/GoogleExtServices@350820300/GoogleExtServices.apk' with 1 weak references
+11-25 12:16:03.867  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/overlay/DisplayCutoutEmulationDouble/DisplayCutoutEmulationDoubleOverlay.apk' with 1 weak references
+11-25 12:16:03.867  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/TelephonyProvider/TelephonyProvider.apk' with 1 weak references
+11-25 12:16:03.867  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '/product/overlay/TelephonyProvider__sdk_gphone64_x86_64__auto_generated_rro_product.apk' with 1 weak references
+11-25 12:16:03.868  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/DynamicSystemInstallationService/DynamicSystemInstallationService.apk' with 1 weak references
+11-25 12:16:03.868  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/Velvet/Velvet.apk' with 1 weak references
+11-25 12:16:03.868  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/CalendarProvider/CalendarProvider.apk' with 1 weak references
+11-25 12:16:03.869  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/GoogleOneTimeInitializer/GoogleOneTimeInitializer.apk' with 1 weak references
+11-25 12:16:03.869  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/app/GoogleExtShared/GoogleExtShared.apk' with 1 weak references
+11-25 12:16:03.869  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/ExternalStorageProvider/ExternalStorageProvider.apk' with 1 weak references
+11-25 12:16:03.869  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~tjkn2mAUnWsbSzZB6K8aXw==/com.vedant.velora-Wi-4z1DyMjrckEn5PyjOrg==/base.apk' with 1 weak references
+11-25 12:16:03.869  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/app/HTMLViewer/HTMLViewer.apk' with 1 weak references
+11-25 12:16:03.869  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/app/CompanionDeviceManager/CompanionDeviceManager.apk' with 1 weak references
+11-25 12:16:03.869  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/DownloadProvider/DownloadProvider.apk' with 1 weak references
+11-25 12:16:03.869  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/PrebuiltBugle/PrebuiltBugle.apk' with 1 weak references
+11-25 12:16:03.870  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/SoundPickerPrebuilt/SoundPickerPrebuilt.apk' with 1 weak references
+11-25 12:16:03.870  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.mediaprovider/priv-app/MediaProviderGoogle@350820300/MediaProviderGoogle.apk' with 1 weak references
+11-25 12:16:03.870  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/SafetyHubPrebuilt/SafetyHubPrebuilt.apk' with 1 weak references
+11-25 12:16:03.870  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/DownloadProviderUi/DownloadProviderUi.apk' with 1 weak references
+11-25 12:16:03.870  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.wifi/app/OsuLoginGoogle@350820300/OsuLoginGoogle.apk' with 1 weak references
+11-25 12:16:03.870  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/app/PacProcessor/PacProcessor.apk' with 1 weak references
+11-25 12:16:03.870  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/app/SimAppDialog/SimAppDialog.apk' with 1 weak references
+11-25 12:16:03.870  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '/product/overlay/SimAppDialog__sdk_gphone64_x86_64__auto_generated_rro_product.apk' with 1 weak references
+11-25 12:16:03.870  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.adservices/priv-app/AdServicesApkGoogle@350820260/AdServicesApkGoogle.apk' with 1 weak references
+11-25 12:16:03.871  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/overlay/DisplayCutoutEmulationHole/DisplayCutoutEmulationHoleOverlay.apk' with 1 weak references
+11-25 12:16:03.871  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/overlay/DisplayCutoutEmulationTall/DisplayCutoutEmulationTallOverlay.apk' with 1 weak references
+11-25 12:16:03.871  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/app/CertInstaller/CertInstaller.apk' with 1 weak references
+11-25 12:16:03.871  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/talkback/talkback.apk' with 1 weak references
+11-25 12:16:03.871  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '/vendor/overlay/EmulatorTalkBackOverlay/EmulatorTalkBackOverlay.apk' with 1 weak references
+11-25 12:16:03.871  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/overlay/NavigationBarMode3Button/NavigationBarMode3ButtonOverlay.apk' with 1 weak references
+11-25 12:16:03.872  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/Camera2/Camera2.apk' with 1 weak references
+11-25 12:16:03.872  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/app/EasterEgg/EasterEgg.apk' with 1 weak references
+11-25 12:16:03.872  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/MtpService/MtpService.apk' with 1 weak references
+11-25 12:16:03.872  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.nfcservices/priv-app/NfcNciApexGoogle@AE3A.240806.043/NfcNciApexGoogle.apk' with 1 weak references
+11-25 12:16:03.874  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/app/Stk/Stk.apk' with 1 weak references
+11-25 12:16:03.874  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/PrebuiltDeskClockGoogle/PrebuiltDeskClockGoogle.apk' with 1 weak references
+11-25 12:16:03.874  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/overlay/NavigationBarMode2Button/NavigationBarMode2ButtonOverlay.apk' with 1 weak references
+11-25 12:16:03.874  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/DevicePersonalizationPrebuiltPixel2021-aiai_20240329.00_RC16/DevicePersonalizationPrebuiltPixel2021-aiai_20240329.00_RC16.apk' with 1 weak references
+11-25 12:16:03.874  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/PrebuiltGmail/PrebuiltGmail.apk' with 1 weak references
+11-25 12:16:03.874  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.permission/priv-app/GooglePermissionController@350820360/GooglePermissionController.apk' with 1 weak references
+11-25 12:16:03.875  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '/product/overlay/GooglePermissionControllerOverlay.apk' with 1 weak references
+11-25 12:16:03.876  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.btservices/app/BluetoothGoogle@342010060/BluetoothGoogle.apk' with 1 weak references
+11-25 12:16:03.876  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/SettingsProvider/SettingsProvider.apk' with 1 weak references
+11-25 12:16:03.876  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '/product/overlay/LargeScreenSettingsProviderOverlay.apk' with 1 weak references
+11-25 12:16:03.876  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '/product/overlay/SettingsProvider__sdk_gphone64_x86_64__auto_generated_rro_product.apk' with 1 weak references
+11-25 12:16:03.876  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/app/PrintSpooler/PrintSpooler.apk' with 1 weak references
+11-25 12:16:03.876  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/app/BasicDreams/BasicDreams.apk' with 1 weak references
+11-25 12:16:03.876  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/DeviceIntelligenceNetworkPrebuilt-astrea_20240329.00_RC02/DeviceIntelligenceNetworkPrebuilt-astrea_20240329.00_RC02.apk' with 1 weak references
+11-25 12:16:03.876  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/InputDevices/InputDevices.apk' with 1 weak references
+11-25 12:16:03.877  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.devicelock/priv-app/DeviceLockControllerGoogle@AE3A.240806.043/DeviceLockControllerGoogle.apk' with 1 weak references
+11-25 12:16:03.877  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/GoogleDialer/GoogleDialer.apk' with 1 weak references
+11-25 12:16:03.877  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/BuiltInPrintService/BuiltInPrintService.apk' with 1 weak references
+11-25 12:16:03.877  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '/product/overlay/BuiltInPrintService__sdk_gphone64_x86_64__auto_generated_rro_product.apk' with 1 weak references
+11-25 12:16:03.877  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/app/CaptivePortalLoginGoogle/CaptivePortalLoginGoogle.apk' with 1 weak references
+11-25 12:16:03.877  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/MusicFX/MusicFX.apk' with 1 weak references
+11-25 12:16:03.877  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/Drive/Drive.apk' with 1 weak references
+11-25 12:16:03.878  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/Maps/Maps.apk' with 1 weak references
+11-25 12:16:03.878  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/ModuleMetadataGoogle/ModuleMetadataGoogle.apk' with 1 weak references
+11-25 12:16:03.879  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/overlay/DisplayCutoutEmulationEmu01/DisplayCutoutEmulationEmu01Overlay.apk' with 1 weak references
+11-25 12:16:03.879  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/AvatarPickerGoogle/AvatarPickerGoogle.apk' with 1 weak references
+11-25 12:16:03.879  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/MarkupGoogle_v2/MarkupGoogle_v2.apk' with 1 weak references
+11-25 12:16:03.879  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/NetworkStackGoogle/NetworkStackGoogle.apk' with 1 weak references
+11-25 12:16:03.879  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.rkpd/priv-app/rkpdapp.google@350820300/rkpdapp.google.apk' with 1 weak references
+11-25 12:16:03.880  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/GoogleContacts/GoogleContacts.apk' with 1 weak references
+11-25 12:16:03.880  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/Telecom/Telecom.apk' with 1 weak references
+11-25 12:16:03.880  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '/product/overlay/Telecom__sdk_gphone64_x86_64__auto_generated_rro_product.apk' with 1 weak references
+11-25 12:16:03.880  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/app/KeyChain/KeyChain.apk' with 1 weak references
+11-25 12:16:03.880  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~TrLq5g_eTe455XJcqV9JjA==/com.android.chrome-xqRdCwaN-krUk7nNBzXXCg==/Chrome.apk' with 1 weak references
+11-25 12:16:03.880  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~y2iv45XSVFb4DULQ-JBuvw==/com.google.android.trichromelibrary_636771938-opSFfqcgi4XRdzVetLIP8g==/TrichromeLibrary.apk' with 1 weak references
+11-25 12:16:03.880  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/GooglePackageInstaller/GooglePackageInstaller.apk' with 1 weak references
+11-25 12:16:03.880  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/PixelThemesStub/PixelThemesStub.apk' with 1 weak references
+11-25 12:16:03.882  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/GoogleServicesFramework/GoogleServicesFramework.apk' with 1 weak references
+11-25 12:16:03.882  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/TagGoogle/TagGoogle.apk' with 1 weak references
+11-25 12:16:03.882  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/GoogleTTS/GoogleTTS.apk' with 1 weak references
+11-25 12:16:03.883  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/CallLogBackup/CallLogBackup.apk' with 1 weak references
+11-25 12:16:03.883  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/PartnerSetupPrebuilt/PartnerSetupPrebuilt.apk' with 1 weak references
+11-25 12:16:03.884  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/app/CameraExtensionsProxy/CameraExtensionsProxy.apk' with 1 weak references
+11-25 12:16:03.884  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/NexusWallpapersStubPrebuilt2018/NexusWallpapersStubPrebuilt2018.apk' with 1 weak references
+11-25 12:16:03.884  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/NexusLauncherRelease/NexusLauncherRelease.apk' with 1 weak references
+11-25 12:16:03.884  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/app/CarrierDefaultApp/CarrierDefaultApp.apk' with 1 weak references
+11-25 12:16:03.885  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/CredentialManager/CredentialManager.apk' with 1 weak references
+11-25 12:16:03.885  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/overlay/FontNotoSerifSource/FontNotoSerifSourceOverlay.apk' with 1 weak references
+11-25 12:16:03.885  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/DeviceAsWebcam/DeviceAsWebcam.apk' with 1 weak references
+11-25 12:16:03.885  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/ProxyHandler/ProxyHandler.apk' with 1 weak references
+11-25 12:16:03.885  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.permission/priv-app/GoogleSafetyCenterResources@350820360/GoogleSafetyCenterResources.apk' with 1 weak references
+11-25 12:16:03.885  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/overlay/DisplayCutoutEmulationWaterfall/DisplayCutoutEmulationWaterfallOverlay.apk' with 1 weak references
+11-25 12:16:03.885  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/IntentResolver/IntentResolver.apk' with 1 weak references
+11-25 12:16:03.885  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/overlay/TransparentNavigationBar/TransparentNavigationBarOverlay.apk' with 1 weak references
+11-25 12:16:03.886  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/E2eeContactKeysProvider/E2eeContactKeysProvider.apk' with 1 weak references
+11-25 12:16:03.886  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.tethering/priv-app/ServiceConnectivityResourcesGoogle@350820300/ServiceConnectivityResourcesGoogle.apk' with 1 weak references
+11-25 12:16:03.886  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '/vendor/overlay/goldfish_overlay_connectivity_google.apk' with 1 weak references
+11-25 12:16:03.886  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/GoogleFeedback/GoogleFeedback.apk' with 1 weak references
+11-25 12:16:03.886  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/app/GooglePrintRecommendationService/GooglePrintRecommendationService.apk' with 1 weak references
+11-25 12:16:03.886  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/Photos/Photos.apk' with 1 weak references
+11-25 12:16:03.886  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/CalendarGooglePrebuilt/CalendarGooglePrebuilt.apk' with 1 weak references
+11-25 12:16:03.887  1441  1454 W FuseDaemon: Suspending all threads took: 5.396ms
+11-25 12:16:03.888   920   920 D TileServices: Couldn't find tile for ComponentInfo{com.google.android.apps.wellbeing/com.google.android.apps.wellbeing.focusmode.quicksettings.FocusModeTileService}(0)
+11-25 12:16:03.888  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/ManagedProvisioning/ManagedProvisioning.apk' with 1 weak references
+11-25 12:16:03.888  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/SoundPicker/SoundPicker.apk' with 1 weak references
+11-25 12:16:03.888  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/DocumentsUIGoogle/DocumentsUIGoogle.apk' with 1 weak references
+11-25 12:16:03.888  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/PrebuiltGoogleTelemetryTvp/PrebuiltGoogleTelemetryTvp.apk' with 1 weak references
+11-25 12:16:03.888  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/MultiDisplayProvider/MultiDisplayProvider.apk' with 1 weak references
+11-25 12:16:03.888  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/DeviceDiagnostics/DeviceDiagnostics.apk' with 1 weak references
+11-25 12:16:03.888  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '/product/overlay/DeviceDiagnostics__sdk_gphone64_x86_64__auto_generated_rro_product.apk' with 1 weak references
+11-25 12:16:03.888  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/overlay/NotesRoleEnabled/NotesRoleEnabledOverlay.apk' with 1 weak references
+11-25 12:16:03.888  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/LiveWallpapersPicker/LiveWallpapersPicker.apk' with 1 weak references
+11-25 12:16:03.888  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/PrebuiltGoogleAdservicesTvp/PrebuiltGoogleAdservicesTvp.apk' with 1 weak references
+11-25 12:16:03.888  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.healthfitness/priv-app/HealthConnectControllerGoogle@350820300/HealthConnectControllerGoogle.apk' with 1 weak references
+11-25 12:16:03.889  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/KidsSupervisionStub/KidsSupervisionStub.apk' with 1 weak references
+11-25 12:16:03.889  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/StorageManager/StorageManager.apk' with 1 weak references
+11-25 12:16:03.889  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '/product/overlay/StorageManager__sdk_gphone64_x86_64__auto_generated_rro_product.apk' with 1 weak references
+11-25 12:16:03.889  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/app/BookmarkProvider/BookmarkProvider.apk' with 1 weak references
+11-25 12:16:03.889  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/SettingsGoogle/SettingsGoogle.apk' with 1 weak references
+11-25 12:16:03.889  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '/product/overlay/SettingsGoogle__sdk_gphone64_x86_64__auto_generated_rro_product.apk' with 1 weak references
+11-25 12:16:03.889  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.uwb/priv-app/ServiceUwbResourcesGoogle@350820300/ServiceUwbResourcesGoogle.apk' with 1 weak references
+11-25 12:16:03.889  1369  1386 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.wifi/priv-app/ServiceWifiResourcesGoogle@350820300/ServiceWifiResourcesGoogle.apk' with 1 weak references
+11-25 12:16:03.897  1441  1702 D WM-SystemJobScheduler: Scheduling work ID cea1bbef-84e3-42e0-8f8d-6e7953eb9371Job ID 4
+11-25 12:16:03.898  1441  1454 I FuseDaemon: Background concurrent mark compact GC freed 2626KB AllocSpace bytes, 6(248KB) LOS objects, 49% free, 3274KB/6549KB, paused 6.168ms,508us total 52.331ms
+11-25 12:16:03.898  1441  1702 D WM-GreedyScheduler: Ignoring {WorkSpec: 9b4ca57a-3a24-43cb-885d-93f32a4cbfb7}. Requires device idle.
+11-25 12:16:03.898  1441  1702 D WM-GreedyScheduler: Ignoring {WorkSpec: 665b44f7-b1a0-4d0e-ac66-b3ed4819f076}. Requires device idle.
+11-25 12:16:03.913  1230  5346 I NetworkScheduler.Stats: Task com.google.android.gms/com.google.android.gms.ipa.base.IpaGcmTaskService started execution. cause:9 exec_start_elapsed_seconds: 187 [CONTEXT service_id=218 ]
+11-25 12:16:03.918  1230  5347 I NetworkScheduler.Stats: Task com.google.android.gms/com.google.android.gms.ipa.base.IpaGcmTaskService finished executing. cause:9 result: 1 elapsed_millis: 12 uptime_millis: 12 exec_start_elapsed_seconds: 187 [CONTEXT service_id=218 ]
+11-25 12:16:03.938   564   673 I RoleService: Granting default roles...
+11-25 12:16:03.939  1400  5345 I TelephonySpamChimeraSer: Running Telephony Spam Chimera Service [CONTEXT service_id=150 ]
+11-25 12:16:03.941  1230  5343 I NetworkScheduler.Stats: Task com.google.android.gms/com.google.android.gms.telephonyspam.sync.SpamListSyncTaskService started execution. cause:5 exec_start_elapsed_seconds: 187 [CONTEXT service_id=218 ]
+11-25 12:16:03.941   564  1057 W Role    : Default holder doesn't have required signing certificate: com.google.android.retaildemo:6547c73dee150c103980bfdffe55cc9a011d785dd694a5f99afd8205bcaf1f80
+11-25 12:16:03.941   564  1057 E RoleControllerServiceImpl: Default/fallback role holder package doesn't qualify for the role, package: com.google.android.gms.supervision, role: android.app.role.SYSTEM_SUPERVISION
+11-25 12:16:03.943   564  1057 W Role    : Default holder doesn't have required signing certificate: com.google.android.apps.work.clouddpc:23962F4B43B9857638EA66F4D419518EAE282491ACDA4B94707BD59003C45E58
+11-25 12:16:03.945  1230  5347 I NetworkScheduler.Stats: Task com.google.android.gms/com.google.android.gms.telephonyspam.sync.SpamListSyncTaskService finished executing. cause:5 result: 2 elapsed_millis: 8 uptime_millis: 8 exec_start_elapsed_seconds: 187 [CONTEXT service_id=218 ]
+11-25 12:16:03.963   564  1057 E RoleControllerServiceImpl: Default/fallback role holder package doesn't qualify for the role, package: com.google.android.gms, role: android.app.role.WALLET
+11-25 12:16:03.967   564  1057 E RoleControllerServiceImpl: Default/fallback role holder package doesn't qualify for the role, package: com.google.android.devicelockcontroller, role: android.app.role.SYSTEM_FINANCED_DEVICE_CONTROLLER
+11-25 12:16:04.418  3189  4600 I GMS_MM_Logger: Memory Metric Logging not allowed. Stopping.
+11-25 12:16:05.367  1441  1441 D WM-DelayedWorkTracker: Scheduling work cea1bbef-84e3-42e0-8f8d-6e7953eb9371
+11-25 12:16:05.368  1441  1441 D WM-GreedyScheduler: Starting tracking for cea1bbef-84e3-42e0-8f8d-6e7953eb9371
+11-25 12:16:05.369  1441  1702 D WM-ConstraintTracker: BatteryNotLowTracker: initial state = true
+11-25 12:16:05.369  1441  1702 D WM-BrdcstRcvrCnstrntTrc: BatteryNotLowTracker: registering receiver
+11-25 12:16:05.369  1441  1688 D WM-GreedyScheduler: Constraints met: Scheduling work ID WorkGenerationalId(workSpecId=cea1bbef-84e3-42e0-8f8d-6e7953eb9371, generation=0)
+11-25 12:16:05.370  1441  1688 D WM-Processor: Processor: processing WorkGenerationalId(workSpecId=cea1bbef-84e3-42e0-8f8d-6e7953eb9371, generation=0)
+11-25 12:16:05.371  1441  1441 D WM-WorkerWrapper: Starting work for com.android.providers.media.photopicker.sync.ProactiveSyncWorker
+11-25 12:16:05.371  1441  5376 I PSyncWorker: Starting proactive picker sync from sync source: 1
+11-25 12:16:05.371  1441  5376 I PickerSyncTracker: Created new sync future java.util.concurrent.CompletableFuture@49ef3d1[Not completed, 1 dependents]. Future map: {cea1bbef-84e3-42e0-8f8d-6e7953eb9371=java.util.concurrent.CompletableFuture@49ef3d1[Not completed, 1 dependents]}
+11-25 12:16:05.372  1441  5376 D PickerSyncController: syncAllMediaFromProvider() LOCAL, auth=com.android.providers.media.photopicker, retry=true
+11-25 12:16:05.372  1441  5376 D PickerSyncController: getSyncRequestParams() LOCAL, auth=com.android.providers.media.photopicker
+11-25 12:16:05.373  1441  5376 D PickerSyncController:    Latest ID/Gen=1409:a39d3a61-6898-42a2-bfc2-54a159036cb6:external_primary/16
+11-25 12:16:05.373  1441  5376 D PickerSyncController:    Cached ID/Gen=1409:a39d3a61-6898-42a2-bfc2-54a159036cb6:external_primary/11
+11-25 12:16:05.373  1441  5376 D PickerSyncController:    RESULT=SyncRequestParams{type=MEDIA_INCREMENTAL, gen=11, latest=Bundle[{last_media_sync_generation=16, media_collection_id=1409:a39d3a61-6898-42a2-bfc2-54a159036cb6:external_primary}], pageSize=1000}
+11-25 12:16:05.374  1441  5376 I PickerSyncController: Executing SyncAdd. isLocal: true. authority: com.android.providers.media.photopicker
+11-25 12:16:05.374  1441  5376 D PickerSyncLockManager: Trying to acquire lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@5bf5151[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = [] with timeout.
+11-25 12:16:05.374  1441  5376 D CloseableReentrantLock: Successfully acquired lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@5bf5151[Locked by thread pool-3-thread-2]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+11-25 12:16:05.374  1441  5376 D CloseableReentrantLock: Successfully released lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@5bf5151[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+11-25 12:16:05.374  1441  5376 D ExternalDbFacade: Token received for queryMedia = null
+11-25 12:16:05.375  1441  5376 D PickerSyncLockManager: Trying to acquire lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@5bf5151[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = [] with timeout.
+11-25 12:16:05.375  1441  5376 D CloseableReentrantLock: Successfully acquired lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@5bf5151[Locked by thread pool-3-thread-2]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+11-25 12:16:05.375  1441  5376 D PickerSyncController: Saving next page token: 1795608963000|1000000019 for key: local_provider:media_add:resume
+11-25 12:16:05.375  1441  5376 D CloseableReentrantLock: Successfully released lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@5bf5151[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+11-25 12:16:05.375  1441  5376 D PickerNotificationSender: Sending a notification for media update
+11-25 12:16:05.375  1441  5376 D PickerNotificationSender: Sending a notification for merged album media update Favorites
+11-25 12:16:05.375  1441  5376 D PickerNotificationSender: Sending a notification for album media update Favorites
+11-25 12:16:05.376  1441  5376 D PickerNotificationSender: Sending a notification for merged album media update Videos
+11-25 12:16:05.376  1441  5376 D PickerNotificationSender: Sending a notification for album media update Videos
+11-25 12:16:05.376  1441  5376 D ExternalDbFacade: Token received for queryMedia = 1795608963000|1000000019
+11-25 12:16:05.377  1441  5376 D PickerSyncLockManager: Trying to acquire lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@5bf5151[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = [] with timeout.
+11-25 12:16:05.377  1441  5376 D CloseableReentrantLock: Successfully acquired lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@5bf5151[Locked by thread pool-3-thread-2]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+11-25 12:16:05.377  1441  5376 D PickerSyncController: Clearing next page token for key: local_provider:media_add:resume
+11-25 12:16:05.377  1441  5376 D CloseableReentrantLock: Successfully released lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@5bf5151[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+11-25 12:16:05.377  1441  5376 D PickerNotificationSender: Sending a notification for media update
+11-25 12:16:05.377  1441  5376 D PickerNotificationSender: Sending a notification for merged album media update Favorites
+11-25 12:16:05.377  1441  5376 D PickerNotificationSender: Sending a notification for album media update Favorites
+11-25 12:16:05.377  1441  5376 D PickerNotificationSender: Sending a notification for merged album media update Videos
+11-25 12:16:05.377  1441  5376 D PickerNotificationSender: Sending a notification for album media update Videos
+11-25 12:16:05.378  1441  5376 I PickerSyncController: Paged sync successful. QueryArgs: Bundle[{android.provider.extra.PAGE_TOKEN=1795608963000|1000000019, android.provider.extra.SYNC_GENERATION=11, android.provider.extra.PAGE_SIZE=1000}] Total Rows: 1
+11-25 12:16:05.378  1441  5376 I PickerSyncController: Executing SyncRemove. isLocal: true. authority: com.android.providers.media.photopicker
+11-25 12:16:05.378  1441  5376 D PickerSyncLockManager: Trying to acquire lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@5bf5151[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = [] with timeout.
+11-25 12:16:05.378  1441  5376 D CloseableReentrantLock: Successfully acquired lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@5bf5151[Locked by thread pool-3-thread-2]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+11-25 12:16:05.378  1441  5376 D CloseableReentrantLock: Successfully released lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@5bf5151[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+11-25 12:16:05.378  1441  5376 D PickerSyncLockManager: Trying to acquire lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@5bf5151[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = [] with timeout.
+11-25 12:16:05.378  1441  5376 D CloseableReentrantLock: Successfully acquired lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@5bf5151[Locked by thread pool-3-thread-2]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+11-25 12:16:05.378  1441  5376 D PickerSyncController: Clearing next page token for key: local_provider:media_remove:resume
+11-25 12:16:05.378  1441  5376 D CloseableReentrantLock: Successfully released lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@5bf5151[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+11-25 12:16:05.378  1441  5376 D PickerNotificationSender: Sending a notification for media update
+11-25 12:16:05.379  1441  5376 D PickerNotificationSender: Sending a notification for merged album media update Favorites
+11-25 12:16:05.379  1441  5376 D PickerNotificationSender: Sending a notification for album media update Favorites
+11-25 12:16:05.379  1441  5376 D PickerNotificationSender: Sending a notification for merged album media update Videos
+11-25 12:16:05.379  1441  5376 D PickerNotificationSender: Sending a notification for album media update Videos
+11-25 12:16:05.379  1441  5376 I PickerSyncController: Paged sync successful. QueryArgs: Bundle[{android.provider.extra.PAGE_TOKEN=1795608963000|1000000019, android.provider.extra.SYNC_GENERATION=11, android.provider.extra.PAGE_SIZE=1000}] Total Rows: 0
+11-25 12:16:05.379  1441  5376 I PickerSyncTracker: Marked sync future complete for work id: cea1bbef-84e3-42e0-8f8d-6e7953eb9371. Future map: {}
+11-25 12:16:05.379  1441  5376 I PSyncWorker: Completed picker proactive sync complete from local provider.
+11-25 12:16:05.380  1441  1688 I WM-WorkerWrapper: Worker result SUCCESS for Work [ id=cea1bbef-84e3-42e0-8f8d-6e7953eb9371, tags={ com.android.providers.media.photopicker.sync.ProactiveSyncWorker } ]
+11-25 12:16:05.380  1441  1441 D WM-Processor: Processor cea1bbef-84e3-42e0-8f8d-6e7953eb9371 executed; reschedule = false
+11-25 12:16:05.380  1441  1441 D WM-GreedyScheduler: Stopping tracking for WorkGenerationalId(workSpecId=cea1bbef-84e3-42e0-8f8d-6e7953eb9371, generation=0)
+11-25 12:16:05.382  1441  1688 D WM-GreedyScheduler: Cancelling work ID cea1bbef-84e3-42e0-8f8d-6e7953eb9371
+11-25 12:16:05.382  1441  1688 D WM-GreedyScheduler: Ignoring {WorkSpec: 9b4ca57a-3a24-43cb-885d-93f32a4cbfb7}. Requires device idle.
+11-25 12:16:05.382  1441  1688 D WM-GreedyScheduler: Ignoring {WorkSpec: 665b44f7-b1a0-4d0e-ac66-b3ed4819f076}. Requires device idle.
+11-25 12:16:05.382  1441  1702 D WM-BrdcstRcvrCnstrntTrc: BatteryNotLowTracker: unregistering receiver
+11-25 12:16:05.843  5380  5380 W BpBinder: Linking to death on android.gui.ISurfaceComposer but there are no threads (yet?) listening to incoming transactions. See ProcessState::startThreadPool and ProcessState::setThreadPoolMaxThreadCount. Generally you should setup the binder threadpool before other initialization steps.
+11-25 12:16:05.843  5380  5380 W ProcessState: Extra binder thread started, but 0 threads requested. Do not use *startThreadPool when zero threads are requested.
+11-25 12:16:05.855   152   152 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.mapper@4.0::IMapper/default in either framework or device VINTF manifest.
+11-25 12:16:05.855  5380  5381 I Gralloc4: mapper 4.x is not supported
+11-25 12:16:06.035     0     0 I servicemanager: Caller(pid=5380,uid=2000,sid=u:r:shell:s0) Could not find android.hardware.graphics.allocator.IAllocator/default in the VINTF manifest. No alternative instances declared in VINTF.
