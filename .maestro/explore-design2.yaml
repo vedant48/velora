@@ -63,6 +63,10 @@ appId: com.vedant.velora
 - tapOn: 'Clear search'
 - tapOn: 'Search movies, TV shows, actors...'
 - inputText: 'e2e_bob'
+- hideKeyboard
+# Redesign search has scope chips (All/Movies/TV Series/People); member results
+# render only under People.
+- tapOn: People
 - extendedWaitUntil:
     visible: 'E2E Bob'
     timeout: 20000
