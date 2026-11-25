@@ -63,22 +63,15 @@ export const CircleReviews = memo(function CircleReviews({ mediaType, tmdbId, re
 
   const ratings = useMemo(() => {
     const byUser = new Map<string, Review>();
-    const when = (r: Review) => String(r.rated_at ?? r.updated_at);
     for (const r of reviews) {
       if (r.rating == null) continue;
       const cur = byUser.get(r.user_id);
-      if (!cur) {
-        byUser.set(r.user_id, r);
-        continue;
-      }
-      // A season rating beats the whole-title rating; among seasons the most recently rated wins.
-      if (cur.season_number === 0 && r.season_number > 0) byUser.set(r.user_id, r);
-      else if (cur.season_number > 0 && r.season_number === 0) continue;
-      else if (when(r) > when(cur) || (when(r) === when(cur) && r.season_number > cur.season_number)) byUser.set(r.user_id, r);
+      // The latest rated season wins; the whole-title rating (season 0) only counts when no season is rated.
+      if (!cur || r.season_number > cur.season_number) byUser.set(r.user_id, r);
     }
     const mine = user?.id;
     return [...byUser.values()].sort(
-      (a, b) => Number(b.user_id === mine) - Number(a.user_id === mine) || String(b.rated_at ?? b.updated_at).localeCompare(String(a.rated_at ?? a.updated_at)),
+      (a, b) => Number(b.user_id === mine) - Number(a.user_id === mine) || String(b.updated_at).localeCompare(String(a.updated_at)),
     );
   }, [reviews, user?.id]);
 

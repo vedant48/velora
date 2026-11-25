@@ -7,12 +7,12 @@ const put = async (token, path, body) => {
 };
 const rev = (t, mt, id, seasonNumber, rating, body) => put(t, `/reviews/${mt}/${id}`, { seasonNumber, rating, body });
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-// Series. Alice rates S1, S2, S3 in order, then LATER re-rates S1 (10 -> 6): her badge must be S1 = 6
-// (most recently rated), while her cards stay S3, S2, S1. Bob rates S1, S2, S4, then edits only the S2 text
-// (no rating change): his badge must stay S4 = 7.
+// Series. Alice rates S3 first, then S1 and S2 later: her badge must still be S3 = 9 (highest rated season, no
+// timestamps), while her cards stay S3, S2, S1. Bob rates S1, S2, S4 and edits S2 text only: badge stays S4 = 7.
+await rev(aliceToken, 'tv', 1396, 3, 9, 'Season three is where it turns dark. Hank and Walt finally collide.');
+await sleep(1100);
 await rev(aliceToken, 'tv', 1396, 1, 10, 'Season one is the tightest pilot run I have seen, every episode earns the next.');
 await rev(aliceToken, 'tv', 1396, 2, 8, 'Season two builds the plane crash slowly but it pays off.');
-await rev(aliceToken, 'tv', 1396, 3, 9, 'Season three is where it turns dark. Hank and Walt finally collide.');
 await rev(bobToken, 'tv', 1396, 1, 9, 'Great start, Bryan Cranston carries it.');
 await rev(bobToken, 'tv', 1396, 2, 7, 'Slower than the first but Gus is a great villain.');
 await rev(bobToken, 'tv', 1396, 4, 7, 'Season four, the cat and mouse never lets up.');

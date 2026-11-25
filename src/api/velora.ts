@@ -62,8 +62,6 @@ export interface Review {
   display_name?: string;
   /** Photo revision marker of the author; null or missing when they have no photo. */
   avatar_at?: string | null;
-  /** When the rating last changed (not text edits); null for unrated rows. */
-  rated_at?: string | null;
 }
 
 export interface WatchedSeason {

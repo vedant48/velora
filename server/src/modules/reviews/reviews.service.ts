@@ -20,16 +20,13 @@ export class ReviewsService {
     if (!text && rating === null) throw new BadRequestException('Review text or a rating is required');
 
     await this.db.run(
-      `INSERT INTO reviews (id, user_id, media_type, tmdb_id, season_number, rating, body, rated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, CASE WHEN ? IS NULL THEN NULL ELSE datetime('now') END)
+      `INSERT INTO reviews (id, user_id, media_type, tmdb_id, season_number, rating, body)
+       VALUES (?, ?, ?, ?, ?, ?, ?)
        ON CONFLICT (user_id, media_type, tmdb_id, season_number) DO UPDATE SET
          rating = COALESCE(excluded.rating, reviews.rating),
-         rated_at = CASE
-           WHEN excluded.rating IS NOT NULL AND (reviews.rating IS NULL OR reviews.rating <> excluded.rating) THEN datetime('now')
-           ELSE reviews.rated_at END,
          body = excluded.body,
          updated_at = datetime('now')`,
-      [randomId(), userId, mediaType, tmdbId, seasonNumber, rating, text, rating],
+      [randomId(), userId, mediaType, tmdbId, seasonNumber, rating, text],
     );
     return this.db.first(
       `SELECT r.*, u.username, u.display_name FROM reviews r JOIN users u ON u.id = r.user_id
@@ -61,7 +58,7 @@ export class ReviewsService {
     const tmdbId = requireTmdbId(tmdbIdRaw);
     const reviews = await this.db.all(
       `SELECT r.id, r.user_id, r.media_type, r.tmdb_id, r.season_number, r.rating, r.body,
-              r.created_at, r.updated_at, r.rated_at, u.username, u.display_name, u.avatar_at
+              r.created_at, r.updated_at, u.username, u.display_name, u.avatar_at
        FROM reviews r JOIN users u ON u.id = r.user_id
        WHERE r.media_type = ? AND r.tmdb_id = ?
          AND (r.user_id = ? OR r.user_id IN (SELECT followee_id FROM follows WHERE follower_id = ?))
