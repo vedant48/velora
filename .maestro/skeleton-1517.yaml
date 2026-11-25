@@ -1,6 +1,9 @@
 appId: com.vedant.velora
 ---
 - launchApp
+- extendedWaitUntil:
+    visible: 'Home'
+    timeout: 20000
 - takeScreenshot: ${P}-k1-launch
 - tapOn: Series
 - takeScreenshot: ${P}-k2-series
