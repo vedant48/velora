@@ -1,0 +1,99 @@
+appId: com.vedant.velora
+---
+- launchApp
+- tapOn: 'Log in / Sign up'
+- tapOn: Username
+- inputText: e2e_alice
+- tapOn: Password
+- inputText: e2e-alice-pass-1
+- hideKeyboard
+- tapOn:
+    text: 'Log in'
+    below: Password
+- extendedWaitUntil:
+    visible: E2E Alice
+    timeout: 30000
+# Initial order (owner reference): icon bar, then profile details, then tab row
+- assertVisible: Settings
+- assertVisible: More profile actions
+- assertVisible:
+    id: library-tab-series
+- takeScreenshot: 1-initial-order
+# Profile photo opens enlarged, tap closes
+- tapOn: View profile photo
+- extendedWaitUntil:
+    visible: Close profile photo
+    timeout: 5000
+- takeScreenshot: 2-photo-viewer
+- tapOn: Close profile photo
+# Movie details: merged Cast & Crew, director card first (F1 seeded as most recent Want)
+- tapOn: F1
+- extendedWaitUntil:
+    visible: 'Cast & Crew'
+    timeout: 60000
+- swipe:
+    direction: UP
+    duration: 500
+- assertVisible: 'Cast & Crew'
+- assertVisible: Director
+- takeScreenshot: 7-movie-cast-crew-director-first
+- back
+# Scroll: icon bar AND profile details scroll away; only tabs + filter pin
+- takeScreenshot: 3-scroll-before
+# Partial collapse: header mid-collapse must clip cleanly (status-bar bleed regression, v1.5.9)
+- swipe:
+    direction: UP
+    duration: 250
+- takeScreenshot: 3b-scroll-partial
+- swipe:
+    direction: UP
+    duration: 700
+- swipe:
+    direction: UP
+    duration: 700
+- assertNotVisible: E2E Alice
+- assertNotVisible: Settings
+- assertNotVisible: Place
+- assertVisible:
+    id: library-tab-series
+- takeScreenshot: 4-scroll-tabs-pinned
+# Return to top: header expands back, icon bar + profile visible again
+- swipe:
+    direction: DOWN
+    duration: 600
+- swipe:
+    direction: DOWN
+    duration: 600
+- waitForAnimationToEnd:
+    timeout: 5000
+- assertVisible: E2E Alice
+- assertVisible: Settings
+- takeScreenshot: 4b-scroll-return-top
+# Series sort: ended+fully-watched sink to the bottom
+- tapOn:
+    id: library-tab-series
+- extendedWaitUntil:
+    visible: Prison Break
+    timeout: 90000
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: 5-series-top
+- swipe:
+    direction: UP
+    duration: 700
+- extendedWaitUntil:
+    visible: 'Ended, all episodes watched'
+    timeout: 60000
+- takeScreenshot: 6-series-bottom-ended-last
+# Series details: Watch online compact row opens the provider sheet
+- tapOn: Breaking Bad
+- extendedWaitUntil:
+    visible: 'Watch online'
+    timeout: 60000
+- takeScreenshot: 8-watch-online-row
+- tapOn: 'Watch online: show all providers'
+- extendedWaitUntil:
+    visible: Subscription
+    timeout: 20000
+- takeScreenshot: 9-providers-sheet
+- tapOn: 'Close watch providers'
