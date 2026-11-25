@@ -15,4 +15,20 @@ maestro test --format junit --output proof/ui.xml --test-output-dir proof/maestr
 maestro test --format junit --output proof/ui-explore.xml --test-output-dir proof/maestroB .maestro/explore-design2.yaml || status=1
 adb exec-out screencap -p > proof/final-screen.png || true
 adb logcat -d -t 800 > proof/logcat.txt || true
+# Native-header motion on the redesign library (recorded; same finalize-safe pattern as 1511)
+adb shell pm clear com.vedant.velora
+adb shell screenrecord --time-limit 55 --size 720x1480 /sdcard/design-tabs.mp4 &
+REC_PID=$!
+sleep 2
+maestro test --format junit --output proof/ui-motion.xml --test-output-dir proof/maestro-motion .maestro/motion-tabs-design2.yaml || status=1
+sleep 1
+adb shell pkill -INT screenrecord 2>/dev/null || true
+for i in $(seq 1 15); do
+  sleep 2
+  adb shell pgrep screenrecord >/dev/null 2>&1 || break
+done
+wait $REC_PID 2>/dev/null || true
+adb pull /sdcard/design-tabs.mp4 proof/design-tabs.mp4 || true
+adb shell rm -f /sdcard/design-tabs.mp4 || true
+if [ -f proof/design-tabs.mp4 ] && ! grep -q moov proof/design-tabs.mp4; then echo "DESIGN TABS VIDEO CORRUPT (no moov)"; status=1; fi
 exit $status

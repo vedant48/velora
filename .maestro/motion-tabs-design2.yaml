@@ -1,0 +1,41 @@
+appId: com.vedant.velora
+---
+# Design native-header motion: tab switches and flings on the redesign library
+# (grouped Series list + Insights), with per-tab offset preservation.
+- launchApp
+- runFlow:
+    when:
+      visible: 'Log in / Sign up'
+    file: login-design2.yaml
+- extendedWaitUntil:
+    visible: E2E Alice
+    timeout: 30000
+- takeScreenshot: m0-top
+- swipe: { direction: UP, duration: 300 }
+- swipe: { direction: UP, duration: 300 }
+- swipe: { direction: UP, duration: 300 }
+- takeScreenshot: m1-want-deep
+- tapOn:
+    id: library-tab-series
+- extendedWaitUntil:
+    visible: Prison Break
+    timeout: 60000
+- swipe: { direction: UP, duration: 400 }
+- takeScreenshot: m2-series-scrolled
+- tapOn:
+    id: library-tab-insights
+- extendedWaitUntil:
+    visible: Average rating
+    timeout: 30000
+- swipe: { direction: UP, duration: 300 }
+- takeScreenshot: m3-insights-scrolled
+- tapOn:
+    id: library-tab-want
+- takeScreenshot: m4-want-return
+- swipe: { direction: DOWN, duration: 400 }
+- swipe: { direction: DOWN, duration: 400 }
+- swipe: { direction: DOWN, duration: 400 }
+- extendedWaitUntil:
+    visible: E2E Alice
+    timeout: 10000
+- takeScreenshot: m5-top-restored
