@@ -8,7 +8,7 @@ adb shell wm size 720x1600
 adb shell wm density 320
 python3 scripts/emulator-ready.py || true
 export PATH="$PATH:$HOME/.maestro/bin"
-sed -i 's/? 15000 : 0/? 6000 : 0/' scripts/e2e-delay-proxy-skeleton.cjs
+sed -i 's/? *15000/? 5000/' scripts/e2e-delay-proxy-skeleton.cjs
 nohup node scripts/e2e-delay-proxy-skeleton.cjs > proof/delay.log 2>&1 &
 sleep 1
 shots() { # $1 = prefix: relaunch app then screencap every ~1s for 14s
