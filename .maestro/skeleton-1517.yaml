@@ -1,5 +1,7 @@
 appId: com.vedant.velora
 ---
+- runFlow: login-design2.yaml
+- stopApp
 - launchApp
 - extendedWaitUntil:
     visible: 'Home'
