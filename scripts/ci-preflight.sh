@@ -2,8 +2,11 @@
 # ci-preflight.sh <runner-script>... - resolve every CI-referenced seed/script/flow
 # path against the checked-out tree BEFORE any expensive build. Exits 1 on any miss.
 set -uo pipefail
+if [ $# -eq 0 ]; then echo "PREFLIGHT FAIL: no runner scripts given (usage: ci-preflight.sh <runner-script>...)"; exit 1; fi
 fail=0
+refs=0
 check() {
+  refs=$((refs+1))
   if [ -f "$1" ]; then echo "OK   $1"; return; fi
   # Runner scripts cd into server/ before node scripts/...; resolve that form too.
   case "$1" in scripts/*)
@@ -22,4 +25,5 @@ for root in "$@"; do
     esac
   done
 done
-if [ $fail -eq 0 ]; then echo "PREFLIGHT PASS"; else echo "PREFLIGHT FAIL"; exit 1; fi
+if [ "$refs" -le 1 ]; then echo "PREFLIGHT FAIL: zero CI references scanned - refusing to validate an empty scan"; exit 1; fi
+if [ $fail -eq 0 ]; then echo "PREFLIGHT PASS ($refs references resolved)"; else echo "PREFLIGHT FAIL"; exit 1; fi
