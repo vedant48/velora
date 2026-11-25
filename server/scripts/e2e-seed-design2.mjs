@@ -1,7 +1,8 @@
 // Synthetic LOCAL backend only: v1.5.7 proofs (series sort, scrollable Watched tab). Real TMDB ids + posters.
 import { readFileSync } from 'node:fs';
-const { aliceToken } = JSON.parse(readFileSync('/tmp/e2e-tokens.json', 'utf8'));
+const { aliceToken, bobToken } = JSON.parse(readFileSync('/tmp/e2e-tokens.json', 'utf8'));
 const H = { Authorization: `Bearer ${aliceToken}`, 'Content-Type': 'application/json' };
+const HB = { Authorization: `Bearer ${bobToken}`, 'Content-Type': 'application/json' };
 const call = async (method, path, body) => {
   const r = await fetch(`http://127.0.0.1:8787/api${path}`, { method, headers: H, body: JSON.stringify(body) });
   if (!r.ok) throw Error(`${method} ${path}: ${r.status} ${await r.text()}`);
@@ -63,4 +64,16 @@ for (const [id, title, status, totalWanted, watchedWanted] of series) {
 // F1 LAST so it is the most recent Want item (top-left on the landing tab): director-first cast proof.
 const f1 = await tmdb('/movie/911430');
 await lib('movie', 911430, 'F1', f1.poster_path, 'want');
+// Populated Activity feed proof: bob owns one real movie and alice follows him,
+// so her feed has a real event and the explainer footer renders (empty feed
+// renders the empty state instead - captured separately as evidence).
+const f1b = await tmdb('/movie/911430');
+{
+  const r = await fetch('http://127.0.0.1:8787/api/library/movie/911430', { method: 'PUT', headers: HB, body: JSON.stringify({ mediaType: 'movie', tmdbId: 911430, title: 'F1', posterPath: f1b.poster_path, status: 'watched' }) });
+  if (!r.ok) throw Error(`bob library: ${r.status} ${await r.text()}`);
+}
+{
+  const r = await fetch('http://127.0.0.1:8787/api/social/follow/e2e_bob', { method: 'POST', headers: H, body: '{}' });
+  if (!r.ok) throw Error(`follow: ${r.status} ${await r.text()}`);
+}
 console.log('seeded 1510');
