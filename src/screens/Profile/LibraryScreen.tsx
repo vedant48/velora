@@ -378,7 +378,7 @@ export const LibraryScreen: React.FC = () => {
                 </View>
               </View>
             ) : null}
-              contentContainerStyle={[styles.listContent, { paddingTop: insets.top + collapseH + pinnedH + 14 }]}
+              contentContainerStyle={[styles.listContent, { paddingTop: insets.top + collapseH + pinnedH + ui.component.libraryGrid.topPadding }]}
               ListEmptyComponent={pageTab === 'insights' ? null : loading ? <AppLoader style={{ marginTop: ui.space.xxl }} /> : loadError ? <Pressable onPress={() => setRefreshKey(k => k + 1)} accessibilityRole="button"><Text style={styles.emptyText}>Could not load your library. Tap to retry.</Text></Pressable> : <Text style={styles.emptyText}>Nothing here yet. Rate and track from any title page.</Text>}
             />
           </View>)}
@@ -398,11 +398,11 @@ export const LibraryScreen: React.FC = () => {
               </View>
             </View>
 
-            <View style={{ paddingHorizontal: 15 }}>{profileHeader}</View>
+            <View style={{ paddingHorizontal: ui.component.profileHeader.horizontalPadding }}>{profileHeader}</View>
           </View>
         </Animated.View>
           <View onLayout={(e) => setPinnedH(e.nativeEvent.layout.height)}>
-            <View style={{ paddingHorizontal: 20, paddingTop: 14 }}>{tabsHeader}</View>
+            <View style={{ paddingHorizontal: ui.component.libraryTabs.horizontalPadding, paddingTop: ui.component.libraryTabs.topPadding }}>{tabsHeader}</View>
             <Expandable open={sortSheetVisible && tab !== 'insights'}>
                   <View style={styles.filters}>
                     <View style={styles.filterChips}>
@@ -465,60 +465,60 @@ const InsightCell = memo(function InsightCell({ label, value }: { label: string;
 
 const createStyles = (colors: AppColors) => StyleSheet.create({
   filterScrim: { position: 'absolute', left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(255,255,255,0.55)' },
-  topRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 10 },
-  topButton: { width: 34, height: 34, alignItems: 'center', justifyContent: 'center' },
+  topRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: ui.component.topRow.horizontalPadding },
+  topButton: { width: ui.component.topRow.buttonSize, height: ui.component.topRow.buttonSize, alignItems: 'center', justifyContent: 'center' },
   brand: { fontSize: 9, letterSpacing: 2, color: colors.primary, fontWeight: '700' },
-  brandIcon: { width: 28, height: 28, borderRadius: 6, marginLeft: 6 },
+  brandIcon: { width: ui.component.topRow.brandIconSize, height: ui.component.topRow.brandIconSize, borderRadius: ui.component.topRow.brandIconRadius, marginLeft: ui.component.topRow.brandIconMarginLeft },
   topActions: { flexDirection: 'row', alignItems: 'center' },
   photoViewerBackdrop: { flex: 1, backgroundColor: 'rgba(0,0,0,0.92)', alignItems: 'center', justifyContent: 'center' },
-  filters: { padding: ui.space.md, gap: 10 },
+  filters: { padding: ui.space.md, gap: ui.component.libraryFilters.gap },
   filterChips: { flexDirection: 'row', flexWrap: 'wrap', gap: ui.space.sm },
-  filterChip: { paddingHorizontal: ui.space.md, paddingVertical: ui.space.sm, borderRadius: 20, backgroundColor: colors.surface },
+  filterChip: { paddingHorizontal: ui.space.md, paddingVertical: ui.space.sm, borderRadius: ui.purpose.chipRadius, backgroundColor: colors.surface },
   filterChipSelected: { backgroundColor: colors.surfaceLight },
-  apply: { alignSelf: 'center', paddingHorizontal: 30, paddingVertical: 9, borderRadius: 20, backgroundColor: colors.surface },
+  apply: { alignSelf: 'center', paddingHorizontal: ui.component.libraryFilters.applyHorizontalPadding, paddingVertical: ui.component.libraryFilters.applyVerticalPadding, borderRadius: ui.purpose.chipRadius, backgroundColor: colors.surface },
   root: { flex: 1, backgroundColor: colors.background },
   headerOverlay: { position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10, elevation: 10 },
-  listContent: { paddingHorizontal: 15, paddingTop: 14, paddingBottom: 100 },
-  gridCell: { flex: 1 / 2, padding: 5 },
-  header: { gap: 0, paddingBottom: ui.space.md, paddingHorizontal: 5 },
+  listContent: { paddingHorizontal: ui.component.libraryGrid.horizontalPadding, paddingTop: ui.component.libraryGrid.topPadding, paddingBottom: ui.component.libraryGrid.bottomPadding },
+  gridCell: { flex: 1 / 2, padding: ui.component.libraryGrid.cellPadding },
+  header: { gap: 0, paddingBottom: ui.space.md, paddingHorizontal: ui.component.libraryHeader.innerHorizontalPadding },
   identityRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    gap: 14,
+    gap: ui.component.profileHeader.identityGap,
   },
   identityText: { flex: 1, gap: 2 },
   avatar: {
-    width: 52,
-    height: 52,
-    borderRadius: 26,
+    width: ui.component.profileHeader.avatarSize,
+    height: ui.component.profileHeader.avatarSize,
+    borderRadius: ui.component.profileHeader.avatarSize / 2,
     backgroundColor: colors.trackBlue,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  avatarText: { fontSize: 26, fontWeight: '900', color: '#fff' },
-  name: { fontSize: 27, fontWeight: '700', color: colors.textPrimary },
+  avatarText: { fontSize: ui.component.profileHeader.avatarTextSize, fontWeight: '900', color: '#fff' },
+  name: { fontSize: ui.component.profileHeader.nameSize, fontWeight: '700', color: colors.textPrimary },
   username: { fontSize: 13, color: colors.textTertiary },
   bio: { fontSize: 13, color: colors.textSecondary, marginTop: ui.space.xs },
   statsRow: {
     paddingTop: ui.space.xxl, paddingBottom: ui.space.lg,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingRight: 45,
+    paddingRight: ui.component.profileHeader.statsRightPadding,
     marginTop: 2, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.borderHighlight,
   },
   stat: { flex: 1, alignItems: 'center' },
-  statValue: { fontSize: 15, fontWeight: '600', color: colors.textPrimary },
+  statValue: { fontSize: ui.component.profileHeader.statValueSize, fontWeight: '600', color: colors.textPrimary },
   statLabel: { fontSize: ui.type.label, color: colors.textTertiary, marginTop: 1 },
   actionsRow: {
     flexDirection: 'row',
-    gap: 10,
+    gap: ui.component.profileHeader.actionsGap,
     marginTop: 2,
   },
   iconAction: {
-    width: 38,
-    height: 38,
-    borderRadius: 10,
+    width: ui.purpose.actionIconSize,
+    height: ui.purpose.actionIconSize,
+    borderRadius: ui.purpose.actionIconRadius,
     backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.surfaceBorder,
@@ -538,44 +538,44 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     justifyContent: 'space-between',
   },
   tabsGroup: { flexDirection: 'row', gap: 2, flexShrink: 1 },
-  tab: { paddingHorizontal: 9, paddingVertical: 10, borderRadius: 18, backgroundColor: 'transparent' },
+  tab: { paddingHorizontal: ui.component.libraryTabs.tabHorizontalPadding, paddingVertical: ui.component.libraryTabs.tabVerticalPadding, borderRadius: ui.component.libraryTabs.tabRadius, backgroundColor: 'transparent' },
   tabActive: { backgroundColor: colors.surfaceLight },
   tabText: { fontSize: ui.type.label, fontWeight: '700', color: colors.textTertiary },
   tabTextActive: { color: colors.textPrimary },
   filterButton: {
-    width: 34,
-    height: 34,
-    borderRadius: 17,
+    width: ui.purpose.iconButtonSize,
+    height: ui.purpose.iconButtonSize,
+    borderRadius: ui.purpose.iconButtonRadius,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: colors.surface,
   },
-  insights: { gap: 18, paddingTop: 6, paddingBottom: 20 },
-  insightRow: { flexDirection: 'row', gap: 10 },
+  insights: { gap: ui.component.libraryInsights.gap, paddingTop: 6, paddingBottom: 20 },
+  insightRow: { flexDirection: 'row', gap: ui.component.libraryInsights.rowGap },
   insightCell: {
     flex: 1,
     backgroundColor: colors.surface,
-    borderRadius: 14,
+    borderRadius: ui.component.libraryInsights.cardRadius,
     paddingVertical: ui.space.lg,
     alignItems: 'center',
     borderWidth: 1,
     borderColor: colors.surfaceBorder,
   },
-  insightCellValue: { fontSize: 22, fontWeight: '800', color: colors.textPrimary },
+  insightCellValue: { fontSize: ui.component.libraryInsights.valueSize, fontWeight: '800', color: colors.textPrimary },
   insightCellLabel: { fontSize: ui.type.caption, color: colors.textTertiary, marginTop: 3, fontWeight: '600' },
   insightBlock: {
     backgroundColor: colors.surface,
-    borderRadius: 14,
+    borderRadius: ui.component.libraryInsights.cardRadius,
     padding: ui.space.lg,
     borderWidth: 1,
     borderColor: colors.surfaceBorder,
   },
   insightHeading: { fontSize: 13, fontWeight: '800', color: colors.textSecondary, letterSpacing: 0.4 },
-  insightBig: { fontSize: 34, fontWeight: '900', color: colors.textPrimary, marginTop: 6 },
+  insightBig: { fontSize: ui.component.libraryInsights.bigValueSize, fontWeight: '900', color: colors.textPrimary, marginTop: 6 },
   insightSub: { fontSize: ui.type.label, color: colors.textTertiary, marginTop: 2 },
-  distRow: { flexDirection: 'row', alignItems: 'flex-end', gap: 5, marginTop: ui.space.md },
+  distRow: { flexDirection: 'row', alignItems: 'flex-end', gap: ui.component.libraryInsights.distGap, marginTop: ui.space.md },
   distCol: { flex: 1, alignItems: 'center', gap: ui.space.xs },
-  distBarTrack: { height: 76, width: '100%', justifyContent: 'flex-end' },
+  distBarTrack: { height: ui.component.libraryInsights.distBarHeight, width: '100%', justifyContent: 'flex-end' },
   distBarFill: {
     width: '100%',
     borderRadius: 3,
