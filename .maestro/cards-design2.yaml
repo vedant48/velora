@@ -1,18 +1,6 @@
 appId: com.vedant.velora
 ---
-- launchApp
-- tapOn: 'Log in / Sign up'
-- tapOn: Username
-- inputText: e2e_alice
-- tapOn: Password
-- inputText: e2e-alice-pass-1
-- hideKeyboard
-- tapOn:
-    text: 'Log in'
-    below: Password
-- extendedWaitUntil:
-    visible: E2E Alice
-    timeout: 30000
+- runFlow: login-design2.yaml
 # Initial order (owner reference): icon bar, then profile details, then tab row
 - assertVisible: Settings
 - assertVisible: More profile actions
@@ -32,7 +20,8 @@ appId: com.vedant.velora
 - extendedWaitUntil:
     visible: 'Your ratings'
     timeout: 20000
-- assertVisible: 'Movies watched'
+- assertVisible: 'Top genre'
+- assertVisible: 'Time watched'
 - takeScreenshot: 1c-insights
 # Filter sheet: iOS bottom sheet with sort radios, hide switches, Apply (redesign fidelity)
 - tapOn:
@@ -49,6 +38,7 @@ appId: com.vedant.velora
 - extendedWaitUntil:
     visible: 'Cast & Crew'
     timeout: 60000
+- takeScreenshot: 7a-details-hero
 - swipe:
     direction: UP
     duration: 500
