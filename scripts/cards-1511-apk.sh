@@ -24,7 +24,16 @@ sleep 2
 maestro test --format junit --output proof/ui-tabs.xml --test-output-dir proof/maestro-tabs .maestro/flicker-tabs-1511.yaml || status=1
 sleep 1
 kill -INT $REC_PID 2>/dev/null || true
-sleep 2
+# Wait until screenrecord finalizes (moov written): file size stable across 4s, max ~40s
+for i in $(seq 1 10); do
+  sleep 2
+  S1=$(adb shell stat -c %s /sdcard/flicker-tabs.mp4 2>/dev/null | tr -d '\r')
+  sleep 2
+  S2=$(adb shell stat -c %s /sdcard/flicker-tabs.mp4 2>/dev/null | tr -d '\r')
+  if [ -n "$S1" ] && [ "$S1" = "$S2" ]; then break; fi
+done
 adb pull /sdcard/flicker-tabs.mp4 proof/flicker-tabs.mp4 || true
 adb shell rm -f /sdcard/flicker-tabs.mp4 || true
+# Fail loudly if the recording has no moov atom (truncated pull = unusable evidence)
+if [ -f proof/flicker-tabs.mp4 ] && ! grep -q moov proof/flicker-tabs.mp4; then echo "TABS VIDEO CORRUPT (no moov)"; status=1; fi
 exit $status
