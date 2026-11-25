@@ -73,9 +73,14 @@ export const LibraryScreen: React.FC = () => {
   const [collapseH, setCollapseH] = useState(0);
   const [pinnedH, setPinnedH] = useState(0);
   const collapseRange = Math.max(collapseH, 1);
-  const headerTranslate = useMemo(
-    () => scrollY.interpolate({ inputRange: [0, collapseRange], outputRange: [0, -collapseRange], extrapolate: 'clamp' }),
-    [scrollY, collapseRange],
+  // Clip-window collapse (owner report, 25 Nov): the icon bar + profile live in a window
+  // whose height animates collapseH -> 0 with overflow hidden, bottom-anchored so content
+  // exits upward. A static opaque spacer owns the status-bar strip, so scrolled-away content
+  // can never render behind the status bar, and the window clamps to exactly 0 so no
+  // measurement drift can leave a gap above the pinned tabs.
+  const clipH = useMemo(
+    () => scrollY.interpolate({ inputRange: [0, collapseRange], outputRange: [collapseH, 0], extrapolate: 'clamp' }),
+    [scrollY, collapseRange, collapseH],
   );
   const syncScrollTo = useCallback((key: TabKey) => { scrollY.setValue(pageOffsets.current[key] ?? 0); }, [scrollY]);
   const selectTab = useCallback((next: TabKey) => { setSortSheetVisible(false); syncScrollTo(next); setTab(next); }, [syncScrollTo]);
@@ -379,8 +384,9 @@ export const LibraryScreen: React.FC = () => {
       </ContentPager>
           {sortSheetVisible && <Pressable accessibilityLabel="Dismiss filters without applying" onPress={() => setSortSheetVisible(false)} style={[StyleSheet.absoluteFill, styles.filterScrim]} />}
       </View>
-      <Animated.View style={[styles.headerOverlay, { transform: [{ translateY: headerTranslate }] }]}>
-        <View style={{ paddingTop: insets.top, backgroundColor: colors.background }}>
+      <Animated.View style={[styles.headerOverlay, { backgroundColor: colors.background }]}>
+        <View style={{ height: insets.top }} />
+        <Animated.View style={{ height: clipH, overflow: 'hidden', justifyContent: 'flex-end' }}>
           <View onLayout={(e) => setCollapseH(e.nativeEvent.layout.height)}>
       {/* Owner rule (25 Nov): no VELORA text; app icon only on the left, settings + overflow on the right. */}
             <View style={styles.topRow}>
@@ -393,6 +399,7 @@ export const LibraryScreen: React.FC = () => {
 
             <View style={{ paddingHorizontal: 15 }}>{profileHeader}</View>
           </View>
+        </Animated.View>
           <View onLayout={(e) => setPinnedH(e.nativeEvent.layout.height)}>
             <View style={{ paddingHorizontal: 20, paddingTop: 14 }}>{tabsHeader}</View>
             <Expandable open={sortSheetVisible && tab !== 'insights'}>
@@ -412,7 +419,6 @@ export const LibraryScreen: React.FC = () => {
             </Expandable>
 
           </View>
-        </View>
       </Animated.View>
 
       <ActionSheet visible={menuVisible} onClose={() => setMenuVisible(false)} options={[
