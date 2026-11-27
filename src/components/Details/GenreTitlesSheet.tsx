@@ -36,12 +36,12 @@ export function GenreTitlesSheet({ genreId, genreName, mediaType, onClose, onSee
 
   return (
     <BottomSheet visible onClose={onClose} showHandle>
-      <View style={styles.headerRow}>
+      <View style={styles.headerRow} testID={`genre-sheet-${mediaType}`}>
         <View style={{ flex: 1 }}>
           <Text style={styles.title}>{genreName}</Text>
           <Text style={styles.subtitle}>{mediaType === 'movie' ? 'Movies' : 'Series'}</Text>
         </View>
-        <Pressable accessibilityRole="button" accessibilityLabel={`See all ${genreName}`} onPress={onSeeAll} hitSlop={8}>
+        <Pressable accessibilityRole="button" accessibilityLabel={`See all ${genreName}`} testID="genre-sheet-see-all" onPress={onSeeAll} hitSlop={8}>
           <Text style={styles.seeAll}>See all</Text>
         </Pressable>
       </View>

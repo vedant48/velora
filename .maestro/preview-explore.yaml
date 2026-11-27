@@ -41,6 +41,14 @@ appId: com.vedant.velora
     timeout: 30000
 - assertNotVisible: "Log in / Sign up"
 - takeScreenshot: p04-home-restored
+- tapOn:
+    id: "library-tab-watched"
+- waitForAnimationToEnd
+- takeScreenshot: p04b-watched-poster-grid
+- tapOn:
+    id: "library-tab-want"
+- waitForAnimationToEnd
+- takeScreenshot: p04c-want-poster-grid
 
 # 4. Unified Explore: Movies/Series filter chips, personal rails, genre browse.
 #    Default view is Movies (owner removed the All filter).
@@ -90,7 +98,51 @@ appId: com.vedant.velora
     timeout: 60000
 - takeScreenshot: p11-search-results
 
-# 6. Light theme over the restored Home, then back to dark.
+# 6. Genre drawer from a movie Details page: drawer lists movies only.
+- tapOn: "Clear search"
+- tapOn: "Movies, series, people…"
+- inputText: "fight club"
+- extendedWaitUntil:
+    visible:
+      text: "Fight Club"
+    timeout: 60000
+- tapOn: "Fight Club"
+- extendedWaitUntil:
+    visible:
+      text: "Drama"
+    timeout: 30000
+- tapOn: "Drama"
+- assertVisible:
+    id: "genre-sheet-movie"
+- takeScreenshot: p12-genre-drawer-movie
+- tapOn: "Dismiss"
+- assertNotVisible:
+    id: "genre-sheet-movie"
+- tapOn: "Go back"
+
+# 7. Genre drawer from a series Details page: drawer lists series only.
+- tapOn: "Clear search"
+- tapOn: "Movies, series, people…"
+- inputText: "game of thrones"
+- extendedWaitUntil:
+    visible:
+      text: "Game of Thrones"
+    timeout: 60000
+- tapOn: "Game of Thrones"
+- extendedWaitUntil:
+    visible:
+      text: "Drama"
+    timeout: 30000
+- tapOn: "Drama"
+- assertVisible:
+    id: "genre-sheet-tv"
+- takeScreenshot: p13-genre-drawer-series
+- tapOn: "Dismiss"
+- assertNotVisible:
+    id: "genre-sheet-tv"
+- tapOn: "Go back"
+
+# 8. Light theme over the restored Home, then back to dark.
 - tapOn: "Home"
 - tapOn: "Settings"
 - extendedWaitUntil:
@@ -100,9 +152,9 @@ appId: com.vedant.velora
 - tapOn: "Appearance"
 - tapOn: "Light"
 - tapOn: "Back"
-- takeScreenshot: p12-home-light
+- takeScreenshot: p14-home-light
 - tapOn: "Settings"
 - tapOn: "Appearance"
 - tapOn: "Dark"
 - tapOn: "Back"
-- takeScreenshot: p13-home-dark
+- takeScreenshot: p15-home-dark
