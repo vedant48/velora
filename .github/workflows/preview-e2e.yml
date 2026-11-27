@@ -93,10 +93,10 @@ jobs:
       - name: 📥 Checkout repository
         uses: actions/checkout@v4
 
-      - name: 🟢 Setup Node.js 20
+      - name: 🟢 Setup Node.js 22 (wrangler 4 needs >= 22.12)
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - name: 🗄️ Start local backend (wrangler + local D1, seeded users)
         run: scripts/e2e-backend.sh
