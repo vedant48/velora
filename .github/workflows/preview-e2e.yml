@@ -3,6 +3,8 @@ name: Preview e2e (Explore evidence)
 # Branch-scoped visual evidence run: builds the release APK exactly like the
 # release pipeline, boots an emulator against a local backend, and captures
 # screenshots of the new Explore, skeletons and session restore.
+# Flow-only changes (.maestro/** or this file) skip the ~15 min APK build and
+# reuse the newest preview-apk artifact, since the app code is unchanged.
 on:
   push:
     branches: [explore-recs-v1.6]
@@ -10,9 +12,28 @@ on:
 
 permissions:
   contents: read
+  actions: read # cross-run artifact download when the build is skipped
 
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      app: ${{ steps.f.outputs.app }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - id: f
+        run: |
+          if git diff --name-only HEAD~1 HEAD | grep -qvE '^\.maestro/|^\.github/workflows/preview-e2e\.yml$'; then
+            echo "app=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "app=false" >> "$GITHUB_OUTPUT"
+          fi
+
   build:
+    needs: changes
+    if: needs.changes.outputs.app == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: 📥 Checkout repository
@@ -87,7 +108,8 @@ jobs:
           retention-days: 7
 
   e2e:
-    needs: build
+    needs: [changes, build]
+    if: needs.build.result != 'failure' && needs.build.result != 'cancelled'
     runs-on: ubuntu-latest
     steps:
       - name: 📥 Checkout repository
@@ -107,14 +129,33 @@ jobs:
       - name: 🐢 Start delay proxy (keeps loading states visible)
         run: nohup node scripts/e2e-delay-proxy.cjs > /tmp/delay-proxy.log 2>&1 &
 
+      - name: 🔥 Warm TMDB proxy (Render free tier sleeps when idle)
+        run: |
+          for i in $(seq 1 40); do
+            if curl -sf -o /dev/null "https://proxy-api-server-f1an.onrender.com/v1/tmdb/3/trending/movie/day"; then exit 0; fi
+            sleep 5
+          done
+          echo "TMDB proxy did not wake in time"
+          exit 1
+
       - name: 📱 Install Maestro
         run: curl -fsSL "https://get.maestro.mobile.dev" | bash
 
-      - name: 📦 Download APK
+      - name: 📦 Download APK (built this run)
+        if: needs.changes.outputs.app == 'true'
         uses: actions/download-artifact@v4
         with:
           name: preview-apk
           path: candidate
+
+      - name: 📦 Download APK (reuse newest artifact, app code unchanged)
+        if: needs.changes.outputs.app == 'false'
+        run: |
+          RUN_ID=$(gh api "repos/$GITHUB_REPOSITORY/actions/artifacts?name=preview-apk&per_page=1" --jq '.artifacts[0].workflow_run.id')
+          echo "Reusing preview-apk from run $RUN_ID"
+          gh run download "$RUN_ID" -n preview-apk -D candidate
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: ⚡ Enable KVM (emulator boot times out without it)
         run: |
