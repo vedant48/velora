@@ -38,6 +38,12 @@ jobs:
           npx tsc --noEmit
           node --test tests/*.test.cjs
 
+      - name: 🏗️ Expo prebuild (repo tracks only signing config, no gradlew)
+        run: |
+          if [ ! -f "android/gradlew" ]; then
+            npx expo prebuild --platform android --clean
+          fi
+
       - name: 🛠️ Ensure Android directory & optimized Gradle properties
         run: |
           mkdir -p android
