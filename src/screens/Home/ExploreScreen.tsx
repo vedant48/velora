@@ -10,9 +10,9 @@ import { LibraryItem, veloraApi } from '../../api/velora';
 import { TVCollections } from '../../components/Collections/TVCollections';
 import { CollectionsRail } from '../../components/Collections/CollectionsRail';
 import { HeroBanner } from '../../components/Home/HeroBanner';
-import { WideCardRail } from '../../components/Home/WideCardRail';
 import { TrailersRail } from '../../components/Home/TrailersRail';
 import { WatchNextRail } from '../../components/Home/WatchNextRail';
+import { WideCardRail } from '../../components/Home/WideCardRail';
 import { GenreBrowseSection } from '../../components/Home/GenreBrowseSection';
 import { SegmentedControl } from '../../components/common/SegmentedControl';
 import { MovieCarousel } from '../../components/MovieCarousel/MovieCarousel';
@@ -133,13 +133,15 @@ export function ExploreScreen() {
       )}
       {forYou.mixed.length > 0 && <LazySection>{rail('For you', { data: forYou.mixed })}</LazySection>}
       {forYou.rails.map(r => <LazySection key={r.key}>{rail(r.title, { data: r.items })}</LazySection>)}
+      {filter !== 'tv' && <LazySection>{rail('Trending movies', trending)}</LazySection>}
+      {filter !== 'movies' && <LazySection>{rail('Trending series', television)}</LazySection>}
       {filter !== 'movies' && <LazySection height={340}><WatchNextRail onPressItem={openSeries} showEmpty={filter !== 'all'} /></LazySection>}
       <LazySection height={filter === 'all' ? 560 : 330}><GenreBrowseSection filter={filter} onPressGenre={openGenre} /></LazySection>
       {filter !== 'tv' && <>
-        {filter === 'all' ? (
+        {/* Trending movies/series rails also sit right after For you above; the
+            wide Trending this week cards below keep the original All-tab section. */}
+        {filter === 'all' && (
           <LazySection height={240}><WideCardRail title="Trending this week" items={trending.data ?? []} onItemPress={open} /></LazySection>
-        ) : (
-          forYou.mixed.length === 0 && <LazySection>{rail('Trending movies', trending)}</LazySection>
         )}
         <LazySection height={230}><TrailersRail items={nowPlaying.data ?? []} onItemPress={open} /></LazySection>
         <LazySection>{rail('Available for streaming', streaming)}</LazySection>
@@ -149,7 +151,6 @@ export function ExploreScreen() {
       </>}
       {filter !== 'movies' && <>
         <LazySection height={750}><TVCollections /></LazySection>
-        <LazySection>{rail('Trending TV shows', television)}</LazySection>
       </>}
     </ScrollView></ViewportContext.Provider>
   </View>;

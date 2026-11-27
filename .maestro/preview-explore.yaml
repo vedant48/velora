@@ -1,0 +1,109 @@
+appId: com.vedant.velora
+---
+# Preview evidence for the unified Explore + skeleton/session-restore fixes.
+# Runs against the local wrangler backend behind the delay proxy (1.4s reads),
+# so loading states stay on screen long enough to capture.
+# Asserts are the regression gates; screenshots carry the visual evidence.
+
+# 1. Signed-out cold start: the login wall is correct here (no session).
+- launchApp
+- extendedWaitUntil:
+    visible:
+      text: "Log in / Sign up"
+    timeout: 20000
+- takeScreenshot: p01-signedout-home-wall
+
+# 2. Log in as the seeded member.
+- tapOn: "Log in / Sign up"
+- tapOn: "Username"
+- inputText: "e2e_alice"
+- tapOn: "Password"
+- inputText: "e2e-alice-pass-1"
+- hideKeyboard
+- tapOn:
+    text: "Log in"
+    below: "Password"
+- extendedWaitUntil:
+    visible:
+      text: "E2E Alice"
+    timeout: 30000
+- takeScreenshot: p02-home-loaded
+
+# 3. Cold start with a saved session: the login wall must never appear while
+#    the token validates (delayed 1.4s by the proxy, so a regression would be caught).
+- stopApp
+- launchApp
+- assertNotVisible: "Log in / Sign up"
+- takeScreenshot: p03-coldstart-restoring
+- extendedWaitUntil:
+    visible:
+      text: "E2E Alice"
+    timeout: 30000
+- assertNotVisible: "Log in / Sign up"
+- takeScreenshot: p04-home-restored
+
+# 4. Unified Explore: filter chips, personal rails, genre browse.
+- tapOn: "Explore"
+- extendedWaitUntil:
+    visible:
+      text: "For you"
+    timeout: 60000
+- takeScreenshot: p05-explore-all-top
+- assertVisible: "Movies"
+- assertVisible: "Series"
+- assertVisible: "Because you liked Fight Club"
+- scrollUntilVisible:
+    element:
+      text: "Science Fiction"
+    direction: DOWN
+- takeScreenshot: p06-explore-genres-movies
+- scrollUntilVisible:
+    element:
+      text: "War & Politics"
+    direction: DOWN
+- takeScreenshot: p07-explore-genres-series
+- tapOn:
+    id: "explore-filter-movies"
+- extendedWaitUntil:
+    visible:
+      text: "Available for streaming"
+    timeout: 30000
+- assertNotVisible: "Watch next"
+- takeScreenshot: p08-explore-movies
+- tapOn:
+    id: "explore-filter-tv"
+- extendedWaitUntil:
+    visible:
+      text: "Watch next"
+    timeout: 30000
+- takeScreenshot: p09-explore-series
+- tapOn:
+    id: "explore-filter-all"
+
+# 5. Search skeleton then results, same query as the member's report.
+- tapOn: "Search"
+- tapOn: "Movies, series, people…"
+- inputText: "ramayan"
+- takeScreenshot: p10-search-loading
+- extendedWaitUntil:
+    visible:
+      text: "(?i).*ramayan.*"
+    timeout: 60000
+- takeScreenshot: p11-search-results
+
+# 6. Light theme over the restored Home, then back to dark.
+- tapOn: "Home"
+- tapOn: "Settings"
+- extendedWaitUntil:
+    visible:
+      text: "Appearance"
+    timeout: 20000
+- tapOn: "Appearance"
+- tapOn: "Light"
+- tapOn: "Back"
+- takeScreenshot: p12-home-light
+- tapOn: "Settings"
+- tapOn: "Appearance"
+- tapOn: "Dark"
+- tapOn: "Back"
+- takeScreenshot: p13-home-dark

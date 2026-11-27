@@ -17,6 +17,7 @@ import { CircleReviews } from '../../components/Library/CircleReviews';
 import { TrackingControls } from '../../components/Library/TrackingControls';
 import { MovieCarousel } from '../../components/MovieCarousel/MovieCarousel';
 import { PersonModal } from '../../components/Person/PersonModal';
+import { GenreTitlesSheet } from '../../components/Details/GenreTitlesSheet';
 import { useLibraryItem } from '../../hooks/useLibraryItem';
 import { RootStackParamList } from '../../navigation/types';
 import { useAuth } from '../../state/AuthContext';
@@ -48,6 +49,7 @@ export const DetailsScreen: React.FC = () => {
   const isTV = !isMovie;
 
   const [selectedSeason, setSelectedSeason] = useState(1);
+  const [genreSheet, setGenreSheet] = useState<{ id: number; name: string } | null>(null);
   const [seasonPickerOpen, setSeasonPickerOpen] = useState(false);
   const [selectedPersonId, setSelectedPersonId] = useState<number | null>(null);
   const [isPersonModalVisible, setIsPersonModalVisible] = useState(false);
@@ -422,8 +424,8 @@ export const DetailsScreen: React.FC = () => {
                   {(details?.genres ?? []).map((g, i) => (
                     <Pressable
                       key={g.id}
-                      onPress={() => navigation.push('Genre', { genreId: g.id, genreName: g.name, mediaType: isMovie ? 'movie' : 'tv' })}
-                      accessibilityRole="link"
+                      onPress={() => setGenreSheet({ id: g.id, name: g.name })}
+                      accessibilityRole="button"
                       accessibilityLabel={`${g.name} genre`}
                       hitSlop={4}
                     >
@@ -434,6 +436,16 @@ export const DetailsScreen: React.FC = () => {
                   ))}
                 </View>
               ) : null}
+              {genreSheet && (
+                <GenreTitlesSheet
+                  genreId={genreSheet.id}
+                  genreName={genreSheet.name}
+                  mediaType={isMovie ? 'movie' : 'tv'}
+                  onClose={() => setGenreSheet(null)}
+                  onSeeAll={() => { const g = genreSheet; setGenreSheet(null); navigation.push('Genre', { genreId: g.id, genreName: g.name, mediaType: isMovie ? 'movie' : 'tv' }); }}
+                  onPressItem={(item) => { setGenreSheet(null); navigation.push('Details', { item }); }}
+                />
+              )}
               {endedBadge ? (
                 <View style={styles.endedPill}>
                   <Text style={styles.endedPillText}>{endedBadge}</Text>
