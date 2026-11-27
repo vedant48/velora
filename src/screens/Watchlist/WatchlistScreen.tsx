@@ -29,7 +29,7 @@ export const WatchlistScreen: React.FC = () => {
   );
 
   const handleExplore = useCallback(() => {
-    (navigation as any).navigate('MainTabs', { screen: 'HomeTab' });
+    (navigation as any).navigate('MainTabs', { screen: 'ExploreTab' });
   }, [navigation]);
 
   // 3-column grid calculation

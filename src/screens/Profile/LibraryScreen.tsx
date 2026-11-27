@@ -9,6 +9,7 @@ import { endedCompleteLast, itemInTab, LibraryTab } from './libraryTabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LibraryItem, Review, UserStats, veloraApi } from '../../api/velora';
 import { AppButton } from '../../components/common/AppButton';
+import { SegmentedControl } from '../../components/common/SegmentedControl';
 import { AppLoader } from '../../components/common/AppLoader';
 import { Avatar } from '../../components/Avatar';
 import { LibraryCard } from '../../components/Library/LibraryCard';
@@ -23,7 +24,7 @@ import { GC_TIME, STALE_TIME, useTVDetailsQuery } from '../../api/queries';
 import { useAuth } from '../../state/AuthContext';
 import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
 import { ui } from '../../theme/ui';
-import { PosterGridSkeleton } from '../../components/Skeleton/ContentSkeletons';
+import { LibraryGridSkeleton } from '../../components/Skeleton/ContentSkeletons';
 
 type TabKey = LibraryTab;
 type SortKey = 'recent' | 'release' | 'title' | 'rating';
@@ -52,7 +53,7 @@ export const LibraryScreen: React.FC = () => {
   const [hideSeries, setHideSeries] = useState(false);
   const [hideUnreleased, setHideUnreleased] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
-  const { user, logout, apiReady, refresh: refreshUser } = useAuth();
+  const { user, logout, apiReady, refresh: refreshUser, loading: authLoading } = useAuth();
   const [refreshing, setRefreshing] = useState(false);
   const refreshProfile = useCallback(async () => {
     if (!user || refreshing) return;
@@ -351,13 +352,7 @@ export const LibraryScreen: React.FC = () => {
     () => (
       <View style={styles.header}>
         <View style={styles.segRow}>
-          <View style={styles.seg}>
-            {TABS.map((t) => (
-              <Pressable key={t.key} testID={`library-tab-${t.key}`} accessibilityRole="tab" accessibilityState={{ selected: tab === t.key }} accessibilityLabel={t.label} onPress={() => selectTab(t.key)} style={[styles.segItem, tab === t.key && styles.segItemActive]}>
-                <Text style={[styles.segText, tab === t.key && styles.segTextActive]}>{t.label}</Text>
-              </Pressable>
-            ))}
-          </View>
+          <SegmentedControl options={TABS} value={tab} onChange={selectTab} testIDPrefix="library-tab" style={{ flex: 1 }} />
           {tab !== 'insights' && (
             <Pressable onPress={() => {
               setHideMovies(appliedFilters.hideMovies); setHideSeries(appliedFilters.hideSeries); setHideUnreleased(appliedFilters.hideUnreleased); setSort(appliedSort);
@@ -457,7 +452,7 @@ export const LibraryScreen: React.FC = () => {
     (item: RowItem & { __row: string }) => {
       if (item.__row === 'tabs') return <View style={{ height: tabsH }} />;
       if (item.__row === 'insights') return insightsBody;
-      if (item.__row === 'loader') return <PosterGridSkeleton />;
+      if (item.__row === 'loader') return <LibraryGridSkeleton />;
       if (item.__row === 'error') return <Pressable onPress={() => setRefreshKey(k => k + 1)} accessibilityRole="button"><Text style={styles.emptyText}>Could not load your library. Tap to retry.</Text></Pressable>;
       return <Text style={styles.emptyText}>Nothing here yet. Rate and track from any title page.</Text>;
     },
@@ -496,6 +491,17 @@ export const LibraryScreen: React.FC = () => {
     ({ leadingItem }: { leadingItem?: RowItem }) => (leadingItem && '__row' in leadingItem ? null : <View style={styles.seriesSep} />),
     [styles],
   );
+
+  // Session restore in flight: hold the loading grid instead of flashing the
+  // sign-in wall for a member whose token is still being validated.
+  if (apiReady && !user && authLoading) {
+    return (
+      <View style={styles.root}>
+        <View style={{ height: insets.top, backgroundColor: colors.background }} />
+        <LibraryGridSkeleton />
+      </View>
+    );
+  }
 
   if (!apiReady || !user) {
     return (
@@ -691,7 +697,7 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     backgroundColor: colors.appleFill,
   },
   brand: { fontSize: 9, letterSpacing: 2, color: colors.primary, fontWeight: '700' },
-  brandTile: { width: 34, height: 34, marginLeft: 20 },
+  brandTile: { width: ui.component.topRow.brandIconSize, height: ui.component.topRow.brandIconSize, marginLeft: ui.component.topRow.brandIconMarginLeft },
   overlay: { position: 'absolute', top: 0, left: 0, right: 0 },
   overlayBg: { backgroundColor: colors.background },
   stickyTabs: { backgroundColor: colors.background, marginHorizontal: -ui.component.libraryGrid.horizontalPadding, paddingHorizontal: ui.component.libraryGrid.horizontalPadding },
@@ -738,24 +744,6 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
   statSep: { width: StyleSheet.hairlineWidth, backgroundColor: colors.appleSeparator, marginVertical: 4 },
   // Apple redesign: iOS segmented control + filter circle button.
   segRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
-  seg: {
-    flex: 1,
-    flexDirection: 'row',
-    backgroundColor: colors.appleSegTrack,
-    borderRadius: 10,
-    padding: 2,
-  },
-  segItem: { flex: 1, alignItems: 'center', paddingVertical: 6, borderRadius: 8 },
-  segItemActive: {
-    backgroundColor: colors.appleSegActive,
-    shadowColor: '#000',
-    shadowOpacity: 0.35,
-    shadowRadius: 6,
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 2,
-  },
-  segText: { fontSize: 13, fontWeight: '500', color: colors.appleText2 },
-  segTextActive: { color: colors.appleText },
   // Apple redesign: iOS bottom sheet for sort & filter.
   sheetScrim: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.4)' },
   sheet: {

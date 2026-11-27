@@ -5,6 +5,9 @@ import { MediaItem } from '../../api/types';
 import { AppColors, useAppTheme, useThemedStyles } from '../../theme/ThemeContext';
 import { ui } from '../../theme/ui';
 
+/** Poster corner radius shared by the search grid skeleton so both paint the same shape. */
+export const SEARCH_POSTER_RADIUS = 3;
+
 export const SearchPoster = memo(function SearchPoster({ item, width, onPress, labels = true }: {
   item: MediaItem; width: number; onPress: (item: MediaItem) => void; labels?: boolean;
 }) {
@@ -16,7 +19,7 @@ export const SearchPoster = memo(function SearchPoster({ item, width, onPress, l
   </Pressable>;
 });
 const createStyles = (colors: AppColors) => StyleSheet.create({
-  poster: { aspectRatio: 2 / 3, borderRadius: 3, backgroundColor: colors.surfaceLight },
+  poster: { aspectRatio: 2 / 3, borderRadius: SEARCH_POSTER_RADIUS, backgroundColor: colors.surfaceLight },
   title: { color: colors.textSecondary, fontSize: ui.type.caption, textAlign: 'center', marginTop: 6 },
   year: { color: colors.textTertiary, fontSize: 10, textAlign: 'center', marginTop: 3 },
 });

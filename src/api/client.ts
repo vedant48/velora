@@ -17,6 +17,12 @@ export class ApiError extends Error {
   }
 }
 
+/** The Render free tier sleeps when idle; one fire-and-forget ping at app start
+ *  wakes it so the first real screen does not sit on skeletons through a cold start. */
+export function warmProxy(): void {
+  fetch(`${PROXY_URL}/v1/tmdb/3/trending/movie/day`, { headers: { Accept: 'application/json' } }).catch(() => undefined);
+}
+
 /**
  * Robust fetch wrapper with timeout, automatic retries with exponential backoff,
  * and standard abort signal support.

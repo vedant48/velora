@@ -11,7 +11,7 @@ import { searchMovies, searchMulti, searchTV } from '../../api/search';
 import { MediaItem } from '../../api/types';
 import { veloraApi } from '../../api/velora';
 import { AppLoader } from '../../components/common/AppLoader';
-import { SearchPoster } from '../../components/Library/SearchPoster';
+import { SearchPoster, SEARCH_POSTER_RADIUS } from '../../components/Library/SearchPoster';
 import { useDebounce } from '../../hooks/useDebounce';
 import { RootStackParamList } from '../../navigation/types';
 import { metrics } from '../../theme/metrics';
@@ -285,7 +285,7 @@ export const SearchScreen: React.FC = () => {
           />
         )
       ) : (isLoading || (isFetching && allResults.length === 0)) && debouncedQuery.trim().length > 1 ? (
-        <PosterGridSkeleton count={9} />
+        <PosterGridSkeleton count={9} columns={numColumns} gap={gap} tileWidth={cardWidth} tileRadius={SEARCH_POSTER_RADIUS} labels horizontalPadding={metrics.screenHorizontalPadding} />
       ) : isError && allResults.length === 0 ? (
         <View style={styles.centerState}>
           <Ionicons name="alert-circle-outline" size={48} color={colors.error} />

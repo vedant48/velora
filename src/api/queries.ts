@@ -36,7 +36,7 @@ export const STALE_TIME = 10 * 60 * 1000; // 10 minutes cache freshness
 export const GC_TIME = 60 * 60 * 1000; // 1 hour garbage collection
 
 // Helper to normalize Movie or TV array to MediaItem[]
-function normalizeMedia(items: any[], type?: 'movie' | 'tv'): MediaItem[] {
+export function normalizeMedia(items: any[], type?: 'movie' | 'tv'): MediaItem[] {
   return items.map((item) => ({
     id: item.id,
     media_type: type || item.media_type || (item.title ? 'movie' : 'tv'),

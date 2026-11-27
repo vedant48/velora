@@ -23,15 +23,84 @@ export const RowsSkeleton: React.FC<{ count?: number; avatar?: boolean }> = Reac
 ));
 RowsSkeleton.displayName = 'RowsSkeleton';
 
+interface PosterGridSkeletonProps {
+  count?: number;
+  /** When set with `columns`, tiles match the caller's real poster cards exactly
+   *  (search results, library grids) instead of the generic fixed-size cards. */
+  tileWidth?: number;
+  columns?: number;
+  gap?: number;
+  tileRadius?: number;
+  /** Centered title/year bars under each tile, matching cards that render labels. */
+  labels?: boolean;
+  horizontalPadding?: number;
+}
+
 /** Poster cards in a wrapped grid (genre, search, collections, library, profile). */
-export const PosterGridSkeleton: React.FC<{ count?: number }> = React.memo(({ count = 6 }) => (
-  <View accessibilityRole="progressbar" accessibilityLabel="Loading" accessibilityState={{ busy: true }} style={styles.grid}>
-    {Array.from({ length: count }, (_, i) => (
-      <MovieCardSkeleton key={i} />
-    ))}
-  </View>
-));
+export const PosterGridSkeleton: React.FC<PosterGridSkeletonProps> = React.memo(({
+  count = 6,
+  tileWidth,
+  columns,
+  gap = ui.space.md,
+  tileRadius = ui.radius.card,
+  labels = false,
+  horizontalPadding = ui.space.lg,
+}) => {
+  if (tileWidth == null || !columns) {
+    return (
+      <View accessibilityRole="progressbar" accessibilityLabel="Loading" accessibilityState={{ busy: true }} style={styles.grid}>
+        {Array.from({ length: count }, (_, i) => (
+          <MovieCardSkeleton key={i} />
+        ))}
+      </View>
+    );
+  }
+  return (
+    <View
+      accessibilityRole="progressbar"
+      accessibilityLabel="Loading"
+      accessibilityState={{ busy: true }}
+      style={[styles.tileGrid, { rowGap: gap, columnGap: gap, paddingHorizontal: horizontalPadding }]}
+    >
+      {Array.from({ length: count }, (_, i) => (
+        <View key={i} style={{ width: tileWidth }}>
+          <Shimmer style={{ width: tileWidth, aspectRatio: 2 / 3 }} borderRadius={tileRadius} />
+          {labels && (
+            <>
+              <Shimmer style={styles.tileLabel} borderRadius={4} />
+              <Shimmer style={styles.tileYear} borderRadius={3} />
+            </>
+          )}
+        </View>
+      ))}
+    </View>
+  );
+});
 PosterGridSkeleton.displayName = 'PosterGridSkeleton';
+
+/** Library Want/Watched grid: 2-column poster-only tiles, exactly the LibraryCard
+ *  footprint (no label bars - the real cards are poster only). */
+export const LibraryGridSkeleton: React.FC<{ count?: number }> = React.memo(({ count = 6 }) => {
+  const g = ui.component.libraryGrid;
+  // Row renders inside the list's horizontalPadding; each cell adds cellPadding,
+  // same as the real gridCell + LibraryCard pair.
+  const cellWidth = Math.floor((metrics.screenWidth - g.horizontalPadding * 2) / 2);
+  return (
+    <View
+      accessibilityRole="progressbar"
+      accessibilityLabel="Loading"
+      accessibilityState={{ busy: true }}
+      style={styles.libraryGrid}
+    >
+      {Array.from({ length: count }, (_, i) => (
+        <View key={i} style={{ width: cellWidth, padding: g.cellPadding }}>
+          <Shimmer style={{ width: '100%', aspectRatio: 2 / 3 }} borderRadius={g.posterRadius} />
+        </View>
+      ))}
+    </View>
+  );
+});
+LibraryGridSkeleton.displayName = 'LibraryGridSkeleton';
 
 /** One carousel row of poster cards. */
 export const PosterRowSkeleton: React.FC<{ cardWidth?: number; cardHeight?: number }> = React.memo(
@@ -82,6 +151,10 @@ const styles = StyleSheet.create({
   lineTall: { width: '70%', height: sk.rowLineTall },
   lineShort: { width: '45%', height: sk.rowLineShort },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: ui.space.md, padding: ui.space.lg },
+  tileGrid: { flexDirection: 'row', flexWrap: 'wrap' },
+  tileLabel: { width: '70%', height: 11, marginTop: 6, alignSelf: 'center' },
+  tileYear: { width: '35%', height: 9, marginTop: 4, alignSelf: 'center' },
+  libraryGrid: { flexDirection: 'row', flexWrap: 'wrap' },
   posterRow: { paddingHorizontal: ui.space.lg },
   pills: { flexDirection: 'row', gap: ui.space.md, paddingVertical: ui.space.lg },
   pill: { width: sk.pillWidth, height: sk.pillHeight },

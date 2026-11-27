@@ -5,6 +5,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { warmProxy } from './src/api/client';
 import { AnimatedSplash } from './src/components/Splash/AnimatedSplash';
 import { AppNavigator } from './src/navigation/AppNavigator';
 import { AuthProvider } from './src/state/AuthContext';
@@ -45,6 +46,9 @@ function ThemedApp() {
     nativeSplashHidden.current = true;
     SplashScreen.hideAsync().catch(() => undefined);
   }, []);
+
+  // Wake the TMDB proxy while the splash is up, not when the first screen asks.
+  useEffect(() => { warmProxy(); }, []);
 
   useEffect(() => {
     // Safety net only. The splash overlay hides the native layer itself once

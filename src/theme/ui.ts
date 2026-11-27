@@ -62,6 +62,7 @@ export const ui = {
       topPadding: 14,
       bottomPadding: 100,
       cellPadding: 6,
+      posterRadius: 12,
     },
     libraryFilters: {
       gap: 10,

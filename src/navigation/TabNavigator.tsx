@@ -4,7 +4,7 @@ import { BlurView } from 'expo-blur';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { MoviesExploreScreen, TVExploreScreen, AllExploreScreen } from '../screens/Home/ExploreScreen';
+import { ExploreScreen } from '../screens/Home/ExploreScreen';
 import { SearchScreen } from '../screens/Search/SearchScreen';
 import { MainTabParamList } from './types';
 // WatchlistScreen import removed with the tab (user direction 21 Nov: Want is
@@ -51,16 +51,12 @@ export const TabNavigator: React.FC = () => {
         tabBarIcon: ({ color, focused, size }) => {
           let iconName: keyof typeof Ionicons.glyphMap = 'home';
 
-          if (route.name === 'HomeTab') {
-            iconName = focused ? 'film' : 'film-outline';
+          if (route.name === 'ExploreTab') {
+            iconName = focused ? 'flash' : 'flash-outline';
           } else if (route.name === 'SearchTab') {
             iconName = focused ? 'search' : 'search-outline';
           } else if (route.name === 'ProfileTab') {
             iconName = focused ? 'person' : 'person-outline';
-          } else if (route.name === 'TVTab') {
-            iconName = focused ? 'tv' : 'tv-outline';
-          } else if (route.name === 'ExploreAllTab') {
-            iconName = focused ? 'flash' : 'flash-outline';
           } else if (route.name === 'DebugTab') {
             iconName = focused ? 'speedometer' : 'speedometer-outline';
           }
@@ -78,13 +74,7 @@ export const TabNavigator: React.FC = () => {
         component={LibraryScreen}
         options={{ tabBarLabel: 'Home', tabBarAccessibilityLabel: 'Home' }}
       />
-      <Tab.Screen
-        name="HomeTab"
-        component={MoviesExploreScreen}
-        options={{ tabBarLabel: 'Movies', tabBarAccessibilityLabel: 'Explore Movies' }}
-      />
-      <Tab.Screen name="TVTab" component={TVExploreScreen} options={{ tabBarLabel: 'Series', tabBarAccessibilityLabel: 'Explore TV Series' }} />
-      <Tab.Screen name="ExploreAllTab" component={AllExploreScreen} options={{ tabBarLabel: 'Explore', tabBarAccessibilityLabel: 'Explore All' }} />
+      <Tab.Screen name="ExploreTab" component={ExploreScreen} options={{ tabBarLabel: 'Explore', tabBarAccessibilityLabel: 'Explore' }} />
       <Tab.Screen
         name="SearchTab"
         component={SearchScreen}

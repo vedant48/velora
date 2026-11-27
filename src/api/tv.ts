@@ -87,6 +87,11 @@ export async function getSeasonEpisodes(
   return data.episodes || [];
 }
 
+export async function getTVRecommendations(id: number, signal?: AbortSignal): Promise<TVSeries[]> {
+  const data = await proxyGet<TMDBResponse<TVSeries>>(`/v1/tmdb/3/tv/${id}/recommendations`, { signal });
+  return data.results || [];
+}
+
 export async function getTVWatchProviders(
   seriesId: number,
   signal?: AbortSignal
