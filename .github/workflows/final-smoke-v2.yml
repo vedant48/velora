@@ -1,0 +1,130 @@
+name: Final binary smoke v2 (published v1.5.17, artifact upload, honest status)
+on:
+  push:
+    branches: [test/ui-proof-1517]
+    paths: ['.github/workflows/final-smoke-v2.yml']
+permissions:
+  contents: write
+  actions: read
+jobs:
+  ui:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Maestro
+        run: curl -Ls "https://get.maestro.mobile.dev" | bash
+      - name: Enable emulator acceleration
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules && sudo udevadm trigger --name-match=kvm
+      - name: Write harness (test only, no app code touched)
+        run: |
+          mkdir -p .ci proof
+          cat > .ci/smoke2.yaml <<'EOF'
+          appId: com.vedant.velora
+          ---
+          - launchApp:
+              clearState: false
+          - extendedWaitUntil:
+              visible: "Log in / Sign up"
+              timeout: 25000
+          - takeScreenshot: v1-launch-home
+          - tapOn: "Movies"
+          - waitForAnimationToEnd:
+              timeout: 8000
+          - takeScreenshot: v2-movies-tab
+          - scroll
+          - takeScreenshot: v3-movies-scrolled
+          - tapOn:
+              text: "Details"
+              optional: true
+          - waitForAnimationToEnd:
+              timeout: 9000
+          - takeScreenshot: v4-after-details-tap
+          - scroll
+          - scroll
+          - takeScreenshot: v5-details-scrolled
+          - back
+          - tapOn: "Series"
+          - waitForAnimationToEnd:
+              timeout: 8000
+          - takeScreenshot: v6-series-tab
+          - tapOn:
+              text: "Details"
+              optional: true
+          - waitForAnimationToEnd:
+              timeout: 9000
+          - takeScreenshot: v7-series-after-details
+          - scroll
+          - scroll
+          - takeScreenshot: v8-series-details-scrolled
+          - back
+          - tapOn: "Explore"
+          - waitForAnimationToEnd:
+              timeout: 8000
+          - takeScreenshot: v9-explore
+          - tapOn: "Search"
+          - waitForAnimationToEnd:
+              timeout: 6000
+          - takeScreenshot: v10-search
+          - tapOn: "Home"
+          - waitForAnimationToEnd:
+              timeout: 6000
+          - takeScreenshot: v11-home-again
+          EOF
+          cat > .ci/smoke2.sh <<'EOF'
+          #!/usr/bin/env bash
+          set -uo pipefail
+          export PATH="$PATH:$HOME/.maestro/bin"
+          adb shell wm size 720x1600; adb shell wm density 320
+          python3 scripts/emulator-ready.py || true
+          B=https://github.com/vedant48/velora/releases/download
+          curl -fsSL -o proof/v1.5.16.apk $B/v1.5.16/velora-v1.5.16.apk
+          curl -fsSL -o proof/v1.5.17.apk $B/v1.5.17/velora-v1.5.17.apk
+          sha256sum proof/v1.5.1[67].apk | tee proof/sha.txt
+          curl -fsSL $B/v1.5.17/velora-v1.5.17-checksums.txt | tee proof/release-checksums.txt
+          adb install proof/v1.5.16.apk 2>&1 | tee proof/install-1516.txt
+          adb install -r proof/v1.5.17.apk 2>&1 | tee proof/install-over-1517.txt
+          adb shell dumpsys package com.vedant.velora | grep -E "versionCode|versionName|lastUpdateTime|firstInstallTime|requested permissions|android.permission" | tee proof/dump-after.txt
+          adb shell am force-stop com.vedant.velora
+          maestro test --format junit --output proof/smoke.xml --test-output-dir proof/smoke .ci/smoke2.yaml > proof/maestro-out.txt 2>&1
+          echo $? > proof/maestro-exit.txt
+          adb exec-out screencap -p > proof/final-screen.png || true
+          adb logcat -d | grep -iE "FATAL EXCEPTION|ReactNativeJS.*Error|ANR in" | head -20 > proof/crashes.txt || true
+          rm -f proof/*.apk
+          exit 0
+          EOF
+      - uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          target: google_apis
+          arch: x86_64
+          profile: pixel_2
+          ram-size: 3072
+          disable-animations: false
+          emulator-options: -no-window -gpu swiftshader -no-snapshot -noaudio -no-boot-anim
+          script: bash .ci/smoke2.sh
+      - name: Upload evidence artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke2-${{ github.run_id }}-${{ github.run_attempt }}
+          path: proof
+          retention-days: 14
+      - name: Publish evidence branch (unique name)
+        if: always()
+        run: |
+          git config user.email ci@velora.local; git config user.name velora-ci
+          EV=$(mktemp -d); git worktree add --detach "$EV"
+          N=ci-evidence/smoke2-${{ github.run_id }}-${{ github.run_attempt }}
+          git -C "$EV" checkout --orphan "$N"
+          git -C "$EV" rm -rf . >/dev/null 2>&1 || true
+          cp -r proof "$EV/" 2>/dev/null || true
+          printf 'run_id=%s\nattempt=%s\ncommit=%s\n' "${{ github.run_id }}" "${{ github.run_attempt }}" "$GITHUB_SHA" > "$EV/META.txt"
+          git -C "$EV" add -A; git -C "$EV" commit -m "smoke2 evidence"
+          git -C "$EV" push origin "HEAD:$N"
+      - name: Fail honestly if the Maestro flow failed
+        if: always()
+        run: |
+          test "$(cat proof/maestro-exit.txt 2>/dev/null || echo 99)" = "0"
