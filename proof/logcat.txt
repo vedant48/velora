@@ -1,0 +1,482 @@
+--------- beginning of system
+11-27 12:29:10.999   556  1884 D BiometricService/PreAuthInfo: Package: com.google.android.gms Sensor ID: 4 Modality: 8 Status: 7
+11-27 12:29:10.999   556  1884 D BiometricService/PreAuthInfo: getCanAuthenticateInternal Modality: 8 AuthenticatorStatus: 7
+11-27 12:29:10.999   556  1884 D AuthService: canAuthenticate, userId: 0, callingUserId: 0, authenticators: 255, result: 11
+--------- beginning of main
+11-27 12:29:11.002   906   906 D PersistedStoragePackageUninstalledReceiver: Received android.intent.action.PACKAGE_FULLY_REMOVED for dev.mobile.maestro for u0
+11-27 12:29:11.022   556   868 D ShortcutService: Saving package item com.android.systemui to /data/system_ce/0/shortcut_service/launchers/com.android.systemui0.xml
+11-27 12:29:11.022  1398  1875 D MediaGrants: Removed 0 media_grants for 0 user for [dev.mobile.maestro.test]. Reason: Package orphaned
+11-27 12:29:11.031   358   358 D Zygote  : Forked child process 4511
+11-27 12:29:11.042  1398  1875 I MediaProvider: End Intent { act=android.intent.action.PACKAGE_FULLY_REMOVED dat=package: flg=0x5000010 cmp=com.google.android.providers.media.module/com.android.providers.media.MediaService (has extras) }
+11-27 12:29:11.068  4511  4511 I externalstorage: Using CollectorTypeCMC GC.
+11-27 12:29:11.068   556   598 W ActivityManager: Slow operation: 75ms so far, now at startProcess: done updating battery stats
+11-27 12:29:11.068   556   598 W ActivityManager: Slow operation: 75ms so far, now at startProcess: building log message
+11-27 12:29:11.068   556   598 I ActivityManager: Start proc 4511:com.android.externalstorage/u0a104 for content provider {com.android.externalstorage/com.android.externalstorage.ExternalStorageProvider}
+11-27 12:29:11.068   556   598 W ActivityManager: Slow operation: 76ms so far, now at startProcess: starting to update pids map
+11-27 12:29:11.069  4511  4511 W externalstorage: Unexpected CPU variant for x86: x86_64.
+11-27 12:29:11.069  4511  4511 W externalstorage: Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, goldmont-without-sha-xsaves, tremont, kabylake, default
+11-27 12:29:11.074  4511  4511 E externalstorage: Not starting debugger since process cannot load the jdwp agent.
+11-27 12:29:11.078   556  1890 D BiometricService: canAuthenticate: User=0, Caller=0, Authenticators=32768
+11-27 12:29:11.078   556  1890 D BiometricService/PreAuthInfo: getCanAuthenticateInternal Modality: 1 AuthenticatorStatus: 9
+11-27 12:29:11.078   556  1890 D AuthService: canAuthenticate, userId: 0, callingUserId: 0, authenticators: 32768, result: 11
+11-27 12:29:11.078   556   598 W ActivityManager: Slow operation: 85ms so far, now at startProcess: done updating pids map
+11-27 12:29:11.095  1376  3337 I Fido    : [FidoV2EnrollmentController] Attempting to enroll Autofill Keystore keys
+11-27 12:29:11.110  1376  3337 I Fido    : [FidoV2EnrollmentController] No screen lock set.
+11-27 12:29:11.113  4511  4511 D nativeloader: Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok
+11-27 12:29:11.118  1376  4507 I Blockstore: [DataStoreImpl] Clearing all the restore credential for 1 packages [CONTEXT service_id=258 ]
+11-27 12:29:11.118  1376  4507 W Blockstore: [DataStoreImpl] Does not contain gms package key space. [CONTEXT service_id=258 ]
+11-27 12:29:11.119  1376  4507 I Blockstore: [PackageIntentOperation] Deleted restore credential for package dev.mobile.maestro is successful: true [CONTEXT service_id=258 ]
+11-27 12:29:11.119  1376  4507 I Blockstore: [DataStoreImpl] Clearing all the Blockstore Data for package dev.mobile.maestro [CONTEXT service_id=258 ]
+11-27 12:29:11.119  1376  4507 I Blockstore: [DataStoreImpl] Clearing all the Blockstore Data for 1 packages [CONTEXT service_id=258 ]
+11-27 12:29:11.119  1376  4507 I Blockstore: [DataStoreImpl] Removing Blockstore data for packages [dev.mobile.maestro] [CONTEXT service_id=258 ]
+11-27 12:29:11.129  1162  1162 D LauncherAppsCallbackImpl: package removed received dev.mobile.maestro.test
+11-27 12:29:11.130  1162  1221 D PackageUpdatedTask: Package updated: mOp=REMOVE packages=[dev.mobile.maestro.test]
+11-27 12:29:11.130  1162  1221 D PackageUpdatedTask: REMOVE: removing package=dev.mobile.maestro.test
+11-27 12:29:11.130   556  1019 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
+11-27 12:29:11.130  1162  1221 D PackageUpdatedTask: OP_REMOVE: removing packages=[dev.mobile.maestro.test]
+11-27 12:29:11.131  1162  1221 D ModelWriter: removing items from db . Reason: [removed because the corresponding package or component is removed. mOp=3 removedPackages=[dev.mobile.maestro.test] removedComponents=[]]
+11-27 12:29:11.132  1192  1192 I Fido    : [AuthenticatorChimeraService] Unregistered the broadcast receiver [CONTEXT service_id=287 ]
+11-27 12:29:11.133   556  1019 D PackageManager: Clear ephemeral installer activity
+11-27 12:29:11.133  4503  4503 W BpBinder: Linking to death on android.gui.ISurfaceComposer but there are no threads (yet?) listening to incoming transactions. See ProcessState::startThreadPool and ProcessState::setThreadPoolMaxThreadCount. Generally you should setup the binder threadpool before other initialization steps.
+11-27 12:29:11.134  4503  4503 W ProcessState: Extra binder thread started, but 0 threads requested. Do not use *startThreadPool when zero threads are requested.
+11-27 12:29:11.140  1436  1436 I AiAiEcho: AppFetcherImplV2 onPackageRemoved dev.mobile.maestro.test.
+11-27 12:29:11.145   556  1884 D SafetySourceDataValidat: No cert check requested for package com.google.android.permissioncontroller
+11-27 12:29:11.150  1699  2242 W SearchServiceCore: Abort, client detached.
+--------- beginning of kernel
+11-27 12:29:11.284     0     0 I servicemanager: Caller(pid=4503,uid=2000,sid=u:r:shell:s0) Could not find android.hardware.graphics.allocator.IAllocator/default in the VINTF manifest. No alternative instances declared in VINTF.
+11-27 12:29:11.165   906   906 D PersistedStoragePackageUninstalledReceiver: Received android.intent.action.PACKAGE_FULLY_REMOVED for dev.mobile.maestro.test for u0
+11-27 12:29:11.172   556  1814 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
+11-27 12:29:11.178   556  1814 D PackageManager: Clear ephemeral installer activity
+11-27 12:29:11.180  1376  3337 I SpotInitializer: All Finder use cases are disabled. [CONTEXT service_id=284 ]
+11-27 12:29:11.182   145   145 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.mapper@4.0::IMapper/default in either framework or device VINTF manifest.
+11-27 12:29:11.183  4503  4521 I Gralloc4: mapper 4.x is not supported
+11-27 12:29:11.193   556  1885 I AppWidgetServiceImpl: getInstalledProvidersForProfiles() 0
+11-27 12:29:11.200   556  1885 W ParceledListSlice: Element #25 is 19828 bytes.
+11-27 12:29:11.200   556  1885 W ParceledListSlice: Element #26 is 19864 bytes.
+11-27 12:29:11.201   556  1578 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
+11-27 12:29:11.201   556  1578 D PackageManager: Clear ephemeral installer activity
+11-27 12:29:11.201   556  1345 W ParceledListSlice: Element #27 is 19708 bytes.
+11-27 12:29:11.201   556  1345 W ParceledListSlice: Element #28 is 19616 bytes.
+11-27 12:29:11.201   556  1345 W ParceledListSlice: Element #29 is 19728 bytes.
+11-27 12:29:11.202  1436  1852 W PackageManager: Failure retrieving text 0x7f130786 in package com.android.systemui
+11-27 12:29:11.202  1436  1852 W PackageManager: android.content.res.Resources$NotFoundException: String resource ID #0x7f130786
+11-27 12:29:11.202  1436  1852 W PackageManager: 	at android.content.res.Resources.getText(Resources.java:466)
+11-27 12:29:11.202  1436  1852 W PackageManager: 	at android.app.ApplicationPackageManager.getText(ApplicationPackageManager.java:2405)
+11-27 12:29:11.202  1436  1852 W PackageManager: 	at android.appwidget.AppWidgetProviderInfo.loadDescription(AppWidgetProviderInfo.java:484)
+11-27 12:29:11.202  1436  1852 W PackageManager: 	at kml.a(PG:341)
+11-27 12:29:11.202  1436  1852 W PackageManager: 	at kmg.b(PG:82)
+11-27 12:29:11.202  1436  1852 W PackageManager: 	at aaer.g(PG:13)
+11-27 12:29:11.202  1436  1852 W PackageManager: 	at kotlinx.coroutines.DispatchedTask.run(PG:114)
+11-27 12:29:11.202  1436  1852 W PackageManager: 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+11-27 12:29:11.202  1436  1852 W PackageManager: 	at wqm.a(PG:3)
+11-27 12:29:11.202  1436  1852 W PackageManager: 	at wpo.run(PG:21)
+11-27 12:29:11.202  1436  1852 W PackageManager: 	at wqn.run(PG:5)
+11-27 12:29:11.202  1436  1852 W PackageManager: 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+11-27 12:29:11.202  1436  1852 W PackageManager: 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+11-27 12:29:11.202  1436  1852 W PackageManager: 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:307)
+11-27 12:29:11.202  1436  1852 W PackageManager: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-27 12:29:11.202  1436  1852 W PackageManager: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-27 12:29:11.202  1436  1852 W PackageManager: 	at hqv.run(PG:221)
+11-27 12:29:11.202  1436  1852 W PackageManager: 	at java.lang.Thread.run(Thread.java:1012)
+11-27 12:29:11.203  1436  1632 I AiAiEcho: [pnb-agg] Reload pnb aggregation on events deleted
+11-27 12:29:11.204  1436  1632 I AiAiEcho: [pnb-agg] pnb aggregation disabled.
+11-27 12:29:11.204  1192  4508 I NetworkScheduler.Stats: Task com.google.android.gms/com.google.android.gms.droidguard.DroidGuardGcmTaskService started execution. cause:7 exec_start_elapsed_seconds: 162 [CONTEXT service_id=218 ]
+11-27 12:29:11.209   556  1507 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
+11-27 12:29:11.211   556  1507 D PackageManager: Clear ephemeral installer activity
+11-27 12:29:11.214  1436  1852 I AiAiEcho: EchoSearch: WidgetFetcherImpl is initialized with [33] widgets [reason=package removed for userId: 0]
+11-27 12:29:11.227  4511  4511 D nativeloader: Configuring clns-shared-7 for other apk /system/priv-app/ExternalStorageProvider/ExternalStorageProvider.apk. target_sdk_version=35, uses_libraries=, library_path=/system/priv-app/ExternalStorageProvider/lib/x86_64:/system/lib64:/system_ext/lib64, permitted_path=/data:/mnt/expand:/data/user/0/com.android.externalstorage:/system/priv-app/ExternalStorageProvider:/system/lib64:/system_ext/lib64
+11-27 12:29:11.228  4511  4511 D CompatChangeReporter: Compat change id reported: 202956589; UID 10104; state: ENABLED
+11-27 12:29:11.250  4511  4511 V GraphicsEnvironment: Currently set values for:
+11-27 12:29:11.250  4511  4511 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
+11-27 12:29:11.250  4511  4511 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
+11-27 12:29:11.250  4511  4511 V GraphicsEnvironment: Global.Settings values are invalid: number of packages: 0, number of values: 0
+11-27 12:29:11.250  4511  4511 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+11-27 12:29:11.263  4479  4482 I VirtualizationService: virtualizationservice::aidl: ignoring packageRemoved(user_id=0, app_id=10211)
+11-27 12:29:11.263   556   587 I DropBoxManagerService: add tag=system_server_strictmode isTagEnabled=true flags=0x2
+11-27 12:29:11.267  1449  1454 I hbox:interactor: JIT allocated 54KB for compiled code of java.lang.Object com.google.android.apps.gsa.binaries.velvet.app.arq.r()
+11-27 12:29:11.268  1449  1454 I hbox:interactor: Compiler allocated 5672KB to compile java.lang.Object com.google.android.apps.gsa.binaries.velvet.app.arq.r()
+11-27 12:29:11.270  1192  4505 I ProximityAuth: [RecentAppsMediator] Package removed: (user=UserHandle{0}) dev.mobile.maestro
+11-27 12:29:11.280  1376  4539 I Icing   : doRemovePackageData dev.mobile.maestro
+11-27 12:29:11.290   556  1507 D ActivityManager: sync unfroze 2188 com.google.android.gms.unstable for 6
+11-27 12:29:11.303  4511  4511 D ExternalStorage: After updating volumes, found 1 active roots
+11-27 12:29:11.311   556  1884 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
+11-27 12:29:11.313   556  1884 D PackageManager: Clear ephemeral installer activity
+11-27 12:29:11.315  2421  4497 W oid.documentsui: Long monitor contention with owner pool-17-thread-1 (4496) at void com.android.documentsui.roots.ProvidersCache$MultiProviderUpdateTask.handleDocumentsProvider(android.content.pm.ProviderInfo, com.android.documentsui.base.UserId)(ProvidersCache.java:648) waiters=0 in void com.android.documentsui.roots.ProvidersCache$MultiProviderUpdateTask.handleDocumentsProvider(android.content.pm.ProviderInfo, com.android.documentsui.base.UserId) for 334ms
+11-27 12:29:11.316  2421  4498 W oid.documentsui: Long monitor contention with owner pool-17-thread-1 (4496) at void com.android.documentsui.roots.ProvidersCache$MultiProviderUpdateTask.handleDocumentsProvider(android.content.pm.ProviderInfo, com.android.documentsui.base.UserId)(ProvidersCache.java:648) waiters=1 in void com.android.documentsui.roots.ProvidersCache$MultiProviderUpdateTask.handleDocumentsProvider(android.content.pm.ProviderInfo, com.android.documentsui.base.UserId) for 335ms
+11-27 12:29:11.317  2421  4500 W oid.documentsui: Long monitor contention with owner pool-17-thread-1 (4496) at void com.android.documentsui.roots.ProvidersCache$MultiProviderUpdateTask.handleDocumentsProvider(android.content.pm.ProviderInfo, com.android.documentsui.base.UserId)(ProvidersCache.java:648) waiters=3 in void com.android.documentsui.roots.ProvidersCache$MultiProviderUpdateTask.handleDocumentsProvider(android.content.pm.ProviderInfo, com.android.documentsui.base.UserId) for 336ms
+11-27 12:29:11.317  2421  4501 W oid.documentsui: Long monitor contention with owner pool-17-thread-1 (4496) at void com.android.documentsui.roots.ProvidersCache$MultiProviderUpdateTask.handleDocumentsProvider(android.content.pm.ProviderInfo, com.android.documentsui.base.UserId)(ProvidersCache.java:648) waiters=4 in void com.android.documentsui.roots.ProvidersCache$MultiProviderUpdateTask.handleDocumentsProvider(android.content.pm.ProviderInfo, com.android.documentsui.base.UserId) for 336ms
+11-27 12:29:11.324  1376  3337 I Blockstore: [DataStoreImpl] Clearing all the restore credential for 1 packages [CONTEXT service_id=258 ]
+11-27 12:29:11.326  1376  3337 W Blockstore: [DataStoreImpl] Does not contain gms package key space. [CONTEXT service_id=258 ]
+11-27 12:29:11.330  1376  3337 I Blockstore: [PackageIntentOperation] Deleted restore credential for package dev.mobile.maestro.test is successful: true [CONTEXT service_id=258 ]
+11-27 12:29:11.330   556   967 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
+11-27 12:29:11.330   556   967 D PackageManager: Clear ephemeral installer activity
+11-27 12:29:11.331  1376  3337 I Blockstore: [DataStoreImpl] Clearing all the Blockstore Data for package dev.mobile.maestro.test [CONTEXT service_id=258 ]
+11-27 12:29:11.331  1376  3337 I Blockstore: [DataStoreImpl] Clearing all the Blockstore Data for 1 packages [CONTEXT service_id=258 ]
+11-27 12:29:11.331  1376  3337 I Blockstore: [DataStoreImpl] Removing Blockstore data for packages [dev.mobile.maestro.test] [CONTEXT service_id=258 ]
+11-27 12:29:11.331   556  1507 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
+11-27 12:29:11.331   556  1507 D PackageManager: Clear ephemeral installer activity
+11-27 12:29:11.334   556  1507 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
+11-27 12:29:11.334   556  1507 D PackageManager: Clear ephemeral installer activity
+11-27 12:29:11.335   556  1345 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
+11-27 12:29:11.335   556  1345 D PackageManager: Clear ephemeral installer activity
+11-27 12:29:11.336   556  1345 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
+11-27 12:29:11.336   556  1345 D PackageManager: Clear ephemeral installer activity
+11-27 12:29:11.337   556  1345 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
+11-27 12:29:11.337   556  1345 D PackageManager: Clear ephemeral installer activity
+11-27 12:29:11.337   556  1345 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
+11-27 12:29:11.337   556  1345 D PackageManager: Clear ephemeral installer activity
+11-27 12:29:11.338   556  1345 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
+11-27 12:29:11.338   556  1345 D PackageManager: Clear ephemeral installer activity
+11-27 12:29:11.338   556  1345 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
+11-27 12:29:11.338   556  1345 D PackageManager: Clear ephemeral installer activity
+11-27 12:29:11.338   556  1345 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
+11-27 12:29:11.338   556  1345 D PackageManager: Clear ephemeral installer activity
+11-27 12:29:11.339   556  1345 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
+11-27 12:29:11.339   556  1345 D PackageManager: Clear ephemeral installer activity
+11-27 12:29:11.340  1376  4544 W ChimeraUtils: Module com.google.android.gms.growth missing resource growth_module_display_name(0)
+11-27 12:29:11.342  1376  4544 W ChimeraUtils: Module com.google.android.gms.growth missing resource growth_module_display_name(0)
+11-27 12:29:11.342  1192  3926 I NetworkScheduler.Stats: Task com.google.android.gms/com.google.android.gms.droidguard.DroidGuardGcmTaskService finished executing. cause:7 result: 1 elapsed_millis: 474 uptime_millis: 474 exec_start_elapsed_seconds: 162 [CONTEXT service_id=218 ]
+11-27 12:29:11.345  1376  4490 I HomeStub: Updating Home module request state at home stub update [CONTEXT service_id=336 ]
+11-27 12:29:11.345  1376  4490 I HomeStubModuleLoader: No requirement for Home module found. [CONTEXT service_id=336 ]
+11-27 12:29:11.345  1376  4490 W SystemServiceRegistry: No service published for: thread_network
+11-27 12:29:11.345  1376  4490 I HomeStubModuleLoader: Not downloading Thread module: Thread feature not available. [CONTEXT service_id=336 ]
+11-27 12:29:11.345  1376  4490 I HomeStub: Updating Home module request state at home stub init [CONTEXT service_id=336 ]
+11-27 12:29:11.345  1376  4490 I HomeStubModuleLoader: No requirement for Home module found. [CONTEXT service_id=336 ]
+11-27 12:29:11.345  1376  4490 W SystemServiceRegistry: No service published for: thread_network
+11-27 12:29:11.345  1376  4490 I HomeStubModuleLoader: Not downloading Thread module: Thread feature not available. [CONTEXT service_id=336 ]
+11-27 12:29:11.346   356  4545 I resolv  : GetAddrInfoHandler::run: {100 786532 100 983140 10143 0}
+11-27 12:29:11.346   356  4546 I resolv  : res_nmkquery: (QUERY, IN, AAAA)
+11-27 12:29:11.346   356  4546 I resolv  : resolv_cache_lookup: FOUND IN CACHE entry=0x722543452190
+11-27 12:29:11.346   356  4546 I resolv  : doQuery: rcode=0, ancount=8, return value=260
+11-27 12:29:11.346   356  4547 I resolv  : res_nmkquery: (QUERY, IN, A)
+11-27 12:29:11.346   356  4547 I resolv  : resolv_cache_lookup: FOUND IN CACHE entry=0x7226d3458950
+11-27 12:29:11.346   356  4547 I resolv  : doQuery: rcode=0, ancount=8, return value=164
+11-27 12:29:11.351  2188  2312 I GMS_MM_Logger: Memory Metric Logging not allowed. Stopping.
+11-27 12:29:11.356  2188  2412 D TrafficStats: tagSocket(118) with statsTag=0x1803, statsUid=10143
+11-27 12:29:11.363  2188  2191 W id.gms.unstable: Missing inline cache for int fkid.a(java.lang.Object)
+11-27 12:29:11.368  1376  2639 I ebvk$a  : Unable to retrieve flag snapshot for com.google.android.gms.inappreach#com.google.android.gms, using defaults.
+11-27 12:29:11.392  1192  4505 I Fitness : FitCleanupIntentOperation received Intent android.intent.action.PACKAGE_REMOVED [CONTEXT service_id=17 ]
+11-27 12:29:11.397   356   405 I netd    : tetherGetStats() -> {[]} <0.26ms>
+11-27 12:29:11.399  1192  4487 I ProximityAuth: [RecentAppsMediator] Package removed: (user=UserHandle{0}) dev.mobile.maestro.test
+11-27 12:29:11.403  1376  4540 I Icing   : doRemovePackageData dev.mobile.maestro.test
+11-27 12:29:11.416  1192  4550 I Fitness : FitCleanupIntentOperation received Intent android.intent.action.PACKAGE_REMOVED [CONTEXT service_id=17 ]
+11-27 12:29:11.421   556  1345 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
+11-27 12:29:11.421   556  1345 D PackageManager: Clear ephemeral installer activity
+11-27 12:29:11.422  1192  4508 I AlarmManager: setExactAndAllowWhileIdle [name: GCM_CONN_ALARM type: 2 triggerAtMillis: 185572]
+11-27 12:29:11.426  1376  2356 I Icing   : MaintenanceDriver: Registering all GCM Tasks.
+11-27 12:29:11.440  1376  1376 D BoundBrokerSvc: onBind: Intent { act=com.google.android.gms.feedback.internal.IFeedbackService dat=chimera-action:/... cmp=com.google.android.gms/.chimera.GmsBoundBrokerService }
+11-27 12:29:11.440  1376  1376 D BoundBrokerSvc: Loading bound service for intent: Intent { act=com.google.android.gms.feedback.internal.IFeedbackService dat=chimera-action:/... cmp=com.google.android.gms/.chimera.GmsBoundBrokerService }
+11-27 12:29:11.441  1376  4491 W SQLiteLog: (28) double-quoted string literal: "dev.mobile.maestro"
+11-27 12:29:11.451  1376  4540 I Icing   : Indexing com.google.android.gms-internal.3p:MobileApplication from com.google.android.gms
+11-27 12:29:11.456  1376  4493 I TelephonySpamChimeraSer: Running Telephony Spam Chimera Service [CONTEXT service_id=150 ]
+11-27 12:29:11.460  1376  4491 W SQLiteLog: (28) double-quoted string literal: "dev.mobile.maestro.test"
+11-27 12:29:11.465  1376  2432 I NewModuleOp: Enable component: com.google.android.gms.languageprofile.GcmReceiverService [CONTEXT service_id=167 ]
+11-27 12:29:11.466   556  1013 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
+11-27 12:29:11.466   556  1013 D PackageManager: Clear ephemeral installer activity
+11-27 12:29:11.468  1376  4540 I Icing   : Indexing done com.google.android.gms-internal.3p:MobileApplication
+11-27 12:29:11.469  1376  2432 I NewModuleOp: Enable component: com.google.android.gms.languageprofile.GcmTaskService [CONTEXT service_id=167 ]
+11-27 12:29:11.469   556  1013 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
+11-27 12:29:11.469   556  1013 D PackageManager: Clear ephemeral installer activity
+11-27 12:29:11.474  1376  2432 I NewModuleOp: Schedule LanguageProfileGcmTaskChimeraService tasks. [CONTEXT service_id=167 ]
+11-27 12:29:11.474  1376  2432 I LPGcmTaskChimeraService: Scheduling sync task. [CONTEXT service_id=167 ]
+11-27 12:29:11.476  1376  2432 I GmsSyncPolicyEngine: Periodic sync 2 disabled by policy, cancelled.
+11-27 12:29:11.477  1376  2432 I GmsSyncPolicyEngine: Periodic sync 6 disabled
+11-27 12:29:11.492   556   666 I RoleService: Granting default roles...
+11-27 12:29:11.520   556  1507 I RemoteProvisionSysSvc: getRegistration(android.hardware.security.keymint.IRemotelyProvisionedComponent/default)
+11-27 12:29:11.651     0     0 I servicemanager: Caller(pid=170,uid=1017,sid=u:r:keystore:s0) Found android.hardware.security.keymint.IRemotelyProvisionedComponent/default in device VINTF manifest.
+11-27 12:29:11.523   556  1345 D FileUtils: Rounded bytes from 3121676288 to 4000000000
+11-27 12:29:11.526   556  1042 W Role    : Default holder doesn't have required signing certificate: com.google.android.retaildemo:6547c73dee150c103980bfdffe55cc9a011d785dd694a5f99afd8205bcaf1f80
+11-27 12:29:11.526   556  1042 E RoleControllerServiceImpl: Default/fallback role holder package doesn't qualify for the role, package: com.google.android.gms.supervision, role: android.app.role.SYSTEM_SUPERVISION
+11-27 12:29:11.527   556  1042 W Role    : Default holder doesn't have required signing certificate: com.google.android.apps.work.clouddpc:23962F4B43B9857638EA66F4D419518EAE282491ACDA4B94707BD59003C45E58
+11-27 12:29:11.548  2188  4541 W libc    : Access denied finding property "persist.adb.tls_server.enable"
+11-27 12:29:11.548  2188  4541 W libc    : Access denied finding property "service.adb.tls.port"
+11-27 12:29:11.550   556  1507 D ActivityManager: sync unfroze 2626 com.google.android.rkpdapp for 6
+11-27 12:29:11.540  2188  2188 W binder:2188_9: type=1400 audit(0.0:55): avc:  denied  { read } for  name="u:object_r:system_adbd_prop:s0" dev="tmpfs" ino=318 scontext=u:r:gmscore_app:s0:c512,c768 tcontext=u:object_r:system_adbd_prop:s0 tclass=file permissive=0 app=com.google.android.gms
+11-27 12:29:11.557   556   556 I RegistrationProxy: onServiceConnected: com.android.rkpdapp.service.RemoteProvisioningService
+11-27 12:29:11.548  2188  2188 W binder:2188_9: type=1400 audit(0.0:56): avc:  denied  { read } for  name="u:object_r:adbd_prop:s0" dev="tmpfs" ino=63 scontext=u:r:gmscore_app:s0:c512,c768 tcontext=u:object_r:adbd_prop:s0 tclass=file permissive=0 app=com.google.android.gms
+11-27 12:29:11.697     0     0 I servicemanager: Caller(pid=2626,uid=10202,sid=u:r:rkpdapp:s0:c202,c256,c512,c768) Found android.hardware.security.keymint.IRemotelyProvisionedComponent/default in device VINTF manifest.
+11-27 12:29:11.568   356  4553 I resolv  : GetAddrInfoHandler::run: {100 786532 100 983140 10143 0}
+11-27 12:29:11.568  2188  4541 D TrafficStats: tagSocket(126) with statsTag=0x1809, statsUid=-1
+11-27 12:29:11.574   556  1888 I RegistrationProxy: IGetRegistrationCallback.onSuccess
+11-27 12:29:11.575   556  1888 I RemoteProvisionSysSvc: Fetching key 10143 for client 231561014
+11-27 12:29:11.575   556  1888 I RegistrationProxy: getKeyAsync operation started with callback 180667959
+11-27 12:29:11.576  2626  4554 I RkpdRegistrationBinder: Key requested for : android.hardware.security.keymint.IRemotelyProvisionedComponent/default, clientUid: 1017, keyId: 10143, callback: 36741711
+11-27 12:29:11.579  2626  4554 I RkpdRegistrationBinder: Key successfully assigned to client
+11-27 12:29:11.580   556   556 I RemoteProvisionSysSvc: Successfully fetched key for client 231561014
+11-27 12:29:11.588   174   174 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 148: Using TAG_CERTIFICATE_NOT_BEFORE: 0
+11-27 12:29:11.588   174   174 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 154: Using TAG_CERTIFICATE_NOT_AFTER: 2461449600000
+11-27 12:29:11.588   174   174 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 159: Got certificate date params:  NotBefore = 0, NotAfter = 2461449600000
+11-27 12:29:11.588   174   174 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 273: Setting notBefore to 0
+11-27 12:29:11.588   174   174 D SoftKeymaster: system/keymaster/km_openssl/certificate_utils.cpp, Line 282: Setting notAfter to 2461449600
+11-27 12:29:11.717     0     0 I servicemanager: Caller(pid=170,uid=1017,sid=u:r:keystore:s0) Found android.hardware.security.keymint.IRemotelyProvisionedComponent/default in device VINTF manifest.
+11-27 12:29:11.595   556  1042 E RoleControllerServiceImpl: Default/fallback role holder package doesn't qualify for the role, package: com.google.android.gms, role: android.app.role.WALLET
+11-27 12:29:11.597   556  1345 D BiometricService: Sensor ID(0), oemStrength: 15, updatedStrength: 15, modality 2, state: 0, cookie: 0, sensorId 0, hasEnrollments: false cannot participate in Keystore operations
+11-27 12:29:11.597   556  1345 D BiometricService: Sensor ID(4), oemStrength: 15, updatedStrength: 15, modality 8, state: 0, cookie: 0, sensorId 4, hasEnrollments: false cannot participate in Keystore operations
+11-27 12:29:11.605  1192  3234 W GmsUrlRequestImpl: Content-Type header is overwritten.
+11-27 12:29:11.608   556  1042 E RoleControllerServiceImpl: Default/fallback role holder package doesn't qualify for the role, package: com.google.android.devicelockcontroller, role: android.app.role.SYSTEM_FINANCED_DEVICE_CONTROLLER
+11-27 12:29:11.612  1436  1684 W ogle.android.as: Long monitor contention with owner aiai-vc-0 (2084) at java.lang.Object ibk.b()(PG:48) waiters=0 in java.lang.Object ibk.b() for 341ms
+11-27 12:29:11.616  2188  2188 W IntentService[D: type=1400 audit(0.0:57): avc:  denied  { read } for  name="u:object_r:system_adbd_prop:s0" dev="tmpfs" ino=318 scontext=u:r:gmscore_app:s0:c512,c768 tcontext=u:object_r:system_adbd_prop:s0 tclass=file permissive=0 app=com.google.android.gms
+11-27 12:29:11.623   556   853 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_CHANGED on user 0
+11-27 12:29:11.624   556   868 D ShortcutService: received package broadcast intent: Intent { act=android.intent.action.PACKAGE_CHANGED dat=package: flg=0x45000010 (has extras) }
+11-27 12:29:11.624   556   868 D ShortcutService: changing package: com.google.android.gms userId0
+11-27 12:29:11.624   556   868 D ShortcutService: handlePackageChanged: com.google.android.gms user=0
+11-27 12:29:11.624   556   868 D ShortcutService: rescanPackageIfNeeded 0@com.google.android.gms, forceRescan=true , isNewApp=false
+11-27 12:29:11.625   556   868 D ShortcutService: Package com.google.android.gms has 0 manifest shortcut(s), and 1 share target(s)
+11-27 12:29:11.625   556   868 D ShortcutService: Package com.google.android.gms updated, version 242335041 -> 242335041
+11-27 12:29:11.625   556   868 D ShortcutService: Package com.google.android.gms: publishing manifest shortcuts
+11-27 12:29:11.626  2188  4542 W libc    : Access denied finding property "persist.adb.tls_server.enable"
+11-27 12:29:11.626  2188  4542 W libc    : Access denied finding property "service.adb.tls.port"
+11-27 12:29:11.632   356  4557 I resolv  : GetAddrInfoHandler::run: {100 786532 100 983140 10143 0}
+11-27 12:29:11.632   356  4558 I resolv  : res_nmkquery: (QUERY, IN, AAAA)
+11-27 12:29:11.632   356  4558 I resolv  : resolv_cache_lookup: FOUND IN CACHE entry=0x722543454490
+11-27 12:29:11.632   356  4558 I resolv  : doQuery: rcode=0, ancount=8, return value=264
+11-27 12:29:11.632   356  4559 I resolv  : res_nmkquery: (QUERY, IN, A)
+11-27 12:29:11.632   356  4559 I resolv  : resolv_cache_lookup: FOUND IN CACHE entry=0x7226d3459df0
+11-27 12:29:11.632   356  4559 I resolv  : doQuery: rcode=0, ancount=8, return value=168
+11-27 12:29:11.624  2188  2188 W IntentService[D: type=1400 audit(0.0:58): avc:  denied  { read } for  name="u:object_r:adbd_prop:s0" dev="tmpfs" ino=63 scontext=u:r:gmscore_app:s0:c512,c768 tcontext=u:object_r:adbd_prop:s0 tclass=file permissive=0 app=com.google.android.gms
+11-27 12:29:11.637  1088  1088 D CarrierSvcBindHelper: onPackageModified: com.google.android.gms
+11-27 12:29:11.637  1088  1088 D CarrierSvcBindHelper: No carrier app for: 0
+11-27 12:29:11.642  1699  1699 I BgTaskExecutorImpl: (REDACTED) Starting %s background task %s.
+11-27 12:29:11.644   905   905 D ControlsListingControllerImpl: ServiceConfig reloaded, count: 0
+11-27 12:29:11.645   906  4480 I PermissionControllerServiceImpl: Updating user sensitive for uid 10143
+11-27 12:29:11.650  1699  3008 I NetworkRecognitionRnr: Using pair HTTP connection
+11-27 12:29:11.651  1699  3186 I A       : [Upload] Connected
+11-27 12:29:11.654  1088  1088 E SmsApplication: com.google.android.apps.messaging lost android:read_cell_broadcasts:  (fixing)
+11-27 12:29:11.654   556  1019 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 10136, code = READ_CELL_BROADCASTS, mode = allow, callingUid = 1001, oldMode = allow
+11-27 12:29:11.661  1088  1088 E CellBroadcastUtils: getDefaultCellBroadcastReceiverPackageName: no package found
+11-27 12:29:11.666   556  1345 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_SMS, mode = allow, callingUid = 1001, oldMode = allow
+11-27 12:29:11.666   556  1507 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_SMS, mode = allow, callingUid = 1001, oldMode = allow
+11-27 12:29:11.666   556  1013 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_WAP_PUSH, mode = allow, callingUid = 1001, oldMode = allow
+11-27 12:29:11.666   556  1013 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = SEND_SMS, mode = allow, callingUid = 1001, oldMode = allow
+11-27 12:29:11.666   556  1884 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_CELL_BROADCASTS, mode = allow, callingUid = 1001, oldMode = allow
+11-27 12:29:11.668  1699  1914 W CronetNetworkRqstWrppr: Upload request without a content type.
+11-27 12:29:11.678  1192  2139 D TrafficStats: tagSocket(248) with statsTag=0x401, statsUid=10143
+11-27 12:29:11.692  1088  1276 D ImsResolver: maybeAddedImsService, packageName: com.google.android.gms
+11-27 12:29:11.697  1699  1699 E A       : onError
+11-27 12:29:11.697  1699  1699 E A       : com.google.android.apps.gsa.shared.speech.b.l: errorCode: 65561, engine: 2
+11-27 12:29:11.697  1699  1699 E A       : 	at com.google.android.apps.gsa.staticplugins.bp.a.f.a(PG:23)
+11-27 12:29:11.697  1699  1699 E A       : 	at com.google.android.apps.gsa.s3.o.hi(PG:13)
+11-27 12:29:11.697  1699  1699 E A       : 	at com.google.ci.g.a.f.e(PG:9)
+11-27 12:29:11.697  1699  1699 E A       : 	at com.google.android.apps.gsa.speech.k.a.g.d(PG:162)
+11-27 12:29:11.697  1699  1699 E A       : 	at com.google.android.apps.gsa.speech.k.a.g.iO(PG:26)
+11-27 12:29:11.697  1699  1699 E A       : 	at com.google.android.apps.gsa.s3.p.c(PG:102)
+11-27 12:29:11.697  1699  1699 E A       : 	at com.google.android.apps.gsa.s3.q.run(PG:1)
+11-27 12:29:11.697  1699  1699 E A       : 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+11-27 12:29:11.697  1699  1699 E A       : 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+11-27 12:29:11.697  1699  1699 E A       : 	at com.google.android.apps.gsa.shared.util.c.a.e.run(PG:12)
+11-27 12:29:11.697  1699  1699 E A       : 	at com.google.android.apps.gsa.shared.util.c.a.bg.run(PG:3)
+11-27 12:29:11.697  1699  1699 E A       : 	at com.google.android.apps.gsa.shared.util.c.a.bg.run(PG:3)
+11-27 12:29:11.697  1699  1699 E A       : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-27 12:29:11.697  1699  1699 E A       : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-27 12:29:11.697  1699  1699 E A       : 	at java.lang.Thread.run(Thread.java:1012)
+11-27 12:29:11.697  1699  1699 E A       : 	at com.google.android.apps.gsa.shared.util.c.a.l.run(PG:42)
+11-27 12:29:11.697  1699  1699 E A       : Caused by: com.google.android.apps.gsa.shared.speech.b.n: errorCode: 65586, engine: 2
+11-27 12:29:11.697  1699  1699 E A       : 	at com.google.android.apps.gsa.s3.o.hi(PG:6)
+11-27 12:29:11.697  1699  1699 E A       : 	... 14 more
+11-27 12:29:11.697  1699  1699 E A       : Caused by: com.google.android.apps.gsa.shared.speech.b.j: errorCode: 401, engine: 2
+11-27 12:29:11.697  1699  1699 E A       : 	at com.google.android.apps.gsa.assistant.shared.n.i.b(PG:30)
+11-27 12:29:11.697  1699  1699 E A       : 	at com.google.android.apps.gsa.s3.producers.j.hs(PG:11)
+11-27 12:29:11.697  1699  1699 E A       : 	at com.google.android.apps.gsa.speech.k.a.g.d(PG:135)
+11-27 12:29:11.697  1699  1699 E A       : 	... 12 more
+11-27 12:29:11.698  1699  3186 I NetworkRecognitionRnr: Using pair HTTP connection
+11-27 12:29:11.698   556   596 W MagnificationConnectionManager: requestConnection duplicated request: connect=false, mConnectionState=DISCONNECTED
+11-27 12:29:11.699   556   556 W IPCThreadState: Sending oneway calls to frozen process.
+11-27 12:29:11.699   556   556 W IPCThreadState: Sending oneway calls to frozen process.
+11-27 12:29:11.699   556   556 W IPCThreadState: Sending oneway calls to frozen process.
+11-27 12:29:11.703  1699  2700 I A       : [Upload] Connected
+11-27 12:29:11.703  1699  1699 W A       : Failed to sync device settings.
+11-27 12:29:11.703  1699  1699 I A       : Retrying to sync device settings.
+11-27 12:29:11.704  1699  1699 W JobInfo : Job 'com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService#-353' has a deadline with functional constraints and an extremely short time window of 0 ms (delay=120000, deadline=120000). The functional constraints are not likely to be satisfied when the job runs.
+11-27 12:29:11.704   556  1019 W JobInfo : Job 'com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService#-353' has a deadline with functional constraints and an extremely short time window of 0 ms (delay=120000, deadline=120000). The functional constraints are not likely to be satisfied when the job runs.
+11-27 12:29:11.704   556  1019 W JobInfo : Job 'com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService#-353' has a deadline with functional constraints and an extremely short time window of 0 ms (delay=120000, deadline=120000). The functional constraints are not likely to be satisfied when the job runs.
+11-27 12:29:11.708   556  1019 W JobScheduler: Job didn't exist in JobStore: 1f2c958 #u0a144/-353 com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService
+11-27 12:29:11.714   556   596 I CredentialManager: CredentialManagerServiceImpl constructed for: com.google.android.gms/com.google.android.gms.auth.api.credentials.credman.service.PasswordAndPasskeyService
+11-27 12:29:11.714   556   596 I CredentialManager: newServiceInfoLocked, mInfo null, com.google.android.gms/com.google.android.gms.auth.api.credentials.credman.service.PasswordAndPasskeyService
+11-27 12:29:11.727  1162  1221 D PackageUpdatedTask: Package updated: mOp=UPDATE packages=[com.google.android.gms]
+11-27 12:29:11.732  1436  1436 I AiAiEcho: AppFetcherImpl onPackageChanged com.google.android.gms.
+11-27 12:29:11.733  1162  1221 W AllAppsList: updatePromiseInstallInfo: no Activities matched updated package, removing all apps from package=com.google.android.gms
+11-27 12:29:11.733  1436  2478 I AiAiEcho: AppIndexer Package:[com.google.android.gms] UserProfile:[0] Enabled:[true].
+11-27 12:29:11.733  1436  2478 I AiAiEcho: AppFetcherImplV2 updateApps package:[com.google.android.gms], userId:[0], reason:[package is updated.].
+11-27 12:29:11.867     0     0 I logd    : logdr: UID=2000 GID=2000 PID=4560 n tail=0 logMask=99 pid=0 start=0ns deadline=0ns
+11-27 12:29:11.757   556   868 D ShortcutService: Saving package item com.google.android.gms to /data/system_ce/0/shortcut_service/packages/com.google.android.gms.xml
+11-27 12:29:11.765  1192  4510 I NetworkScheduler.Stats: Task com.google.android.gms/com.google.android.gms.telephonyspam.sync.SpamListSyncTaskService started execution. cause:5 exec_start_elapsed_seconds: 162 [CONTEXT service_id=218 ]
+11-27 12:29:11.788   556   596 D ShortcutService: Getting shortcuts for launcher= com.google.android.asuser=0 pkg=com.google.android.gms
+11-27 12:29:11.788  1376  2432 I LSRModuleInit: New Geofences: [] [CONTEXT service_id=277 ]
+11-27 12:29:11.788  1376  2432 I LSRModuleInit: Attempting to change container components state to enabled: true [CONTEXT service_id=277 ]
+11-27 12:29:11.798   556  1884 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
+11-27 12:29:11.799   556  1884 D PackageManager: Clear ephemeral installer activity
+11-27 12:29:11.813   556   596 D ShortcutService: Getting shortcuts for launcher= com.android.systemuiuser=0 pkg=com.google.android.gms
+11-27 12:29:11.822   556   596 D ShortcutService: Getting shortcuts for launcher= com.google.android.apps.nexuslauncheruser=0 pkg=com.google.android.gms
+11-27 12:29:11.823  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/YouTube/YouTube.apk' with 1 weak references
+11-27 12:29:11.824  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/overlay/DisplayCutoutEmulationCorner/DisplayCutoutEmulationCornerOverlay.apk' with 1 weak references
+11-27 12:29:11.824  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.extservices/priv-app/GoogleExtServices@350820300/GoogleExtServices.apk' with 1 weak references
+11-27 12:29:11.824  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/overlay/DisplayCutoutEmulationDouble/DisplayCutoutEmulationDoubleOverlay.apk' with 1 weak references
+11-27 12:29:11.824  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/TelephonyProvider/TelephonyProvider.apk' with 1 weak references
+11-27 12:29:11.824  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '/product/overlay/TelephonyProvider__sdk_gphone64_x86_64__auto_generated_rro_product.apk' with 1 weak references
+11-27 12:29:11.824  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/DynamicSystemInstallationService/DynamicSystemInstallationService.apk' with 1 weak references
+11-27 12:29:11.824  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/Velvet/Velvet.apk' with 1 weak references
+11-27 12:29:11.824  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/CalendarProvider/CalendarProvider.apk' with 1 weak references
+11-27 12:29:11.824  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/GoogleOneTimeInitializer/GoogleOneTimeInitializer.apk' with 1 weak references
+11-27 12:29:11.824  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/app/GoogleExtShared/GoogleExtShared.apk' with 1 weak references
+11-27 12:29:11.824  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/ExternalStorageProvider/ExternalStorageProvider.apk' with 1 weak references
+11-27 12:29:11.824  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~Zs8rWLv2_-y-caz3PL4P3g==/com.vedant.velora-tx_MlLLlIlIpgeMXI5KKIA==/base.apk' with 1 weak references
+11-27 12:29:11.824  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/app/HTMLViewer/HTMLViewer.apk' with 1 weak references
+11-27 12:29:11.825  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/app/CompanionDeviceManager/CompanionDeviceManager.apk' with 1 weak references
+11-27 12:29:11.826  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/DownloadProvider/DownloadProvider.apk' with 1 weak references
+11-27 12:29:11.826  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/PrebuiltBugle/PrebuiltBugle.apk' with 1 weak references
+11-27 12:29:11.826  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/SoundPickerPrebuilt/SoundPickerPrebuilt.apk' with 1 weak references
+11-27 12:29:11.826  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.mediaprovider/priv-app/MediaProviderGoogle@350820300/MediaProviderGoogle.apk' with 1 weak references
+11-27 12:29:11.826  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/SafetyHubPrebuilt/SafetyHubPrebuilt.apk' with 1 weak references
+11-27 12:29:11.826  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/DownloadProviderUi/DownloadProviderUi.apk' with 1 weak references
+11-27 12:29:11.826  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.wifi/app/OsuLoginGoogle@350820300/OsuLoginGoogle.apk' with 1 weak references
+11-27 12:29:11.826  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/app/PacProcessor/PacProcessor.apk' with 1 weak references
+11-27 12:29:11.826  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/app/SimAppDialog/SimAppDialog.apk' with 1 weak references
+11-27 12:29:11.826  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '/product/overlay/SimAppDialog__sdk_gphone64_x86_64__auto_generated_rro_product.apk' with 1 weak references
+11-27 12:29:11.826  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.adservices/priv-app/AdServicesApkGoogle@350820260/AdServicesApkGoogle.apk' with 1 weak references
+11-27 12:29:11.829  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/overlay/DisplayCutoutEmulationHole/DisplayCutoutEmulationHoleOverlay.apk' with 1 weak references
+11-27 12:29:11.829  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/overlay/DisplayCutoutEmulationTall/DisplayCutoutEmulationTallOverlay.apk' with 1 weak references
+11-27 12:29:11.829  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/app/CertInstaller/CertInstaller.apk' with 1 weak references
+11-27 12:29:11.830  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/talkback/talkback.apk' with 1 weak references
+11-27 12:29:11.830  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '/vendor/overlay/EmulatorTalkBackOverlay/EmulatorTalkBackOverlay.apk' with 1 weak references
+11-27 12:29:11.830  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/overlay/NavigationBarMode3Button/NavigationBarMode3ButtonOverlay.apk' with 1 weak references
+11-27 12:29:11.830  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/Camera2/Camera2.apk' with 1 weak references
+11-27 12:29:11.830  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/app/EasterEgg/EasterEgg.apk' with 1 weak references
+11-27 12:29:11.830  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/MtpService/MtpService.apk' with 1 weak references
+11-27 12:29:11.830  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.nfcservices/priv-app/NfcNciApexGoogle@AE3A.240806.043/NfcNciApexGoogle.apk' with 1 weak references
+11-27 12:29:11.831  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/app/Stk/Stk.apk' with 1 weak references
+11-27 12:29:11.831  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/PrebuiltDeskClockGoogle/PrebuiltDeskClockGoogle.apk' with 1 weak references
+11-27 12:29:11.831  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/overlay/NavigationBarMode2Button/NavigationBarMode2ButtonOverlay.apk' with 1 weak references
+11-27 12:29:11.831  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/DevicePersonalizationPrebuiltPixel2021-aiai_20240329.00_RC16/DevicePersonalizationPrebuiltPixel2021-aiai_20240329.00_RC16.apk' with 1 weak references
+11-27 12:29:11.831  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/PrebuiltGmail/PrebuiltGmail.apk' with 1 weak references
+11-27 12:29:11.831  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.permission/priv-app/GooglePermissionController@350820360/GooglePermissionController.apk' with 1 weak references
+11-27 12:29:11.831  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '/product/overlay/GooglePermissionControllerOverlay.apk' with 1 weak references
+11-27 12:29:11.831  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.btservices/app/BluetoothGoogle@342010060/BluetoothGoogle.apk' with 1 weak references
+11-27 12:29:11.833  1192  4550 I LSR     : Handling LSR module init in persistent process [CONTEXT service_id=277 ]
+11-27 12:29:11.833  1192  4550 I LSR     : Refreshing periodic location reporting state [CONTEXT service_id=277 ]
+11-27 12:29:11.837  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/SettingsProvider/SettingsProvider.apk' with 1 weak references
+11-27 12:29:11.837  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '/product/overlay/LargeScreenSettingsProviderOverlay.apk' with 1 weak references
+11-27 12:29:11.837  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '/product/overlay/SettingsProvider__sdk_gphone64_x86_64__auto_generated_rro_product.apk' with 1 weak references
+11-27 12:29:11.837  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/app/PrintSpooler/PrintSpooler.apk' with 1 weak references
+11-27 12:29:11.837  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/app/BasicDreams/BasicDreams.apk' with 1 weak references
+11-27 12:29:11.837  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/DeviceIntelligenceNetworkPrebuilt-astrea_20240329.00_RC02/DeviceIntelligenceNetworkPrebuilt-astrea_20240329.00_RC02.apk' with 1 weak references
+11-27 12:29:11.837  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/InputDevices/InputDevices.apk' with 1 weak references
+11-27 12:29:11.837  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.devicelock/priv-app/DeviceLockControllerGoogle@AE3A.240806.043/DeviceLockControllerGoogle.apk' with 1 weak references
+11-27 12:29:11.837  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/GoogleDialer/GoogleDialer.apk' with 1 weak references
+11-27 12:29:11.837  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/BuiltInPrintService/BuiltInPrintService.apk' with 1 weak references
+11-27 12:29:11.837  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '/product/overlay/BuiltInPrintService__sdk_gphone64_x86_64__auto_generated_rro_product.apk' with 1 weak references
+11-27 12:29:11.837  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/app/CaptivePortalLoginGoogle/CaptivePortalLoginGoogle.apk' with 1 weak references
+11-27 12:29:11.837  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/MusicFX/MusicFX.apk' with 1 weak references
+11-27 12:29:11.837  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/Drive/Drive.apk' with 1 weak references
+11-27 12:29:11.838  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/Maps/Maps.apk' with 1 weak references
+11-27 12:29:11.838  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/ModuleMetadataGoogle/ModuleMetadataGoogle.apk' with 1 weak references
+11-27 12:29:11.838  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/overlay/DisplayCutoutEmulationEmu01/DisplayCutoutEmulationEmu01Overlay.apk' with 1 weak references
+11-27 12:29:11.838  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/AvatarPickerGoogle/AvatarPickerGoogle.apk' with 1 weak references
+11-27 12:29:11.838  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/MarkupGoogle_v2/MarkupGoogle_v2.apk' with 1 weak references
+11-27 12:29:11.838  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/NetworkStackGoogle/NetworkStackGoogle.apk' with 1 weak references
+11-27 12:29:11.838  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.rkpd/priv-app/rkpdapp.google@350820300/rkpdapp.google.apk' with 1 weak references
+11-27 12:29:11.838  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/GoogleContacts/GoogleContacts.apk' with 1 weak references
+11-27 12:29:11.842  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/Telecom/Telecom.apk' with 1 weak references
+11-27 12:29:11.842  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '/product/overlay/Telecom__sdk_gphone64_x86_64__auto_generated_rro_product.apk' with 1 weak references
+11-27 12:29:11.842  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/app/KeyChain/KeyChain.apk' with 1 weak references
+11-27 12:29:11.842  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~35kig-R2qJLvxuhwD0hJvQ==/com.android.chrome-jodcP1dc25VEhTkdsIAyog==/Chrome.apk' with 1 weak references
+11-27 12:29:11.842  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~1I_ECOIeoGZyjTFRVISJ5A==/com.google.android.trichromelibrary_636771938-iat5OfDVtRfWX9FFMkftOg==/TrichromeLibrary.apk' with 1 weak references
+11-27 12:29:11.842  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/GooglePackageInstaller/GooglePackageInstaller.apk' with 1 weak references
+11-27 12:29:11.842  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/PixelThemesStub/PixelThemesStub.apk' with 1 weak references
+11-27 12:29:11.842  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/GoogleServicesFramework/GoogleServicesFramework.apk' with 1 weak references
+11-27 12:29:11.842  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/TagGoogle/TagGoogle.apk' with 1 weak references
+11-27 12:29:11.843  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/GoogleTTS/GoogleTTS.apk' with 1 weak references
+11-27 12:29:11.843  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/CallLogBackup/CallLogBackup.apk' with 1 weak references
+11-27 12:29:11.843  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/PartnerSetupPrebuilt/PartnerSetupPrebuilt.apk' with 1 weak references
+11-27 12:29:11.843  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/app/CameraExtensionsProxy/CameraExtensionsProxy.apk' with 1 weak references
+11-27 12:29:11.843  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/NexusWallpapersStubPrebuilt2018/NexusWallpapersStubPrebuilt2018.apk' with 1 weak references
+11-27 12:29:11.843  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/NexusLauncherRelease/NexusLauncherRelease.apk' with 1 weak references
+11-27 12:29:11.843  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/app/CarrierDefaultApp/CarrierDefaultApp.apk' with 1 weak references
+11-27 12:29:11.843  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/CredentialManager/CredentialManager.apk' with 1 weak references
+11-27 12:29:11.843  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/overlay/FontNotoSerifSource/FontNotoSerifSourceOverlay.apk' with 1 weak references
+11-27 12:29:11.843  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/DeviceAsWebcam/DeviceAsWebcam.apk' with 1 weak references
+11-27 12:29:11.843  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/ProxyHandler/ProxyHandler.apk' with 1 weak references
+11-27 12:29:11.843  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.permission/priv-app/GoogleSafetyCenterResources@350820360/GoogleSafetyCenterResources.apk' with 1 weak references
+11-27 12:29:11.843  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/overlay/DisplayCutoutEmulationWaterfall/DisplayCutoutEmulationWaterfallOverlay.apk' with 1 weak references
+11-27 12:29:11.843  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/IntentResolver/IntentResolver.apk' with 1 weak references
+11-27 12:29:11.844  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/overlay/TransparentNavigationBar/TransparentNavigationBarOverlay.apk' with 1 weak references
+11-27 12:29:11.844  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/E2eeContactKeysProvider/E2eeContactKeysProvider.apk' with 1 weak references
+11-27 12:29:11.844  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.tethering/priv-app/ServiceConnectivityResourcesGoogle@350820300/ServiceConnectivityResourcesGoogle.apk' with 1 weak references
+11-27 12:29:11.844  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '/vendor/overlay/goldfish_overlay_connectivity_google.apk' with 1 weak references
+11-27 12:29:11.844  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/GoogleFeedback/GoogleFeedback.apk' with 1 weak references
+11-27 12:29:11.844  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/app/GooglePrintRecommendationService/GooglePrintRecommendationService.apk' with 1 weak references
+11-27 12:29:11.844  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/Photos/Photos.apk' with 1 weak references
+11-27 12:29:11.844  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/CalendarGooglePrebuilt/CalendarGooglePrebuilt.apk' with 1 weak references
+11-27 12:29:11.844  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/ManagedProvisioning/ManagedProvisioning.apk' with 1 weak references
+11-27 12:29:11.844  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/SoundPicker/SoundPicker.apk' with 1 weak references
+11-27 12:29:11.844  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/DocumentsUIGoogle/DocumentsUIGoogle.apk' with 1 weak references
+11-27 12:29:11.844  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/PrebuiltGoogleTelemetryTvp/PrebuiltGoogleTelemetryTvp.apk' with 1 weak references
+11-27 12:29:11.844  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/MultiDisplayProvider/MultiDisplayProvider.apk' with 1 weak references
+11-27 12:29:11.844  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/DeviceDiagnostics/DeviceDiagnostics.apk' with 1 weak references
+11-27 12:29:11.844  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '/product/overlay/DeviceDiagnostics__sdk_gphone64_x86_64__auto_generated_rro_product.apk' with 1 weak references
+11-27 12:29:11.844  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/overlay/NotesRoleEnabled/NotesRoleEnabledOverlay.apk' with 1 weak references
+11-27 12:29:11.844  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/LiveWallpapersPicker/LiveWallpapersPicker.apk' with 1 weak references
+11-27 12:29:11.844  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/PrebuiltGoogleAdservicesTvp/PrebuiltGoogleAdservicesTvp.apk' with 1 weak references
+11-27 12:29:11.844  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.healthfitness/priv-app/HealthConnectControllerGoogle@350820300/HealthConnectControllerGoogle.apk' with 1 weak references
+11-27 12:29:11.844  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/KidsSupervisionStub/KidsSupervisionStub.apk' with 1 weak references
+11-27 12:29:11.844  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/StorageManager/StorageManager.apk' with 1 weak references
+11-27 12:29:11.845  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '/product/overlay/StorageManager__sdk_gphone64_x86_64__auto_generated_rro_product.apk' with 1 weak references
+11-27 12:29:11.845  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/app/BookmarkProvider/BookmarkProvider.apk' with 1 weak references
+11-27 12:29:11.845  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/SettingsGoogle/SettingsGoogle.apk' with 1 weak references
+11-27 12:29:11.845  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '/product/overlay/SettingsGoogle__sdk_gphone64_x86_64__auto_generated_rro_product.apk' with 1 weak references
+11-27 12:29:11.845  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/SettingsIntelligenceGooglePrebuilt/SettingsIntelligenceGooglePrebuilt.apk' with 1 weak references
+11-27 12:29:11.845  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.uwb/priv-app/ServiceUwbResourcesGoogle@350820300/ServiceUwbResourcesGoogle.apk' with 1 weak references
+11-27 12:29:11.845  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.wifi/priv-app/ServiceWifiResourcesGoogle@350820300/ServiceWifiResourcesGoogle.apk' with 1 weak references
+11-27 12:29:11.845  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/ThemePicker/ThemePicker.apk' with 1 weak references
+11-27 12:29:11.845  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/WallpaperPickerGoogleRelease/WallpaperPickerGoogleRelease.apk' with 1 weak references
+11-27 12:29:11.845  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/OdadPrebuilt/OdadPrebuilt.apk' with 1 weak references
+11-27 12:29:11.845  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/TeleService/TeleService.apk' with 1 weak references
+11-27 12:29:11.845  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '/vendor/overlay/TeleService__sdk_gphone64_x86_64__auto_generated_rro_vendor.apk' with 1 weak references
+11-27 12:29:11.845  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '/product/overlay/TeleService__sdk_gphone64_x86_64__auto_generated_rro_product.apk' with 1 weak references
+11-27 12:29:11.845  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/Shell/Shell.apk' with 1 weak references
+11-27 12:29:11.845  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/BlockedNumberProvider/BlockedNumberProvider.apk' with 1 weak references
+11-27 12:29:11.845  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/UserDictionaryProvider/UserDictionaryProvider.apk' with 1 weak references
+11-27 12:29:11.845  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/app/EmergencyInfoGoogleNoUi/EmergencyInfoGoogleNoUi.apk' with 1 weak references
+11-27 12:29:11.845  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/overlay/NavigationBarModeGestural/NavigationBarModeGesturalOverlay.apk' with 1 weak references
+11-27 12:29:11.845  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/FusedLocation/FusedLocation.apk' with 1 weak references
+11-27 12:29:11.849  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/SystemUIGoogle/SystemUIGoogle.apk' with 1 weak references
+11-27 12:29:11.849  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '/vendor/overlay/SystemUIGoogle__sdk_gphone64_x86_64__auto_generated_rro_vendor.apk' with 1 weak references
+11-27 12:29:11.849  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '/product/overlay/SystemUIGoogle__sdk_gphone64_x86_64__auto_generated_rro_product.apk' with 1 weak references
+11-27 12:29:11.849  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/YouTubeMusicPrebuilt/YouTubeMusicPrebuilt.apk' with 1 weak references
+11-27 12:29:11.849  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/app/BluetoothMidiService/BluetoothMidiService.apk' with 1 weak references
+11-27 12:29:11.849  1348  1367 W .apps.wellbeing: ApkAssets: Deleting an ApkAssets object '<empty> and /system/app/Traceur/Traceur.apk' with 1 weak references
+11-27 12:29:11.852  1192  3234 W GLSUser : [AppCertManager] Exception while requesting key: 
+11-27 12:29:11.852  1192  3234 W GLSUser : java.util.concurrent.ExecutionException: bpcw: Parse Proto Exception with response code 400
+11-27 12:29:11.852  1192  3234 W GLSUser : 	at etvr.s(:com.google.android.gms@242335041@24.23.35 (190800-646585959):21)
+11-27 12:29:11.852  1192  3234 W GLSUser : 	at etvr.get(:com.google.android.gms@242335041@24.23.35 (190800-646585959):10)
+11-27 12:29:11.852  1192  3234 W GLSUser : 	at yfw.b(:com.google.android.gms@242335041@24.23.35 (190800-646585959):477)
+11-27 12:29:11.852  1192  3234 W GLSUser : 	at yfu.b(:com.google.android.gms@242335041@24.23.35 (190800-646585959):31)
+11-27 12:29:11.852  1192  3234 W GLSUser : 	at yfp.a(:com.google.android.gms@242335041@24.23.35 (190800-646585959):1)
+11-27 12:29:11.852  1192  3234 W GLSUser : 	at yfs.a(:com.google.android.gms@242335041@24.23.35 (190800-646585959):58)
+11-27 12:29:11.852  1192  3234 W GLSUser : 	at uou.call(:com.google.android.gms@242335041@24.23.35 (190800-646585959):56)
+11-27 12:29:11.852  1192  3234 W GLSUser : 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+11-27 12:29:11.852  1192  3234 W GLSUser : 	at angs.c(:com.google.android.gms@242335041@24.23.35 (190800-646585959):50)
+11-27 12:29:11.852  1192  3234 W GLSUser : 	at angs.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):76)
+11-27 12:29:11.852  1192  3234 W GLSUser : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-27 12:29:11.852  1192  3234 W GLSUser : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-27 12:29:11.852  1192  3234 W GLSUser : 	at anmg.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):8)
+11-27 12:29:11.852  1192  3234 W GLSUser : 	at java.lang.Thread.run(Thread.java:1012)
+11-27 12:29:11.852  1192  3234 W GLSUser : Caused by: bpcw: Parse Proto Exception with response code 400
+11-27 12:29:11.852  1192  3234 W GLSUser : 	at bpdw.b(:com.google.android.gms@242335041@24.23.35 (190800-646585959):80)
+11-27 12:29:11.852  1192  3234 W GLSUser : 	at bpgb.e(:com.google.android.gms@242335041@24.23.35 (190800-646585959):17)
+11-27 12:29:11.852  1192  3234 W GLSUser : 	at bpgp.onSucceeded(:com.google.android.gms@242335041@24.23.35 (190800-646585959):7)
+11-27 12:29:11.852  1192  3234 W GLSUser : 	at m.mw.onSucceeded(:com.google.android.gms.dynamite_cronetdynamite@242335041@24.23.35 (190800-0):3)
+11-27 12:29:11.852  1192  3234 W GLSUser : 	at m.lt.run(:com.google.android.gms.dynamite_cronetdynamite@242335041@24.23.35 (190800-0):25)
+11-27 12:29:11.852  1192  3234 W GLSUser : 	... 6 more
+11-27 12:29:11.852  1192  3234 W GLSUser : Caused by: fkhe: Protocol message contained an invalid tag (zero).
+11-27 12:29:11.852  1192  3234 W GLSUser : 	at fkea.k(:com.google.android.gms@242335041@24.23.35 (190800-646585959):39)
+11-27 12:29:11.852  1192  3234 W GLSUser : 	at fkid.c(:com.google.android.gms@242335041@24.23.35 (190800-646585959):309)
+11-27 12:29:11.852  1192  3234 W GLSUser : 	at fkid.i(:com.google.android.gms@242335041@24.23.35 (190800-646585959):8)
+11-27 12:29:11.852  1192  3234 W GLSUser : 	at fkgi.fe(:com.google.android.gms@242335041@24.23.35 (190800-646585959):25)
+11-27 12:29:11.852  1192  3234 W GLSUser : 	at fkgc.g(:com.google.android.gms@242335041@24.23.35 (190800-646585959):3)
+11-27 12:29:11.852  1192  3234 W GLSUser : 	at fkdw.e(:com.google.android.gms@242335041@24.23.35 (190800-646585959):1)
+11-27 12:29:11.852  1192  3234 W GLSUser : 	at fkdw.d(:com.google.android.gms@242335041@24.23.35 (190800-646585959):3)
+11-27 12:29:11.852  1192  3234 W GLSUser : 	at fkdw.p(:com.google.android.gms@242335041@24.23.35 (190800-646585959):1)
+11-27 12:29:11.852  1192  3234 W GLSUser : 	at bpdw.g(:com.google.android.gms@242335041@24.23.35 (190800-646585959):68)
+11-27 12:29:11.852  1192  3234 W GLSUser : 	at bpdw.b(:com.google.android.gms@242335041@24.23.35 (190800-646585959):11)
+11-27 12:29:11.852  1192  3234 W GLSUser : 	... 10 more
+11-27 12:29:11.986     0     0 I logd    : logdr: UID=2000 GID=2000 PID=4564 n tail=400 logMask=99 pid=0 start=0ns deadline=0ns

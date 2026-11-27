@@ -1,0 +1,247 @@
+12:27:54.702 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Define variables RUNNING
+12:27:54.707 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Define variables COMPLETED
+12:27:54.707 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Apply configuration RUNNING
+12:27:54.708 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Apply configuration COMPLETED
+12:27:54.708 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../.maestro/login-design2.yaml RUNNING
+12:27:54.708 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Apply configuration RUNNING
+12:27:54.709 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Apply configuration COMPLETED
+12:27:54.709 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Launch app "com.vedant.velora" RUNNING
+12:27:55.856 [DEBUG] maestro.Maestro.setPermissionInternal: Failed to set permission com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE for app com.vedant.velora: shell command failed (exit -1): 
+Exception occurred while executing 'grant':
+java.lang.IllegalArgumentException: Unknown permission com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE
+	at com.android.server.permission.access.permission.PermissionService.setRuntimePermissionGranted(PermissionService.kt:911)
+	at com.android.server.permission.access.permission.PermissionService.access$setRuntimePermissionGranted(PermissionService.kt:108)
+	at com.android.server.permission.access.permission.PermissionService.setRuntimePermissionGranted(PermissionService.kt:809)
+	at com.android.server.permission.access.permission.PermissionService.setRuntimePermissionGranted$default(PermissionService.kt:714)
+	at com.android.server.permission.access.permission.PermissionService.grantRuntimePermission(PermissionService.kt:676)
+	at com.android.server.pm.permission.PermissionManagerService.grantRuntimePermission(PermissionManagerService.java:585)
+	at android.permission.PermissionManager.grantRuntimePermissionInternal(PermissionManager.java:679)
+	at android.permission.PermissionManager.grantRuntimePermission(PermissionManager.java:642)
+	at com.android.server.pm.PackageManagerShellCommand.runGrantRevokePermission(PackageManagerShellCommand.java:2690)
+	at com.android.server.pm.PackageManagerShellCommand.onCommand(PackageManagerShellCommand.java:316)
+	at com.android.modules.utils.BasicShellCommandHandler.exec(BasicShellCommandHandler.java:97)
+	at android.os.ShellCommand.exec(ShellCommand.java:38)
+	at com.android.server.pm.PackageManagerService$IPackageManagerImpl.onShellCommand(PackageManagerService.java:6561)
+	at android.os.Binder.shellCommand(Binder.java:1230)
+	at android.os.Binder.onTransact(Binder.java:1043)
+	at android.content.pm.IPackageManager$Stub.onTransact(IPackageManager.java:4620)
+	at com.android.server.pm.PackageManagerService$IPackageManagerImpl.onTransact(PackageManagerService.java:6545)
+	at android.os.Binder.execTransactInternal(Binder.java:1505)
+	at android.os.Binder.execTransact(Binder.java:1444)
+
+12:27:55.860 [ INFO] maestro.Maestro.launchApp$lambda$6: Launching app com.vedant.velora
+12:27:55.860 [ INFO] maestro.Maestro.launchApp$lambda$6: Stopping com.vedant.velora app during launch
+12:27:55.981 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Launch app "com.vedant.velora" COMPLETED
+12:27:55.982 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when "Log in / Sign up" is visible RUNNING
+12:27:58.571 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "Log in / Sign up" RUNNING
+12:27:59.467 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=Log in / Sign up, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[262,972][459,1010], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.TextView, important-for-accessibility=true, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=262, y=972, width=197, height=38))
+12:28:01.318 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+12:28:01.328 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (360, 991) using hierarchy based logic for wait
+12:28:02.455 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+12:28:02.455 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "Log in / Sign up" COMPLETED
+12:28:02.455 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "Username" RUNNING
+12:28:02.549 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=, hintText=Username, ignoreBoundsFiltering=false, resource-id=, clickable=true, bounds=[48,721][672,818], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.EditText, important-for-accessibility=true, error=}, children=[], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=48, y=721, width=624, height=97))
+12:28:03.794 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+12:28:03.797 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (360, 769) using hierarchy based logic for wait
+12:28:04.652 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+12:28:04.652 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "Username" COMPLETED
+12:28:04.653 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Input text e2e_alice RUNNING
+12:28:04.653 [ INFO] maestro.Maestro.inputText: Inputting text: e2e_alice
+12:28:07.758 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Input text e2e_alice COMPLETED
+12:28:07.759 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "Password" RUNNING
+12:28:07.862 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=, hintText=Password, ignoreBoundsFiltering=false, resource-id=, clickable=true, bounds=[48,846][672,943], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.EditText, important-for-accessibility=true, error=}, children=[], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=48, y=846, width=624, height=97))
+12:28:09.182 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+12:28:09.184 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (360, 894) using hierarchy based logic for wait
+12:28:10.774 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+12:28:10.774 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "Password" COMPLETED
+12:28:10.774 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Input text e2e-alice-pass-1 RUNNING
+12:28:10.776 [ INFO] maestro.Maestro.inputText: Inputting text: e2e-alice-pass-1
+12:28:14.078 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Input text e2e-alice-pass-1 COMPLETED
+12:28:14.078 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Hide Keyboard RUNNING
+12:28:14.079 [ INFO] maestro.Maestro.hideKeyboard$lambda$13: Hiding Keyboard
+12:28:15.154 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Hide Keyboard COMPLETED
+12:28:15.155 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "Sign in", Below "Password" RUNNING
+12:28:15.185 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=Sign in, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[316,996][403,1034], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.TextView, important-for-accessibility=true, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=316, y=996, width=87, height=38))
+12:28:16.378 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+12:28:16.378 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (359, 1015) using hierarchy based logic for wait
+12:28:19.377 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+12:28:19.377 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "Sign in", Below "Password" COMPLETED
+12:28:19.377 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when "Log in / Sign up" is visible COMPLETED
+12:28:19.378 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "E2E Alice.*" is visible RUNNING
+12:28:19.859 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "E2E Alice.*" is visible COMPLETED
+12:28:19.859 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../.maestro/login-design2.yaml COMPLETED
+12:28:19.860 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Wait for animation to end within 8000 ms RUNNING
+12:28:19.862 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$54: Waiting for animation to end with timeout 8000
+12:28:19.867 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+12:28:19.868 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+12:28:20.876 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+12:28:20.877 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+12:28:21.270 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Wait for animation to end within 8000 ms COMPLETED
+12:28:21.271 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Take screenshot p1-home-want RUNNING
+12:28:21.274 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+12:28:21.277 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+12:28:21.534 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Take screenshot p1-home-want COMPLETED
+12:28:21.534 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on (Optional) "Watched" RUNNING
+12:28:21.616 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=Watched, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[395,402][482,432], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.TextView, important-for-accessibility=true, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=395, y=402, width=87, height=30))
+12:28:22.848 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+12:28:22.849 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (438, 417) using hierarchy based logic for wait
+12:28:23.189 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on (Optional) "Watched" COMPLETED
+12:28:23.190 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Wait for animation to end within 4000 ms RUNNING
+12:28:23.190 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$54: Waiting for animation to end with timeout 4000
+12:28:23.190 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+12:28:23.191 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+12:28:23.458 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+12:28:23.458 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+12:28:23.830 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Wait for animation to end within 4000 ms COMPLETED
+12:28:23.830 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Take screenshot p2-watched RUNNING
+12:28:23.831 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+12:28:23.831 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+12:28:24.111 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Take screenshot p2-watched COMPLETED
+12:28:24.111 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on (Optional) "Series" RUNNING
+12:28:24.226 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=Series, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[564,402][624,432], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.TextView, important-for-accessibility=true, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=564, y=402, width=60, height=30))
+12:28:25.465 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+12:28:25.466 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (594, 417) using hierarchy based logic for wait
+12:28:25.845 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on (Optional) "Series" COMPLETED
+12:28:25.845 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Wait for animation to end within 4000 ms RUNNING
+12:28:25.846 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$54: Waiting for animation to end with timeout 4000
+12:28:25.846 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+12:28:25.846 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+12:28:26.113 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+12:28:26.113 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+12:28:26.409 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Wait for animation to end within 4000 ms COMPLETED
+12:28:26.410 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Take screenshot p3-series RUNNING
+12:28:26.410 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+12:28:26.411 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+12:28:26.717 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Take screenshot p3-series COMPLETED
+12:28:26.717 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on (Optional) "Insights" RUNNING
+12:28:26.895 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=Insights, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[473,520][567,556], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.TextView, important-for-accessibility=true, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=473, y=520, width=94, height=36))
+12:28:28.101 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+12:28:28.102 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (520, 538) using hierarchy based logic for wait
+12:28:31.140 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+12:28:31.140 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on (Optional) "Insights" COMPLETED
+12:28:31.140 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Wait for animation to end within 4000 ms RUNNING
+12:28:31.141 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$54: Waiting for animation to end with timeout 4000
+12:28:31.141 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+12:28:31.141 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+12:28:31.279 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+12:28:31.280 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+12:28:31.392 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Wait for animation to end within 4000 ms COMPLETED
+12:28:31.392 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Take screenshot p4-insights RUNNING
+12:28:31.393 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+12:28:31.394 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+12:28:31.451 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Take screenshot p4-insights COMPLETED
+12:28:31.451 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on (Optional) "Want" RUNNING
+12:28:31.569 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=Want, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[256,402][307,432], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.TextView, important-for-accessibility=true, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=256, y=402, width=51, height=30))
+12:28:32.835 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+12:28:32.836 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (281, 417) using hierarchy based logic for wait
+12:28:33.167 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on (Optional) "Want" COMPLETED
+12:28:33.167 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Wait for animation to end within 3000 ms RUNNING
+12:28:33.168 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$54: Waiting for animation to end with timeout 3000
+12:28:33.168 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+12:28:33.168 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+12:28:33.307 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+12:28:33.307 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+12:28:33.410 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Wait for animation to end within 3000 ms COMPLETED
+12:28:33.411 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on point (27%,45%) RUNNING
+12:28:33.419 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (194, 720) using hierarchy based logic for wait
+12:28:33.781 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on point (27%,45%) COMPLETED
+12:28:33.781 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Wait for animation to end within 9000 ms RUNNING
+12:28:33.782 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$54: Waiting for animation to end with timeout 9000
+12:28:33.782 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+12:28:33.782 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+12:28:33.923 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+12:28:33.923 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+12:28:34.026 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Wait for animation to end within 9000 ms COMPLETED
+12:28:34.026 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Take screenshot p5-details-logged-in RUNNING
+12:28:34.027 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+12:28:34.028 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+12:28:34.091 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Take screenshot p5-details-logged-in COMPLETED
+12:28:34.091 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Scroll vertically RUNNING
+12:28:34.092 [ INFO] maestro.Maestro.scrollVertical: Scrolling vertically
+12:28:35.825 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Scroll vertically COMPLETED
+12:28:35.826 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Take screenshot p6-details-scrolled RUNNING
+12:28:35.826 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+12:28:35.827 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+12:28:35.908 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Take screenshot p6-details-scrolled COMPLETED
+12:28:35.908 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Scroll vertically RUNNING
+12:28:35.908 [ INFO] maestro.Maestro.scrollVertical: Scrolling vertically
+12:28:37.631 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Scroll vertically COMPLETED
+12:28:37.631 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Take screenshot p7-details-scrolled2 RUNNING
+12:28:37.631 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+12:28:37.632 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+12:28:37.711 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Take screenshot p7-details-scrolled2 COMPLETED
+12:28:37.712 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Press back RUNNING
+12:28:37.712 [ INFO] maestro.Maestro.backPress: Pressing back
+12:28:39.243 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Press back COMPLETED
+12:28:39.243 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Wait for animation to end within 4000 ms RUNNING
+12:28:39.244 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$54: Waiting for animation to end with timeout 4000
+12:28:39.244 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+12:28:39.244 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+12:28:39.634 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+12:28:39.634 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+12:28:40.068 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Wait for animation to end within 4000 ms COMPLETED
+12:28:40.068 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on (Optional) "Settings" RUNNING
+12:28:47.187 [ INFO] maestro.orchestra.Orchestra.executeCommands: [Command execution] CommandWarned: Element not found: Text matching regex: Settings
+12:28:47.294 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+12:28:47.294 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+12:28:47.717 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on (Optional) "Settings" WARNED
+12:28:47.717 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Wait for animation to end within 5000 ms RUNNING
+12:28:47.718 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$54: Waiting for animation to end with timeout 5000
+12:28:47.718 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+12:28:47.718 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+12:28:48.105 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+12:28:48.105 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+12:28:48.536 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Wait for animation to end within 5000 ms COMPLETED
+12:28:48.537 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Take screenshot p8-settings RUNNING
+12:28:48.538 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+12:28:48.538 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+12:28:48.923 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Take screenshot p8-settings COMPLETED
+12:28:48.923 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Scroll vertically RUNNING
+12:28:48.923 [ INFO] maestro.Maestro.scrollVertical: Scrolling vertically
+12:28:50.411 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Scroll vertically COMPLETED
+12:28:50.412 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Take screenshot p9-settings-scrolled RUNNING
+12:28:50.413 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+12:28:50.413 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+12:28:50.509 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Take screenshot p9-settings-scrolled COMPLETED
+12:28:50.509 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Press back RUNNING
+12:28:50.509 [ INFO] maestro.Maestro.backPress: Pressing back
+12:28:51.599 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Press back COMPLETED
+12:28:51.599 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Wait for animation to end within 3000 ms RUNNING
+12:28:51.599 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$54: Waiting for animation to end with timeout 3000
+12:28:51.599 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+12:28:51.600 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+12:28:52.056 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+12:28:52.057 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+12:28:52.493 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Wait for animation to end within 3000 ms COMPLETED
+12:28:52.494 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on (Optional) "Search" RUNNING
+12:28:59.580 [ INFO] maestro.orchestra.Orchestra.executeCommands: [Command execution] CommandWarned: Element not found: Text matching regex: Search
+12:28:59.679 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+12:28:59.680 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+12:29:00.144 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on (Optional) "Search" WARNED
+12:29:00.144 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Wait for animation to end within 5000 ms RUNNING
+12:29:00.145 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$54: Waiting for animation to end with timeout 5000
+12:29:00.145 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+12:29:00.145 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+12:29:00.539 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+12:29:00.539 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+12:29:01.294 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Wait for animation to end within 5000 ms COMPLETED
+12:29:01.294 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Take screenshot p10-search-logged-in RUNNING
+12:29:01.295 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+12:29:01.295 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+12:29:01.679 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Take screenshot p10-search-logged-in COMPLETED
+12:29:01.679 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on (Optional) "Back" RUNNING
+12:29:08.367 [ INFO] maestro.orchestra.Orchestra.executeCommands: [Command execution] CommandWarned: Element not found: Text matching regex: Back
+12:29:08.461 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+12:29:08.461 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+12:29:08.840 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on (Optional) "Back" WARNED
+12:29:08.840 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Wait for animation to end within 4000 ms RUNNING
+12:29:08.841 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$54: Waiting for animation to end with timeout 4000
+12:29:08.841 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+12:29:08.841 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+12:29:09.216 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+12:29:09.216 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+12:29:09.642 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Wait for animation to end within 4000 ms COMPLETED
+12:29:09.643 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Take screenshot p11-after-search-back RUNNING
+12:29:09.644 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+12:29:09.644 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+12:29:10.005 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Take screenshot p11-after-search-back COMPLETED
