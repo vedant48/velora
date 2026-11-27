@@ -42,16 +42,19 @@ appId: com.vedant.velora
 - assertNotVisible: "Log in / Sign up"
 - takeScreenshot: p04-home-restored
 
-# 4. Unified Explore: filter chips, personal rails, genre browse.
+# 4. Unified Explore: Movies/Series filter chips, personal rails, genre browse.
+#    Default view is Movies (owner removed the All filter).
 - tapOn: "Explore"
 - extendedWaitUntil:
     visible:
       text: "For you"
     timeout: 60000
-- takeScreenshot: p05-explore-all-top
+- takeScreenshot: p05-explore-movies-top
 - assertVisible: "Movies"
 - assertVisible: "Series"
 - assertVisible: "Because you liked Fight Club"
+- assertVisible: "Trending movies"
+- assertNotVisible: "Watch next"
 - scrollUntilVisible:
     element:
       text: "Science Fiction"
@@ -59,26 +62,22 @@ appId: com.vedant.velora
 - takeScreenshot: p06-explore-genres-movies
 - scrollUntilVisible:
     element:
-      text: "War & Politics"
-    direction: DOWN
-- takeScreenshot: p07-explore-genres-series
-- tapOn:
-    id: "explore-filter-movies"
-- extendedWaitUntil:
-    visible:
       text: "Available for streaming"
-    timeout: 30000
-- assertNotVisible: "Watch next"
-- takeScreenshot: p08-explore-movies
+    direction: DOWN
+- takeScreenshot: p07-explore-movies-catalog
 - tapOn:
     id: "explore-filter-tv"
 - extendedWaitUntil:
     visible:
       text: "Watch next"
     timeout: 30000
-- takeScreenshot: p09-explore-series
-- tapOn:
-    id: "explore-filter-all"
+- assertVisible: "Trending series"
+- takeScreenshot: p08-explore-series
+- scrollUntilVisible:
+    element:
+      text: "War & Politics"
+    direction: DOWN
+- takeScreenshot: p09-explore-genres-series
 
 # 5. Search skeleton then results, same query as the member's report.
 - tapOn: "Search"

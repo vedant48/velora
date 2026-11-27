@@ -20,10 +20,10 @@ import { useAuth } from '../../state/AuthContext';
 import { useAppTheme } from '../../theme/ThemeContext';
 import { ui } from '../../theme/ui';
 
-type ExploreFilter = 'all' | 'movies' | 'tv';
+type ExploreFilter = 'movies' | 'tv';
 
+// Owner call (2026-11-28): no All filter, Movies and Series only.
 const FILTER_OPTIONS: { key: ExploreFilter; label: string }[] = [
-  { key: 'all', label: 'All' },
   { key: 'movies', label: 'Movies' },
   { key: 'tv', label: 'Series' },
 ];
@@ -32,10 +32,10 @@ const EMPTY_FOR_YOU: ForYouResult = { mixed: [], rails: [] };
 
 type RailSource = { data?: MediaItem[]; isLoading?: boolean; isError?: boolean; refetch?: () => void };
 
-/** Single Explore tab: one discovery feed with an All / Movies / Series filter,
+/** Single Explore tab: one discovery feed with a Movies / Series filter,
  *  personal multi-seed recommendations, genre browsing, then the catalog rails. */
 export function ExploreScreen() {
-  const [filter, setFilter] = useState<ExploreFilter>('all');
+  const [filter, setFilter] = useState<ExploreFilter>('movies');
   const [offset, setOffset] = useState(0);
   const { height: viewportHeight } = useWindowDimensions();
   const { colors } = useAppTheme();
@@ -93,8 +93,15 @@ export function ExploreScreen() {
   const openGenre = useCallback((genreId: number, genreName: string, mediaType: 'movie' | 'tv') => navigation.navigate('Genre', { genreId, genreName, mediaType }), [navigation]);
   const collections = <CollectionsRail onPressCollection={(collectionId, collectionName) => navigation.navigate('Collection', { collectionId, collectionName })} />;
 
-  const heroItem = filter === 'tv' ? television.data?.[0] : (forYou.mixed[0] ?? trending.data?.[0]);
-  const heroEyebrow = filter === 'tv' ? 'Series pick for you' : forYou.mixed.length > 0 ? 'Picked for you' : 'Trending now';
+  // Personal picks are filtered to the visible media type so a Movies view
+  // never shows series recs (and vice versa); labels stay truthful.
+  const mixed = forYou.mixed.filter(i => (filter === 'tv' ? i.media_type === 'tv' : i.media_type !== 'tv'));
+  const personalRails = forYou.rails
+    .map(r => ({ ...r, items: r.items.filter(i => (filter === 'tv' ? i.media_type === 'tv' : i.media_type !== 'tv')) }))
+    .filter(r => r.items.length > 0);
+
+  const heroItem = mixed[0] ?? (filter === 'tv' ? television.data?.[0] : trending.data?.[0]);
+  const heroEyebrow = mixed.length > 0 ? 'Picked for you' : 'Trending now';
 
   const rail = (title: string, source: RailSource) => (
     <MovieCarousel title={title} data={source.data} isLoading={source.isLoading ?? false} isError={source.isError ?? false} onRetry={source.refetch ?? (() => undefined)} onItemPress={open} cardWidth={116} cardHeight={174} minimal trackingStatus={tracked} />
@@ -131,18 +138,16 @@ export function ExploreScreen() {
           onWant={addToWant}
         />
       )}
-      {forYou.mixed.length > 0 && <LazySection>{rail('For you', { data: forYou.mixed })}</LazySection>}
-      {forYou.rails.map(r => <LazySection key={r.key}>{rail(r.title, { data: r.items })}</LazySection>)}
+      {mixed.length > 0 && <LazySection>{rail('For you', { data: mixed })}</LazySection>}
+      {personalRails.map(r => <LazySection key={r.key}>{rail(r.title, { data: r.items })}</LazySection>)}
       {filter !== 'tv' && <LazySection>{rail('Trending movies', trending)}</LazySection>}
       {filter !== 'movies' && <LazySection>{rail('Trending series', television)}</LazySection>}
-      {filter !== 'movies' && <LazySection height={340}><WatchNextRail onPressItem={openSeries} showEmpty={filter !== 'all'} /></LazySection>}
-      <LazySection height={filter === 'all' ? 560 : 330}><GenreBrowseSection filter={filter} onPressGenre={openGenre} /></LazySection>
+      {filter !== 'movies' && <LazySection height={340}><WatchNextRail onPressItem={openSeries} showEmpty /></LazySection>}
+      <LazySection height={330}><GenreBrowseSection filter={filter} onPressGenre={openGenre} /></LazySection>
       {filter !== 'tv' && <>
         {/* Trending movies/series rails also sit right after For you above; the
-            wide Trending this week cards below keep the original All-tab section. */}
-        {filter === 'all' && (
-          <LazySection height={240}><WideCardRail title="Trending this week" items={trending.data ?? []} onItemPress={open} /></LazySection>
-        )}
+            wide Trending this week cards below keep the original wide-card section. */}
+        <LazySection height={240}><WideCardRail title="Trending this week" items={trending.data ?? []} onItemPress={open} /></LazySection>
         <LazySection height={230}><TrailersRail items={nowPlaying.data ?? []} onItemPress={open} /></LazySection>
         <LazySection>{rail('Available for streaming', streaming)}</LazySection>
         <LazySection>{rail('In Theaters Now', nowPlaying)}</LazySection>
