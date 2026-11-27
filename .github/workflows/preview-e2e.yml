@@ -109,7 +109,9 @@ jobs:
 
   e2e:
     needs: [changes, build]
-    if: needs.build.result != 'failure' && needs.build.result != 'cancelled'
+    # always() is required: without a status function the job is skipped when
+    # the reused-APK path intentionally skips the build job.
+    if: ${{ always() && needs.changes.result == 'success' && (needs.build.result == 'success' || needs.build.result == 'skipped') }}
     runs-on: ubuntu-latest
     steps:
       - name: 📥 Checkout repository
