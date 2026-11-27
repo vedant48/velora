@@ -1,0 +1,149 @@
+name: Seeded logged-in proof v3 (CI test build, local backend, no production)
+on:
+  push:
+    branches: [test/ui-proof-1517]
+    paths: ['.github/workflows/seeded-proof-v3.yml']
+permissions:
+  contents: write
+  actions: read
+jobs:
+  ui:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: ui-test-apk
+          path: candidate
+          run-id: 45686817602
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - name: Install Maestro
+        run: curl -Ls "https://get.maestro.mobile.dev" | bash
+      - name: Enable emulator acceleration
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules && sudo udevadm trigger --name-match=kvm
+      - name: Write harness (test only)
+        run: |
+          mkdir -p .ci proof
+          cat > .ci/seeded.yaml <<'EOF'
+          appId: com.vedant.velora
+          ---
+          - runFlow: ../.maestro/login-design2.yaml
+          - waitForAnimationToEnd:
+              timeout: 8000
+          - takeScreenshot: p1-home-want
+          - tapOn:
+              text: "Watched"
+              optional: true
+          - waitForAnimationToEnd:
+              timeout: 4000
+          - takeScreenshot: p2-watched
+          - tapOn:
+              text: "Series"
+              optional: true
+          - waitForAnimationToEnd:
+              timeout: 4000
+          - takeScreenshot: p3-series
+          - tapOn:
+              text: "Insights"
+              optional: true
+          - waitForAnimationToEnd:
+              timeout: 4000
+          - takeScreenshot: p4-insights
+          - tapOn:
+              text: "Want"
+              optional: true
+          - waitForAnimationToEnd:
+              timeout: 3000
+          - tapOn:
+              point: "27%,45%"
+          - waitForAnimationToEnd:
+              timeout: 9000
+          - takeScreenshot: p5-details-logged-in
+          - scroll
+          - takeScreenshot: p6-details-scrolled
+          - scroll
+          - takeScreenshot: p7-details-scrolled2
+          - back
+          - waitForAnimationToEnd:
+              timeout: 4000
+          - tapOn:
+              text: "Settings"
+              optional: true
+          - waitForAnimationToEnd:
+              timeout: 5000
+          - takeScreenshot: p8-settings
+          - scroll
+          - takeScreenshot: p9-settings-scrolled
+          - back
+          - waitForAnimationToEnd:
+              timeout: 3000
+          - tapOn:
+              text: "Search"
+              optional: true
+          - waitForAnimationToEnd:
+              timeout: 5000
+          - takeScreenshot: p10-search-logged-in
+          - tapOn:
+              text: "Back"
+              optional: true
+          - waitForAnimationToEnd:
+              timeout: 4000
+          - takeScreenshot: p11-after-search-back
+          EOF
+          cat > .ci/seeded.sh <<'EOF'
+          #!/usr/bin/env bash
+          set -uo pipefail
+          export PATH="$PATH:$HOME/.maestro/bin"
+          { bash scripts/e2e-backend.sh && (cd server && node scripts/e2e-seed-design2.mjs && node scripts/e2e-seed-circle.mjs); } > proof/backend-setup.log 2>&1 || { echo SETUP_FAILED >> proof/backend-setup.log; echo 98 > proof/maestro-exit.txt; exit 0; }
+          adb reverse tcp:8787 tcp:8787
+          adb install candidate/app-release.apk 2>&1 | tee proof/install.txt
+          adb shell dumpsys package com.vedant.velora | grep -E "versionCode|versionName" | tee proof/dump.txt
+          sha256sum candidate/app-release.apk | tee proof/test-apk-sha.txt
+          adb shell wm size 720x1600; adb shell wm density 320
+          python3 scripts/emulator-ready.py || true
+          adb shell cmd uimode night yes
+          maestro test --format junit --output proof/smoke.xml --test-output-dir proof/smoke .ci/seeded.yaml > proof/maestro-out.txt 2>&1
+          echo $? > proof/maestro-exit.txt
+          adb exec-out screencap -p > proof/final-screen.png || true
+          adb logcat -d | grep -iE "FATAL EXCEPTION|ReactNativeJS.*Error|ANR in" | head -20 > proof/crashes.txt || true
+          adb logcat -d -t 400 > proof/logcat.txt || true
+          exit 0
+          EOF
+      - uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          target: google_apis
+          arch: x86_64
+          profile: pixel_2
+          ram-size: 3072
+          disable-animations: false
+          emulator-options: -no-window -gpu swiftshader -no-snapshot -noaudio -no-boot-anim
+          script: bash .ci/seeded.sh
+      - name: Upload evidence artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: seeded3-${{ github.run_id }}-${{ github.run_attempt }}
+          path: proof
+          retention-days: 14
+      - name: Publish evidence branch (unique name)
+        if: always()
+        run: |
+          git config user.email ci@velora.local; git config user.name velora-ci
+          EV=$(mktemp -d); git worktree add --detach "$EV"
+          N=ci-evidence/seeded3-${{ github.run_id }}-${{ github.run_attempt }}
+          git -C "$EV" checkout --orphan "$N"
+          git -C "$EV" rm -rf . >/dev/null 2>&1 || true
+          cp -r proof "$EV/" 2>/dev/null || true
+          printf 'run_id=%s\nattempt=%s\ncommit=%s\n' "${{ github.run_id }}" "${{ github.run_attempt }}" "$GITHUB_SHA" > "$EV/META.txt"
+          git -C "$EV" add -A; git -C "$EV" commit -m "seeded3 evidence"
+          git -C "$EV" push origin "HEAD:$N"
+      - name: Fail honestly if setup or Maestro failed
+        if: always()
+        run: |
+          test "$(cat proof/maestro-exit.txt 2>/dev/null || echo 99)" = "0"
