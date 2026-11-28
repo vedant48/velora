@@ -141,8 +141,12 @@ appId: com.vedant.velora
       text: "Fight Club"
 - extendedWaitUntil:
     visible:
-      text: "Share Fight Club"
+      text: "My rating 9 of 10"
     timeout: 60000
+- assertNotVisible:
+    text: "Share Fight Club"
+- assertVisible:
+    text: "Drama genre"
 - takeScreenshot: p11b-details-fightclub
 - extendedWaitUntil:
     visible:
@@ -170,8 +174,12 @@ appId: com.vedant.velora
       text: "Game of Thrones"
 - extendedWaitUntil:
     visible:
-      text: "Share Game of Thrones"
+      text: "All episodes"
     timeout: 60000
+- assertNotVisible:
+    text: "Share Game of Thrones"
+- assertVisible:
+    text: "Drama genre"
 - takeScreenshot: p13b-details-got
 - extendedWaitUntil:
     visible:
@@ -237,7 +245,7 @@ appId: com.vedant.velora
       text: "Fight Club"
 - extendedWaitUntil:
     visible:
-      text: "Share Fight Club"
+      text: "My rating 9 of 10"
     timeout: 60000
 - extendedWaitUntil:
     visible:

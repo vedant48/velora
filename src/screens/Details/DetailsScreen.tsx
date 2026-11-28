@@ -4,7 +4,8 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { CachedImage as Image } from '../../experience/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Linking, Modal, Pressable, ScrollView, Share, StatusBar, StyleSheet, Text, View } from 'react-native';
+import { Linking, Modal, Pressable, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
+// Share import removed with the header share button (owner request 28 Nov): { Share } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useMovieCreditsQuery, useMovieDetailsQuery, useMovieVideosQuery, useSeasonEpisodesQuery, useSimilarMoviesQuery, useTVCreditsQuery, useTVDetailsQuery, useTVVideosQuery } from '../../api/queries';
 import { useQueryClient } from '@tanstack/react-query';
@@ -56,6 +57,7 @@ export const DetailsScreen: React.FC = () => {
   const [statsRefreshKey, setStatsRefreshKey] = useState(0);
   const [titleStats, setTitleStats] = useState<{ want: number; watching: number; watched: number; reviews: number } | null>(null);
   const [mySeasonRatings, setMySeasonRatings] = useState<Record<number, number>>({});
+  const [myRating, setMyRating] = useState<number | null>(null);
 
   const { user, apiReady } = useAuth();
 
@@ -109,32 +111,38 @@ export const DetailsScreen: React.FC = () => {
       .catch(() => undefined);
   }, [isMovie, initialItem.id, statsRefreshKey]);
 
-  // My per-season ratings drive the star badge on season pills
+  // My ratings: per-season ratings drive the star badge on season pills (series),
+  // and my title-level rating (movie, or whole-series season 0) shows in the header
+  // where the share button used to be (owner request 28 Nov).
   useEffect(() => {
-    if (!isTV || !user || !apiReady) {
+    if (!user || !apiReady) {
       setMySeasonRatings({});
+      setMyRating(null);
       return;
     }
     let cancelled = false;
     veloraApi
       .me()
       .then((me) =>
-        veloraApi.getReviews('tv', initialItem.id).then(({ reviews }) => {
+        veloraApi.getReviews(isMovie ? 'movie' : 'tv', initialItem.id).then(({ reviews }) => {
           if (cancelled) return;
           const map: Record<number, number> = {};
+          let titleRating: number | null = null;
           for (const r of reviews) {
-            if (r.user_id === me.user.id && r.season_number > 0 && r.rating != null) {
-              map[r.season_number] = r.rating;
+            if (r.user_id === me.user.id && r.rating != null) {
+              if (r.season_number === 0) titleRating = r.rating;
+              else if (isTV) map[r.season_number] = r.rating;
             }
           }
           setMySeasonRatings(map);
+          setMyRating(titleRating);
         }),
       )
       .catch(() => undefined);
     return () => {
       cancelled = true;
     };
-  }, [isTV, user, apiReady, initialItem.id, statsRefreshKey]);
+  }, [isMovie, isTV, user, apiReady, initialItem.id, statsRefreshKey]);
 
   const onChanged = useCallback(() => {
     setStatsRefreshKey((k) => k + 1);
@@ -310,12 +318,13 @@ export const DetailsScreen: React.FC = () => {
     }
     return value ? (cc === 'IN' ? value : `${value} (${cc})`) : null;
   }, [details, isMovie]);
-  // User-triggered share via the native sheet; shares the title and its TMDB page, nothing else.
-  const shareTitle = useCallback(() => {
-    const kind = isMovie ? 'movie' : 'tv';
-    const tmdbId = (details as any)?.id ?? initialItem.id;
-    Share.share({ message: `${title} on Velora - https://www.themoviedb.org/${kind}/${tmdbId}` }).catch(() => undefined);
-  }, [details, initialItem.id, isMovie, title]);
+  // Share button removed from the header (owner request 28 Nov): the slot now shows
+  // my own rating when the title is rated. Kept commented, not deleted.
+  // const shareTitle = useCallback(() => {
+  //   const kind = isMovie ? 'movie' : 'tv';
+  //   const tmdbId = (details as any)?.id ?? initialItem.id;
+  //   Share.share({ message: `${title} on Velora - https://www.themoviedb.org/${kind}/${tmdbId}` }).catch(() => undefined);
+  // }, [details, initialItem.id, isMovie, title]);
 
   const metaLine = [isMovie ? year : airRange ?? '', runtimeText, certification]
     .filter(Boolean)
@@ -352,6 +361,8 @@ export const DetailsScreen: React.FC = () => {
           <Ionicons name="arrow-back" size={20} color="#FFF" />
         </Pressable>
 
+        {/* Share button replaced by my own rating when rated (owner request 28 Nov);
+            unrated titles show nothing in this slot. Old button kept commented:
         <Pressable
           onPress={shareTitle}
           style={styles.circleButton}
@@ -361,6 +372,16 @@ export const DetailsScreen: React.FC = () => {
         >
           <Ionicons name="share-outline" size={20} color="#FFF" />
         </Pressable>
+        */}
+        {myRating != null && (
+          <View
+            style={[styles.circleButton, styles.myRatingBadge]}
+            accessibilityLabel={`My rating ${myRating} of 10`}
+          >
+            <Ionicons name="star" size={12} color="#FF9F0A" />
+            <Text style={styles.myRatingText}>{myRating}</Text>
+          </View>
+        )}
       </View>
 
       <ScrollView
@@ -419,6 +440,9 @@ export const DetailsScreen: React.FC = () => {
             <View style={styles.detailTitleCol}>
               <Text style={styles.title}>{title}</Text>
               {metaLine ? <Text style={styles.metaLineText}>{metaLine}</Text> : null}
+              {/* Genre badges (owner request 28 Nov): genres render as tappable pill
+                  badges; tapping still opens the genre titles sheet. The old inline
+                  text line is kept commented:
               {genresText ? (
                 <View style={styles.genresRow}>
                   {(details?.genres ?? []).map((g, i) => (
@@ -432,6 +456,23 @@ export const DetailsScreen: React.FC = () => {
                       <Text style={styles.genresLineText}>
                         {g.name}{i < (details?.genres?.length ?? 0) - 1 ? ' · ' : ''}
                       </Text>
+                    </Pressable>
+                  ))}
+                </View>
+              ) : null}
+              */}
+              {genresText ? (
+                <View style={styles.genreRow}>
+                  {(details?.genres ?? []).map((g) => (
+                    <Pressable
+                      key={g.id}
+                      onPress={() => setGenreSheet({ id: g.id, name: g.name })}
+                      accessibilityRole="button"
+                      accessibilityLabel={`${g.name} genre`}
+                      hitSlop={4}
+                      style={styles.genrePill}
+                    >
+                      <Text style={styles.genreText}>{g.name}</Text>
                     </Pressable>
                   ))}
                 </View>
@@ -766,13 +807,24 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     fontSize: 13,
     fontWeight: '500',
   },
-  genresLineText: {
-    color: colors.appleText3,
-    fontSize: 13,
-  },
-  genresRow: {
+  // Old inline genre text line styles, kept (commented) after genres became badges
+  // (owner request 28 Nov):
+  // genresLineText: {
+  //   color: colors.appleText3,
+  //   fontSize: 13,
+  // },
+  // genresRow: {
+  //   flexDirection: 'row',
+  //   flexWrap: 'wrap',
+  // },
+  myRatingBadge: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
+    gap: 3,
+  },
+  myRatingText: {
+    color: '#FFF',
+    fontSize: 13,
+    fontWeight: '800',
   },
   posterWrap: {
     width: 96,
