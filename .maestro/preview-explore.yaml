@@ -124,17 +124,16 @@ appId: com.vedant.velora
       text: "Comedy series"
     direction: UP
 - tapOn: "Comedy series"
-# The skeleton window is deterministic in e2e: the build routes TMDB through the
-# delay proxy (1.5s on discover reads) and Comedy is a genre the flow has not
-# opened before, so no cached page can skip the loading state.
+# Deterministic skeleton window: the e2e build routes TMDB through the delay
+# proxy (1.5s on discover reads) and Comedy is a genre the flow has not opened
+# before, so no cache can skip the skeleton. Capture immediately (the
+# accessibilityLabel "Loading" is not reliably matchable by maestro, so do not
+# wait on it - same pattern as the search-skeleton capture).
+- takeScreenshot: p09b-genre-browse-loading
+# First rating chip (e.g. "7.4") means the grid has loaded.
 - extendedWaitUntil:
     visible:
-      text: "Loading"
-    timeout: 10000
-- takeScreenshot: p09b-genre-browse-loading
-- extendedWaitUntil:
-    notVisible:
-      text: "Loading"
+      text: "^\\d+\\.\\d$"
     timeout: 60000
 # Movies/TV switch removed from the genre page (member request 28 Nov)
 - assertNotVisible:
