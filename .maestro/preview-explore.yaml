@@ -61,7 +61,12 @@ appId: com.vedant.velora
 - assertVisible: "Movies"
 - assertVisible: "Series"
 - assertVisible: "Because you liked Fight Club"
-- assertVisible: "Trending movies"
+# Rails mount only near the viewport (LazySection), so anything below the
+# first screen must be scrolled into view, not bare-asserted.
+- scrollUntilVisible:
+    element:
+      text: "Trending movies"
+    direction: DOWN
 - assertNotVisible: "Watch next"
 - scrollUntilVisible:
     element:
@@ -73,14 +78,23 @@ appId: com.vedant.velora
       text: "Available for streaming"
     direction: DOWN
 - takeScreenshot: p07-explore-movies-catalog
+- scrollUntilVisible:
+    element:
+      id: "explore-filter-tv"
+    direction: UP
 - tapOn:
     id: "explore-filter-tv"
-- extendedWaitUntil:
-    visible:
-      text: "Watch next"
-    timeout: 30000
-- assertVisible: "Trending series"
+- scrollUntilVisible:
+    element:
+      text: "Trending series"
+    direction: DOWN
+    timeout: 60000
 - takeScreenshot: p08-explore-series
+- scrollUntilVisible:
+    element:
+      text: "Watch next"
+    direction: DOWN
+- takeScreenshot: p08b-explore-watch-next
 - scrollUntilVisible:
     element:
       text: "War & Politics"

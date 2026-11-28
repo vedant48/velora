@@ -26,7 +26,7 @@ jobs:
           fetch-depth: 2
       - id: f
         run: |
-          if git diff --name-only HEAD~1 HEAD | grep -qvE '^\.maestro/'; then
+          if git diff --name-only HEAD~1 HEAD | grep -qvE '^\.maestro/|^scripts/e2e-'; then
             echo "app=true" >> "$GITHUB_OUTPUT"
           else
             echo "app=false" >> "$GITHUB_OUTPUT"
@@ -165,11 +165,11 @@ jobs:
           # app tree (everything except .maestro + this workflow) is identical
           # to HEAD. Artifact existence proves its build job succeeded.
           MATCH=""
-          # Fingerprint = whole tree except .maestro (the workflow file itself
-          # is compared, so build-config changes like the cleartext manifest
-          # step force a fresh build instead of a stale reuse).
+          # Fingerprint = whole tree except the e2e harness (.maestro,
+          # scripts/e2e-*); the workflow file itself is compared, so
+          # build-config changes force a fresh build instead of stale reuse.
           for SHA in $(gh api "repos/$GITHUB_REPOSITORY/actions/artifacts?name=preview-apk&per_page=10" --jq '[.artifacts[] | select(.workflow_run.head_branch == "explore-recs-v1.6") | .workflow_run.head_sha] | unique | .[]'); do
-            if git diff --quiet "$SHA" HEAD -- . ':(exclude).maestro'; then MATCH="$SHA"; break; fi
+            if git diff --quiet "$SHA" HEAD -- . ':(exclude).maestro' ':(exclude)scripts/e2e-*'; then MATCH="$SHA"; break; fi
           done
           if [ -z "$MATCH" ]; then echo "No preview-apk artifact matches the current app tree; run a full build."; exit 1; fi
           RUN_ID=$(gh api "repos/$GITHUB_REPOSITORY/actions/artifacts?name=preview-apk&per_page=10" --jq --arg sha "$MATCH" '[.artifacts[] | select(.workflow_run.head_sha == $sha)] | .[0].workflow_run.id')
@@ -193,14 +193,7 @@ jobs:
           profile: pixel_6
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
           script: |
-            adb reverse tcp:8788 tcp:8788
-            adb install candidate/app-release.apk
-            mkdir -p evidence
-            $HOME/.maestro/bin/maestro test --test-output-dir evidence .maestro/preview-explore.yaml; MAESTRO_EXIT=$?
-            # Capture device logs either way: distinguishes app network errors
-            # (e.g. cleartext refusal) from backend or selector issues.
-            adb logcat -d -t 400 > evidence/logcat-tail.txt 2>/dev/null || true
-            exit $MAESTRO_EXIT
+            bash scripts/e2e-run-maestro.sh
 
       - name: 🖼️ Upload evidence
         if: always()
