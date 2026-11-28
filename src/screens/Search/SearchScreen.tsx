@@ -271,6 +271,7 @@ export const SearchScreen: React.FC = () => {
           <FlashList
             data={peopleQuery.data?.users ?? []}
             keyExtractor={(u) => u.id}
+            keyboardShouldPersistTaps="handled"
             contentContainerStyle={styles.listContent}
             renderItem={({ item: u }) => (
               <Pressable style={styles.userRow} onPress={() => navigation.navigate('UserProfile', { username: u.username })}>
@@ -315,6 +316,7 @@ export const SearchScreen: React.FC = () => {
           <FlashList
             data={allResults}
             renderItem={renderItem}
+            keyboardShouldPersistTaps="handled"
             keyExtractor={keyExtractor}
             numColumns={numColumns}
             contentContainerStyle={styles.listContent}
