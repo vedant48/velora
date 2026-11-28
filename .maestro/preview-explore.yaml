@@ -207,9 +207,12 @@ appId: com.vedant.velora
 
 # 9. Dark theme over Explore, genres and the genre drawer.
 - tapOn: "Explore"
-- extendedWaitUntil:
-    visible:
+# Explore keeps its previous scroll position; the For you rail is above the
+# viewport (and unmounted) unless we scroll back up first.
+- scrollUntilVisible:
+    element:
       text: "For you"
+    direction: UP
     timeout: 30000
 - takeScreenshot: p16-explore-dark-top
 - scrollUntilVisible:
@@ -218,6 +221,11 @@ appId: com.vedant.velora
     direction: DOWN
 - takeScreenshot: p17-explore-dark-genres
 - tapOn: "Search"
+# The Search tab keeps the previous query; clear it if present so the
+# placeholder exists for the next tap.
+- tapOn:
+    text: "Clear search"
+    optional: true
 - tapOn: "Movies, series, people…"
 - inputText: "fight club"
 - extendedWaitUntil:
