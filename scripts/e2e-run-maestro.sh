@@ -11,7 +11,7 @@ MAESTRO_EXIT=$?
 # Capture device logs either way: distinguishes app network errors (cleartext
 # refusal, failed fetch) from backend or selector issues. Highlights are
 # echoed so they are readable in the job log without artifact access.
-adb logcat -d -t 400 > evidence/logcat-tail.txt 2>/dev/null || true
+adb logcat -d -t 4000 > evidence/logcat-tail.txt 2>/dev/null || true
 echo '--- logcat highlights ---'
 grep -iE 'cleartext|ReactNativeJS|AndroidRuntime|ECONN|ETIMEDOUT|UnknownHost' evidence/logcat-tail.txt | tail -30 || true
 echo '--- end logcat highlights ---'

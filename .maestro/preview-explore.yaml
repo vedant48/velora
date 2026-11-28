@@ -123,8 +123,13 @@ appId: com.vedant.velora
 - tapOn: "Fight Club"
 - extendedWaitUntil:
     visible:
+      text: "Share Fight Club"
+    timeout: 60000
+- takeScreenshot: p11b-details-fightclub
+- extendedWaitUntil:
+    visible:
       text: "Drama"
-    timeout: 30000
+    timeout: 90000
 - tapOn: "Drama"
 - assertVisible:
     id: "genre-sheet-movie"
@@ -145,8 +150,13 @@ appId: com.vedant.velora
 - tapOn: "Game of Thrones"
 - extendedWaitUntil:
     visible:
+      text: "Share Game of Thrones"
+    timeout: 60000
+- takeScreenshot: p13b-details-got
+- extendedWaitUntil:
+    visible:
       text: "Drama"
-    timeout: 30000
+    timeout: 90000
 - tapOn: "Drama"
 - assertVisible:
     id: "genre-sheet-tv"
