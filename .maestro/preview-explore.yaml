@@ -80,6 +80,16 @@ appId: com.vedant.velora
 - takeScreenshot: p07-explore-movies-catalog
 - scrollUntilVisible:
     element:
+      text: "In Theaters Now"
+    direction: DOWN
+- takeScreenshot: p07b-in-theaters
+- scrollUntilVisible:
+    element:
+      text: "Coming Soon"
+    direction: DOWN
+- takeScreenshot: p07c-coming-soon
+- scrollUntilVisible:
+    element:
       id: "explore-filter-tv"
     direction: UP
 - tapOn:
@@ -118,9 +128,11 @@ appId: com.vedant.velora
 - inputText: "fight club"
 - extendedWaitUntil:
     visible:
-      text: "Fight Club"
+      text: "1999"
     timeout: 60000
-- tapOn: "Fight Club"
+- tapOn:
+    containsChild:
+      text: "Fight Club"
 - extendedWaitUntil:
     visible:
       text: "Share Fight Club"
@@ -145,9 +157,11 @@ appId: com.vedant.velora
 - inputText: "game of thrones"
 - extendedWaitUntil:
     visible:
-      text: "Game of Thrones"
+      text: "2011"
     timeout: 60000
-- tapOn: "Game of Thrones"
+- tapOn:
+    containsChild:
+      text: "Game of Thrones"
 - extendedWaitUntil:
     visible:
       text: "Share Game of Thrones"
@@ -182,3 +196,41 @@ appId: com.vedant.velora
 - tapOn: "Dark"
 - tapOn: "Back"
 - takeScreenshot: p15-home-dark
+
+# 9. Dark theme over Explore, genres and the genre drawer.
+- tapOn: "Explore"
+- extendedWaitUntil:
+    visible:
+      text: "For you"
+    timeout: 30000
+- takeScreenshot: p16-explore-dark-top
+- scrollUntilVisible:
+    element:
+      text: "Browse by genre"
+    direction: DOWN
+- takeScreenshot: p17-explore-dark-genres
+- tapOn: "Search"
+- tapOn: "Movies, series, people…"
+- inputText: "fight club"
+- extendedWaitUntil:
+    visible:
+      text: "1999"
+    timeout: 60000
+- tapOn:
+    containsChild:
+      text: "Fight Club"
+- extendedWaitUntil:
+    visible:
+      text: "Share Fight Club"
+    timeout: 60000
+- extendedWaitUntil:
+    visible:
+      text: "Drama"
+    timeout: 90000
+- tapOn: "Drama"
+- assertVisible:
+    id: "genre-sheet-movie"
+- takeScreenshot: p18-dark-genre-drawer
+- tapOn: "Dismiss"
+- assertNotVisible:
+    id: "genre-sheet-movie"
