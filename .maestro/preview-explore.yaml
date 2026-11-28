@@ -117,6 +117,24 @@ appId: com.vedant.velora
     direction: DOWN
 - takeScreenshot: p09-explore-genres-series
 
+# 4b. Genre browse page (genre tap): loading skeleton must be 3 poster-only
+#     columns matching the loaded grid - no text bars (member report 28 Nov).
+- scrollUntilVisible:
+    element:
+      text: "Drama series"
+    direction: UP
+- tapOn: "Drama series"
+- takeScreenshot: p09b-genre-browse-loading
+- extendedWaitUntil:
+    notVisible:
+      text: "Loading"
+    timeout: 60000
+# Movies/TV switch removed from the genre page (member request 28 Nov)
+- assertNotVisible:
+    text: "Movies"
+- takeScreenshot: p09c-genre-browse-loaded
+- tapOn: "Go back"
+
 # 5. Search skeleton then results, same query as the member's report.
 - tapOn: "Search"
 - tapOn: "Movies, series, people…"

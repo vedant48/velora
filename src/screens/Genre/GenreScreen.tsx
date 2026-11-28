@@ -2,7 +2,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { FlashList, ListRenderItem } from '@shopify/flash-list';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
+// useState removed with the Movies/TV toggle (owner request 28 Nov)
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useGenreInfiniteQuery } from '../../api/queries';
@@ -25,7 +26,10 @@ export const GenreScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
 
   const { genreId, genreName, mediaType: initialMediaType = 'movie' } = route.params;
-  const [mediaType, setMediaType] = useState<'movie' | 'tv'>(initialMediaType);
+  // Movies/TV switch removed (owner request 28 Nov): movie and series genres differ,
+  // so the genre that opened this screen fixes the media type. Toggle state kept commented:
+  // const [mediaType, setMediaType] = useState<'movie' | 'tv'>(initialMediaType);
+  const mediaType = initialMediaType;
 
   const {
     data,
@@ -110,7 +114,7 @@ export const GenreScreen: React.FC = () => {
           </Text>
         </View>
 
-        {/* Media type toggle pills */}
+        {/* Media type toggle removed (owner request 28 Nov) - kept commented:
         <View style={styles.toggleRow}>
           <Pressable
             onPress={() => setMediaType('movie')}
@@ -133,11 +137,22 @@ export const GenreScreen: React.FC = () => {
             </Text>
           </Pressable>
         </View>
+        */}
       </View>
 
       {/* Grid Content */}
+      {/* Skeleton matches the loaded grid exactly: 3 poster-only columns, same tile
+          size/gaps, no text bars (owner report 28 Nov). tileRadius 12 matches
+          MovieCard's minimal borderRadius. */}
       {isLoading ? (
-        <PosterGridSkeleton count={9} />
+        <PosterGridSkeleton
+          count={9}
+          columns={numColumns}
+          gap={gap}
+          tileWidth={cardWidth}
+          tileRadius={12}
+          horizontalPadding={metrics.screenHorizontalPadding}
+        />
       ) : isError && items.length === 0 ? (
         <View style={styles.emptyContainer}><Text style={styles.emptyTitle}>Could not load titles</Text>
           <Pressable onPress={() => refetch()} accessibilityRole="button"><Text style={styles.emptySubtitle}>Tap to retry</Text></Pressable>
@@ -203,30 +218,32 @@ const createStyles = (colors: AppColors) => StyleSheet.create({
     fontWeight: '700',
     color: colors.textPrimary,
   },
-  toggleRow: {
-    flexDirection: 'row',
-    backgroundColor: colors.appleSegTrack,
-    borderRadius: 9,
-    padding: 2,
-    gap: 2,
-  },
-  togglePill: {
-    paddingHorizontal: 12,
-    paddingVertical: 5,
-    borderRadius: 7,
-  },
-  togglePillActive: {
-    backgroundColor: colors.appleSegActive,
-  },
-  toggleText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: colors.textMuted,
-  },
-  toggleTextActive: {
-    color: '#FFF',
-    fontWeight: '700',
-  },
+  // Movies/TV toggle styles, kept (commented) after the toggle was removed
+  // (owner request 28 Nov):
+  // toggleRow: {
+  //   flexDirection: 'row',
+  //   backgroundColor: colors.appleSegTrack,
+  //   borderRadius: 9,
+  //   padding: 2,
+  //   gap: 2,
+  // },
+  // togglePill: {
+  //   paddingHorizontal: 12,
+  //   paddingVertical: 5,
+  //   borderRadius: 7,
+  // },
+  // togglePillActive: {
+  //   backgroundColor: colors.appleSegActive,
+  // },
+  // toggleText: {
+  //   fontSize: 12,
+  //   fontWeight: '600',
+  //   color: colors.textMuted,
+  // },
+  // toggleTextActive: {
+  //   color: '#FFF',
+  //   fontWeight: '700',
+  // },
   skeletonGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
