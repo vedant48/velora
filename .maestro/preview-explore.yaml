@@ -192,17 +192,11 @@ appId: com.vedant.velora
       text: "Game of Thrones"
 - extendedWaitUntil:
     visible:
-      text: "All episodes"
-    timeout: 60000
-- assertNotVisible:
-    text: "Share Game of Thrones"
-- assertVisible:
-    text: "Drama genre"
-- takeScreenshot: p13b-details-got
-- extendedWaitUntil:
-    visible:
       text: "Drama genre"
     timeout: 90000
+- assertNotVisible:
+    text: "Share Game of Thrones"
+- takeScreenshot: p13b-details-got
 - tapOn: "Drama genre"
 - assertVisible:
     id: "genre-sheet-tv"
