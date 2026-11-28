@@ -1,9 +1,9 @@
-## Reviews and ratings from friends, skeleton loaders
+## Explore revamp: genres, trending placement and genre drawers
 
-- Movie and series pages now show review cards and a rating row above Overview, from you and the people you follow. Real profile photos are used when they have one.
-- Series reviews go season by season, newest season first (S3, then S2, then S1). The rating under each photo is the season that person rated most recently.
-- Tap a photo or rating to open a drawer with that person's review and rating for every season they watched.
-- The old "Write a review" box is gone from movies and series. Your saved reviews are untouched.
-- The red spinners are replaced by skeleton loaders that match each screen, in Light, Dark and System theme.
+- Explore now has Movies and Series tabs, with genre browsing for both.
+- Trending movies and Trending series rails now sit right after For you.
+- Tapping a genre on any movie or series page opens a drawer of similar titles; movies stay movies, series stay series.
+- Loading placeholders are now poster-only skeletons that match the real card layout.
+- The login screen no longer flashes on app start, and the search keyboard no longer eats the first tap on a result.
 
 No change to your account or library; update in place.
