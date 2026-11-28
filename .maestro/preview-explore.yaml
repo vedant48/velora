@@ -140,9 +140,9 @@ appId: com.vedant.velora
 - takeScreenshot: p11b-details-fightclub
 - extendedWaitUntil:
     visible:
-      text: "Drama"
+      text: "Drama genre"
     timeout: 90000
-- tapOn: "Drama"
+- tapOn: "Drama genre"
 - assertVisible:
     id: "genre-sheet-movie"
 - takeScreenshot: p12-genre-drawer-movie
@@ -169,9 +169,9 @@ appId: com.vedant.velora
 - takeScreenshot: p13b-details-got
 - extendedWaitUntil:
     visible:
-      text: "Drama"
+      text: "Drama genre"
     timeout: 90000
-- tapOn: "Drama"
+- tapOn: "Drama genre"
 - assertVisible:
     id: "genre-sheet-tv"
 - takeScreenshot: p13-genre-drawer-series
@@ -225,9 +225,9 @@ appId: com.vedant.velora
     timeout: 60000
 - extendedWaitUntil:
     visible:
-      text: "Drama"
+      text: "Drama genre"
     timeout: 90000
-- tapOn: "Drama"
+- tapOn: "Drama genre"
 - assertVisible:
     id: "genre-sheet-movie"
 - takeScreenshot: p18-dark-genre-drawer

@@ -139,9 +139,10 @@ export function ExploreScreen() {
         />
       )}
       {mixed.length > 0 && <LazySection>{rail('For you', { data: mixed })}</LazySection>}
-      {personalRails.map(r => <LazySection key={r.key}>{rail(r.title, { data: r.items })}</LazySection>)}
+      {/* Trending rails sit directly after For you (owner direction 28 Nov). */}
       {filter !== 'tv' && <LazySection>{rail('Trending movies', trending)}</LazySection>}
       {filter !== 'movies' && <LazySection>{rail('Trending series', television)}</LazySection>}
+      {personalRails.map(r => <LazySection key={r.key}>{rail(r.title, { data: r.items })}</LazySection>)}
       {filter !== 'movies' && <LazySection height={340}><WatchNextRail onPressItem={openSeries} showEmpty /></LazySection>}
       <LazySection height={330}><GenreBrowseSection filter={filter} onPressGenre={openGenre} /></LazySection>
       {filter !== 'tv' && <>
