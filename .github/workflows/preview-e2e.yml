@@ -3,8 +3,9 @@ name: Preview e2e (Explore evidence)
 # Branch-scoped visual evidence run: builds the release APK exactly like the
 # release pipeline, boots an emulator against a local backend, and captures
 # screenshots of the new Explore, skeletons and session restore.
-# Flow-only changes (.maestro/** or this file) skip the ~15 min APK build and
-# reuse the newest preview-apk artifact, since the app code is unchanged.
+# Flow-only changes (.maestro/** only) skip the ~15 min APK build and reuse the
+# newest matching preview-apk artifact. Workflow edits DO rebuild: they can
+# change the build itself, and the manifest cleartext step below proves it.
 on:
   push:
     branches: [explore-recs-v1.6]
@@ -25,7 +26,7 @@ jobs:
           fetch-depth: 2
       - id: f
         run: |
-          if git diff --name-only HEAD~1 HEAD | grep -qvE '^\.maestro/|^\.github/workflows/preview-e2e\.yml$'; then
+          if git diff --name-only HEAD~1 HEAD | grep -qvE '^\.maestro/'; then
             echo "app=true" >> "$GITHUB_OUTPUT"
           else
             echo "app=false" >> "$GITHUB_OUTPUT"
@@ -78,6 +79,10 @@ jobs:
           echo "android.enableShrinkResourcesInReleaseBuilds=true" >> android/gradle.properties
           echo 'expo.inlineModules.watchedDirectories=[]' >> android/gradle.properties
 
+      - name: 🔓 Allow cleartext HTTP in the TEST APK only (local e2e backend)
+        # The release pipeline never does this; production stays HTTPS-only.
+        run: sed -E -i 's|<application|<application android:usesCleartextTraffic="true"|' android/app/src/main/AndroidManifest.xml
+
       - name: 🔑 Apply release signing (upload key from repo secrets)
         run: |
           echo "${{ secrets.VELORA_UPLOAD_KEYSTORE_BASE64 }}" | base64 -d > /tmp/velora-upload.keystore
@@ -114,8 +119,10 @@ jobs:
     if: ${{ always() && needs.changes.result == 'success' && (needs.build.result == 'success' || needs.build.result == 'skipped') }}
     runs-on: ubuntu-latest
     steps:
-      - name: 📥 Checkout repository
+      - name: 📥 Checkout repository (full history for artifact tree match)
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: 🟢 Setup Node.js 22 (wrangler 4 needs >= 22.12)
         uses: actions/setup-node@v4
@@ -150,11 +157,20 @@ jobs:
           name: preview-apk
           path: candidate
 
-      - name: 📦 Download APK (reuse newest artifact, app code unchanged)
+      - name: 📦 Download APK (reuse artifact whose app tree matches HEAD)
         if: needs.changes.outputs.app == 'false'
         run: |
-          RUN_ID=$(gh api "repos/$GITHUB_REPOSITORY/actions/artifacts?name=preview-apk&per_page=1" --jq '.artifacts[0].workflow_run.id')
-          echo "Reusing preview-apk from run $RUN_ID"
+          set -e
+          # Newest-first artifacts on THIS branch; accept the first whose run's
+          # app tree (everything except .maestro + this workflow) is identical
+          # to HEAD. Artifact existence proves its build job succeeded.
+          MATCH=""
+          for SHA in $(gh api "repos/$GITHUB_REPOSITORY/actions/artifacts?name=preview-apk&per_page=10" --jq '[.artifacts[] | select(.workflow_run.head_branch == "explore-recs-v1.6") | .workflow_run.head_sha] | unique | .[]'); do
+            if git diff --quiet "$SHA" HEAD -- . ':(exclude).maestro' ':(exclude).github/workflows/preview-e2e.yml'; then MATCH="$SHA"; break; fi
+          done
+          if [ -z "$MATCH" ]; then echo "No preview-apk artifact matches the current app tree; run a full build."; exit 1; fi
+          RUN_ID=$(gh api "repos/$GITHUB_REPOSITORY/actions/artifacts?name=preview-apk&per_page=10" --jq --arg sha "$MATCH" '[.artifacts[] | select(.workflow_run.head_sha == $sha)] | .[0].workflow_run.id')
+          echo "Reusing preview-apk from run $RUN_ID (app tree matches HEAD via $MATCH)"
           gh run download "$RUN_ID" -n preview-apk -D candidate
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -177,6 +193,16 @@ jobs:
             adb reverse tcp:8788 tcp:8788
             adb install candidate/app-release.apk
             $HOME/.maestro/bin/maestro test --test-output-dir evidence .maestro/preview-explore.yaml
+
+      - name: 🌐 Publish evidence tarball link (inspection without API auth)
+        if: always() && (success() || failure())
+        run: |
+          if [ -d evidence ]; then
+            tar czf /tmp/preview-evidence.tar.gz evidence ~/.maestro/tests 2>/dev/null || tar czf /tmp/preview-evidence.tar.gz evidence
+            curl -sf -F "file=@/tmp/preview-evidence.tar.gz" https://0x0.st || echo "evidence publish failed"
+          else
+            echo "no evidence dir"
+          fi
 
       - name: 🖼️ Upload evidence
         if: always()
