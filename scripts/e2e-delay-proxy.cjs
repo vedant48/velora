@@ -4,8 +4,10 @@
 // /v1/tmdb/* -> deployed TMDB proxy over HTTPS (1.5s on discover reads so the
 // genre grid skeleton is reliably observable; the rest of TMDB stays fast).
 // Deterministic p09b capture: ONLY the Comedy-series first page (the request
-// the p09 leg triggers) is held 15s, because maestro's tap needs ~3s to settle
-// before the screenshot fires and a 1.5s hold already ended by then.
+// the p09 leg triggers) is held 10s, because maestro's tap needs ~3s to settle
+// before the screenshot fires and a 1.5s hold already ended by then. Must stay
+// under the app's 15s fetch timeout (client.ts timeoutMs) including upstream
+// latency, or the request aborts and retries and the grid never loads.
 const http = require('http');
 const https = require('https');
 const TMDB_HOST = 'proxy-api-server-f1an.onrender.com';
@@ -13,7 +15,7 @@ const COMEDY_SERIES_PAGE1 = '/v1/tmdb/3/discover/tv?with_genres=35&page=1';
 const delayFor = (req) => {
   if (req.method !== 'GET') return 0;
   if (/\/api\/(users|library|reviews|auth\/me)/.test(req.url)) return 1400;
-  if (req.url === COMEDY_SERIES_PAGE1) return 15000;
+  if (req.url === COMEDY_SERIES_PAGE1) return 10000;
   if (req.url.startsWith('/v1/tmdb/3/discover/')) return 1500;
   return 0;
 };
