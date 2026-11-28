@@ -8,7 +8,7 @@ name: Preview e2e (Explore evidence)
 # change the build itself, and the manifest cleartext step below proves it.
 on:
   push:
-    branches: [explore-recs-v1.6]
+    branches: [explore-recs-v1.6, details-genre-badges]
   workflow_dispatch:
 
 permissions:
