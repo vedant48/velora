@@ -121,11 +121,12 @@ appId: com.vedant.velora
 #     columns matching the loaded grid - no text bars (member report 28 Nov).
 - scrollUntilVisible:
     element:
-      text: "Drama series"
+      text: "Comedy series"
     direction: UP
-- tapOn: "Drama series"
-# The discover call hits the warm TMDB proxy directly (not the delay proxy), so
-# the grid can load before a post-tap screenshot: wait for the skeleton first.
+- tapOn: "Comedy series"
+# The skeleton window is deterministic in e2e: the build routes TMDB through the
+# delay proxy (1.5s on discover reads) and Comedy is a genre the flow has not
+# opened before, so no cached page can skip the loading state.
 - extendedWaitUntil:
     visible:
       text: "Loading"

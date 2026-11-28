@@ -100,6 +100,9 @@ jobs:
           ./gradlew assembleRelease --no-daemon
         env:
           EXPO_PUBLIC_API_URL: http://127.0.0.1:8788
+          # TMDB through the same delay proxy: 1.5s on discover reads keeps the
+          # genre grid skeleton observable; production builds never set this.
+          EXPO_PUBLIC_TMDB_URL: http://127.0.0.1:8788
           VELORA_UPLOAD_KEYSTORE_PATH: /tmp/velora-upload.keystore
           VELORA_UPLOAD_STORE_PASSWORD: ${{ secrets.VELORA_UPLOAD_STORE_PASSWORD }}
           VELORA_UPLOAD_KEY_ALIAS: ${{ secrets.VELORA_UPLOAD_KEY_ALIAS }}

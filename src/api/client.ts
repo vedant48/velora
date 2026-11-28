@@ -1,4 +1,9 @@
-export const PROXY_URL = "https://proxy-api-server-f1an.onrender.com";
+// Build-time overridable (e2e points this at the local delay proxy); the default
+// is the deployed TMDB proxy. Kept the exported name for existing imports.
+// Old fixed value: "https://proxy-api-server-f1an.onrender.com"
+import { TMDB_BASE_URL } from '../config';
+
+export const PROXY_URL = TMDB_BASE_URL;
 
 export interface RequestOptions extends RequestInit {
   timeoutMs?: number;

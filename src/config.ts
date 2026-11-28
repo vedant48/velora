@@ -9,6 +9,14 @@ export const API_BASE_URL =
 export const isApiConfigured = !API_BASE_URL.includes('your-subdomain');
 
 /**
+ * TMDB proxy base URL. EXPO_PUBLIC_TMDB_URL overrides it at build time (the e2e
+ * build points it at the local delay proxy so loading states stay visible);
+ * production always uses the deployed proxy.
+ */
+export const TMDB_BASE_URL =
+  process.env.EXPO_PUBLIC_TMDB_URL ?? 'https://proxy-api-server-f1an.onrender.com';
+
+/**
  * Google OAuth web client ID used as `webClientId` for native Google sign-in
  * (react-native-nitro-google-signin). Client IDs are public identifiers, not
  * secrets; the backend accepts ID tokens whose audience matches this ID or the
