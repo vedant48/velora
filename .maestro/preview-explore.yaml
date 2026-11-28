@@ -60,14 +60,20 @@ appId: com.vedant.velora
 - takeScreenshot: p05-explore-movies-top
 - assertVisible: "Movies"
 - assertVisible: "Series"
-- assertVisible: "Because you liked Fight Club"
 # Rails mount only near the viewport (LazySection), so anything below the
 # first screen must be scrolled into view, not bare-asserted.
+# Order check (owner 28 Nov): Trending movies right after For you, the
+# Because-you-liked rail only after the Trending rails.
 - scrollUntilVisible:
     element:
       text: "Trending movies"
     direction: DOWN
+- takeScreenshot: p05b-trending-after-foryou
 - assertNotVisible: "Watch next"
+- scrollUntilVisible:
+    element:
+      text: "Because you liked Fight Club"
+    direction: DOWN
 - scrollUntilVisible:
     element:
       text: "Science Fiction"
