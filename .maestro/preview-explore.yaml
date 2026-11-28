@@ -186,8 +186,10 @@ appId: com.vedant.velora
     id: "genre-sheet-tv"
 - tapOn: "Go back"
 
-# 8. Light theme over the restored Home, then back to dark.
-- tapOn: "Home"
+# 8. Light theme over the restored Home, then back to dark. Search hides the
+# tab bar, so "Home" would hit the Android system home button; leave Search
+# through its own back arrow instead.
+- tapOn: "Back to library"
 - tapOn: "Settings"
 - extendedWaitUntil:
     visible:
