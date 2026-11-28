@@ -124,6 +124,12 @@ appId: com.vedant.velora
       text: "Drama series"
     direction: UP
 - tapOn: "Drama series"
+# The discover call hits the warm TMDB proxy directly (not the delay proxy), so
+# the grid can load before a post-tap screenshot: wait for the skeleton first.
+- extendedWaitUntil:
+    visible:
+      text: "Loading"
+    timeout: 10000
 - takeScreenshot: p09b-genre-browse-loading
 - extendedWaitUntil:
     notVisible:
